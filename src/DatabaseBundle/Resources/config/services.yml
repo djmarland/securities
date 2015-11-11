@@ -1,0 +1,9 @@
+services:
+
+  database.services.query_factory:
+      class: DatabaseBundle\Query\QueryFactory
+      arguments: [@doctrine.orm.default_entity_manager,@database.mapper.factory]
+
+
+  database.mapper.factory:
+      class: DatabaseBundle\Mapper\MapperFactory

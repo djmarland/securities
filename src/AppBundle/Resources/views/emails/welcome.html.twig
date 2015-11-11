@@ -1,0 +1,11 @@
+{% extends 'AppBundle:emails:base.html.twig' %}
+
+
+{% block body %}
+
+    <h1>Welcome</h1>
+    <p>Hello {{ email.name }}. You have been registered.</p>
+    <p>Your one time login password is: {{ email.password }}. You will need to change this on first login</p>
+    <p><a href="#">Login now</a></p>
+
+{% endblock %}

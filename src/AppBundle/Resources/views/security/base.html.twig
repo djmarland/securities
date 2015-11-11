@@ -1,0 +1,22 @@
+{% extends 'AppBundle::base.html.twig' %}
+{% block title %}Login{% endblock %}
+{% block bodyClass %}page-login{% endblock %}
+
+{% block header %}{% endblock %}
+{% block footer %}{% endblock %}
+
+{% block body %}
+    <div class="login-page">
+    <div class="mdl-grid login-panel">
+        <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col intro">
+            <header class="login-logo">
+                <div class="logo-area">
+                    <img src="/static/img/logo.png" />
+                </div>
+            </header>
+            <div class="demo-graphs">
+                {% block form %}{% endblock %}
+            </div>
+        </div>
+    </div>
+{% endblock %}

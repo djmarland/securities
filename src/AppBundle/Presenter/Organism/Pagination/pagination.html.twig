@@ -1,0 +1,29 @@
+{% if pagination.showStatus %}
+    <span class="pagination__status">Showing {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}</span>
+{% endif %}
+{% if pagination.isActive %}
+    <nav>
+        <ol class="pagination">
+            <li>{%
+                if pagination.prevUrl %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                       href="{{ pagination.prevUrl }}">
+                        Previous
+                    </a>
+                {% else %}
+                    <span disabled class="mdl-button mdl-js-button mdl-button--raised">Previous</span>
+                {% endif
+                %}</li>
+            <li>{%
+                if pagination.nextUrl %}
+                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                       href="{{ pagination.nextUrl }}">
+                        Next
+                    </a>
+                {% else %}
+                    <span disabled class="mdl-button mdl-js-button mdl-button--raised">Next</span>
+                {% endif
+                %}</li>
+        </ol>
+    </nav>
+{% endif %}

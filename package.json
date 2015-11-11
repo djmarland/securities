@@ -1,0 +1,15 @@
+{
+  "name": "app",
+  "version": "0.1.0",
+  "description": "PHP App",
+  "private": true,
+  "main": "Gruntfile.js",
+  "dependencies": {},
+  "devDependencies": {
+    "grunt": "~0.4.1",
+    "grunt-contrib-watch": "~0.4.4",
+    "grunt-sass": "~0.18.0"
+  },
+  "author": "David Marland",
+  "license": "MIT"
+}

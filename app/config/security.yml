@@ -1,0 +1,39 @@
+security:
+
+    encoders:
+         AppBundle\Security\Visitor:
+            id: app.security.encoder
+
+    providers:
+        app_user_provider:
+            id: app.security.user_provider
+
+    firewalls:
+        dev:
+            pattern: ^/(_(profiler|wdt|error)|css|images|js)/
+            security: false
+
+        login_firewall:
+            pattern:   ^/(login|reset-password|first-user)$
+            anonymous: ~
+
+        secured_area:
+            pattern:    ^/
+            form_login:
+                login_path: login
+                check_path: login_check
+                csrf_provider: security.csrf.token_manager
+                provider: app_user_provider
+            logout:
+                path:   logout
+                target: home
+            remember_me:
+                key:      "%secret%"
+                lifetime: 9.46708e8 # 30 years
+                path:     /
+                always_remember_me: true
+
+    access_control:
+        - { path: ^/(login|reset-password|first-user), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/, roles:  IS_AUTHENTICATED_REMEMBERED }
+
