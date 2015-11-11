@@ -3,7 +3,7 @@
 
 # Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
 VAGRANTFILE_API_VERSION = "2"
-VM_DISPLAY_NAME = "PHP7-Box"
+VM_DISPLAY_NAME = "PHP7-Securities"
 VM_HOSTNAME = "php7.app"
 
 Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
