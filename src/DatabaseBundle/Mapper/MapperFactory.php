@@ -2,10 +2,9 @@
 
 namespace DatabaseBundle\Mapper;
 
-use DatabaseBundle\Entity\Settings as SettingsOrm;
-use DatabaseBundle\Entity\User as UserOrm;
-use AppBundle\Domain\Entity\Settings;
-use AppBundle\Domain\Entity\User;
+use AppBundle\Domain\Entity\Entity;
+use DatabaseBundle\Entity\Entity as EntityOrm;
+use DatabaseBundle\Entity\Security as SecurityOrm;
 
 /**
  * Factory to create mappers as needed
@@ -17,55 +16,24 @@ class MapperFactory
     {
     }
 
-    public function getMapper($item)
+    public function getMapper(EntityOrm $item): MapperInterface
     {
         // decide which mapper is needed based on the incoming data
         // this needs to be able to recognise data, and sub data achieved through joins
-        if ($item instanceof SettingsOrm ||
-            $item instanceof Settings) {
-            return $this->createSettings();
-        }
-        if ($item instanceof UserOrm ||
-            $item instanceof User) {
-            return $this->createUser();
-        }
-
-
-        $type = 'customer'; // hack. of course they're not all customers
-
-        $domain = null;
-
-        if ($type == 'customer') {
-            return $this->createCustomer();
+        if ($item instanceof SecurityOrm) {
+            return $this->createSecurity();
         }
     }
 
-    /**
-     * Shortcut, if you only have one item
-     * @param $item
-     * @return Settings
-     */
-    public function getDomainModel($item)
+    public function getDomainModel(EntityOrm $item): Entity
     {
         $mapper = $this->getMapper($item);
         return $mapper->getDomainModel($item);
     }
 
-    public function createCustomer()
+    public function createSecurity(): SecurityMapper
     {
-        $customerMapper = new CustomerMapper($this);
-        return $customerMapper;
-    }
-
-    public function createSettings()
-    {
-        $settingsMapper = new SettingsMapper($this);
+        $settingsMapper = new SecurityMapper($this);
         return $settingsMapper;
-    }
-
-    public function createUser()
-    {
-        $userMapper = new UserMapper($this);
-        return $userMapper;
     }
 }

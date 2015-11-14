@@ -19,18 +19,9 @@ class QueryFactory
         $this->mapperFactory = $mapperFactory;
     }
 
-    public function createSettingsQuery()
+    public function createSecuritiesQuery(): SecuritiesQuery
     {
-        $query = new SettingsQuery(
-            $this->entityManager,
-            $this->mapperFactory
-        );
-        return $query;
-    }
-
-    public function createUsersQuery()
-    {
-        $query = new UsersQuery(
+        $query = new SecuritiesQuery(
             $this->entityManager,
             $this->mapperFactory
         );

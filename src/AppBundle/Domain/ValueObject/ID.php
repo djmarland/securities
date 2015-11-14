@@ -22,14 +22,11 @@ class ID
     }
 
     /**
-     * @var string
+     * @var int
      */
     private $id;
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }

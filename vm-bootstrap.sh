@@ -1,7 +1,6 @@
 #!/usr/bin/env bash
 set -ex
-#
-#PHP_VERSION="$1"
+
 APPENV=dev
 DBHOST=localhost
 DBNAME=app
@@ -21,6 +20,7 @@ sudo apt-get update
 sudo apt-get -y install mysql-server
 sudo sed -i "s/^bind-address/#bind-address/" /etc/mysql/my.cnf
 mysql -u root -proot -e "GRANT ALL PRIVILEGES ON *.* TO 'root'@'%' IDENTIFIED BY 'root' WITH GRANT OPTION; FLUSH PRIVILEGES;"
+mysql -u root -proot -e "CREATE DATABASE app;"
 sudo /etc/init.d/mysql restart
 
 #if [ "$PHP_VERSION" == "7" ]; then

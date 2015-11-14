@@ -4,7 +4,7 @@ namespace AppBundle\Service;
 
 interface ServiceResultInterface
 {
-    public function setTotal($total);
+    public function setTotal(int $total);
     public function setDomainModels(array $models);
 
     public function getTotal();

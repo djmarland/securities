@@ -4,7 +4,6 @@ app/config/parameters.yml
 .composer/
 .idea/
 html
-/web/bundles/
 /app/bootstrap.php.cache
 /app/cache/*
 /app/config/parameters.yml
@@ -20,3 +19,4 @@ html
 .mysql_history
 node_modules/
 tmp/
+public/bundles/

@@ -1,0 +1,14 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block crumb %}
+    Securities
+{% endblock %}
+
+{% block body %}
+    <h1>Securities</h1>
+    <ul>
+        {%  for security in securities %}
+            <li><a href="{{ path('securities_show',{'isin':security.isin}) }}">{{ security.name }}</a></li>
+        {%  endfor %}
+    </ul>
+{% endblock %}

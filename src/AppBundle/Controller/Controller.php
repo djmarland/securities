@@ -12,16 +12,6 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class Controller extends BaseController implements ControllerInterface
 {
     /**
-     * @var User
-     */
-    protected $currentUser;
-
-    /**
-     * @var
-     */
-    protected $settings;
-
-    /**
      * @var int
      */
     protected $currentPage = 1;
@@ -44,45 +34,6 @@ class Controller extends BaseController implements ControllerInterface
     {
         $this->request = $request;
         $this->masterViewPresenter = new MasterPresenter();
-        $this->getSettings();
-        $this->getCurrentUser();
-    }
-
-    private function getSettings()
-    {
-        // get the initial app settings
-        $result = $this->get('app.services.settings')->get();
-        $settings = $result = $result->getDomainModel();
-
-        if ($settings === null) {
-            // if settings failed due to missing database: 404
-            throw new HttpException(404, 'Client does not exist');
-        }
-
-        // if app is not active, throw to "not ready" page
-        // @todo - don't do this on the "first-user" page
-        if (!$settings->isActive()) {
-            $message = ($settings->isSuspended()) ?
-                'Account has been suspended' :
-                'Account has not yet been initialised';
-             throw new HttpException(202, $message);
-        }
-
-        $this->settings = $settings;
-        $this->toView('settings', $settings);
-    }
-
-    private function getCurrentUser()
-    {
-        $user = $this->get('security.token_storage')
-                            ->getToken()
-                            ->getUser();
-        $visitor = null;
-        if ($user instanceof Visitor) {
-            $result = $this->get('app.services.users')->findByEmail($user->getUsername());
-            $visitor = $result->getDomainModel();
-        }
-        $this->toView('visitor', $visitor);
     }
 
     protected function getCurrentPage()
@@ -153,13 +104,5 @@ class Controller extends BaseController implements ControllerInterface
     {
         $path = 'AppBundle:' . $template . '.html.twig';
         return $this->render($path, $this->masterViewPresenter->getData());
-    }
-
-    protected function renderEmail($viewPath, $mailData)
-    {
-        $viewPath = 'AppBundle:emails:' . $viewPath . '.html.twig';
-        $data = $this->masterViewPresenter->getData();
-        $data['email'] = $mailData;
-        return $this->renderView($viewPath, $data);
     }
 }

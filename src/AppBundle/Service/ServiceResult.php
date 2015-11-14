@@ -4,51 +4,31 @@ namespace AppBundle\Service;
 
 class ServiceResult implements ServiceResultInterface
 {
-    /**
-     * @var
-     */
     private $total;
 
-    /**
-     * @var
-     */
     private $domainModels = [];
 
-    /**
-     * @param $domainModels
-     * @param null $total
-     */
-    public function __construct($domainModels, $total = null)
-    {
-        if (!is_array($domainModels)) {
-            $domainModels = [$domainModels];
-        }
+    public function __construct(
+        array $domainModels,
+        int $total = null
+    ) {
         $this->domainModels = $domainModels;
         if (!is_null($total)) {
             $this->total = (int)$total;
         }
     }
 
-    /**
-     * @param $total
-     */
-    public function setTotal($total)
+    public function setTotal(int $total)
     {
         $this->total = $total;
     }
 
-    /**
-     * @param $models
-     */
     public function setDomainModels(array $models)
     {
         $this->domainModels = $models;
     }
 
-    /**
-     * return int
-     */
-    public function getTotal()
+    public function getTotal(): int
     {
         if (is_null($this->total)) {
             // @todo - throw a better exception
@@ -57,18 +37,11 @@ class ServiceResult implements ServiceResultInterface
         return $this->total;
     }
 
-    /**
-     * @return mixed
-     */
-    public function getDomainModels()
+    public function getDomainModels(): array
     {
         return $this->domainModels;
     }
 
-    /**
-     * Get a single domain model (always the first)
-     * @return mixed|null
-     */
     public function getDomainModel()
     {
         $models = $this->getDomainModels();

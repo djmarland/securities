@@ -2,30 +2,26 @@
 
 namespace AppBundle\Domain\Entity;
 
-use AppBundle\Domain\ValueObject\Address;
 use AppBundle\Domain\ValueObject\ID;
+use AppBundle\Domain\ValueObject\ISIN;
+use DateTime;
 
-/**
- * Class User
- * For describe users of the system
- */
-class Customer extends Entity
+class Security extends Entity
 {
-    const KEY_PREFIX = 'C';
 
     /**
      * @param ID $id
      * @param $createdAt
      * @param $updatedAt
+     * @param ISIN $isin
      * @param $name
-     * @param Address $address
      */
     public function __construct(
         ID $id,
-        $createdAt,
-        $updatedAt,
-        $name,
-        Address $address = null
+        DateTime $createdAt,
+        DateTime $updatedAt,
+        ISIN $isin,
+        string $name
     ) {
         parent::__construct(
             $id,
@@ -34,7 +30,7 @@ class Customer extends Entity
         );
 
         $this->name = $name;
-        $this->address = $address;
+        $this->isin = $isin;
     }
 
     /**
@@ -42,10 +38,7 @@ class Customer extends Entity
      */
     private $name;
 
-    /**
-     * @return string
-     */
-    public function getName()
+    public function getName(): string
     {
         return $this->name;
     }
@@ -53,13 +46,10 @@ class Customer extends Entity
     /**
      * @var string
      */
-    private $address;
+    private $isin;
 
-    /**
-     * @return string
-     */
-    public function getAddress()
+    public function getIsin(): string
     {
-        return $this->address;
+        return $this->isin;
     }
 }

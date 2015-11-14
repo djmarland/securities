@@ -2,104 +2,19 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>{% block title %}Dashboard{% endblock %} - {{ settings.applicationName }}</title>
+    <title>Securities</title>
 
-    <link rel="stylesheet" href="http://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
     <link rel="stylesheet" href="/static/css/global.css" />
 </head>
 <body class="{% block bodyClass %}{% endblock %}">
 {% block header %}
-<div class="mdl-layout__container">
-<div class="demo-layout mdl-layout mdl-js-layout mdl-layout--fixed-drawer mdl-layout--fixed-header">
-    <header class="demo-header mdl-layout__header mdl-color--white mdl-color--grey-100 mdl-color-text--grey-600">
-        <div class="mdl-layout__header-row">
-            <span class="mdl-layout-title crumb">
-                <a href="/" class="mdl-button mdl-js-button mdl-js-ripple-effect">Home</a>
-                <i class="mdl-color-text--blue-grey-400 material-icons">keyboard_arrow_right</i>
-                {% block crumb %}{% endblock %}
-            </span>
-            <div class="mdl-layout-spacer"></div>
-            <div class="mdl-textfield mdl-textfield--search mdl-js-textfield mdl-textfield--expandable">
-                <label class="mdl-button mdl-js-button mdl-button--icon" for="search">
-                    <i class="material-icons">search</i>
-                </label>
-                <div class="mdl-textfield__expandable-holder">
-                    <input class="mdl-textfield__input" type="text" id="search" />
-                    <label class="mdl-textfield__label" for="search">Enter your query...</label>
-                </div>
-            </div>
-        </div>
-    </header>
-    <div class="demo-drawer mdl-layout__drawer mdl-color--blue-grey-900 mdl-color-text--blue-grey-50">
-
-        <header class="demo-drawer-header">
-            <div class="logo-area">
-                <img src="/static/img/logo.png" />
-            </div>
-            <div class="demo-avatar-dropdown">
-                <span>{{ visitor.name }}</span>
-                <div class="mdl-layout-spacer"></div>
-                <button id="accbtn" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--icon">
-                    <i class="material-icons">arrow_drop_down</i>
-                </button>
-                <ul class="mdl-menu mdl-menu--bottom-right mdl-js-menu mdl-js-ripple-effect" for="accbtn">
-                    <li class="mdl-menu__item"><a class="mdl-navigation__link" href="{{ path('users_show', { user_key : visitor.key }) }}">Edit profile</a></li>
-                    <li class="mdl-menu__item"><a class="mdl-navigation__link" href="{{ path('logout') }}">Logout</a></li>
-                </ul>
-            </div>
-        </header>
-        <nav class="demo-navigation mdl-navigation mdl-color--blue-grey-800">
-            <a class="mdl-navigation__link" href="/">
-                <i class="mdl-color-text--blue-grey-400 material-icons">home</i>Home</a>
-            <a class="mdl-navigation__link" href="/users">
-                <i class="mdl-color-text--blue-grey-400 material-icons">face</i>Users</a>
-            <a class="mdl-navigation__link" href="/users">
-                <i class="mdl-color-text--blue-grey-400 material-icons">people</i>Customers</a>
-            <a class="mdl-navigation__link" href="/users">
-                <i class="mdl-color-text--blue-grey-400 material-icons">build</i>Jobs</a>
-            <div class="mdl-layout-spacer"></div>
-            <a class="mdl-navigation__link" href="/users">
-                <i class="mdl-color-text--blue-grey-400 material-icons">settings</i>Admin</a>
-            <a class="mdl-navigation__link" href=/help">
-                <i class="mdl-color-text--blue-grey-400 material-icons">help_outline</i>Help</a>
-        </nav>
-    </div>
-
-<!--
-
-    <div class="header">{{ settings.applicationName }}</div>
-    <hr />
-        <div>
-            Hello <a href="{{ path('users_show', { user_key : visitor.key }) }}">{{ visitor.name }}</a> |
-            <a href="{{ path('logout') }}">Logout</a>
-        </div>
-        <nav>
-            <ul>
-                <li><a href="{{ path('home') }}">Home</a></li>
-            </ul>
-        </nav>
-    <hr />
-    -->
-    <main class="mdl-layout__content mdl-color--grey-100">
-        <div class="mdl-grid demo-content">
-
-    {% if app.session.flashbag.get('success') %}
-        <div class="mdl-shadow--2dp mdl-color--white mdl-cell mdl-cell--12-col">
-            {% for flashMessage in app.session.flashbag.get('success') %}
-                <div class="alert alert--success">
-                    <i class="material-icons">done</i>{{ flashMessage }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+    <div>
 {% endblock %}
 {% block body %}{% endblock %}
 {% block footer %}
     </div>
-</main>
-</div>
-</div>
 {% endblock %}
 </body>
 </html>

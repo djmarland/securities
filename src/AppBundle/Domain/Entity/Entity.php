@@ -35,36 +35,9 @@ abstract class Entity
      */
     protected $id;
 
-    /**
-     * @return string
-     */
-    public function getId()
+    public function getId(): ID
     {
-        if ($this->id instanceof IDUnset) {
-            return null; // this means it's a new object
-        }
         return $this->id;
-    }
-
-    public function getIdValue()
-    {
-        $id = $this->getId();
-        if ($id) {
-            return $id->getId();
-        }
-        return null;
-    }
-
-    /**
-     * @param ID $id
-     */
-    public function setId(ID $id)
-    {
-        // may only be set if it wasn't before
-        if (!($this->id instanceof IDUnset)) {
-            throw new \InvalidArgumentException('Tried to set an ID when one was already set');
-        }
-        $this->id = $id;
     }
 
     /**
@@ -72,10 +45,7 @@ abstract class Entity
      */
     protected $createdAt;
 
-    /**
-     * @return \DateTime
-     */
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->createdAt;
     }
@@ -85,58 +55,8 @@ abstract class Entity
      */
     protected $updatedAt;
 
-    /**
-     * @return \DateTime
-     */
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updatedAt;
-    }
-
-    protected $key;
-
-    /**
-     * @return Key
-     */
-    public function getKey()
-    {
-        if (!$this->key) {
-            $this->key = new Key($this->id, static::KEY_PREFIX);
-        }
-        return $this->key;
-    }
-
-    /**
-     * @var \DatabaseBundle\Entity\Entity
-     */
-    protected $ormEntity;
-
-    /**
-     * @param \DatabaseBundle\Entity\Entity $ormEntity
-     */
-    public function setOrmEntity($ormEntity)
-    {
-        $this->ormEntity = $ormEntity;
-    }
-
-    /**
-     * @return \DatabaseBundle\Entity\Entity$ormEntity
-     */
-    public function getOrmEntity()
-    {
-        return $this->ormEntity;
-    }
-
-    protected $changed = false;
-
-    protected function updated()
-    {
-        $this->changed = true;
-        $this->updatedAt = new DateTime();
-    }
-
-    public function hasChanged()
-    {
-        return $this->changed;
     }
 }

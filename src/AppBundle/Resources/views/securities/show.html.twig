@@ -1,0 +1,10 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block crumb %}
+    Securities
+{% endblock %}
+
+{% block body %}
+    <h1>{{ security.name }}</h1>
+    <h2>{{ security.isin }}</h2>
+{% endblock %}

@@ -10,32 +10,10 @@ login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
 
-reset_password:
-    path:     /reset-password
-    defaults: { _controller: AppBundle:Security:resetPassword }
+securities_list:
+  path:     /securities
+  defaults: { _controller: AppBundle:Securities:list }
 
-reset_password:
-    path:     /set-password
-    defaults: { _controller: AppBundle:Security:setPassword }
-
-login_check:
-    path: /login-check
-
-logout:
-    path: /logout
-
-users_list:
-  path:     /users
-  defaults: { _controller: AppBundle:Users:list }
-
-users_new:
-  path:     /users/new
-  defaults: { _controller: AppBundle:Users:new }
-
-users_show:
-  path:     /users/{user_key}
-  defaults: { _controller: AppBundle:Users:show }
-
-users_first:
-  path:     /first-user
-  defaults: { _controller: AppBundle:Users:firstUser }
+securities_show:
+  path:     /securities/{isin}
+  defaults: { _controller: AppBundle:Securities:show }

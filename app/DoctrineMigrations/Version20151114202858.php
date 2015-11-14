@@ -8,7 +8,7 @@ use Doctrine\DBAL\Schema\Schema;
 /**
  * Auto-generated Migration: Please modify to your needs!
  */
-class Version20150621110951 extends AbstractMigration
+class Version20151114202858 extends AbstractMigration
 {
     /**
      * @param Schema $schema
@@ -18,7 +18,7 @@ class Version20150621110951 extends AbstractMigration
         // this up() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE users ADD email VARCHAR(255) NOT NULL, ADD password_digest VARCHAR(255) NOT NULL, ADD is_admin TINYINT(1) NOT NULL, ADD password_expired TINYINT(1) NOT NULL');
+        $this->addSql('CREATE TABLE securities (id INT AUTO_INCREMENT NOT NULL, name VARCHAR(255) NOT NULL, isin VARCHAR(12) NOT NULL, created_at DATETIME NOT NULL, updated_at DATETIME NOT NULL, INDEX isin_idx (isin), PRIMARY KEY(id)) DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci ENGINE = InnoDB');
     }
 
     /**
@@ -29,6 +29,6 @@ class Version20150621110951 extends AbstractMigration
         // this down() migration is auto-generated, please modify it to your needs
         $this->abortIf($this->connection->getDatabasePlatform()->getName() != 'mysql', 'Migration can only be executed safely on \'mysql\'.');
 
-        $this->addSql('ALTER TABLE users DROP email, DROP password_digest, DROP is_admin, DROP password_expired');
+        $this->addSql('DROP TABLE securities');
     }
 }

@@ -2,6 +2,7 @@
 namespace DatabaseBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use DateTime;
 
 abstract class Entity
 {
@@ -24,17 +25,17 @@ abstract class Entity
 
 
     /** Getters/Setters */
-    public function getId()
+    public function getId(): int
     {
         return $this->id;
     }
 
-    public function getCreatedAt()
+    public function getCreatedAt(): DateTime
     {
         return $this->created_at;
     }
 
-    public function getUpdatedAt()
+    public function getUpdatedAt(): DateTime
     {
         return $this->updated_at;
     }

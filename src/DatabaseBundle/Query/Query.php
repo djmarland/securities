@@ -2,8 +2,10 @@
 
 namespace DatabaseBundle\Query;
 
+use DatabaseBundle\Entity\Entity;
 use DatabaseBundle\Mapper\MapperFactory;
 use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 abstract class Query {
 
@@ -19,13 +21,13 @@ abstract class Query {
         $this->mapperFactory = $mapperFactory;
     }
 
-    public function getEntity($name)
+    public function getEntity(string $name): EntityRepository
     {
         return $this->entityManager
             ->getRepository('DatabaseBundle:' . $name);
     }
 
-    protected function getFromEntity($entity)
+    protected function getFromEntity(EntityRepository  $entity): array
     {
         $result = $entity->findBy(
             $this->by,
@@ -36,7 +38,7 @@ abstract class Query {
         return $this->getDomainModels($result);
     }
 
-    protected function countFromEntity($entity)
+    protected function countFromEntity(EntityRepository  $entity): int
     {
         $qb = $entity->createQueryBuilder('tbl');
         $qb->select('count(tbl.id)');
@@ -62,26 +64,28 @@ abstract class Query {
 
     protected $offset = null;
 
-    public function paginate($perPage, $page)
-    {
+    public function paginate(
+        int $perPage,
+        int $page
+    ): Query {
         $this->limit = $perPage;
         $this->offset = ($perPage * ($page - 1));
         return $this;
     }
 
-    public function byId($id)
+    public function byId(int $id): Query
     {
         $this->by['id'] = $id;
         return $this;
     }
 
-    public function sortByCreationDate($direction = 'DESC')
+    public function sortByCreationDate(string $direction = 'DESC'): Query
     {
         $this->sort = ['created_at' => $direction];
         return $this;
     }
 
-    public function getDomainModels($items)
+    public function getDomainModels($items): array
     {
         if (!$items) {
             return null;
@@ -96,17 +100,5 @@ abstract class Query {
             $domainModels[] = $mapper->getDomainModel($item);
         }
         return $domainModels;
-    }
-
-    public function insert($domain)
-    {
-        $mapper = $this->mapperFactory->getMapper($domain);
-
-        $entity = $mapper->getOrmEntity($domain);
-
-        $this->entityManager->persist($entity);
-        $this->entityManager->flush();
-
-        return $entity->getId();
     }
 }
