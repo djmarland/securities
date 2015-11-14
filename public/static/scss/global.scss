@@ -1,3 +1,18 @@
+// Initial Setup for Sass
+@import 'setup/setup';
+
+// Begin writing CSS
+// Core
 @import 'core/base';
 @import 'core/typography';
 @import 'core/grid';
+
+// Atoms
+@import 'atoms/visibility';
+@import 'atoms/island';
+
+// Molecules
+
+// Organisms
+@import 'organisms/header';
+@import 'organisms/search';

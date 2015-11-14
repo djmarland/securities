@@ -14,3 +14,6 @@ app/phpunit.xml
 public/bundles
 vendor
 node_modules
+tmp/
+.npm/
+.v8flags.3.14.5.9.vagrant.json

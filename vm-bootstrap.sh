@@ -48,3 +48,9 @@ sudo /etc/init.d/apache2 restart
 
 sudo update-rc.d apache2 defaults
 sudo update-rc.d apache2 enable
+
+sudo apt-get -y install nodejs
+sudo ln -s /usr/bin/nodejs /usr/bin/node
+sudo apt-get -y install npm
+sudo npm install -g gulp --no-bin-links
+sudo npm install --no-bin-links

@@ -1,0 +1,11 @@
+// sizes
+.a {
+    font-size: 3rem;
+}
+
+// specific heading types
+h1,
+.h-a {
+    @extend .a;
+    font-weight: lighter;
+}

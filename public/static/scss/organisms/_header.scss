@@ -1,0 +1,10 @@
+.header {
+    background: $color-header-bg;
+    color: $color-header-text;
+    padding: $grid-unit-large;
+}
+.header__logo {
+    margin: 0;
+    font-size: 2rem;
+    opacity: .65;
+}

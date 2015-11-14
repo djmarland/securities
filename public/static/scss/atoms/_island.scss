@@ -1,0 +1,11 @@
+.island {
+    padding: $grid-unit-small;
+    background: rebeccapurple;
+}
+
+
+@include mq($from: m) {
+    .island {
+        padding: $grid-unit-large;
+    }
+}
