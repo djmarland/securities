@@ -4,4 +4,6 @@
 {% block body %}
    <h1>HOME PAGE</h1>
     <a href="{{ path('securities_list') }}">Securities</a>
+
+    {% include '@partials/search.html.twig' %}
 {% endblock %}

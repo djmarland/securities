@@ -34,6 +34,7 @@ class Controller extends BaseController implements ControllerInterface
     {
         $this->request = $request;
         $this->masterViewPresenter = new MasterPresenter();
+        $this->setSearchContext();
     }
 
     protected function getCurrentPage()
@@ -47,7 +48,15 @@ class Controller extends BaseController implements ControllerInterface
         ) {
             throw new HttpException(404, 'No such page value');
         }
-        return (int) $page;
+        return (int)$page;
+    }
+
+    protected function setSearchContext()
+    {
+        $search = $this->request->get('q', null);
+        $this->toView('searchContext', $search);
+        $this->toView('searchAutofocus', null);
+        $this->toView('showSearchInHead', true);
     }
 
     /**

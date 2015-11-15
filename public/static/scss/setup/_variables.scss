@@ -1,6 +1,12 @@
 // Colours
-$color-header-bg: #263238;
-$color-header-text: #fff;
+$color-subtle: #B2B6B8;
+$color-text: #444748;
+$color-body: #fff;
+$color-darker: #263238;
+
+$color-header-bg: $color-darker;
+$color-header-text: $color-subtle;
+$color-header-active: #fff;
 
 // Sizes
 $grid-unit-large: 24px;

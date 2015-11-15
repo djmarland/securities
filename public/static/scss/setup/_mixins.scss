@@ -1,5 +1,5 @@
 // flexbox
-@mixin flexbox($fallback: 'block') {
+@mixin flexbox($fallback: block) {
     display: $fallback;
     display: -ms-flexbox;      /* IE 10 */
     display: -webkit-flex;     /* Chrome */
@@ -42,6 +42,11 @@
     -webkit-flex:  $values;
     -ms-flex:  $values;
     flex:  $values;
+}
+
+@mixin flex-fill() {
+    @include flexbox();
+    @include flex-grow(1);
 }
 
 @mixin order($val) {
@@ -110,4 +115,11 @@
         overflow: auto;
         visibility: visible;
     }
+}
+
+@mixin transition($value) {
+    -webkit-transition: $value;
+    -moz-transition: $value;
+    -o-transition: $value;
+    transition: $value
 }

@@ -1,9 +1,9 @@
 // Don't need this yet. Let's save on bytes
-//@include hidden();
+@include hidden();
 //@include unhidden();
 //@include unhidden-inline();
 //@include unhidden-inlineblock();
-//@include invisible();
+@include invisible();
 //@include visible();
 
 

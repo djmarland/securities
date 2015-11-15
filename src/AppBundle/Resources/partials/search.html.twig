@@ -1,0 +1,10 @@
+<form id="search-form" class="search" action="/search" method="get">
+    <input id="search-input" class="search__box" name="q" type="search" placeholder="Enter ISIN" value="{{ searchContext }}" {{ searchAutofocus }} />
+    <label class="search__label" for="search"><span class="invisible">Search</span></label>
+    <button class="search__button" type="submit">
+        <span class="invisible">Search</span>
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path class="search__path" fill-rule="evenodd" d="M16.477 14.356C17.437 12.98 18 11.306 18 9.5 18 4.806 14.194 1 9.5 1S1 4.806 1 9.5 4.806 18 9.5 18c1.805 0 3.48-.563 4.855-1.522l6.304 6.303c.113.12.3.12.42 0l1.7-1.695c.115-.116.11-.31 0-.423l-6.306-6.303zM9.5 16c3.59 0 6.5-2.91 6.5-6.5S13.09 3 9.5 3 3 5.91 3 9.5 5.91 16 9.5 16z"/>
+        </svg>
+    </button>
+</form>

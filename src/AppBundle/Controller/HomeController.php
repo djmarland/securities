@@ -9,6 +9,9 @@ class HomeController extends Controller
 {
     public function indexAction()
     {
+        $this->toView('showSearchInHead', false);
+        $this->toView('searchAutofocus', 'autofocus');
+
         $i1 = new Security(
             new ID(1),
             new \DateTime(),

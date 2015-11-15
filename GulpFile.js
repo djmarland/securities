@@ -10,8 +10,14 @@ gulp.task('sass', function() {
         .pipe(gulp.dest(staticPath + 'css/'))
 });
 
-gulp.task('default', ['sass']);
+gulp.task('js', function() {
+    gulp.src(staticPath + 'js-src/**/*.js')
+        .pipe(gulp.dest(staticPath + 'js/'))
+});
+
+gulp.task('default', ['sass', 'js']);
 
 gulp.task('watch',function() {
     gulp.watch(staticPath + 'scss/**/*.scss',['sass']);
+    gulp.watch(staticPath + 'js-src/**/*.js',['js']);
 });

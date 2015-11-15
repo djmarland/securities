@@ -371,12 +371,20 @@ th {
 body {
   padding: 0;
   background: #fff;
+  color: #444748;
   font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif; }
 
 .page-limit {
   margin-left: auto;
   margin-right: auto;
-  max-width: 768px; }
+  padding-left: 12px;
+  padding-right: 12px;
+  max-width: 976px; }
+
+@media (min-width: 37.5em) {
+  .page-limit {
+    padding-left: 24px;
+    padding-right: 24px; } }
 
 .a, h1,
 .h-a {
@@ -1247,31 +1255,267 @@ h1,
 
 .island {
   padding: 12px;
-  background: rebeccapurple; }
+  background: #263238;
+  color: #fff; }
 
 @media (min-width: 37.5em) {
   .island {
     padding: 24px; } }
 
+.loading {
+  position: relative;
+  width: 4em;
+  height: 4em;
+  border-radius: 100%; }
+
+.loading::after {
+  content: "";
+  background: #fff;
+  border-radius: 50%;
+  width: 3em;
+  height: 3em;
+  position: absolute;
+  top: 0.5em;
+  left: 0.5em; }
+
+.loading__spinner {
+  position: relative;
+  width: 4em;
+  border-radius: 4em;
+  overflow: hidden;
+  animation: rotate 2000ms infinite linear; }
+
+.loading__spinner:before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: #3F51B5;
+  border: 3px solid #fff;
+  border-radius: 100%; }
+
+.inner-spin {
+  background: #fff;
+  height: 4em;
+  width: 2em; }
+
+.inner-spin {
+  animation: rotate-left 2500ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  border-radius: 2em 0 0 2em;
+  transform-origin: 2em 2em; }
+
+.inner-spin:last-child {
+  animation: rotate-right 2500ms infinite cubic-bezier(0.445, 0.05, 0.55, 0.95);
+  margin-top: -4em;
+  border-radius: 0 2em 2em 0;
+  float: right;
+  transform-origin: 0 50%; }
+
+@keyframes rotate-left {
+  60%, 75%, 100% {
+    transform: rotate(360deg); } }
+
+@keyframes rotate {
+  0% {
+    transform: rotate(0); }
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes rotate-right {
+  0%, 25%, 45% {
+    transform: rotate(0); }
+  100% {
+    transform: rotate(360deg); } }
+
+@keyframes spin {
+  from {
+    -webkit-transform: rotate(-130deg);
+    transform: rotate(-130deg); }
+  50% {
+    -webkit-transform: rotate(5deg);
+    transform: rotate(5deg); }
+  to {
+    -webkit-transform: rotate(-130deg);
+    transform: rotate(-130deg); } }
+
+.loading {
+  display: inline-block;
+  position: relative;
+  width: 50%;
+  height: 100%;
+  overflow: hidden;
+  border-color: inherit; }
+
+.loading__spinner {
+  display: block;
+  height: 50px;
+  width: 50px;
+  border: solid 6px #263238;
+  border-radius: 100%;
+  margin-left: auto;
+  margin-right: auto;
+  border-left-color: transparent;
+  animation: spin 1333ms cubic-bezier(0.4, 0, 1, 1) infinite both;
+  left: -100%;
+  -webkit-transform: rotate(-129deg);
+  -ms-transform: rotate(-129deg);
+  transform: rotate(-129deg); }
+
+.hidden {
+  display: none; }
+
+.invisible {
+  border: 0;
+  clip: rect(0 0 0 0);
+  height: 1px;
+  overflow: hidden;
+  padding: 0;
+  position: absolute;
+  width: 1px;
+  visibility: hidden; }
+
 .header {
   background: #263238;
-  color: #fff;
-  padding: 24px; }
+  color: #B2B6B8;
+  padding-top: 12px;
+  padding-bottom: 12px; }
+  .header a,
+  .header a:link,
+  .header a:visited {
+    text-decoration: none;
+    color: #B2B6B8; }
+  .header a:focus,
+  .header a:hover,
+  .header a:active {
+    color: #fff; }
+
+.header__content {
+  display: block;
+  display: -ms-flexbox;
+  /* IE 10 */
+  display: -webkit-flex;
+  /* Chrome */
+  display: flex;
+  /* Spec  */
+  -ms-flex: 1 1 0%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  -ms-flex-align: center;
+  align-items: center;
+  -webkit-flex-wrap: wrap;
+  -ms-flex-wrap: wrap;
+  flex-wrap: wrap; }
 
 .header__logo {
-  margin: 0;
-  font-size: 2rem;
-  opacity: .65; }
+  margin: 0 24px 0 0;
+  font-size: 1.4rem; }
+
+.header__search {
+  display: block;
+  display: -ms-flexbox;
+  /* IE 10 */
+  display: -webkit-flex;
+  /* Chrome */
+  display: flex;
+  /* Spec  */
+  -ms-flex: 1 1 0%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1; }
+
+@media (min-width: 37.5em) {
+  .header {
+    padding-top: 24px;
+    padding-bottom: 24px; }
+  .header__search {
+    margin-left: 48px;
+    height: 36px; }
+  .header__logo {
+    margin-right: 48px;
+    font-size: 2rem; } }
+
+.search {
+  position: relative;
+  display: block;
+  display: -ms-flexbox;
+  /* IE 10 */
+  display: -webkit-flex;
+  /* Chrome */
+  display: flex;
+  /* Spec  */
+  -ms-flex: 1 1 0%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1; }
 
 .search__button {
   display: inline-block;
-  height: 42px;
-  width: 42px;
+  height: 22px;
+  width: 22px;
   border: none;
   background: transparent;
   padding: 0;
-  margin: 0; }
+  margin: 0;
+  position: absolute;
+  right: 4px;
+  bottom: 6px; }
 
-.search__icon {
-  width: 100%;
+.search__box {
+  display: block;
+  display: -ms-flexbox;
+  /* IE 10 */
+  display: -webkit-flex;
+  /* Chrome */
+  display: flex;
+  /* Spec  */
+  -ms-flex: 1 1 0%;
+  -webkit-flex-grow: 1;
+  flex-grow: 1;
+  font-weight: lighter;
+  font-size: 20px;
+  padding-right: 28px;
+  background: transparent;
+  outline: none;
+  border: none;
+  border-bottom: solid 1px #B2B6B8;
+  position: relative;
+  color: #B2B6B8; }
+
+.search__label::after {
+  will-change: opacity, width;
+  position: absolute;
+  content: "";
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  background-color: #263238;
+  width: 0;
+  opacity: 0;
+  -webkit-transition: all 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-transition: all 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  -o-transition: all 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: all 400ms cubic-bezier(0.19, 1, 0.22, 1); }
+
+.search__path {
+  fill: #B2B6B8;
+  -webkit-transition: fill 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  -moz-transition: fill 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  -o-transition: fill 400ms cubic-bezier(0.19, 1, 0.22, 1);
+  transition: fill 400ms cubic-bezier(0.19, 1, 0.22, 1); }
+
+.search__box:focus {
+  color: #263238; }
+  .search__box:focus ~ .search__button .search__path {
+    fill: #263238; }
+  .search__box:focus ~ .search__label:after {
+    opacity: 1;
+    width: 100%;
+    left: 0; }
+
+.header__search .search__label::after {
+  background-color: #fff; }
+
+.header__search .search__box:focus {
   color: #fff; }
+  .header__search .search__box:focus ~ .search__button .search__path {
+    fill: #fff; }

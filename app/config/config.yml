@@ -39,6 +39,7 @@ twig:
         - 'AppBundle:forms:fields.html.twig'
     paths:
             "%kernel.root_dir%/../src/AppBundle/Presenter": AppBundle/Presenter
+            "%kernel.root_dir%/../src/AppBundle/Resources/partials": partials
 
 # Assetic Configuration
 assetic:
