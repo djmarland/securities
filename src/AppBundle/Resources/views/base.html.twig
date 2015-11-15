@@ -27,9 +27,13 @@
     </main>
 </div>
 {% endblock %}
-<div class="hisdden">
-    <div id="loading-spinner" class="loading"><div class="loading__spinner"></div></div>
-</div>
+<template id="loading-spinner" class="hidden">
+    <div id="loading-spinner" class="loading">
+        <svg class="loading__spinner" viewBox="-2 -2 70 70" xmlns="http://www.w3.org/2000/svg">
+            <circle class="loading__path" fill="none" stroke-width="8" cx="33" cy="33" r="30"></circle>
+        </svg>
+    </div>
+</template>
 <script src="/static/js/bootstrap.js"></script>
 </body>
 </html>
