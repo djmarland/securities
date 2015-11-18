@@ -25,17 +25,17 @@ abstract class Entity
 
 
     /** Getters/Setters */
-    public function getId(): int
+    public function getId()
     {
         return $this->id;
     }
 
-    public function getCreatedAt(): DateTime
+    public function getCreatedAt()
     {
         return $this->created_at;
     }
 
-    public function getUpdatedAt(): DateTime
+    public function getUpdatedAt()
     {
         return $this->updated_at;
     }

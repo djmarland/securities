@@ -5,7 +5,7 @@ class SecuritiesQuery extends Query
 {
     const ENTITY_NAME = 'Security';
 
-    public function get(): array
+    public function get()
     {
         $entity = $this->getEntity(self::ENTITY_NAME);
         return $this->getFromEntity($entity);

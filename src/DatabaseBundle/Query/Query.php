@@ -27,7 +27,7 @@ abstract class Query {
             ->getRepository('DatabaseBundle:' . $name);
     }
 
-    protected function getFromEntity(EntityRepository  $entity): array
+    protected function getFromEntity(EntityRepository  $entity)
     {
         $result = $entity->findBy(
             $this->by,
@@ -85,7 +85,7 @@ abstract class Query {
         return $this;
     }
 
-    public function getDomainModels($items): array
+    public function getDomainModels($items)
     {
         if (!$items) {
             return null;

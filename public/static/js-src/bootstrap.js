@@ -18,15 +18,18 @@
             searchBox = document.getElementById('search-input');
 
         searchBox.addEventListener('keyup', function() {
-            var value,
+            var value = searchBox.value.trim(),
                 searchUrl;
+
+            if (!value.length) {
+                return;
+            }
             if (continerEmpty) {
                 searchContainer.appendChild(searchForm);
                 searchBox.focus();
                 continerEmpty = false;
             }
 
-            value = searchBox.value;
             searchUrl = '/search?q=' + value;
             //if (!hasBegunSearch) {
             //    window.history.pushState({}, '', searchUrl);
