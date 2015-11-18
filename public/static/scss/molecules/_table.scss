@@ -1,0 +1,24 @@
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    border-bottom: dotted 1px $color-faint;
+    &:last-child {
+        border-bottom: none;
+    }
+    > tbody > tr {
+        border-bottom: dotted 1px $color-faint;
+        &:last-child {
+            border-bottom: none;
+        }
+        > td,th {
+            @extend .island-squeezed;
+            font-weight:normal;
+            text-align: left;
+        }
+    }
+}
+@include mq($from: m) {
+    .table > tbody > tr > th {
+        width: 25%;
+    }
+}

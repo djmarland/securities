@@ -6,6 +6,7 @@ use AppBundle\Presenter\MasterPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
 use AppBundle\Security\Visitor;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -111,7 +112,19 @@ class Controller extends BaseController implements ControllerInterface
 
     protected function renderTemplate($template)
     {
-        $path = 'AppBundle:' . $template . '.html.twig';
+        $format = $this->request->get('format', null);
+        if ($format == 'json') {
+            return new JsonResponse($this->masterViewPresenter->getFeedData());
+        }
+
+        $ext = 'html';
+        if (in_array($format, ['inc'])) {
+            $ext = $format;
+        } elseif ($format) {
+            throw new HttpException(404, 'Invalid Format');
+        }
+
+        $path = 'AppBundle:' . $template . '.' . $ext . '.twig';
         return $this->render($path, $this->masterViewPresenter->getData());
     }
 }

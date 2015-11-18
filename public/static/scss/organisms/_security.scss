@@ -1,0 +1,8 @@
+.security{}
+.security__link {
+    &:hover,
+    &:active,
+    &:focus {
+        background-color: $color-card-hover;
+    }
+}

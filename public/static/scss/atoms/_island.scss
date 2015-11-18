@@ -1,12 +1,25 @@
 .island {
     padding: $grid-unit-small;
-    background: $color-header-bg;
-    color: #fff;
+}
+
+.island-squashed {
+    padding: $grid-unit-small/2 $grid-unit-small;
+}
+
+.island-squeezed {
+    padding: $grid-unit-small/3 $grid-unit-small;
 }
 
 
 @include mq($from: m) {
     .island {
         padding: $grid-unit-large;
+    }
+    .island-squashed {
+        padding: $grid-unit-large/2 $grid-unit-large;
+    }
+
+    .island-squeezed {
+        padding: $grid-unit-large/3 $grid-unit-large;
     }
 }

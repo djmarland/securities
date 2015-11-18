@@ -4,10 +4,34 @@
     var spinner = document.getElementById('loading-spinner'),
         mainPage = document.getElementById('main-body');
 
+    function loadUrl(url, callback) {
+        var request = new XMLHttpRequest();
+        request.open('GET', url, true);
+
+        request.onload = function() {
+            // @todo - be better at this, more resiliant
+            if (this.status >= 200 && this.status < 400) {
+                // Success!
+                var resp = this.response;
+                callback(this.response);
+            }
+        };
+
+        request.onerror = function() {
+            // There was a connection error of some sort
+        };
+
+        request.send();
+    }
+
     function startSearch(value) {
-        var spin = document.importNode(spinner.content, true);
+        var spin = document.importNode(spinner.content, true),
+            inc = '/search?q=' + value + '&format=inc';
         mainPage.innerHTML = '';
         mainPage.appendChild(spin);
+        loadUrl(inc, function(response) {
+            mainPage.innerHTML = response;
+        })
     }
 
     function init() {

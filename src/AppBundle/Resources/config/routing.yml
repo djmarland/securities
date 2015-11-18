@@ -6,9 +6,9 @@ styleguide:
   path:     /styleguide
   defaults: { _controller: AppBundle:Home:styleguide }
 
-login:
-    path:     /login
-    defaults: { _controller: AppBundle:Security:login }
+search:
+  path:     /search
+  defaults: { _controller: AppBundle:Search:list }
 
 securities_list:
   path:     /securities

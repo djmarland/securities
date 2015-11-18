@@ -17,6 +17,35 @@ class SecuritiesQuery extends Query
         return $this->countFromEntity($entity);
     }
 
+    public function search(string $query)
+    {
+        $entity = $this->getEntity(self::ENTITY_NAME);
+        $qb = $entity->createQueryBuilder('tbl');
+        $qb->select();
+
+        $qb->andWhere('tbl.isin LIKE ?0');
+        $qb->setParameters(['%' . $query . '%']);
+
+        $qb->setMaxResults($this->limit)
+            ->setFirstResult($this->offset);
+
+        $result = $qb->getQuery()->getResult();
+
+        return $this->getDomainModels($result);
+    }
+
+    public function countSearch(string $query)
+    {
+        $entity = $this->getEntity(self::ENTITY_NAME);
+        $qb = $entity->createQueryBuilder('tbl');
+        $qb->select('count(tbl.id)');
+
+        $qb->andWhere('tbl.isin LIKE ?0');
+        $qb->setParameters(['%' . $query . '%']);
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function byIsin(string $isin): Query
     {
         $this->by['isin'] = $isin;

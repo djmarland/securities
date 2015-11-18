@@ -1,6 +1,28 @@
 // sizes
 .a {
+    font-size: 96px;
     font-size: 3rem;
+    // @todo line-height
+}
+.b {
+    font-size: 38.4px;
+    font-size: 2.4rem;
+}
+.c {
+    font-size: 28.8px;
+    font-size: 1.8rem;
+}
+.d {
+    font-size: 22.4px;
+    font-size: 1.4rem;
+}
+.e {
+    font-size: 16px;
+    font-size: 1rem;
+}
+.f {
+    font-size: 14px;
+    font-size: 0.875rem;
 }
 
 // specific heading types
@@ -8,4 +30,47 @@ h1,
 .h-a {
     @extend .a;
     font-weight: lighter;
+    margin: 0;
+}
+
+h2,
+.h-b {
+    @extend .b;
+    font-weight: lighter;
+    margin: 0;
+}
+
+h3,
+.h-c {
+    @extend .c;
+    font-weight: lighter;
+    margin: 0;
+}
+
+h4,
+.h-d {
+    @extend .d;
+    margin: 0;
+}
+
+p {
+    @extend .e;
+}
+
+h5,
+.h-e {
+    @extend .e;
+    font-weight: bold;
+    margin: 0;
+}
+
+h6,
+.h-f {
+    @extend .f;
+    text-transform: uppercase;
+    margin: 0;
+}
+
+.h-lined {
+    border-bottom: solid 1px $color-subtle;
 }

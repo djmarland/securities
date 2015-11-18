@@ -8,4 +8,14 @@ class ServiceResultEmpty extends ServiceResult
     {
         // empty
     }
+
+
+    public function getTotal() {
+        return 0;
+    }
+
+    public function getDomainModels(): array
+    {
+        return array();
+    }
 }

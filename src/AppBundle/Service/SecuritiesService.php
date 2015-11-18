@@ -7,7 +7,7 @@ use AppBundle\Domain\ValueObject\ISIN;
 
 class SecuritiesService extends Service
 {
-    public function findAndCountLatest(
+    public function findAndCountAll(
         int $limit,
         int $page = 1
     ): ServiceResultInterface {
@@ -41,7 +41,47 @@ class SecuritiesService extends Service
             ->paginate($limit, $page)
             ->get();
 
-        return new ServiceResult($securities);
+        if ($securities) {
+            return new ServiceResult($securities);
+        }
+        return new ServiceResultEmpty();
+    }
+
+    public function searchAndCount(
+        string $query,
+        int $limit,
+        int $page = 1
+    ): ServiceResultInterface {
+        $factory = $this->getQueryFactory();
+
+        $count = $factory
+            ->createSecuritiesQuery()
+            ->countSearch($query);
+
+        if ($count == 0) {
+            return new ServiceResultEmpty();
+        }
+
+        // find them
+        $result = $this->search($query, $limit, $page);
+        $result->setTotal($count);
+        return $result;
+    }
+
+    public function search(
+        string $query,
+        int $limit,
+        int $page = 1
+    ): ServiceResultInterface {
+        $securities = $this->getQueryFactory()
+            ->createSecuritiesQuery()
+            ->paginate($limit, $page)
+            ->search($query);
+
+        if ($securities) {
+            return new ServiceResult($securities);
+        }
+        return new ServiceResultEmpty();
     }
 
     public function findById(ID $id): ServiceResultInterface

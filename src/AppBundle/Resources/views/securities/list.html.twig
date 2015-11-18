@@ -5,10 +5,9 @@
 {% endblock %}
 
 {% block body %}
-    <h1>Securities</h1>
-    <ul>
-        {%  for security in securities %}
-            <li><a href="{{ path('securities_show',{'isin':security.isin}) }}">{{ security.name }}</a></li>
-        {%  endfor %}
-    </ul>
+    <h1 class="g-unit">Securities</h1>
+    {% include '@partials/securities-list.html.twig' %}
+    <div>
+        {% include pagination.templatePath with pagination.vars only %}
+    </div>
 {% endblock %}

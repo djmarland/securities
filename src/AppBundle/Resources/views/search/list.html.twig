@@ -1,0 +1,17 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block crumb %}
+    {{ title }}
+{% endblock %}
+
+{% block body %}
+    <h1 class="g-unit">{{ title }}</h1>
+    {% if hasResults %}
+        {% include '@partials/securities-list.html.twig' %}
+        <div>
+            {% include pagination.templatePath with pagination.vars only %}
+        </div>
+    {% else %}
+        <p>No results match your query</p>
+    {% endif %}
+{% endblock %}

@@ -1,0 +1,5 @@
+<ul class="list--unstyled list--spaced">
+    {%  for security in securities %}
+        <li>{% include security.templatePath with security.vars only %}</li>
+    {%  endfor %}
+</ul>
