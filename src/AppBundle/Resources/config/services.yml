@@ -7,4 +7,4 @@ services:
 
   app.services.securities:
       class: AppBundle\Service\SecuritiesService
-      arguments: [@database.services.query_factory]
+      arguments: [@doctrine.orm.default_entity_manager,@database.mapper.factory]

@@ -49,7 +49,13 @@ class SecuritiesController extends Controller
         }
 
         $this->toView('title', $security->getISIN());
-        $this->toView('security', new SecurityPresenter($security, ['showTitle' => false]));
+        $this->toView('security', new SecurityPresenter(
+            $security,
+            [
+                'showTitle' => false,
+                'includeLink' => false
+            ]
+        ));
         return $this->renderTemplate('securities:show');
     }
 }

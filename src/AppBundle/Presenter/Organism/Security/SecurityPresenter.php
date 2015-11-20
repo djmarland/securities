@@ -7,12 +7,14 @@ use AppBundle\Presenter\Presenter;
 
 class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 {
+    const DATE_FORMAT = 'd/m/Y';
 
     private $security;
 
     public function __construct(
         Security $security,
         array $options = [
+            'includeLink' => true,
             'showTitle' => true
         ]
     )
@@ -20,6 +22,11 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         parent::__construct(null, $options);
 
         $this->security = $security;
+    }
+
+    public function includeLink()
+    {
+        return $this->getOptions()->includeLink;
     }
 
     public function getTitle()
@@ -56,22 +63,26 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getAmount():string
     {
-        return '';
+        return $this->security->getMoneyRaised();
     }
 
     public function getCurrency():string
     {
-        return '';
+        return $this->security->getCurrency()->getCode();
     }
 
     public function getStartDate():string
     {
-        return '';
+        return $this->security->getStartDate()->format(self::DATE_FORMAT);
     }
 
     public function getMaturityDate():string
     {
-        return '';
+        $date = $this->security->getMaturityDate();
+        if ($date) {
+            return $this->security->getMaturityDate()->format(self::DATE_FORMAT);
+        }
+        return 'UNDATED';
     }
 
     public function getDuration():string

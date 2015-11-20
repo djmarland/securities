@@ -7,6 +7,9 @@ use AppBundle\Domain\ValueObject\ISIN;
 
 class SecuritiesService extends Service
 {
+    const SECURITY_ENTITY = 'Security';
+    const CURRENCY_ENTITY = 'Currency';
+
     public function findAndCountAll(
         int $limit,
         int $page = 1
@@ -26,20 +29,25 @@ class SecuritiesService extends Service
 
     public function countAll(): int
     {
-        return $this->getQueryFactory()
-            ->createSecuritiesQuery()
-            ->count();
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('count(tbl.id)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findAll(
         int $limit,
         int $page = 1
     ): ServiceResultInterface {
-        $securities = $this->getQueryFactory()
-            ->createSecuritiesQuery()
-            ->sortByIsin('ASC')
-            ->paginate($limit, $page)
-            ->get();
+        $entity = $this->getEntity(self::SECURITY_ENTITY);
+
+        $result = $entity->findBy(
+            [],
+            ['isin' => 'ASC'],
+            $limit,
+            $this->getOffset($limit, $page)
+        );
+
+        $securities = $this->getDomainModels($result);
 
         if ($securities) {
             return new ServiceResult($securities);
@@ -52,13 +60,9 @@ class SecuritiesService extends Service
         int $limit,
         int $page = 1
     ): ServiceResultInterface {
-        $factory = $this->getQueryFactory();
+        $count = $this->countSearch($query);
 
-        $count = $factory
-            ->createSecuritiesQuery()
-            ->countSearch($query);
-
-        if ($count == 0) {
+        if ($count === 0) {
             return new ServiceResultEmpty();
         }
 
@@ -68,43 +72,41 @@ class SecuritiesService extends Service
         return $result;
     }
 
+    public function countSearch(string $query): int
+    {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('count(tbl.id)');
+        $qb->andWhere('tbl.isin LIKE ?0');
+        $qb->setParameters(['%' . $query . '%']);
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function search(
         string $query,
         int $limit,
         int $page = 1
     ): ServiceResultInterface {
-        $securities = $this->getQueryFactory()
-            ->createSecuritiesQuery()
-            ->paginate($limit, $page)
-            ->search($query);
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('tbl', 'c');
+        $qb->join('tbl.currency', 'c');
 
-        if ($securities) {
-            return new ServiceResult($securities);
-        }
-        return new ServiceResultEmpty();
-    }
+        $qb->andWhere('tbl.isin LIKE :query');
+        $qb->setParameters(['query' => '%' . $query . '%']);
 
-    public function findById(ID $id): ServiceResultInterface
-    {
-        $result = $this->getQueryFactory()
-            ->createSecuritiesQuery()
-            ->byId((string) $id)
-            ->get();
-        if ($result) {
-            return new ServiceResult($result);
-        }
-        return new ServiceResultEmpty();
+        $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
     }
 
     public function findByIsin(ISIN $isin): ServiceResultInterface
     {
-        $result = $this->getQueryFactory()
-            ->createSecuritiesQuery()
-            ->byIsin((string) $isin)
-            ->get();
-        if ($result) {
-            return new ServiceResult($result);
-        }
-        return new ServiceResultEmpty();
+        $entity = $this->getEntity(self::SECURITY_ENTITY);
+
+        $result = $entity->findBy(
+            ['isin' => $isin]
+        );
+
+        return $this->getServiceResult($result);
     }
 }

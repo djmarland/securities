@@ -1,5 +1,7 @@
 <div class="security">
-    <a class="security__link card" href="{{ path('securities_show',{'isin':security.isin}) }}">
+    {% if security.includeLink %}
+        <a class="security__link card" href="{{ path('securities_show',{'isin':security.isin}) }}">
+    {% endif %}
     {% if security.title %}
         <h2 class="island-squashed h-c">{{ security.title }}</h2>
     {% endif %}
@@ -52,5 +54,7 @@
         </tr>
         </tbody>
     </table>
-    </a>
+    {% if security.includeLink %}
+        </a>
+    {% endif %}
 </div>

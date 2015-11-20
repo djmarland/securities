@@ -10,6 +10,7 @@
 
         request.onload = function() {
             // @todo - be better at this, more resiliant
+            // @todo -and cancel previous request if typing continues
             if (this.status >= 200 && this.status < 400) {
                 // Success!
                 var resp = this.response;

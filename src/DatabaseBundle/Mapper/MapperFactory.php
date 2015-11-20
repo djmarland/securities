@@ -5,6 +5,7 @@ namespace DatabaseBundle\Mapper;
 use AppBundle\Domain\Entity\Entity;
 use DatabaseBundle\Entity\Entity as EntityOrm;
 use DatabaseBundle\Entity\Security as SecurityOrm;
+use DatabaseBundle\Entity\Currency as CurrencyOrm;
 
 /**
  * Factory to create mappers as needed
@@ -23,6 +24,10 @@ class MapperFactory
         if ($item instanceof SecurityOrm) {
             return $this->createSecurity();
         }
+
+        if ($item instanceof CurrencyOrm) {
+            return $this->createCurrency();
+        }
     }
 
     public function getDomainModel(EntityOrm $item): Entity
@@ -35,5 +40,11 @@ class MapperFactory
     {
         $settingsMapper = new SecurityMapper($this);
         return $settingsMapper;
+    }
+
+    public function createCurrency(): CurrencyMapper
+    {
+        $currencyMapper = new CurrencyMapper($this);
+        return $currencyMapper;
     }
 }

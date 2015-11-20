@@ -2,37 +2,66 @@
 
 namespace AppBundle\Service;
 
-use DatabaseBundle\Query\QueryFactory;
+use DatabaseBundle\Mapper\MapperFactory;
+use Doctrine\ORM\EntityManager;
+use Doctrine\ORM\EntityRepository;
 
 abstract class Service
 {
-    /**
-     * @param QueryFactory $queryFactory
-     */
+    protected $entityManager;
+
+    protected $mapperFactory;
+
     public function __construct(
-        QueryFactory $queryFactory
+        EntityManager $entityManager,
+        MapperFactory $mapperFactory
     ) {
-        $this->setQueryFactory($queryFactory);
+        $this->entityManager = $entityManager;
+        $this->mapperFactory = $mapperFactory;
     }
 
-    /**
-     * @var QueryFactory
-     */
-    public $queryFactory;
-
-    /**
-     * @return QueryFactory
-     */
-    protected function getQueryFactory()
+    public function getEntity(string $name): EntityRepository
     {
-        return $this->queryFactory;
+        return $this->entityManager
+            ->getRepository('DatabaseBundle:' . $name);
     }
 
-    /**
-     * @param QueryFactory $queryFactory
-     */
-    protected function setQueryFactory(QueryFactory $queryFactory)
+    public function getQueryBuilder(string $name) {
+        $entity = $this->getEntity($name);
+        return $entity->createQueryBuilder('tbl');
+    }
+
+    public function getDomainModels($items)
     {
-        $this->queryFactory = $queryFactory;
+        if (!$items) {
+            return null;
+        }
+        if (!is_array($items)) {
+            $items = [$items];
+        }
+
+        $domainModels = array();
+        foreach ($items as $item) {
+            $mapper = $this->mapperFactory->getMapper($item);
+            $domainModels[] = $mapper->getDomainModel($item);
+        }
+        return $domainModels;
+    }
+
+    public function getOffset(
+        int $limit,
+        int $page
+    ): int {
+        return ($limit * ($page - 1));
+    }
+
+    public function getServiceResult($result)
+    {
+        $data = $this->getDomainModels($result);
+
+        if ($data) {
+            return new ServiceResult($data);
+        }
+        return new ServiceResultEmpty();
     }
 }

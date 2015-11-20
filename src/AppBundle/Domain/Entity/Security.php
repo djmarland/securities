@@ -11,17 +11,24 @@ class Security extends Entity
 
     /**
      * @param ID $id
-     * @param $createdAt
-     * @param $updatedAt
+     * @param DateTime $createdAt
+     * @param DateTime $updatedAt
      * @param ISIN $isin
-     * @param $name
+     * @param string $name
+     * @param DateTime $startTime
+     * @param float $moneyRaised
+     * @param Currency $currency
      */
     public function __construct(
         ID $id,
         DateTime $createdAt,
         DateTime $updatedAt,
         ISIN $isin,
-        string $name
+        string $name,
+        DateTime $startDate,
+        float $moneyRaised,
+        Currency $currency,
+        DateTime $maturityDate = null
     ) {
         parent::__construct(
             $id,
@@ -31,6 +38,10 @@ class Security extends Entity
 
         $this->name = $name;
         $this->isin = $isin;
+        $this->startDate = $startDate;
+        $this->currency = $currency;
+        $this->moneyRaised = $moneyRaised;
+        $this->maturityDate = $maturityDate;
     }
 
     /**
@@ -51,5 +62,45 @@ class Security extends Entity
     public function getIsin(): string
     {
         return $this->isin;
+    }
+
+    /**
+     * @var DateTime
+     */
+    private $startDate;
+
+    public function getStartDate(): DateTime
+    {
+        return $this->startDate;
+    }
+
+    /**
+     * @var DateTime|null
+     */
+    private $maturityDate;
+
+    public function getMaturityDate()
+    {
+        return $this->maturityDate;
+    }
+
+    /**
+     * @var string
+     */
+    private $moneyRaised;
+
+    public function getMoneyRaised(): float
+    {
+        return $this->moneyRaised;
+    }
+
+    /**
+     * @var string
+     */
+    private $currency;
+
+    public function getCurrency(): Currency
+    {
+        return $this->currency;
     }
 }
