@@ -39,9 +39,10 @@ class SecuritiesService extends Service
         int $page = 1
     ): ServiceResultInterface {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select('tbl', 'c', 'co');
+        $qb->select('tbl', 'c', 'co', 'fsa');
         $qb->join('tbl.currency', 'c');
         $qb->join('tbl.company', 'co');
+        $qb->join('tbl.fsa04748', 'fsa');
         $qb->orderBy('tbl.isin', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
