@@ -38,21 +38,15 @@ class SecuritiesService extends Service
         int $limit,
         int $page = 1
     ): ServiceResultInterface {
-        $entity = $this->getEntity(self::SECURITY_ENTITY);
-
-        $result = $entity->findBy(
-            [],
-            ['isin' => 'ASC'],
-            $limit,
-            $this->getOffset($limit, $page)
-        );
-
-        $securities = $this->getDomainModels($result);
-
-        if ($securities) {
-            return new ServiceResult($securities);
-        }
-        return new ServiceResultEmpty();
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('tbl', 'c', 'co');
+        $qb->join('tbl.currency', 'c');
+        $qb->join('tbl.company', 'co');
+        $qb->orderBy('tbl.isin', 'ASC');
+        $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
     }
 
     public function searchAndCount(

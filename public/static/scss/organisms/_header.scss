@@ -3,6 +3,7 @@
     color: $color-header-text;
     padding-top: $grid-unit-small;
     padding-bottom: $grid-unit-small;
+    margin-bottom: $grid-unit-large;
     a,
     a:link,
     a:visited {
@@ -23,6 +24,8 @@
 .header__logo {
     margin: 0 $grid-unit-large 0 0;
     font-size: 1.4rem;
+    font-weight: bolder;
+    text-transform: uppercase;
 }
 .header__search {
     @include flex-fill();

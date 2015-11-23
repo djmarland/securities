@@ -4,7 +4,9 @@ namespace DatabaseBundle\Mapper;
 
 use AppBundle\Domain\Entity\Entity;
 use DatabaseBundle\Entity\Entity as EntityOrm;
+use DatabaseBundle\Entity\Fsa04748 as Fsa04748Orm;
 use DatabaseBundle\Entity\Security as SecurityOrm;
+use DatabaseBundle\Entity\Company as CompanyOrm;
 use DatabaseBundle\Entity\Currency as CurrencyOrm;
 
 /**
@@ -25,8 +27,16 @@ class MapperFactory
             return $this->createSecurity();
         }
 
+        if ($item instanceof CompanyOrm) {
+            return $this->createCompany();
+        }
+
         if ($item instanceof CurrencyOrm) {
             return $this->createCurrency();
+        }
+
+        if ($item instanceof Fsa04748Orm) {
+            return $this->createFsa04748();
         }
     }
 
@@ -40,6 +50,18 @@ class MapperFactory
     {
         $settingsMapper = new SecurityMapper($this);
         return $settingsMapper;
+    }
+
+    public function createFsa04748(): Fsa04748Mapper
+    {
+        $fsa04748Mapper = new Fsa04748Mapper($this);
+        return $fsa04748Mapper;
+    }
+
+    public function createCompany(): CompanyMapper
+    {
+        $companyMapper = new CompanyMapper($this);
+        return $companyMapper;
     }
 
     public function createCurrency(): CurrencyMapper

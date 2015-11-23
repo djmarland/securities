@@ -37,6 +37,7 @@
 
     function init() {
         var searchContainer = document.getElementById('search-container'),
+            mastheadContent = document.getElementById('masthead-content'),
             continerEmpty = !searchContainer.hasChildNodes(),
             hasBegunSearch = false,
             searchForm = document.getElementById('search-form'),
@@ -51,6 +52,7 @@
             }
             if (continerEmpty) {
                 searchContainer.appendChild(searchForm);
+                mastheadContent.classList.remove('transparent');
                 searchBox.focus();
                 continerEmpty = false;
             }

@@ -1,15 +1,15 @@
 // Colours
-$color-subtle: #B2B6B8;
-$color-faint: #d0d4d6;
-$color-text: #444748;
+$color-subtle: #b5b3b8;
+$color-faint: #d3ced6;
+$color-text: #444148;
 $color-body: #fafafa;
 $color-card: #fff;
 $color-card-hover: #f6f6f6;
-$color-darker: #263238;
+$color-darker: #342638;
 
 $color-header-bg: $color-darker;
-$color-header-text: $color-subtle;
-$color-header-active: #fff;
+$color-header-text: #fff;
+$color-header-active: $color-subtle;
 
 // Sizes
 $grid-unit-large: 24px;

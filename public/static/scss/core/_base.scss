@@ -1,15 +1,16 @@
 @import '../vendor/normalize';
 
-.app {
-    *, *:before, *:after {
-        box-sizing: border-box;
-    }
+*, *:before, *:after {
+    box-sizing: border-box;
+}
 
-    img,
-    svg {
-        width: 100%;
-        height: auto;
-    }
+html, body {
+    min-height: 100%;
+    margin: 0;
+}
+
+html {
+    overflow-y: scroll;
 }
 
 body {
@@ -17,6 +18,13 @@ body {
     background: $color-body;
     color: $color-text;
     font-family: $font-body;
+}
+
+
+img,
+svg {
+    width: 100%;
+    height: auto;
 }
 
 a {
@@ -31,6 +39,17 @@ a {
     padding-left: $grid-unit-small;
     padding-right: $grid-unit-small;
     max-width: 976px;
+}
+
+.sf-toolbarreset {
+    *, *:before, *:after {
+        box-sizing: content-box;
+    }
+    img,
+    svg {
+        width: auto;
+        height: auto;
+    }
 }
 
 @include mq($from: m) {

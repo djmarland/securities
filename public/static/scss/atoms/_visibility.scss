@@ -6,7 +6,6 @@
 @include invisible();
 //@include visible();
 
-
 //@each $breakpoint, $suffix in ($breakpoint-suffixes) {
 //    @include mq($from: $breakpoint) {
 //        @include hidden($suffix);
@@ -17,3 +16,7 @@
 //        @include visible($suffix);
 //    }
 //}
+
+.transparent {
+    visibility: hidden;
+}

@@ -35,6 +35,7 @@ class Controller extends BaseController implements ControllerInterface
     {
         $this->request = $request;
         $this->masterViewPresenter = new MasterPresenter();
+        $this->toView('currentYear', date("Y"));
         $this->setSearchContext();
     }
 
@@ -57,7 +58,7 @@ class Controller extends BaseController implements ControllerInterface
         $search = $this->request->get('q', null);
         $this->toView('searchContext', $search);
         $this->toView('searchAutofocus', null);
-        $this->toView('showSearchInHead', true);
+        $this->toView('showMasthead', true);
     }
 
     /**

@@ -2,8 +2,14 @@
 
 
 {% block body %}
-   <h1>HOME PAGE</h1>
-    <a href="{{ path('securities_list') }}">Securities</a>
-
-    {% include '@partials/search.html.twig' %}
+    <div class="home-wrapper card card--padded">
+        <h1 class="home__logo home__content">ISIN Analytics</h1>
+        <div class="home__search home__content">
+            {% include '@partials/search.html.twig' %}
+        </div>
+        <p class="home__intro home__content">
+            Find out how your securities are performing. Enter an ISIN, security or company name to get
+            started, or <a href="{{ path('securities_list') }}">view all securities</a>.
+        </p>
+    </div>
 {% endblock %}

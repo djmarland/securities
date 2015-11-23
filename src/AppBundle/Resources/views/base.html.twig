@@ -11,10 +11,12 @@
 <div class="app">
     <header class="header">
         <div class="page-limit">
-            <div class="header__content">
-            <div class="header__logo"><a href="{{ path('home') }}">ISIN Analytics</a></div>
+            <div id="masthead-content" class="header__content {%if not showMasthead %}transparent{% endif%}">
+            <div class="header__logo">
+                <a href="{{ path('home') }}">ISIN Analytics</a>
+            </div>
             <div id="search-container" class="header__search">{%
-                if showSearchInHead %}{% include '@partials/search.html.twig' %}{% endif
+                if showMasthead %}{% include '@partials/search.html.twig' %}{% endif
             %}</div>
             </div>
         </div>
@@ -26,10 +28,15 @@
 {% block footer %}
         </div>
     </main>
+    <footer class="footer">
+        <div class="page-limit">
+            &copy; {{ currentYear }}
+        </div>
+    </footer>
 </div>
 {% endblock %}
 <template id="loading-spinner" class="hidden">
-    <div id="loading-spinner" class="loading">
+    <div class="loading">
         <svg class="loading__spinner" viewBox="-2 -2 70 70" xmlns="http://www.w3.org/2000/svg">
             <circle class="loading__path" fill="none" stroke-width="8" cx="33" cy="33" r="30"></circle>
         </svg>

@@ -58,7 +58,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getIssuer():string
     {
-        return '';
+        return $this->security->getCompany()->getName();
     }
 
     public function getAmount():string
@@ -92,17 +92,21 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getCoupon():string
     {
-        return '';
+        $coupon = $this->security->getCoupon();
+        if ($coupon) {
+            return $this->security->getCoupon() . '%';
+        }
+        return 'N/A';
     }
 
     public function getFsa047Line():string
     {
-        return '';
+        return (string) $this->security->getFsa04748()->getLine();
     }
 
     public function getFas047Name():string
     {
-        return '';
+        return $this->security->getFsa04748()->getName();
     }
 
     public function getResidualMaturity():string
