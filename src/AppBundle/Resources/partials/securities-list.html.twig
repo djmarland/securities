@@ -1,3 +1,4 @@
+<p>{{ pagination.total }} results</p>
 <ul class="list--unstyled list--spaced">
     {%  for security in securities %}
         <li>{% include security.templatePath with security.vars only %}</li>

@@ -1,23 +1,26 @@
 'use strict';
 
-var gulp = require('gulp');
-var sass = require('gulp-sass');
-var staticPath = 'public/static/';
+var gulp = require('gulp'),
+    sass = require('gulp-sass'),
+    uglify = require('gulp-uglify'),
+    staticPathSrc = 'public/static/src/',
+    staticPathDist = 'public/static/dist/';
 
 gulp.task('sass', function() {
-    gulp.src(staticPath + 'scss/**/*.scss')
-        .pipe(sass().on('error', sass.logError))
-        .pipe(gulp.dest(staticPath + 'css/'))
+    gulp.src(staticPathSrc + 'scss/**/*.scss')
+        .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
+        .pipe(gulp.dest(staticPathDist + 'css/'))
 });
 
 gulp.task('js', function() {
-    gulp.src(staticPath + 'js-src/**/*.js')
-        .pipe(gulp.dest(staticPath + 'js/'))
+    gulp.src(staticPathSrc + 'js/**/*.js')
+        .pipe(uglify())
+        .pipe(gulp.dest(staticPathDist + 'js/'))
 });
 
 gulp.task('default', ['sass', 'js']);
 
 gulp.task('watch',function() {
-    gulp.watch(staticPath + 'scss/**/*.scss',['sass']);
-    gulp.watch(staticPath + 'js-src/**/*.js',['js']);
+    gulp.watch(staticPathSrc + 'scss/**/*.scss',['sass']);
+    gulp.watch(staticPathSrc + 'js/**/*.js',['js']);
 });

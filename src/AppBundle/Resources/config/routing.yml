@@ -6,6 +6,10 @@ styleguide:
   path:     /styleguide
   defaults: { _controller: AppBundle:Home:styleguide }
 
+about:
+  path:     /about
+  defaults: { _controller: AppBundle:Home:about }
+
 search:
   path:     /search
   defaults: { _controller: AppBundle:Search:list }
@@ -17,3 +21,12 @@ securities_list:
 securities_show:
   path:     /securities/{isin}
   defaults: { _controller: AppBundle:Securities:show }
+
+
+issuers_list:
+  path:     /issuers
+  defaults: { _controller: AppBundle:Issuers:list }
+
+issuers_show:
+  path:     /issuers/{id}
+  defaults: { _controller: AppBundle:Issuers:show }

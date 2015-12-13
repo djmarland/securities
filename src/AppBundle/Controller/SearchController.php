@@ -3,19 +3,26 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
+use Symfony\Component\HttpFoundation\Request;
 
 class SearchController extends Controller
 {
+    public function initialize(Request $request)
+    {
+        parent::initialize($request);
+        $this->toView('currentSection', 'search');
+    }
+
     public function listAction()
     {
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
         $query = $this->request->get('q', null);
-        $this->toView('title', 'Search');
+        $this->setTitle('Search');
 
         if ($query) {
-            $this->toView('title', 'Search - ' . $query);
+            $this->setTitle('Search - ' . $query);
 
             $result = $this->get('app.services.securities')
                 ->searchAndCount($query, $perPage, $currentPage);

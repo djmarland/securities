@@ -1,0 +1,4 @@
+imports:
+    - { resource: console.yml }
+    - { resource: config_dev.yml }
+

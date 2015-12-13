@@ -2,7 +2,6 @@
 
 namespace AppBundle\Presenter;
 
-use AppBundle\Domain\Exception\DataNotSetException;
 
 /**
  * Class MasterPresenter
@@ -12,6 +11,25 @@ class MasterPresenter extends Presenter
 {
 
     private $data = [];
+
+    private $meta = [
+        'title' => '',
+        'fullTitle' => '',
+        'siteTitle' => ''
+    ];
+
+    private $title = '';
+
+    private $appConfig;
+
+    public function __construct($appConfig)
+    {
+        parent::__construct();
+        $this->appConfig = $appConfig;
+        $this->meta['title'] = $this->appConfig['title'];
+        $this->meta['fullTitle'] = $this->appConfig['title'];
+        $this->meta['siteTitle'] = $this->appConfig['title'];
+    }
 
     /**
      * @param $key string
@@ -34,12 +52,15 @@ class MasterPresenter extends Presenter
         if (isset($this->data[$key])) {
             return $this->data[$key]->data;
         }
-        throw new DataNotSetException;
+        throw new \Exception; // todo - use a custom one
     }
 
     public function getData()
     {
-        $data = array();
+        // meta always present
+        $data = [
+            'meta' => $this->meta
+        ];
         ksort($this->data);
         foreach ($this->data as $key => $value) {
             $data[$key] = $value->data;
@@ -49,8 +70,9 @@ class MasterPresenter extends Presenter
 
     public function getFeedData()
     {
-        $data = (object) [];
-
+        $data = (object) [
+            'meta' => (object) $this->meta
+        ];
         ksort($this->data);
         foreach ($this->data as $key => $value) {
             if ($value->inFeed) {
@@ -59,5 +81,11 @@ class MasterPresenter extends Presenter
         }
 
         return $data;
+    }
+
+    public function setTitle(string $title)
+    {
+        $this->meta['title'] = $title;
+        $this->meta['fullTitle'] = $title . ' - ' . $this->appConfig['title'];
     }
 }

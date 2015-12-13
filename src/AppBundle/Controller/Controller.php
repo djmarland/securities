@@ -34,8 +34,10 @@ class Controller extends BaseController implements ControllerInterface
     public function initialize(Request $request)
     {
         $this->request = $request;
-        $this->masterViewPresenter = new MasterPresenter();
+        $this->appConfig = $this->getParameter('app.config');
+        $this->masterViewPresenter = new MasterPresenter($this->appConfig);
         $this->toView('currentYear', date("Y"));
+        $this->toView('currentSection', null);
         $this->setSearchContext();
     }
 
@@ -85,18 +87,11 @@ class Controller extends BaseController implements ControllerInterface
         $this->toView('pagination', $pagination);
     }
 
-    /**
-     * Set values that make it to the view
-     * @param $key
-     * @param $value
-     * @param bool  $inFeed
-     * @return $this
-     */
     public function toView(
-        $key,
+        string $key,
         $value,
         $inFeed = true
-    ) {
+    ): Controller {
         $this->masterViewPresenter->set($key, $value, $inFeed);
         return $this;
     }
@@ -109,6 +104,13 @@ class Controller extends BaseController implements ControllerInterface
     public function fromView($key)
     {
         return $this->masterViewPresenter->get($key);
+    }
+
+
+    public function setTitle(string $title): Controller
+    {
+        $this->masterViewPresenter->setTitle($title);
+        return $this;
     }
 
     protected function renderTemplate($template)

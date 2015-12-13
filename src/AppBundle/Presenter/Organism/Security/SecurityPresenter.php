@@ -2,7 +2,7 @@
 
 namespace AppBundle\Presenter\Organism\Security;
 
-use AppBundle\Domain\Entity\Security;
+use SecuritiesService\Domain\Entity\Security;
 use AppBundle\Presenter\Presenter;
 
 class SecurityPresenter extends Presenter implements SecurityPresenterInterface

@@ -1,0 +1,10 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">{{ meta.title }}</h1>
+    <h2>Securities</h2>
+    {% include '@partials/securities-list.html.twig' %}
+    <div>
+        {% include pagination.templatePath with pagination.vars only %}
+    </div>
+{% endblock %}

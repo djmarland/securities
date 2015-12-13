@@ -1,0 +1,22 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">{{ meta.title }}</h1>
+    <p>{{ pagination.total }} results</p>
+    {% set letter = null %}
+    {%  for issuer in issuers %}
+        {% if issuer.letter != letter %}
+            {% if letter != null %}
+                </ul>
+                </div>
+            {% endif %}
+            {% set letter = issuer.letter %}
+            <div class="card card--padded g-unit">
+            <h2>{{ letter }}</h2>
+            <ul>
+        {% endif %}
+        <li>{% include issuer.templatePath with issuer.vars only %}</li>
+    {%  endfor %}
+    </ul>
+    </div>
+{% endblock %}

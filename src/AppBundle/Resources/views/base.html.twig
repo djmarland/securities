@@ -2,10 +2,31 @@
 <html>
 <head>
     <meta charset="utf-8">
-    <title>Securities</title>
+    <title>{{ meta.fullTitle }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="stylesheet" href="/static/css/global.css" />
-</head>
+    <link rel="apple-touch-icon" sizes="57x57" href="/static/icons/apple-touch-icon-57x57.png" />
+    <link rel="apple-touch-icon" sizes="60x60" href="/static/icons/apple-touch-icon-60x60.png" />
+    <link rel="apple-touch-icon" sizes="72x72" href="/static/icons/apple-touch-icon-72x72.png" />
+    <link rel="apple-touch-icon" sizes="76x76" href="/static/icons/apple-touch-icon-76x76.png" />
+    <link rel="apple-touch-icon" sizes="114x114" href="/static/icons/apple-touch-icon-114x114.png" />
+    <link rel="apple-touch-icon" sizes="120x120" href="/static/icons/apple-touch-icon-120x120.png" />
+    <link rel="apple-touch-icon" sizes="144x144" href="/static/icons/apple-touch-icon-144x144.png" />
+    <link rel="apple-touch-icon" sizes="152x152" href="/static/icons/apple-touch-icon-152x152.png" />
+    <link rel="apple-touch-icon" sizes="180x180" href="/static/icons/apple-touch-icon-180x180.png" />
+    <link rel="icon" href="/static/icons/favicon.ico" type="image/x-icon" />
+    <link rel="icon" type="image/png" href="/static/icons/favicon-32x32.png" sizes="32x32" />
+    <link rel="icon" type="image/png" href="/static/icons/favicon-194x194.png" sizes="194x194" />
+    <link rel="icon" type="image/png" href="/static/icons/favicon-96x96.png" sizes="96x96" />
+    <link rel="icon" type="image/png" href="/static/icons/android-chrome-192x192.png" sizes="192x192" />
+    <link rel="icon" type="image/png" href="/static/icons/favicon-16x16.png" sizes="16x16" />
+    <meta name="msapplication-TileColor" content="#383b3f" />
+    <meta name="msapplication-TileImage" content="/static/icons/mstile-144x144.png" />
+    <meta name="msapplication-square150x150logo" content="/static/icons/mstile-150x150.png" />
+    <meta name="msapplication-square310x310logo" content="/static/icons/mstile-310x310.png" />
+    <meta name="theme-color" content="#383b3f" />
+    <style>
+        {{ source('@static/css/global.css') }}
+    </style>
 <body class="{% block bodyClass %}{% endblock %}">
 {% block header %}
 <div class="app">
@@ -13,7 +34,7 @@
         <div class="page-limit">
             <div id="masthead-content" class="header__content {%if not showMasthead %}transparent{% endif%}">
             <div class="header__logo">
-                <a href="{{ path('home') }}">ISIN Analytics</a>
+                <a href="{{ path('home') }}">{{ meta.siteTitle }}</a>
             </div>
             <div id="search-container" class="header__search">{%
                 if showMasthead %}{% include '@partials/search.html.twig' %}{% endif
@@ -21,6 +42,13 @@
             </div>
         </div>
     </header>
+    <nav class="nav">
+        <ul class="nav__list page-limit"
+            ><li class="nav__item"><a class="nav__link {% if currentSection == 'securities' %}nav__link--active{% endif %}" href="{{ path('securities_list') }}">Securities</a></li
+            ><li class="nav__item"><a class="nav__link {% if currentSection == 'issuers' %}nav__link--active{% endif %}" href="{{ path('issuers_list') }}">Issuers</a></li
+            ><li class="nav__item"><a class="nav__link {% if currentSection == 'about' %}nav__link--active{% endif %}" href="{{ path('about') }}">About</a></li
+        ></ul>
+    </nav>
     <main class="main">
         <div class="page-limit" id="main-body">
 {% endblock %}
@@ -42,6 +70,8 @@
         </svg>
     </div>
 </template>
-<script src="/static/js/bootstrap.js"></script>
+<script>
+    {{ source('@static/js/bootstrap.js') }}
+</script>
 </body>
 </html>

@@ -2,13 +2,20 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Domain\ValueObject\ISIN;
+use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SecuritiesController extends Controller
 {
+
+    public function initialize(Request $request)
+    {
+        parent::initialize($request);
+        $this->toView('currentSection', 'securities');
+    }
+
     public function listAction()
     {
         $perPage = 1500;
@@ -25,6 +32,7 @@ class SecuritiesController extends Controller
             }
         }
 
+        $this->setTitle('Securities');
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $result->getTotal());
 
@@ -48,7 +56,7 @@ class SecuritiesController extends Controller
             throw new HttpException(404, 'Security ' . $isin . ' does not exist.');
         }
 
-        $this->toView('title', $security->getISIN());
+        $this->setTitle($security->getISIN());
         $this->toView('security', new SecurityPresenter(
             $security,
             [

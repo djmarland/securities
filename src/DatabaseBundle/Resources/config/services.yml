@@ -1,4 +1,0 @@
-services:
-
-  database.mapper.factory:
-      class: DatabaseBundle\Mapper\MapperFactory

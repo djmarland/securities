@@ -1,0 +1,46 @@
+.nav {
+    margin-bottom: $grid-unit-large;
+    background: $color-nav-bg;
+}
+.nav__list {
+    margin-top: 0;
+    margin-bottom: 0;
+    padding-top: 0;
+    padding-bottom: 0;
+    list-style: none;
+    text-align: center;
+}
+.nav__item {
+    display: inline-block;
+    margin: 0;
+    border-right: solid 1px $color-darker;
+    &:first-child {
+        border-left: solid 1px $color-darker;
+    }
+}
+.nav__link {
+    display: block;
+    padding: $grid-unit-small;
+    &:link,
+    &:visited {
+        color: $color-nav-text;
+    }
+    &:hover,
+    &:active,
+    &:focus,
+    &--active:link,
+    &--active:visited {
+        color: $color-text;
+        background: $color-body;
+    }
+}
+
+
+@include mq($from: m) {
+    .nav__list {
+        text-align: left;
+    }
+    .nav__link {
+        padding: $grid-unit-small $grid-unit-large;
+    }
+}

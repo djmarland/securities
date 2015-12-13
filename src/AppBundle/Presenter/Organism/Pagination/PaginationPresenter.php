@@ -150,7 +150,7 @@ class PaginationPresenter extends Presenter implements PaginationPresenterInterf
 
     public function getStart()
     {
-        return (($this->currentPage - 1) * $this->perPage) + 1;
+        return $this->getDisplayNumber((($this->currentPage - 1) * $this->perPage) + 1);
     }
 
     public function getEnd()
@@ -159,12 +159,17 @@ class PaginationPresenter extends Presenter implements PaginationPresenterInterf
         if ($end > $this->total) {
             $end = $this->total;
         }
-        return $end;
+        return $this->getDisplayNumber($end);
     }
 
     public function getTotal()
     {
-        return $this->total;
+        return $this->getDisplayNumber($this->total);
+    }
+
+    private function getDisplayNumber($number)
+    {
+        return number_format($number);
     }
 
 }
