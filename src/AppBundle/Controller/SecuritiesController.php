@@ -18,7 +18,7 @@ class SecuritiesController extends Controller
 
     public function listAction()
     {
-        $perPage = 1500;
+        $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
         $result = $this->get('app.services.securities')

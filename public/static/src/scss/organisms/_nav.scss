@@ -21,6 +21,7 @@
 .nav__link {
     display: block;
     padding: $grid-unit-small;
+    text-decoration: none;
     &:link,
     &:visited {
         color: $color-nav-text;

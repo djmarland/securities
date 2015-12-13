@@ -1,9 +1,11 @@
 <div class="security">
     {% if security.includeLink %}
-        <a class="security__link card" href="{{ path('securities_show',{'isin':security.isin}) }}">
-    {% endif %}
-    {% if security.title %}
-        <h2 class="island-squashed h-c">{{ security.title }}</h2>
+        <div class="card">
+        <h2 class="island-squashed h-c">
+            <a class="security__link" href="{{ path('securities_show',{'isin':security.isin}) }}">
+                {{ security.title }}
+            </a>
+        </h2>
     {% endif %}
     <{{ security.subH }} class="h-e h-lined island-squashed">LSE Security Information</{{ security.subH }}>
         <table class="table g-unit">
@@ -15,7 +17,7 @@
                 <th>Description</th><td>{{ security.name }}</td>
             </tr>
             <tr>
-                <th>Issuer:</th><td>{{ security.issuer }}</td>
+                <th>Issuer:</th><td><a href="{{ path('issuers_show', { id : security.issuerID }) }}">{{ security.issuer }}</a></td>
             </tr>
             <tr>
                 <th>Amount raised (£m):</th><td>{{ security.amount }}</td>
@@ -55,6 +57,6 @@
         </tbody>
     </table>
     {% if security.includeLink %}
-        </a>
+        </div>
     {% endif %}
 </div>

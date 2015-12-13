@@ -55,10 +55,14 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->security->getName();
     }
 
-
     public function getIssuer():string
     {
         return $this->security->getCompany()->getName();
+    }
+
+    public function getIssuerID():string
+    {
+        return (string) $this->security->getCompany()->getId();
     }
 
     public function getAmount():string

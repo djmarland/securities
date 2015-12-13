@@ -59,7 +59,7 @@ class IssuersController extends Controller
         $this->setTitle($issuer->getName());
         $this->toView('issuer', $issuer);
 
-        $perPage = 1500;
+        $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
         $result = $this->get('app.services.securities')

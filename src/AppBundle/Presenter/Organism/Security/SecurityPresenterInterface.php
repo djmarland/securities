@@ -8,6 +8,7 @@ interface SecurityPresenterInterface
     public function getSubH():string;
     public function getISIN():string;
     public function getIssuer():string;
+    public function getIssuerID():string;
     public function getAmount():string;
     public function getCurrency():string;
     public function getStartDate():string;
