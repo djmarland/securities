@@ -15,8 +15,7 @@ interface SecurityPresenterInterface
     public function getMaturityDate():string;
     public function getDuration():string;
     public function getCoupon():string;
-    public function getFsa047Line():string;
-    public function getFas047Name():string;
+    public function getLine():string;
     public function getResidualMaturity():string;
     public function getContractualMaturity():string;
 }

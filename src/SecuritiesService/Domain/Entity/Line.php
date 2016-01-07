@@ -5,20 +5,13 @@ namespace SecuritiesService\Domain\Entity;
 use SecuritiesService\Domain\ValueObject\ID;
 use DateTime;
 
-class Fsa04748 extends Entity
+class Line extends Entity
 {
-
-    /**
-     * @param ID $id
-     * @param $createdAt
-     * @param $updatedAt
-     * @param $name
-     */
     public function __construct(
         ID $id,
         DateTime $createdAt,
         DateTime $updatedAt,
-        int $line,
+        int $number,
         string $name
     ) {
         parent::__construct(
@@ -28,7 +21,7 @@ class Fsa04748 extends Entity
         );
 
         $this->name = $name;
-        $this->line = $line;
+        $this->number = $number;
     }
 
     /**
@@ -44,10 +37,10 @@ class Fsa04748 extends Entity
     /**
      * @var int
      */
-    private $line;
+    private $number;
 
-    public function getLine(): int
+    public function getNumber(): int
     {
-        return $this->line;
+        return $this->number;
     }
 }

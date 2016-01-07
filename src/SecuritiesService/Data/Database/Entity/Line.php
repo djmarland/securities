@@ -6,10 +6,24 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="markets")})
+ * @ORM\Table(name="line")})
  */
-class Market extends Entity
+class Line extends Entity
 {
+    /** @ORM\Column(type="integer", length=2) */
+    private $number;
+
+    /** Getters/Setters */
+    public function getNumber()
+    {
+        return $this->number;
+    }
+
+    public function setNumber($number)
+    {
+        $this->number = $number;
+    }
+
     /** @ORM\Column(type="string", length=255) */
     private $name;
 

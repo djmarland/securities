@@ -1,9 +1,0 @@
-imports:
-    - { resource: config.yml }
-
-# Doctrine migrations
-doctrine_migrations:
-    dir_name: %kernel.root_dir%/../src/SecuritiesService/Data/Database/Migration
-    namespace: SecuritiesService\Data\Database\Migration
-    table_name: migration_versions
-    name: Application Migrations

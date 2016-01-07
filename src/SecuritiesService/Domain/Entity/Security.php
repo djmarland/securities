@@ -8,20 +8,6 @@ use DateTime;
 
 class Security extends Entity
 {
-
-    /**
-     * @param ID $id
-     * @param DateTime $createdAt
-     * @param DateTime $updatedAt
-     * @param ISIN $isin
-     * @param string $name
-     * @param DateTime $startDate
-     * @param float $moneyRaised
-     * @param Company $company
-     * @param Currency $currency
-     * @param DateTime $maturityDate
-     * @param float $coupon
-     */
     public function __construct(
         ID $id,
         DateTime $createdAt,
@@ -30,7 +16,7 @@ class Security extends Entity
         string $name,
         DateTime $startDate,
         float $moneyRaised,
-        Fsa04748 $fsa04748,
+        Line $line,
         Company $company,
         Currency $currency,
         DateTime $maturityDate = null,
@@ -47,7 +33,7 @@ class Security extends Entity
         $this->startDate = $startDate;
         $this->currency = $currency;
         $this->moneyRaised = $moneyRaised;
-        $this->fsa04748 = $fsa04748;
+        $this->line = $line;
         $this->company = $company;
         $this->maturityDate = $maturityDate;
         $this->coupon = $coupon;
@@ -116,11 +102,11 @@ class Security extends Entity
     /**
      * @var string
      */
-    private $fsa04748;
+    private $line;
 
-    public function getFsa04748(): Fsa04748
+    public function getLine(): Line
     {
-        return $this->fsa04748;
+        return $this->line;
     }
 
     /**

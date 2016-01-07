@@ -4,7 +4,7 @@ namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Data\Database\Entity\Entity as EntityOrm;
-use SecuritiesService\Data\Database\Entity\Fsa04748 as Fsa04748Orm;
+use SecuritiesService\Data\Database\Entity\Line as LineOrm;
 use SecuritiesService\Data\Database\Entity\Security as SecurityOrm;
 use SecuritiesService\Data\Database\Entity\Company as CompanyOrm;
 use SecuritiesService\Data\Database\Entity\Currency as CurrencyOrm;
@@ -35,8 +35,8 @@ class MapperFactory
             return $this->createCurrency();
         }
 
-        if ($item instanceof Fsa04748Orm) {
-            return $this->createFsa04748();
+        if ($item instanceof LineOrm) {
+            return $this->createLine();
         }
     }
 
@@ -52,10 +52,10 @@ class MapperFactory
         return $settingsMapper;
     }
 
-    public function createFsa04748(): Fsa04748Mapper
+    public function createLine(): LineMapper
     {
-        $fsa04748Mapper = new Fsa04748Mapper($this);
-        return $fsa04748Mapper;
+        $lineMapper = new LineMapper($this);
+        return $lineMapper;
     }
 
     public function createCompany(): CompanyMapper

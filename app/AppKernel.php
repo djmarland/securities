@@ -14,10 +14,12 @@ class AppKernel extends Kernel
             new Symfony\Bundle\TwigBundle\TwigBundle(),
             new Symfony\Bundle\MonologBundle\MonologBundle(),
             new Doctrine\Bundle\DoctrineBundle\DoctrineBundle(),
+            new Doctrine\Bundle\MigrationsBundle\DoctrineMigrationsBundle(),
+            new ConsoleBundle\ConsoleBundle(),
             new AppBundle\AppBundle()
         );
 
-        if (in_array($this->getEnvironment(), array('dev', 'test'))) {
+        if (in_array($this->getEnvironment(), array('dev'))) {
             $bundles[] = new Symfony\Bundle\DebugBundle\DebugBundle();
             $bundles[] = new Symfony\Bundle\WebProfilerBundle\WebProfilerBundle();
         }
@@ -29,7 +31,7 @@ class AppKernel extends Kernel
     {
         $suffix = '';
         $env = $this->getEnvironment();
-        if (in_array($env, ['dev','test'])) {
+        if (in_array($env, ['dev','console'])) {
             $suffix = '_' . $env;
         }
         $loader->load($this->getRootDir().'/config/' . static::CONFIG_FILE . $suffix . '.yml');

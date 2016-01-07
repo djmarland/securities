@@ -11,11 +11,15 @@ class SecuritiesService extends Service
 
     private function selectWithJoins()
     {
+        $currency = 'c';
+        $company = 'co';
+        $line = 'line';
+
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select('tbl', 'c', 'co', 'fsa');
-        $qb->join('tbl.currency', 'c');
-        $qb->join('tbl.company', 'co');
-        $qb->join('tbl.fsa04748', 'fsa');
+        $qb->select(self::TBL, $currency, $company, $line);
+        $qb->leftJoin(self::TBL . '.currency', $currency);
+        $qb->leftJoin(self::TBL . '.company', $company);
+        $qb->leftJoin(self::TBL . '.line', $line);
         return $qb;
     }
 
@@ -39,7 +43,7 @@ class SecuritiesService extends Service
     public function countAll(): int
     {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select('count(tbl.id)');
+        $qb->select('count(' . self::TBL . '.id)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -48,7 +52,7 @@ class SecuritiesService extends Service
         int $page = 1
     ): ServiceResultInterface {
         $qb = $this->selectWithJoins();
-        $qb->orderBy('tbl.isin', 'ASC');
+        $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
         $result = $qb->getQuery()->getResult();
@@ -75,8 +79,8 @@ class SecuritiesService extends Service
     public function countSearch(string $query): int
     {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select('count(tbl.id)');
-        $qb->andWhere('tbl.isin LIKE ?0');
+        $qb->select('count(' . self::TBL . '.id)');
+        $qb->andWhere(self::TBL . '.isin LIKE ?0');
         $qb->setParameters(['%' . $query . '%']);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -87,7 +91,7 @@ class SecuritiesService extends Service
         int $page = 1
     ): ServiceResultInterface {
         $qb = $this->selectWithJoins();
-        $qb->andWhere('tbl.isin LIKE :query');
+        $qb->andWhere(self::TBL . '.isin LIKE :query');
         $qb->setParameters(['query' => '%' . $query . '%']);
 
         $qb->setMaxResults($limit)
@@ -128,8 +132,8 @@ class SecuritiesService extends Service
     public function countByIssuer(Company $issuer): int
     {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select('count(tbl.id)')
-            ->where('IDENTITY(tbl.company) = :id')
+        $qb->select('count(' . self::TBL . '.id)')
+            ->where('IDENTITY(' . self::TBL . '.company) = :id')
             ->setParameters(['id' => (string) $issuer->getId()]);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -140,9 +144,9 @@ class SecuritiesService extends Service
         int $page = 1
     ): ServiceResultInterface {
         $qb = $this->selectWithJoins();
-        $qb->where('IDENTITY(tbl.company) = :id')
+        $qb->where('IDENTITY(' . self::TBL . '.company) = :id')
             ->setParameters(['id' => (string) $issuer->getId()])
-            ->orderBy('tbl.isin', 'ASC')
+            ->orderBy(self::TBL . '.isin', 'ASC')
             ->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
         $result = $qb->getQuery()->getResult();

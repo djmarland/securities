@@ -23,4 +23,19 @@ class Company extends Entity
     {
         $this->name = $name;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Country")
+     */
+    private $country;
+
+    public function getCountry()
+    {
+        return $this->country;
+    }
+
+    public function setCountry($country)
+    {
+        $this->country = $country;
+    }
 }

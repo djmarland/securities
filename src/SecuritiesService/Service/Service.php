@@ -8,6 +8,8 @@ use SecuritiesService\Data\Database\Mapper\MapperFactory;
 
 abstract class Service
 {
+    const TBL = 'tbl';
+
     protected $entityManager;
 
     public function __construct(
@@ -24,7 +26,7 @@ abstract class Service
 
     public function getQueryBuilder(string $name) {
         $entity = $this->getEntity($name);
-        return $entity->createQueryBuilder('tbl');
+        return $entity->createQueryBuilder(self::TBL);
     }
 
     public function getDomainModels($items)

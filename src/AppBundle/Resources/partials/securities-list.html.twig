@@ -1,6 +1,29 @@
 <p>{{ pagination.total }} results</p>
-<ul class="list--unstyled list--spaced">
+<table class="table table--striped">
+    <thead>
+        <tr>
+            <th>ISIN</th>
+            <th>Maturity Date</th>
+            <th>Price</th>
+            <th>Coupon</th>
+            <th>Issue Date</th>
+            <th>Currency</th>
+            <th>Line</th>
+        </tr>
+    </thead>
+    <tbody>
     {%  for security in securities %}
-        <li>{% include security.templatePath with security.vars only %}</li>
+        <tr>
+            <td><a class="security__link" href="{{ path('securities_show',{'isin':security.isin}) }}">
+                {{ security.isin }}
+            </a></td>
+            <td>{{ security.maturityDate }}</td>
+            <td>{{ security.amount }}</td>
+            <td>{{ security.coupon }}</td>
+            <td>{{ security.startDate }}</td>
+            <td>{{ security.currency }}</td>
+            <td>{{ security.line }}</td>
+        </tr>
     {%  endfor %}
-</ul>
+    </tbody>
+</table>

@@ -37,18 +37,7 @@ class Security extends Entity
         $this->isin = $isin;
     }
 
-    /** @ORM\Column(type="string", length=4) */
-    private $tidm;
 
-    public function getTidm()
-    {
-        return $this->tidm;
-    }
-
-    public function setTidm($tidm)
-    {
-        $this->tidm = $tidm;
-    }
 
     /** @ORM\Column(type="float") */
     private $money_raised;
@@ -102,103 +91,19 @@ class Security extends Entity
         $this->coupon = $coupon;
     }
 
-    /** @ORM\Column(type="integer", length=6, nullable=true) */
-    private $weighting;
-
-    public function getWeighting()
-    {
-        return $this->weighting;
-    }
-
-    public function setWeighting($weighting)
-    {
-        $this->weighting = $weighting;
-    }
-
-    /** @ORM\Column(type="float", nullable=true) */
-    private $contractual_maturity;
-
-    public function getContractualMaturity()
-    {
-        return $this->contractual_maturity;
-    }
-
-    public function setContractualMaturity($contractual_maturity)
-    {
-        $this->contractual_maturity = $contractual_maturity;
-    }
-
-    /** @ORM\Column(type="integer") */
-    private $issue_month;
-
-    public function getIssueMonth()
-    {
-        return $this->issue_month;
-    }
-
-    public function setIssueMonth($issue_month)
-    {
-        $this->issue_month = $issue_month;
-    }
-
     /**
-     * @ORM\ManyToOne(targetEntity="Fsa04748")
+     * @ORM\ManyToOne(targetEntity="Line")
      */
-    private $fsa04748;
+    private $line;
 
-    public function getFsa04748()
+    public function getLine()
     {
-        return $this->fsa04748;
+        return $this->line;
     }
 
-    public function setFsa04748($fsa04748)
+    public function setLine($line)
     {
-        $this->fsa04748 = $fsa04748;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="FsaBucket")
-     */
-    private $fsa_contractual_bucket;
-
-    public function getFsaContractualBucket()
-    {
-        return $this->fsa_contractual_bucket;
-    }
-
-    public function setFsaContractualBucket($fsa_contractual_bucket)
-    {
-        $this->fsa_contractual_bucket = $fsa_contractual_bucket;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="FsaBucket")
-     */
-    private $fsa_residual_bucket;
-
-    public function getFsaResidualBucket()
-    {
-        return $this->fsa_residual_bucket;
-    }
-
-    public function setFsaResidualBucket($fsa_residual_bucket)
-    {
-        $this->fsa_residual_bucket = $fsa_residual_bucket;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Market")
-     */
-    private $market;
-
-    public function getMarket()
-    {
-        return $this->market;
-    }
-
-    public function setMarket($market)
-    {
-        $this->market = $market;
+        $this->line = $line;
     }
 
     /**
@@ -217,51 +122,6 @@ class Security extends Entity
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="SecurityType")
-     */
-    private $security_type;
-
-    public function getSecurityType()
-    {
-        return $this->security_type;
-    }
-
-    public function setSecurityType($security_type)
-    {
-        $this->security_type = $security_type;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="MarketSegment")
-     */
-    private $market_segment;
-
-    public function getMarketSegment()
-    {
-        return $this->market_segment;
-    }
-
-    public function setMarketSegment($market_segment)
-    {
-        $this->market_segment = $market_segment;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="MarketSector")
-     */
-    private $market_sector;
-
-    public function getMarketSector()
-    {
-        return $this->market_sector;
-    }
-
-    public function setMarketSector($market_sector)
-    {
-        $this->market_sector = $market_sector;
-    }
-
-    /**
      * @ORM\ManyToOne(targetEntity="Currency")
      */
     private $currency;
@@ -274,21 +134,5 @@ class Security extends Entity
     public function setCurrency($currency)
     {
         $this->currency = $currency;
-    }
-
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Country")
-     */
-    private $country;
-
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    public function setCountry($country)
-    {
-        $this->country = $country;
     }
 }

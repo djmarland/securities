@@ -4,19 +4,13 @@ namespace ConsoleBundle\Command;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
-use SecuritiesService\Data\Database\Entity\Fsa04748;
-use SecuritiesService\Data\Database\Entity\FsaBucket;
-use SecuritiesService\Data\Database\Entity\Market;
-use SecuritiesService\Data\Database\Entity\MarketSector;
-use SecuritiesService\Data\Database\Entity\MarketSegment;
+use SecuritiesService\Data\Database\Entity\Line;
 use SecuritiesService\Data\Database\Entity\Region;
 use SecuritiesService\Data\Database\Entity\Security;
-use SecuritiesService\Data\Database\Entity\SecurityType;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
-use Symfony\Component\Console\Input\InputOption;
 use Symfony\Component\Console\Output\OutputInterface;
 
 class ImportCommand extends ContainerAwareCommand
@@ -65,124 +59,69 @@ class ImportCommand extends ContainerAwareCommand
         $security = $repo->findOneBy(
             ['isin' => $isin]
         );
+        if ($security) {
+            return $security;
+        }
         if (!$security) {
             $security = new Security();
             $security->setIsin($isin);
         }
-        $security->setName($row['Security Name']);
-        $security->setCountry($this->getCountry($row));
-        $security->setFsa04748($this->getFsa04748($row));
-        $security->setMarket($this->getMarket($row));
+        $security->setName($row['SECURITY_NAME']);
+        $security->setLine($this->getLine($row));
         $security->setCompany($this->getCompany($row));
-        $security->setSecurityType($this->getSecurityType($row));
-        $security->setMarketSegment($this->getMarketSegment($row));
-        $security->setMarketSector($this->getMarketSector($row));
         $security->setCurrency($this->getCurrency($row));
-        $security->setFsaContractualBucket($this->getBucket($row, 'CONTRACTUAL_FSA_BUCKET'));
-        $security->setFsaResidualBucket($this->getBucket($row, 'RESIDUAL_FSA_BUCKET'));
 
-        $security->setTidm($row['TIDM']);
-        $security->setMoneyRaised($row[' Money Raised (£m) ']);
-        $startDate = DateTime::createFromFormat('d/m/Y',$row['Start Date']);
+        $security->setMoneyRaised($row['MONEY_RAISED_GBP']);
+        $startDate = DateTime::createFromFormat('d/m/Y',$row['SECURITY_START_DATE']);
         $security->setStartDate($startDate);
         $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('d/m/Y',$row['MATURITY_DATE']) : null;
         $security->setMaturityDate($endDate);
-        $security->setCoupon(($row['COUPON'] != 'N/A') ? $row['COUPON'] : null);
-        $security->setWeighting(($row['WEIGHTING'] != 'N/A') ? $row['WEIGHTING'] : null);
-        $security->setContractualMaturity(($row['CONTRACTUAL_MATURITY']) != 'UNDATED' ? $row['CONTRACTUAL_MATURITY'] : null);
-        $security->setIssueMonth($row['ISSUE_MONTH']);
+        $security->setCoupon(($row['COUPON_RATE'] != 'N/A') ? floatval($row['COUPON_RATE'])/100 : null);
 
         $this->em->persist($security);
         $this->em->flush();
         return $security;
     }
 
-    function getBucket($row, $key)
+    function getLine($row)
     {
-        $value = $row[$key];
-        $yearsFrom = null;
-        $yearsTo = null;
-        switch ($value) {
-            case '> 2 years <= 5 years':
-                $yearsFrom = 2;
-                $yearsTo = 5;
-                break;
-
-            case '> 5 years <= 10 years':
-                $yearsFrom = 5;
-                $yearsTo = 10;
-                break;
-
-            case '> 10 years':
-                $yearsFrom = 10;
-                break;
-
-            case '> 6 months <= 1 year':
-                $yearsFrom = 2;
-                $yearsTo = 5;
-                break;
-
-            // @todo - set real values
-            default :
-                $yearsFrom = 0;
-                $yearsTo = 0;
-
-        }
-
-        $repo = $this->em->getRepository('SecuritiesService:FsaBucket');
-        $bucket = $repo->findOneBy(
-            ['years_from' => $yearsFrom, 'years_to' => $yearsTo]
+        $lineNumber = $row['PRA_ITEM_4748'];
+        $lineName = $row['PRA_ITEM_4748'];
+        $repo = $this->em->getRepository('SecuritiesService:Line');
+        $line = $repo->findOneBy(
+            ['number' => $lineNumber]
         );
-        if ($bucket) {
-            return $bucket;
+        if ($line) {
+            return $line;
         }
-        $bucket = new FsaBucket();
-        $bucket->setYearsFrom($yearsFrom);
-        $bucket->setYearsTo($yearsTo);
-        $this->em->persist($bucket);
+        $line = new Line();
+        $line->setNumber($lineNumber);
+        $line->setName($lineName);
+        $this->em->persist($line);
         $this->em->flush();
-        return $bucket;
+        return $line;
     }
 
-    function getFsa04748($row)
-    {
-        $line = $row['FSA04748_LINE'];
-        $lineName = $row['FSA04748_LINE_NAME'];
-        $repo = $this->em->getRepository('SecuritiesService:Fsa04748');
-        $fsa04748 = $repo->findOneBy(
-            ['line' => $line]
-        );
-        if ($fsa04748) {
-            return $fsa04748;
-        }
-        $fsa04748 = new Fsa04748();
-        $fsa04748->setLine($line);
-        $fsa04748->setName($lineName);
-        $this->em->persist($fsa04748);
-        $this->em->flush();
-        return $fsa04748;
-    }
-
-    function getMarket($row)
-    {
-        $name = $row['Market'];
-        $repo = $this->em->getRepository('SecuritiesService:Market');
-        $market = $repo->findOneBy(
-            ['name' => $name]
-        );
-        if ($market) {
-            return $market;
-        }
-        $market = new Market();
-        $market->setName($name);
-        $this->em->persist($market);
-        $this->em->flush();
-        return $market;
-    }
+//    function getMarket($row)
+//    {
+//        $name = $row['Market'];
+//        $repo = $this->em->getRepository('SecuritiesService:Market');
+//        $market = $repo->findOneBy(
+//            ['name' => $name]
+//        );
+//        if ($market) {
+//            return $market;
+//        }
+//        $market = new Market();
+//        $market->setName($name);
+//        $this->em->persist($market);
+//        $this->em->flush();
+//        return $market;
+//    }
 
     function getCompany($row)
     {
-        $name = $row['Company Name'];
+        $name = $row['COMPANY_NAME'];
         $repo = $this->em->getRepository('SecuritiesService:Company');
         $company = $repo->findOneBy(
             ['name' => $name]
@@ -192,6 +131,7 @@ class ImportCommand extends ContainerAwareCommand
         }
         $company = new Company();
         $company->setName($name);
+        $company->setCountry($this->getCountry($row));
         $this->em->persist($company);
         $this->em->flush();
         return $company;
@@ -199,7 +139,7 @@ class ImportCommand extends ContainerAwareCommand
 
     function getCurrency($row)
     {
-        $code = $row['Trading Currency'];
+        $code = $row['TRADING_CURRENCY'];
         $repo = $this->em->getRepository('SecuritiesService:Currency');
         $company = $repo->findOneBy(
             ['code' => $code]
@@ -214,63 +154,63 @@ class ImportCommand extends ContainerAwareCommand
         return $company;
     }
 
-    function getSecurityType($row)
-    {
-        $name = $row['Security Description'];
-        $repo = $this->em->getRepository('SecuritiesService:SecurityType');
-        $securityType = $repo->findOneBy(
-            ['name' => $name]
-        );
-        if ($securityType) {
-            return $securityType;
-        }
-        $securityType = new SecurityType();
-        $securityType->setName($name);
-        $this->em->persist($securityType);
-        $this->em->flush();
-        return $securityType;
-    }
-
-    function getMarketSector($row)
-    {
-        $code = $row['Market Sector Code'];
-        $repo = $this->em->getRepository('SecuritiesService:MarketSector');
-        $marketSector = $repo->findOneBy(
-            ['sector_code' => $code]
-        );
-        if ($marketSector) {
-            return $marketSector;
-        }
-        $marketSector = new MarketSector();
-        $marketSector->setSectorCode($code);
-        $this->em->persist($marketSector);
-        $this->em->flush();
-        return $marketSector;
-    }
-
-    function getMarketSegment($row)
-    {
-        $code = $row['Market Segment Code'];
-        $name = $row['Market Segment'];
-        $repo = $this->em->getRepository('SecuritiesService:MarketSegment');
-        $marketSegment = $repo->findOneBy(
-            ['code' => $name]
-        );
-        if ($marketSegment) {
-            return $marketSegment;
-        }
-        $marketSegment = new MarketSegment();
-        $marketSegment->setName($name);
-        $marketSegment->setCode($code);
-        $this->em->persist($marketSegment);
-        $this->em->flush();
-        return $marketSegment;
-    }
+//    function getSecurityType($row)
+//    {
+//        $name = $row['Security Description'];
+//        $repo = $this->em->getRepository('SecuritiesService:SecurityType');
+//        $securityType = $repo->findOneBy(
+//            ['name' => $name]
+//        );
+//        if ($securityType) {
+//            return $securityType;
+//        }
+//        $securityType = new SecurityType();
+//        $securityType->setName($name);
+//        $this->em->persist($securityType);
+//        $this->em->flush();
+//        return $securityType;
+//    }
+//
+//    function getMarketSector($row)
+//    {
+//        $code = $row['Market Sector Code'];
+//        $repo = $this->em->getRepository('SecuritiesService:MarketSector');
+//        $marketSector = $repo->findOneBy(
+//            ['sector_code' => $code]
+//        );
+//        if ($marketSector) {
+//            return $marketSector;
+//        }
+//        $marketSector = new MarketSector();
+//        $marketSector->setSectorCode($code);
+//        $this->em->persist($marketSector);
+//        $this->em->flush();
+//        return $marketSector;
+//    }
+//
+//    function getMarketSegment($row)
+//    {
+//        $code = $row['Market Segment Code'];
+//        $name = $row['Market Segment'];
+//        $repo = $this->em->getRepository('SecuritiesService:MarketSegment');
+//        $marketSegment = $repo->findOneBy(
+//            ['code' => $name]
+//        );
+//        if ($marketSegment) {
+//            return $marketSegment;
+//        }
+//        $marketSegment = new MarketSegment();
+//        $marketSegment->setName($name);
+//        $marketSegment->setCode($code);
+//        $this->em->persist($marketSegment);
+//        $this->em->flush();
+//        return $marketSegment;
+//    }
 
 
     function getCountry($row)
     {
-        $countryName = $row['Country of Incorporation'];
+        $countryName = $row['COUNTRY_OF_INCORPORATION'];
 
         $repo = $this->em->getRepository('SecuritiesService:Country');
         $country = $repo->findOneBy(
@@ -290,7 +230,7 @@ class ImportCommand extends ContainerAwareCommand
 
     function getRegion($row)
     {
-        $name = $row['World Region'];
+        $name = $row['WORLD_REGION'];
         $repo = $this->em->getRepository('SecuritiesService:Region');
         $region = $repo->findOneBy(
             ['name' => $name]

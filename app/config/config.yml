@@ -31,6 +31,7 @@ framework:
         name: SESSION_IDENTITY
     fragments:       ~
     http_method_override: true
+    assets: ~
 
 # Twig Configuration
 twig:
@@ -69,6 +70,13 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 prefix: SecuritiesService\Data\Database\Entity
+
+# Doctrine migrations
+doctrine_migrations:
+    dir_name: %kernel.root_dir%/../src/SecuritiesService/Data/Database/Migration
+    namespace: SecuritiesService\Data\Database\Migration
+    table_name: migration_versions
+    name: Application Migrations
 
 monolog:
     handlers:
