@@ -1,12 +1,13 @@
+<div class="text--center pagination g-unit">
 {% if pagination.showStatus %}
-    <span class="pagination__status">Showing {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}</span>
+    <p class="pagination__status g-unit">Showing {{ pagination.start }} - {{ pagination.end }} of {{ pagination.total }}</p>
 {% endif %}
 {% if pagination.isActive %}
     <nav>
-        <ol class="pagination">
+        <ol class="pagination__list list--unstyled list--inline">
             <li>{%
                 if pagination.prevUrl %}
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                    <a class="link--button mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                        href="{{ pagination.prevUrl }}">
                         Previous
                     </a>
@@ -16,7 +17,7 @@
                 %}</li>
             <li>{%
                 if pagination.nextUrl %}
-                    <a class="mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                    <a class="link--button mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
                        href="{{ pagination.nextUrl }}">
                         Next
                     </a>
@@ -27,3 +28,4 @@
         </ol>
     </nav>
 {% endif %}
+</div>

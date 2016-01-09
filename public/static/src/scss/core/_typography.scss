@@ -53,10 +53,6 @@ h4,
     margin: 0;
 }
 
-p {
-    @extend .e;
-}
-
 h5,
 .h-e {
     @extend .e;
@@ -69,6 +65,12 @@ h6,
     @extend .f;
     text-transform: uppercase;
     margin: 0;
+}
+
+p,
+.p {
+    @extend .e;
+    font-weight: normal;
 }
 
 .h-lined {

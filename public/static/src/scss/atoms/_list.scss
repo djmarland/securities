@@ -4,6 +4,12 @@
     list-style: none;
 }
 
+.list--inline {
+    > li {
+        display: inline;
+    }
+}
+
 .list--spaced {
     > li {
         margin-bottom: $grid-unit-small;
@@ -12,4 +18,3 @@
         }
     }
 }
-

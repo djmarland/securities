@@ -10,12 +10,17 @@ class ServiceResultEmpty extends ServiceResult
     }
 
 
-    public function getTotal() {
+    public function hasResult(): bool
+    {
+        return false;
+    }
+
+    public function getTotal():int {
         return 0;
     }
 
     public function getDomainModels(): array
     {
-        return array();
+        return [];
     }
 }

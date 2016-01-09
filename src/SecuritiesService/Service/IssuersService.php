@@ -2,7 +2,6 @@
 
 namespace SecuritiesService\Service;
 
-use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class IssuersService extends Service
@@ -10,8 +9,8 @@ class IssuersService extends Service
     const COMPANY_ENTITY = 'Company';
 
     public function findAndCountAll(
-        int $limit,
-        int $page = 1
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
 
         // count them first (cheaper if zero)
@@ -34,8 +33,8 @@ class IssuersService extends Service
     }
 
     public function findAll(
-        int $limit,
-        int $page = 1
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
         $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
         $qb->select('tbl');

@@ -1,0 +1,13 @@
+.link--button {
+    display: inline-block;
+    padding: $grid-unit-tiny $grid-unit-small;
+    color: $color-body;
+    background: $color-link;
+    &:hover,
+    &:active,
+    &:focus,
+    &.link--button-active{
+        background: $color-link-hover;
+    }
+}
+

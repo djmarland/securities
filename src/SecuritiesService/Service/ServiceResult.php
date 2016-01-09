@@ -18,6 +18,11 @@ class ServiceResult implements ServiceResultInterface
         }
     }
 
+    public function hasResult(): bool
+    {
+        return !empty($this->domainModels);
+    }
+
     public function setTotal(int $total)
     {
         $this->total = $total;

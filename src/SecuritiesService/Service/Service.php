@@ -10,6 +10,9 @@ abstract class Service
 {
     const TBL = 'tbl';
 
+    const DEFAULT_LIMIT = 50;
+    const DEFAULT_PAGE = 1;
+
     protected $entityManager;
 
     public function __construct(

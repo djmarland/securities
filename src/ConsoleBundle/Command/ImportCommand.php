@@ -71,7 +71,7 @@ class ImportCommand extends ContainerAwareCommand
         $security->setCompany($this->getCompany($row));
         $security->setCurrency($this->getCurrency($row));
 
-        $security->setMoneyRaised($row['MONEY_RAISED_GBP']);
+        $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
         $startDate = DateTime::createFromFormat('d/m/Y',$row['SECURITY_START_DATE']);
         $security->setStartDate($startDate);
         $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('d/m/Y',$row['MATURITY_DATE']) : null;

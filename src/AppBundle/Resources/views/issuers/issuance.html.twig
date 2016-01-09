@@ -1,0 +1,68 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::issuers/_base.html.twig" %}
+
+{% block content %}
+    <div class="g-unit">
+        <div class="grid grid--flush">
+            <div class="g 1/2@xl">
+                <h2>Issuance {{ activeYear }}</h2>
+            </div>
+            <div class="g 1/2@xl text--right g--align-center">
+                <div>
+                    <h3 class="invisible">Year:</h3>
+                    <ol class="inline list--inline">
+                        {% for year in years %}
+                            <li><a class="link--button
+                                {% if activeYear == year %}link--button-active{% endif %}
+                                " href="{{ path('issuers_issuance', { issuer_id : issuer.id, year : year }) }}">{{ year }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        <div id="chart-area" class="g-unit g g--align-center" style="height: 400px">
+            <p class="text--center">Drawing graph...</p>
+        </div>
+        <table class="table table--striped">
+            <thead>
+            <tr>
+                <th>Line</th>
+                {% for month in months %}
+                    <th>{{ month }}</th>
+                {% endfor %}
+            </tr>
+            </thead>
+            <tbody>
+            {% for line in lineCounts %}
+                <tr>
+                    <th>{{ line.line.name }}</th>
+                    {% for count in line.months %}
+                        <td>{{ count }}</td>
+                    {% endfor %}
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script>
+        google.charts.load('current', {'packages':['bar']});
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var sourceData = {{ graphData|json_encode|raw }},
+                data = google.visualization.arrayToDataTable(sourceData),
+                options = {
+                    height: 400,
+                    legend: {position: 'right', maxLines: 3},
+                    backgroundColor: 'transparent',
+                    isStacked: true,
+                    colors: ['#3a0676']
+                },
+            chart = new google.charts.Bar(document.getElementById('chart-area'));
+            chart.draw(data, google.charts.Bar.convertOptions(options));
+        }
+    </script>
+{% endblock %}

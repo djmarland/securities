@@ -1,10 +1,32 @@
 {% extends 'AppBundle::base.html.twig' %}
 
-{% block body %}
-    <h1 class="g-unit">{{ meta.title }}</h1>
-    <h2>Securities</h2>
-    {% include '@partials/securities-list.html.twig' %}
-    <div>
-        {% include pagination.templatePath with pagination.vars only %}
+{% use "AppBundle::issuers/_base.html.twig" %}
+
+{% block content %}
+<div class="g-unit">
+    <div class="grid grid--flush">
+        <div class="g 1/2@xl">
+            <h2>Securities</h2>
+        </div>
+        <div class="g 1/2@xl text--right g--align-center">
+            <div>
+                <h3 class="invisible">Line:</h3>
+                <ol class="inline list--inline">
+                    <li><a class="link--button {% if activeLine == 'all' %}link--button-active{% endif %}" href="{{ path('issuers_show', { issuer_id : issuer.id }) }}">All</a></li>
+                    {% for line in lines %}
+                        <li><a class="link--button {% if activeLine == line.id %}link--button-active{% endif %}" href="{{ path('issuers_securities', { issuer_id : issuer.id, line_id : line.id }) }}">{{ line.name }}</a></li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        <div class="g 1/2@xl">
+            <p class="d">Total: £{{ totalRaised }}m</p>
+        </div>
+        <div class="g 1/2@xl text--right">
+            <p class="d">{{ pagination.total }} results</p>
+        </div>
     </div>
+</div>
+{% include '@partials/securities-list.html.twig' %}
+{% include pagination.templatePath with pagination.vars only %}
 {% endblock %}

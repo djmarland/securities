@@ -1,0 +1,15 @@
+{% block body %}
+<h1 class="g-unit">{{ meta.title }}</h1>
+<div class="grid">
+    <div class="g 1/5@xl">
+        <nav><ul>
+            <li><a href="{{ path('issuers_show', { issuer_id : issuer.id }) }}">Securities</a></li>
+            <li><a href="{{ path('issuers_maturity_profile', { issuer_id : issuer.id }) }}">Maturity Profile</a></li>
+            <li><a href="{{ path('issuers_issuance', { issuer_id : issuer.id }) }}">Issuance</a></li>
+        </ul></nav>
+    </div>
+    <div class="g 4/5@xl">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

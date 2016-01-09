@@ -24,6 +24,14 @@
   }
 }
 
+.g--align-center {
+  @include flex-align(center);
+}
+
+.g--align-end {
+  @include flex-align(flex-end);
+}
+
 .g,
 .g-unit {
   margin-bottom: $grid-unit-small;

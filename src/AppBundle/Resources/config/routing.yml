@@ -28,5 +28,18 @@ issuers_list:
   defaults: { _controller: AppBundle:Issuers:list }
 
 issuers_show:
-  path:     /issuers/{id}
+  path:     /issuers/{issuer_id}
   defaults: { _controller: AppBundle:Issuers:show }
+
+issuers_securities:
+  path:     /issuers/{issuer_id}/securities/{line_id}
+  defaults: { _controller: AppBundle:Issuers:securities, line_id: null }
+
+
+issuers_maturity_profile:
+  path:     /issuers/{issuer_id}/maturity-profile
+  defaults: { _controller: AppBundle:Issuers:maturityProfile, year: null }
+
+issuers_issuance:
+  path:     /issuers/{issuer_id}/issuance/{year}
+  defaults: { _controller: AppBundle:Issuers:issuance, year: null }

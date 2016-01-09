@@ -9,6 +9,10 @@ services:
       class: SecuritiesService\Service\IssuersService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
+  app.services.lines:
+      class: SecuritiesService\Service\LinesService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.securities:
       class: SecuritiesService\Service\SecuritiesService
       arguments: ["@doctrine.orm.default_entity_manager"]
