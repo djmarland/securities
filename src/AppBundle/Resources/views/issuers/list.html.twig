@@ -2,7 +2,7 @@
 
 {% block body %}
     <h1 class="g-unit">{{ meta.title }}</h1>
-    <p>{{ pagination.total }} results</p>
+    <p class="g-unit text--right d">{{ pagination.total }} results</p>
     {% set letter = null %}
     {%  for issuer in issuers %}
         {% if issuer.letter != letter %}
