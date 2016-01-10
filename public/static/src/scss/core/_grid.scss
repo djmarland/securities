@@ -17,7 +17,6 @@
 
     > * {
         @include flex(0 0 100%);
-        overflow: hidden;
         // immediate child of grid_item MUST be 100% width, as that was the point of the grid
         width: 100%;
     }

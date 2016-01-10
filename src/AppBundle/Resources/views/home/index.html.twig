@@ -12,24 +12,65 @@
             </div>
         </div>
         <div class="g 2/5@xl">
-            <div class="card card--padded">
-                <div class="grid">
-                <div class="g 1/2@xl">
-                    <p class="text--center">
-                        <a class="link--hidden" href="{{ path('securities_list') }}">
-                            <span class="a">{{ securitiesCount }}</span><br />
-                            Securities
-                        </a>
-                    </p>
+            <div>
+                <div class="card card--padded g-unit">
+                    <div class="grid">
+                    <div class="g 1/2@xl">
+                        <p class="text--center">
+                            <a class="link--hidden" href="{{ path('securities_list') }}">
+                                <span class="a">{{ securitiesCount }}</span><br />
+                                Securities
+                            </a>
+                        </p>
+                    </div>
+                    <div class="g 1/2@xl">
+                        <p class="text--center">
+                            <a class="link--hidden" href="{{ path('issuers_list') }}">
+                                <span class="a">{{ issuersCount }}</span><br />
+                                Issuers
+                            </a>
+                        </p>
+                    </div>
+                    </div>
                 </div>
-                <div class="g 1/2@xl">
-                    <p class="text--center">
-                        <a class="link--hidden" href="{{ path('issuers_list') }}">
-                            <span class="a">{{ issuersCount }}</span><br />
-                            Issuers
-                        </a>
-                    </p>
-                </div>
+                <div class="card">
+                    <div id="chart-grouped">Loading chart</div>
+                    <script type="text/javascript" src="https://www.google.com/jsapi"></script>
+                    <script type="text/javascript">
+                        google.load("visualization", "1", {packages:["corechart"]});
+                        google.setOnLoadCallback(drawChart);
+                        function drawChart() {
+                            var data = google.visualization.arrayToDataTable([
+                                ['Funding Product', 'Total'],
+                                ['Non-dated capital resources',     11],
+                                ['Unsecured senior securities',      2],
+                                ['Dated subordinated securities',  2],
+                                ['Covered bonds', 2],
+                                ['Securitisations',    7]
+                            ]);
+
+                            var options = {
+                                height: 300,
+                                pieHole: 0.4,
+                                pieStartAngle: 20,
+                                backgroundColor: 'transparent',
+                                legend : {
+                                    position: 'left'
+                                },
+                                chartArea : {
+                                    top: 24,
+                                    left: 24,
+                                    width: '90%',
+                                    height: 258
+                                },
+                                pieSliceText: 'none',
+                                colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
+                            };
+
+                            var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
+                            chart.draw(data, options);
+                        }
+                    </script>
                 </div>
             </div>
         </div>

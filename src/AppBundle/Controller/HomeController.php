@@ -16,6 +16,10 @@ class HomeController extends Controller
 
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
+
+        $this->toView('byProduct', [
+
+        ]);
         return $this->renderTemplate('home:index');
     }
 
