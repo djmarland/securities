@@ -5,6 +5,13 @@ services:
       tags:
           - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
+  app.twig_extension:
+        class: AppBundle\Extension\AssetPathExtension
+        public: false
+        arguments: ["%kernel.root_dir%/config"]
+        tags:
+            - { name: twig.extension }
+
   app.services.issuers:
       class: SecuritiesService\Service\IssuersService
       arguments: ["@doctrine.orm.default_entity_manager"]
