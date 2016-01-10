@@ -16,11 +16,15 @@ html {
 
 body {
     padding: 0;
-    background: $color-body;
+    background: $color-header-bg;
     color: $color-text;
     font-family: $font-body;
 }
 
+.app {
+    background: $color-body;
+    color: $color-text;
+}
 
 img,
 svg {
