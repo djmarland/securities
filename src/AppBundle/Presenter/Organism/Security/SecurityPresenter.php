@@ -110,11 +110,13 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getResidualMaturity():string
     {
-        return '';
+        $bucket = $this->security->getResidualMaturityBucket();
+        return (string) $bucket;
     }
 
     public function getContractualMaturity():string
     {
-        return '';
+        $bucket = $this->security->getContractualMaturityBucket();
+        return (string) $bucket;
     }
 }

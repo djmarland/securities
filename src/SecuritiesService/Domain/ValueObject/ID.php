@@ -2,10 +2,6 @@
 
 namespace SecuritiesService\Domain\ValueObject;
 
-/**
- * Class ID
- * For handling Identifiers
- */
 class ID
 {
 
@@ -13,11 +9,8 @@ class ID
      * @param $id
      */
     public function __construct(
-        $id
+        int $id
     ) {
-        if (!is_int($id)) {
-            throw new \InvalidArgumentException('ID must be an Integer');
-        }
         $this->id = $id;
     }
 
@@ -31,7 +24,7 @@ class ID
         return $this->id;
     }
 
-    public function __toString()
+    public function __toString(): string
     {
         return (string) $this->getId();
     }

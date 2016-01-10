@@ -2,10 +2,6 @@
 
 namespace SecuritiesService\Domain\ValueObject;
 
-/**
- * Class ID
- * For handling Identifiers
- */
 class ISIN
 {
 
@@ -13,7 +9,7 @@ class ISIN
      * @param $isin
      */
     public function __construct(
-        $isin
+        string $isin
     ) {
         if (strlen($isin) != 12) {
             throw new \InvalidArgumentException('ISIN must be 12 characters long');

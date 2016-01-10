@@ -2,6 +2,8 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use DateTimeImmutable;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use DateTime;
@@ -127,5 +129,20 @@ class Security extends Entity
     public function getCompany(): Company
     {
         return $this->company;
+    }
+
+    public function getContractualMaturityBucket()
+    {
+        return new Bucket($this->startDate, $this->maturityDate);
+    }
+
+    public function getResidualMaturityBucket($startTime = null)
+    {
+        if (!$startTime) {
+            $startTime = new DateTime();
+            // @todo - use application time. Also figure out how to use DateTimeImmutable everywhere
+        }
+
+        return new Bucket($startTime, $this->maturityDate);
     }
 }

@@ -9,7 +9,6 @@ class HomeController extends Controller
 {
     public function indexAction()
     {
-        $this->toView('showMasthead', false);
         $this->toView('searchAutofocus', 'autofocus');
 
 

@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use DateTime;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Line;
@@ -240,6 +241,18 @@ class SecuritiesService extends Service
             'next_month' => $nextMonth
         ]);
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function sumForIssuerAndLineBetweenDates(
+        Company $issuer,
+        Line $line,
+        DateTime $startTime,
+        DateTime $endTime = null
+    ) {
+
+        if ($endTime) {
+
+        }
     }
 
     private function dateFromMonthAndYear(int $month, int $year): DateTimeImmutable

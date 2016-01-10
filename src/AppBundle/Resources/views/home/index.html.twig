@@ -3,14 +3,9 @@
 
 {% block body %}
     <div class="home-wrapper card card--padded">
-        <p style="text-align: center;background: #d30b0a;color:white;padding: 12px;"><strong>APPLICATION UNDER DEVELOPMENT</strong></p>
-        <h1 class="home__logo home__content">ISIN Analytics</h1>
-        <div class="home__search home__content">
-            {% include '@partials/search.html.twig' %}
-        </div>
         <p class="home__intro home__content">
-            Find out how your securities are performing. Enter an ISIN, security or company name to get
-            started, or <a href="{{ path('securities_list') }}">view all securities</a>.
+            Enter an ISIN, security or company name <br />
+            <a href="{{ path('securities_list') }}">View all securities</a> | <a href="{{ path('issuers_list') }}">View all issuers</a>
         </p>
     </div>
 {% endblock %}

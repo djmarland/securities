@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\ID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -127,6 +128,40 @@ class IssuersController extends Controller
     public function maturityProfileAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
+
+        $lines = $this->getLinesForIssuer($issuer);
+        $buckets = Bucket::getAllBuckets(new \DateTime()); // @todo - use global app time
+
+        $tableData = [];
+        $bucketTotals = [];
+        $absoluteTotal = 0;
+        foreach($lines as $line) {
+            $lineData = (object) [
+                'name' => $line->getName(),
+                'buckets' => [],
+                'total' => 0
+            ];
+            foreach($buckets as $key => $bucket) {
+                $amount = rand(0,1000); // @todo - real value
+                $lineData->total += $amount;
+                if (!isset($lineData->buckets[$key])) {
+                    $lineData->buckets[$key] = 0;
+                }
+                if (!isset($bucketTotals[$key])) {
+                    $bucketTotals[$key] = 0;
+                }
+                $lineData->buckets[$key] = $amount;
+                $bucketTotals[$key] += $amount;
+                $absoluteTotal += $amount;
+            }
+            $tableData[] = $lineData;
+        }
+
+        // @todo - create a twig helper for displaying numbers
+        $this->toView('buckets', $buckets);
+        $this->toView('tableData', $tableData);
+        $this->toView('absoluteTotal', $absoluteTotal);
+        $this->toView('bucketTotals', $bucketTotals);
         return $this->renderTemplate('issuers:maturity-profile');
     }
 

@@ -60,7 +60,6 @@ class Controller extends BaseController implements ControllerInterface
         $search = $this->request->get('q', null);
         $this->toView('searchContext', $search);
         $this->toView('searchAutofocus', null);
-        $this->toView('showMasthead', true);
     }
 
     /**
