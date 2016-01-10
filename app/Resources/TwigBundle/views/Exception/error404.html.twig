@@ -1,0 +1,9 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <div class="card card--padded text--center">
+        <h1 class="g-unit">404 - Page not found</h1>
+        <p>{{ exception.message }}</p>
+        <p>Please check the address</p>
+    </div>
+{% endblock %}

@@ -21,6 +21,8 @@ securities_list:
 securities_show:
   path:     /securities/{isin}
   defaults: { _controller: AppBundle:Securities:show }
+  requirements:
+    isin:  "[A-Z0-9]{12}"
 
 
 issuers_list:
