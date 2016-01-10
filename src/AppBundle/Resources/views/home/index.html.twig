@@ -2,10 +2,36 @@
 
 
 {% block body %}
-    <div class="home-wrapper card card--padded">
-        <p class="home__intro home__content">
-            Enter an ISIN, security or company name <br />
-            <a href="{{ path('securities_list') }}">View all securities</a> | <a href="{{ path('issuers_list') }}">View all issuers</a>
-        </p>
+    <div class="grid">
+        <div class="g 3/5@xl">
+            <div class="card card--padded">
+                <p>
+                    Enter an ISIN, security or company name <br />
+                    <a href="{{ path('securities_list') }}">View all securities</a> | <a href="{{ path('issuers_list') }}">View all issuers</a>
+                </p>
+            </div>
+        </div>
+        <div class="g 2/5@xl">
+            <div class="card card--padded">
+                <div class="grid">
+                <div class="g 1/2@xl">
+                    <p class="text--center">
+                        <a class="link--hidden" href="{{ path('securities_list') }}">
+                            <span class="a">{{ securitiesCount }}</span><br />
+                            Securities
+                        </a>
+                    </p>
+                </div>
+                <div class="g 1/2@xl">
+                    <p class="text--center">
+                        <a class="link--hidden" href="{{ path('issuers_list') }}">
+                            <span class="a">{{ issuersCount }}</span><br />
+                            Issuers
+                        </a>
+                    </p>
+                </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

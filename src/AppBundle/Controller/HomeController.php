@@ -11,7 +11,11 @@ class HomeController extends Controller
     {
         $this->toView('searchAutofocus', 'autofocus');
 
+        $securitiesCount = $this->get('app.services.securities')->countAll();
+        $issuersCount = $this->get('app.services.issuers')->countAll();
 
+        $this->toView('securitiesCount', number_format($securitiesCount));
+        $this->toView('issuersCount', number_format($issuersCount));
         return $this->renderTemplate('home:index');
     }
 
