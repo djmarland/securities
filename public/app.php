@@ -1,13 +1,23 @@
 <?php
 use Symfony\Component\HttpFoundation\Request;
 
+header_remove('X-Powered-By');
 date_default_timezone_set('Europe/London');
 
 require __DIR__.'/../app/autoload.php';
 
+// safe default settings
 $env = 'prod';
 $debugMode = false;
-if (true) { // @todo - detect from environment
+
+// override if we can
+$serverEnv = getenv('APP_ENV');
+
+if ($serverEnv && in_array($serverEnv, ['dev', 'prod'])) {
+    $env = $serverEnv;
+}
+
+if ('dev' == $env) {
     $env = 'dev';
     $debugMode = true;
     \Symfony\Component\Debug\Debug::enable();
