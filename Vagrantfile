@@ -10,6 +10,12 @@ Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
   config.ssh.password = "vagrant"
   config.ssh.insert_key = false
 
+  if Vagrant.has_plugin?("vagrant-proxyconf")
+    config.proxy.http     = $HTTP_PROXY
+    config.proxy.https    = $HTTPS_PROXY
+    config.proxy.no_proxy = "localhost,127.0.0.1"
+  end
+
   config.vm.hostname = VM_HOSTNAME
   config.vm.box = "bento/ubuntu-14.04"
   config.vm.provision :shell, path: "vagrant/bootstrap.sh", privileged: false
