@@ -14,7 +14,7 @@
                 <ol class="inline list--inline">
                     <li><a class="link--button {% if activeProduct == 'all' %}link--button-active{% endif %}" href="{{ path('issuers_show', { issuer_id : issuer.id }) }}">All</a></li>
                     {% for product in products %}
-                        <li><a class="link--button {% if activeProduct == product.id %}link--button-active{% endif %}" href="{{ path('issuers_securities', { issuer_id : issuer.id, product_id : product.id }) }}">{{ product.name }}</a></li>
+                        <li><a class="link--button {% if activeProduct == product.id %}link--button-active{% endif %}" href="{{ path('issuers_securities', { issuer_id : issuer.id }) }}?product={{ product.id }}">{{ product.name }}</a></li>
                     {% endfor %}
                 </ol>
             </div>

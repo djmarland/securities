@@ -91,6 +91,7 @@ class IssuersController extends Controller
         $issuer = $this->getIssuer($request);
 
         $product = $this->getProduct($request);
+        $bucket = $this->getBucket($request);
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
@@ -137,25 +138,33 @@ class IssuersController extends Controller
         $bucketTotals = [];
         $absoluteTotal = 0;
         foreach($products as $product) {
-            $productData = (object) [
-                'name' => $product->getName(),
-                'buckets' => [],
+            $rowData = (object) [
+                'product' => $product,
+                'columns' => [],
                 'total' => 0
             ];
             foreach($buckets as $key => $bucket) {
-                $amount = rand(0,1000); // @todo - real value
-                $productData->total += $amount;
-                if (!isset($productData->buckets[$key])) {
-                    $productData->buckets[$key] = 0;
+                $amount = $this->get('app.services.securities')->sumByIssuerProductAndBucket(
+                    $issuer,
+                    $product,
+                    $bucket
+                );
+                $rowData->total += $amount;
+                $empty = (object) [
+                    'bucket'=> $bucket,
+                    'amount' => 0
+                ];
+                if (!isset($rowData->columns[$key])) {
+                    $rowData->columns[$key] = $empty;
                 }
                 if (!isset($bucketTotals[$key])) {
-                    $bucketTotals[$key] = 0;
+                    $bucketTotals[$key] = $empty;
                 }
-                $productData->buckets[$key] = $amount;
-                $bucketTotals[$key] += $amount;
+                $rowData->columns[$key]->amount = $amount;
+                $bucketTotals[$key]->amount += $amount;
                 $absoluteTotal += $amount;
             }
-            $tableData[] = $productData;
+            $tableData[] = $rowData;
         }
 
         // @todo - create a twig helper for displaying numbers
@@ -268,7 +277,7 @@ class IssuersController extends Controller
 
     private function getProduct(Request $request)
     {
-        $productID = $request->get('product_id');
+        $productID = $request->get('product');
         if (is_null($productID)) {
             return null;
         }
@@ -283,6 +292,27 @@ class IssuersController extends Controller
             ->findById(new ID((int) $productParamInt));
         if (!$result->hasResult()) {
             throw new HttpException(404, 'Product ' . $productID . ' does not exist.');
+        }
+        return $result->getDomainModel();
+    }
+
+    private function getBucket(Request $request)
+    {
+        $bucketID = $request->get('bucket');
+        if (is_null($bucketID)) {
+            return null;
+        }
+
+        $bucketParamInt = (int) $bucketID;
+        if ($bucketID !== (string) $bucketParamInt ||
+            $bucketParamInt <= 0) {
+            throw new HttpException(404, 'Invalid ID');
+        }
+
+        $result = $this->get('app.services.buckets')
+            ->findById(new ID((int) $bucketParamInt));
+        if (!$result->hasResult()) {
+            throw new HttpException(404, 'Product ' . $bucketID . ' does not exist.');
         }
         return $result->getDomainModel();
     }

@@ -15,21 +15,39 @@
         </tr>
         </thead>
         <tbody>
-        {% for product in tableData %}
+        {% for row in tableData %}
             <tr>
-                <th>{{ product.name }}</th>
-                {% for bucket in product.buckets %}
-                    <td>£{{ bucket|number_format }}m</td>
+                <th>{{ row.product.name }}</th>
+                {% for column in row.columns %}
+                    <td>
+                        {% if column.amount != 0 %}
+                            <a href="{{ path('issuers_securities', { issuer_id : issuer.id }) }}?product={{ row.product.id }}&bucket={{ column.bucket.id }}">
+                                £{{ column.amount|number_format }}m
+                            </a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
                 {% endfor %}
-                <td><strong>£{{ product.total|number_format }}m</strong></td>
+                <td>
+                    <strong>
+                        {% if row.total != 0 %}
+                            <a href="{{ path('issuers_securities', { issuer_id : issuer.id }) }}?product={{ row.product.id }}">
+                                £{{ row.total|number_format }}m
+                            </a>
+                        {% else %}
+                            -
+                        {% endif %}
+                    </strong>
+                </td>
             </tr>
         {% endfor %}
         </tbody>
         <tfoot>
             <tr>
                 <th>Totals</th>
-                {% for total in bucketTotals %}
-                    <td>£{{ total|number_format }}m</td>
+                {% for column in bucketTotals %}
+                    <td>£{{ column.amount|number_format }}m</td>
                 {% endfor %}
                 <td><strong>£{{ absoluteTotal|number_format }}m</strong></td>
             </tr>

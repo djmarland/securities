@@ -25,6 +25,14 @@ class BucketsService extends Service
                 // @todo - use immutable everywhere so this isn't needed
                 $endDate = new DateTime($endDate->format('c'));
             }
+
+            $calcStartDate = $startDate;
+            if (!($calcStartDate instanceof DateTimeImmutable)) {
+                $calcStartDate = DateTimeImmutable::createFromMutable($calcStartDate);
+            }
+            $startDate = $calcStartDate->add(new DateInterval('PT'.abs($bucket['lower']).'S'));
+            $startDate = new DateTime($startDate->format('c'));
+
             return new Bucket($startDate, $endDate);
         }, Bucket::BUCKET_BOUNDARIES);
 

@@ -97,9 +97,20 @@ class Bucket
         $this->endDate = $endDate;
     }
 
+    private $id;
+
+    public function getId(): int
+    {
+        if (!$this->id) {
+            $this->id = mt_rand(1,1000);
+        }
+        return $this->id;
+
+    }
+
     public function getStartDate(): DateTime
     {
-        return $this->endDate;
+        return $this->startDate;
     }
 
     public function getEndDate()

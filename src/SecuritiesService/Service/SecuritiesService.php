@@ -6,6 +6,8 @@ use DateTime;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Product;
+use SecuritiesService\Domain\ValueObject\Bucket;
+use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\ISIN;
 
 class SecuritiesService extends Service
@@ -209,6 +211,32 @@ class SecuritiesService extends Service
             $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
             $parameters['product_id'] = (string) $product->getId();
         }
+        $qb->setParameters($parameters);
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function sumByIssuerProductAndBucket(
+        Company $issuer,
+        Product $product,
+        Bucket $bucket
+    ): int {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('sum(' . self::TBL . '.money_raised)')
+            ->where('IDENTITY(' . self::TBL . '.company) = :company_id')
+            ->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+        $parameters = [
+            'company_id' => (string) $issuer->getId(),
+            'product_id' => (string) $product->getId()
+        ];
+        if ($bucket instanceof BucketUndated) {
+            $qb->andWhere(self::TBL . '.maturity_date is NULL');
+        } else {
+            $qb->andWhere(self::TBL . '.maturity_date > :maturity_date_lower')
+                ->andWhere(self::TBL . '.maturity_date <= :maturity_date_upper');
+            $parameters['maturity_date_lower'] = $bucket->getStartDate();
+            $parameters['maturity_date_upper'] = $bucket->getEndDate();
+        }
+
         $qb->setParameters($parameters);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }

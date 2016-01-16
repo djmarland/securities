@@ -8,7 +8,8 @@
 }
 
 .table--striped {
-    thead > tr {
+    thead > tr,
+    tfoot > tr{
         background: $color-header-bg;
         color: $color-header-text;
     }
