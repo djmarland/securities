@@ -241,6 +241,60 @@ class SecuritiesService extends Service
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function countProductsByIssuerForYear(
+        Company $issuer,
+        int $year
+    ) {
+        /*
+         * select DATE_FORMAT(start_date, '%m') as m, p.name, count(*)
+         * from securities left join products as p on product_id = p.id
+         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+         */
+        $productTbl = 'product';
+
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select([
+            self::TBL,
+            'DATE_FORMAT(' . self::TBL . '.start_date, \'%m\') as m',
+            'count(' . self::TBL . '.id) as c',
+            $productTbl
+        ])
+            ->where('IDENTITY(' . self::TBL . '.company) = :company_id')
+            ->andWhere('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year');
+
+        $qb->leftJoin(self::TBL . '.product', $productTbl);
+        $qb->groupBy($productTbl . '.id','m');
+
+        $qb->setParameters([
+            'company_id' => (string) $issuer->getId(),
+            'year' => (string) $year
+        ]);
+
+        /*
+         * List of:
+         * 0 => Security
+         * c => count
+         * m => month
+        */
+        $results = $qb->getQuery()->getResult();
+        $months = [];
+        foreach ($results as $result) {
+            $product = $this->getDomainModel($result[0]->getProduct());
+            $total = (int) $result['c'];
+            $month = (int) $result['m'];
+            if (!isset($months[$month])) {
+                $months[$month] = [];
+            }
+            $months[$month][(int) $product->getId()->getValue()] = (object) [
+                'product' => $product,
+                'total' => $total
+            ];
+        }
+        return $months;
+    }
+
+
+
     public function countByIssuerProductForMonth(
         Company $issuer,
         Product $product,

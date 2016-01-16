@@ -19,13 +19,13 @@ class ID
      */
     private $id;
 
-    public function getId(): int
+    public function getValue(): int
     {
         return $this->id;
     }
 
     public function __toString(): string
     {
-        return (string) $this->getId();
+        return (string) $this->getValue();
     }
 }

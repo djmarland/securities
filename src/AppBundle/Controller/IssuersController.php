@@ -196,11 +196,23 @@ class IssuersController extends Controller
             }
         }
 
-        $products = $this->getProductsForIssuer($issuer);
+
+        $results = $this->get('app.services.securities')->countProductsByIssuerForYear(
+            $issuer,
+            $year
+        );
+        $products = [];
+        // extract the products from the results
+        foreach ($results as $month) {
+            foreach($month as $monthValue) {
+                $products[$monthValue->product->getId()->getValue()] = $monthValue->product;
+            }
+        }
+
         $productCounts = [];
         $graphData = [
             array_map(function($product) {
-                return 'Product ' . $product->getName();
+                return $product->getName();
             }, $products)
         ];
         array_unshift($graphData[0], 'Month');
@@ -224,19 +236,20 @@ class IssuersController extends Controller
             12 => 'Dec',
         ];
         // for each month, count how many of each product type were issued
-        $securitiesService = $this->get('app.services.securities');
+//        $securitiesService = $this->get('app.services.securities');
         foreach($products as $product) {
             $productYear = (object) [
                 'product' => $product,
                 'months' => []
             ];
             foreach ($months as $month => $name) {
-                $count = $securitiesService->countByIssuerProductForMonth(
-                    $issuer,
-                    $product,
-                    $year,
-                    $month
-                );
+//                $count = $securitiesService->countByIssuerProductForMonth(
+//                    $issuer,
+//                    $product,
+//                    $year,
+//                    $month
+//                );
+                $count = $results[$month][$product->getId()->getValue()]->total ?? 0;
                 $monthCounts[$month][] = $count;
                 $productYear->months[$month] = $count ? $count : '-';
             }

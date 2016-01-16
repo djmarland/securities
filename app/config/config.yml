@@ -70,6 +70,10 @@ doctrine:
                 is_bundle: false
                 type: annotation
                 prefix: SecuritiesService\Data\Database\Entity
+        dql:
+             datetime_functions:
+                 date: DoctrineExtensions\Query\Mysql\Date
+                 date_format: DoctrineExtensions\Query\Mysql\DateFormat
 
 # Doctrine migrations
 doctrine_migrations:

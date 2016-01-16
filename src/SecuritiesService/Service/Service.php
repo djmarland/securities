@@ -32,6 +32,15 @@ abstract class Service
         return $entity->createQueryBuilder(self::TBL);
     }
 
+    public function getDomainModel($item)
+    {
+        $models = $this->getDomainModels($item);
+        if ($models) {
+            return reset($models);
+        }
+        return null;
+    }
+
     public function getDomainModels($items)
     {
         if (!$items) {
