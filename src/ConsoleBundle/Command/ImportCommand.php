@@ -4,6 +4,7 @@ namespace ConsoleBundle\Command;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
+use SecuritiesService\Data\Database\Entity\ParentGroup;
 use SecuritiesService\Data\Database\Entity\Product;
 use SecuritiesService\Data\Database\Entity\Region;
 use SecuritiesService\Data\Database\Entity\Security;
@@ -59,9 +60,6 @@ class ImportCommand extends ContainerAwareCommand
         $security = $repo->findOneBy(
             ['isin' => $isin]
         );
-        if ($security) {
-            return $security;
-        }
         if (!$security) {
             $security = new Security();
             $security->setIsin($isin);
@@ -126,12 +124,12 @@ class ImportCommand extends ContainerAwareCommand
         $company = $repo->findOneBy(
             ['name' => $name]
         );
-        if ($company) {
-            return $company;
+        if (!$company) {
+            $company = new Company();
         }
-        $company = new Company();
         $company->setName($name);
         $company->setCountry($this->getCountry($row));
+        $company->setParentGroup($this->getParentGroup($row));
         $this->em->persist($company);
         $this->em->flush();
         return $company;
@@ -141,17 +139,34 @@ class ImportCommand extends ContainerAwareCommand
     {
         $code = $row['TRADING_CURRENCY'];
         $repo = $this->em->getRepository('SecuritiesService:Currency');
-        $company = $repo->findOneBy(
+        $currency = $repo->findOneBy(
             ['code' => $code]
         );
-        if ($company) {
-            return $company;
+        if ($currency) {
+            return $currency;
         }
-        $company = new Currency();
-        $company->setCode($code);
-        $this->em->persist($company);
+        $currency = new Currency();
+        $currency->setCode($code);
+        $this->em->persist($currency);
         $this->em->flush();
-        return $company;
+        return $currency;
+    }
+
+    function getParentGroup($row)
+    {
+        $name = $row['COMPANY_PARENT'];
+        $repo = $this->em->getRepository('SecuritiesService:ParentGroup');
+        $parentGroup = $repo->findOneBy(
+            ['name' => $name]
+        );
+        if ($parentGroup) {
+            return $parentGroup;
+        }
+        $parentGroup = new ParentGroup();
+        $parentGroup->setName($name);
+        $this->em->persist($parentGroup);
+        $this->em->flush();
+        return $parentGroup;
     }
 
 //    function getSecurityType($row)

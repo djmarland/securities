@@ -14,6 +14,7 @@ search:
   path:     /search
   defaults: { _controller: AppBundle:Search:list }
 
+# Securities
 securities_list:
   path:     /securities
   defaults: { _controller: AppBundle:Securities:list }
@@ -24,7 +25,7 @@ securities_show:
   requirements:
     isin:  "[A-Z0-9]{12}"
 
-
+# Issuers
 issuers_list:
   path:     /issuers
   defaults: { _controller: AppBundle:Issuers:list }
@@ -45,3 +46,24 @@ issuers_maturity_profile:
 issuers_issuance:
   path:     /issuers/{issuer_id}/issuance/{year}
   defaults: { _controller: AppBundle:Issuers:issuance, year: null }
+
+# Groups
+groups_list:
+  path:     /groups
+  defaults: { _controller: AppBundle:Groups:list }
+
+groups_show:
+  path:     /groups/{group_id}
+  defaults: { _controller: AppBundle:Groups:show }
+
+groups_issuers:
+  path:     /groups/{group_id}/issuers
+  defaults: { _controller: AppBundle:Groups:issuers }
+
+groups_securities:
+  path:     /groups/{group_id}/securities
+  defaults: { _controller: AppBundle:Groups:securities }
+
+groups_yield:
+  path:     /groups/{group_id}/yield
+  defaults: { _controller: AppBundle:Groups:yield }

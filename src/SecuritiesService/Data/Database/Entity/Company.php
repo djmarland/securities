@@ -38,4 +38,19 @@ class Company extends Entity
     {
         $this->country = $country;
     }
+
+    /**
+     * @ORM\ManyToOne(targetEntity="ParentGroup")
+     */
+    private $parentGroup;
+
+    public function getParentGroup()
+    {
+        return $this->parentGroup;
+    }
+
+    public function setParentGroup($parentGroup)
+    {
+        $this->parentGroup = $parentGroup;
+    }
 }

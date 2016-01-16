@@ -8,6 +8,7 @@ use SecuritiesService\Data\Database\Entity\Product as ProductOrm;
 use SecuritiesService\Data\Database\Entity\Security as SecurityOrm;
 use SecuritiesService\Data\Database\Entity\Company as CompanyOrm;
 use SecuritiesService\Data\Database\Entity\Currency as CurrencyOrm;
+use SecuritiesService\Data\Database\Entity\ParentGroup as ParentGroupOrm;
 
 /**
  * Factory to create mappers as needed
@@ -38,6 +39,10 @@ class MapperFactory
         if ($item instanceof ProductOrm) {
             return $this->createProduct();
         }
+
+        if ($item instanceof ParentGroupOrm) {
+            return $this->createParentGroup();
+        }
     }
 
     public function getDomainModel(EntityOrm $item): Entity
@@ -62,6 +67,12 @@ class MapperFactory
     {
         $companyMapper = new CompanyMapper($this);
         return $companyMapper;
+    }
+
+    public function createParentGroup(): ParentGroupMapper
+    {
+        $mapper = new ParentGroupMapper($this);
+        return $mapper;
     }
 
     public function createCurrency(): CurrencyMapper

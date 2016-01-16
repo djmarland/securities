@@ -1,5 +1,14 @@
 {% block body %}
-<h1 class="g-unit">{{ meta.title }}</h1>
+<h1 class="g-unit">
+    {% if issuer.parentGroup %}
+        <span class="h-context d">
+            <a href="{{ path('groups_show', { group_id : issuer.parentGroup.id }) }}">
+                {{ issuer.parentGroup.name }}
+            </a>
+        </span>
+    {% endif %}
+    {{ issuer.name }}
+</h1>
 <div class="grid">
     <div class="g 1/5@xl">
         <nav><ul>

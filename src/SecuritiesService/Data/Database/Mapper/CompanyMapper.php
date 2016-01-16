@@ -12,11 +12,13 @@ class CompanyMapper extends Mapper
     public function getDomainModel(EntityOrm $item): Entity
     {
         $id = new ID($item->getId());
+        $parentGroup = $this->mapperFactory->getDomainModel($item->getParentGroup());
         $currency = new Company(
             $id,
             $item->getCreatedAt(),
             $item->getUpdatedAt(),
-            $item->getName()
+            $item->getName(),
+            $parentGroup
         );
         return $currency;
     }

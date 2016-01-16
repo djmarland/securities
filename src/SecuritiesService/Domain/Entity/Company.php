@@ -7,18 +7,12 @@ use DateTime;
 
 class Company extends Entity
 {
-
-    /**
-     * @param ID $id
-     * @param $createdAt
-     * @param $updatedAt
-     * @param $name
-     */
     public function __construct(
         ID $id,
         DateTime $createdAt,
         DateTime $updatedAt,
-        string $name
+        string $name,
+        ParentGroup $parentGroup = null
     ) {
         parent::__construct(
             $id,
@@ -27,6 +21,7 @@ class Company extends Entity
         );
 
         $this->name = $name;
+        $this->parentGroup = $parentGroup;
     }
 
     /**
@@ -37,5 +32,15 @@ class Company extends Entity
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @var ParentGroup|null
+     */
+    private $parentGroup;
+
+    public function getParentGroup()
+    {
+        return $this->parentGroup;
     }
 }

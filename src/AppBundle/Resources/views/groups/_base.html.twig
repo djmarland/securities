@@ -1,0 +1,15 @@
+{% block body %}
+    <h1 class="g-unit">{{ meta.title }}</h1>
+    <div class="grid">
+        <div class="g 1/5@xl">
+            <nav><ul>
+                    <li><a href="{{ path('groups_issuers', { group_id : group.id }) }}">Issuers</a></li>
+                    <li><a href="{{ path('groups_securities', { group_id : group.id }) }}">Securities</a></li>
+                    <li><a href="{{ path('groups_yield', { group_id : group.id }) }}">Yield Curve</a></li>
+                </ul></nav>
+        </div>
+        <div class="g 4/5@xl">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}
