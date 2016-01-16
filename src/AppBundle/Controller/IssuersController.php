@@ -272,22 +272,6 @@ class IssuersController extends Controller
         return $this->renderTemplate('issuers:issuance');
     }
 
-    private function getYear(Request $request, $today)
-    {
-        $year = $request->get('year');
-        if (is_null($year)) {
-            return null;
-        }
-        $yearInt = (int) $year;
-        $thisYear = $today->format('Y');
-        if ($year !== (string) $yearInt ||
-            $yearInt <= 1900 ||
-            $yearInt > $thisYear) {
-            throw new HttpException(404, 'Invalid Year: ' . $year);
-        }
-        return $year;
-    }
-
     private function getProduct(Request $request)
     {
         $productID = $request->get('product');

@@ -9,6 +9,7 @@ use SecuritiesService\Data\Database\Entity\Security as SecurityOrm;
 use SecuritiesService\Data\Database\Entity\Company as CompanyOrm;
 use SecuritiesService\Data\Database\Entity\Currency as CurrencyOrm;
 use SecuritiesService\Data\Database\Entity\ParentGroup as ParentGroupOrm;
+use SecuritiesService\Data\Database\Entity\YieldCurve as YieldCurveOrm;
 
 /**
  * Factory to create mappers as needed
@@ -43,6 +44,12 @@ class MapperFactory
         if ($item instanceof ParentGroupOrm) {
             return $this->createParentGroup();
         }
+
+        if ($item instanceof YieldCurveOrm) {
+            return $this->createYieldCurve();
+        }
+
+        throw new \Exception('Unrecognised Data');
     }
 
     public function getDomainModel(EntityOrm $item): Entity
@@ -79,5 +86,11 @@ class MapperFactory
     {
         $currencyMapper = new CurrencyMapper($this);
         return $currencyMapper;
+    }
+
+    public function createYieldCurve(): YieldCurveMapper
+    {
+        $mapper = new YieldCurveMapper($this);
+        return $mapper;
     }
 }

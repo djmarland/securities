@@ -65,5 +65,5 @@ groups_securities:
   defaults: { _controller: AppBundle:Groups:securities }
 
 groups_yield:
-  path:     /groups/{group_id}/yield
-  defaults: { _controller: AppBundle:Groups:yield }
+  path:     /groups/{group_id}/yield/{year}
+  defaults: { _controller: AppBundle:Groups:yield, year: null }

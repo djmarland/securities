@@ -14,7 +14,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class ImportCommand extends ContainerAwareCommand
+class ImportCommand extends Command
 {
     protected $em;
 
@@ -258,26 +258,5 @@ class ImportCommand extends ContainerAwareCommand
         $this->em->persist($region);
         $this->em->flush();
         return $region;
-    }
-
-    function csv_to_array($filename='', $delimiter=',')
-    {
-        if(!file_exists($filename) || !is_readable($filename))
-            return FALSE;
-
-        $header = NULL;
-        $data = array();
-        if (($handle = fopen($filename, 'r')) !== FALSE)
-        {
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
-            {
-                if(!$header)
-                    $header = $row;
-                else
-                    $data[] = array_combine($header, $row);
-            }
-            fclose($handle);
-        }
-        return $data;
     }
 }

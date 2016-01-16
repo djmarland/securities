@@ -3,6 +3,83 @@
 {% use "AppBundle::groups/_base.html.twig" %}
 
 {% block content %}
-    <h2>Yield</h2>
-    <p>in progress..</p>
+    <div class="g-unit">
+        <div class="grid grid--flush">
+            <div class="g 1/2@xl">
+                <h2>Yield {{ activeYear }}</h2>
+            </div>
+            <div class="g 1/2@xl text--right g--align-center">
+                <div>
+                    <h3 class="invisible">Year:</h3>
+                    <ol class="inline list--inline">
+                        {% for year in years %}
+                            <li><a class="link--button
+                                {% if activeYear == year %}link--button-active{% endif %}
+                                " href="{{ path('groups_yield', { group_id : group.id, year : year }) }}">{{ year }}</a></li>
+                        {% endfor %}
+                    </ol>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div>
+        {% if yieldData %}
+            <p class="g-unit">Currency: {{ yieldData.currency.code }}</p>
+            <div class="grid g-unit">
+                <div id="chart-area" class="g g--align-center" style="height: 400px">
+                    <p class="text--center">Drawing graph...</p>
+                </div>
+            </div>
+            <table class="table table--striped" id="chart-table">
+                <thead>
+                    <th>Year</th>
+                    <th>Value</th>
+                </thead>
+                <tbody>
+                    {% for year, value in yieldData.dataPoints %}
+                        <tr>
+                            <td>{{ year }}</td>
+                            <td>{{ value }}%</td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+            <script>
+                google.charts.load('current', {'packages':['line']});
+                google.charts.setOnLoadCallback(drawChart);
+                function drawChart() {
+                    var data = new google.visualization.DataTable(),
+                        options = {
+                            height: 400,
+                            legend: {position:'none'},
+                            backgroundColor: {fill:'#fafafa'},
+                            colors: ['#3a0676'],
+                            axes: {
+                                x: {
+                                    0: {side: 'top'}
+                                }
+                            },
+                            animation: {
+                                duration: 2000,
+                                startup: true,
+                                easing: 'out'
+                            },
+                            pointsVisible: true
+                        },
+                        chart;
+                    data.addColumn('number', 'Year');
+                    data.addColumn('number', '%');
+
+                    data.addRows({{ graphData|json_encode|raw }});
+
+                    chart = new google.charts.Line(document.getElementById('chart-area'));
+                    chart.draw(data, google.charts.Line.convertOptions(options));
+                    document.getElementById('chart-table').style.display = 'none';
+                }
+            </script>
+        {% else %}
+            <p>No data available for {{ group.name }} in {{ activeYear }}</p>
+        {% endif %}
+    </div>
 {% endblock %}

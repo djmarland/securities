@@ -31,3 +31,7 @@ services:
   app.services.securities:
       class: SecuritiesService\Service\SecuritiesService
       arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.yields:
+      class: SecuritiesService\Service\YieldCurvesService
+      arguments: ["@doctrine.orm.default_entity_manager"]

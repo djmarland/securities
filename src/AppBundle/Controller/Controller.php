@@ -129,4 +129,20 @@ class Controller extends BaseController implements ControllerInterface
         $path = 'AppBundle:' . $template . '.' . $ext . '.twig';
         return $this->render($path, $this->masterViewPresenter->getData());
     }
+
+    protected function getYear(Request $request, $today)
+    {
+        $year = $request->get('year');
+        if (is_null($year)) {
+            return null;
+        }
+        $yearInt = (int) $year;
+        $thisYear = $today->format('Y');
+        if ($year !== (string) $yearInt ||
+            $yearInt <= 1900 ||
+            $yearInt > $thisYear) {
+            throw new HttpException(404, 'Invalid Year: ' . $year);
+        }
+        return $year;
+    }
 }
