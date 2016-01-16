@@ -15,7 +15,7 @@ interface SecurityPresenterInterface
     public function getMaturityDate():string;
     public function getDuration():string;
     public function getCoupon():string;
-    public function getLine():string;
+    public function getProduct():string;
     public function getResidualMaturity():string;
     public function getContractualMaturity():string;
 }

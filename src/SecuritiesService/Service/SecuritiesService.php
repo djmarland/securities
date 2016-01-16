@@ -5,7 +5,7 @@ namespace SecuritiesService\Service;
 use DateTime;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\Entity\Line;
+use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\ValueObject\ISIN;
 
 class SecuritiesService extends Service
@@ -16,13 +16,13 @@ class SecuritiesService extends Service
     {
         $currency = 'c';
         $company = 'co';
-        $line = 'line';
+        $product = 'product';
 
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
-        $qb->select(self::TBL, $currency, $company, $line);
+        $qb->select(self::TBL, $currency, $company, $product);
         $qb->leftJoin(self::TBL . '.currency', $currency);
         $qb->leftJoin(self::TBL . '.company', $company);
-        $qb->leftJoin(self::TBL . '.line', $line);
+        $qb->leftJoin(self::TBL . '.product', $product);
         return $qb;
     }
 
@@ -119,44 +119,44 @@ class SecuritiesService extends Service
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
-        return $this->findAndCountByIssuerAndLine($issuer, null, $limit, $page);
+        return $this->findAndCountByIssuerAndProduct($issuer, null, $limit, $page);
     }
 
-    public function findAndCountByIssuerAndLine(
+    public function findAndCountByIssuerAndProduct(
         Company $issuer,
-        Line $line = null,
+        Product $product = null,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
 
         // count them first (cheaper if zero)
-        $count = $this->countByIssuerAndLine($issuer, $line);
+        $count = $this->countByIssuerAndProduct($issuer, $product);
         if ($count == 0) {
             return new ServiceResultEmpty();
         }
 
         // find the latest
-        $result = $this->findByIssuerAndLine($issuer, $line, $limit, $page);
+        $result = $this->findByIssuerAndProduct($issuer, $product, $limit, $page);
         $result->setTotal($count);
         return $result;
     }
 
     public function countByIssuer(Company $issuer): int
     {
-        return $this->countByIssuerAndLine($issuer, null);
+        return $this->countByIssuerAndProduct($issuer, null);
     }
 
-    public function countByIssuerAndLine(
+    public function countByIssuerAndProduct(
         Company $issuer,
-        Line $line = null
+        Product $product = null
     ): int {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
         $qb->select('count(' . self::TBL . '.id)')
             ->where('IDENTITY(' . self::TBL . '.company) = :company_id');
         $parameters = ['company_id' => (string) $issuer->getId()];
-        if ($line) {
-            $qb->andWhere('IDENTITY(' . self::TBL . '.line) = :line_id');
-            $parameters['line_id'] = (string) $line->getId();
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+            $parameters['product_id'] = (string) $product->getId();
         }
         $qb->setParameters($parameters);
         return (int) $qb->getQuery()->getSingleScalarResult();
@@ -167,12 +167,12 @@ class SecuritiesService extends Service
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
-        return $this->findByIssuerAndLine($issuer, null, $limit, $page);
+        return $this->findByIssuerAndProduct($issuer, null, $limit, $page);
     }
 
-    public function findByIssuerAndLine(
+    public function findByIssuerAndProduct(
         Company $issuer,
-        Line $line = null,
+        Product $product = null,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
@@ -182,9 +182,9 @@ class SecuritiesService extends Service
             ->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
         $parameters = ['company_id' => (string) $issuer->getId()];
-        if ($line) {
-            $qb->andWhere('IDENTITY(' . self::TBL . '.line) = :line_id');
-            $parameters['line_id'] = (string) $line->getId();
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+            $parameters['product_id'] = (string) $product->getId();
         }
         $qb->setParameters($parameters);
         $result = $qb->getQuery()->getResult();
@@ -194,28 +194,28 @@ class SecuritiesService extends Service
     public function sumByIssuer(
         Company $issuer
     ): int {
-        return $this->sumByIssuerAndLine($issuer, null);
+        return $this->sumByIssuerAndProduct($issuer, null);
     }
 
-    public function sumByIssuerAndLine(
+    public function sumByIssuerAndProduct(
         Company $issuer,
-        Line $line = null
+        Product $product = null
     ): int {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
         $qb->select('sum(' . self::TBL . '.money_raised)')
             ->where('IDENTITY(' . self::TBL . '.company) = :company_id');
         $parameters = ['company_id' => (string) $issuer->getId()];
-        if ($line) {
-            $qb->andWhere('IDENTITY(' . self::TBL . '.line) = :line_id');
-            $parameters['line_id'] = (string) $line->getId();
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+            $parameters['product_id'] = (string) $product->getId();
         }
         $qb->setParameters($parameters);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function countByIssuerLineForMonth(
+    public function countByIssuerProductForMonth(
         Company $issuer,
-        Line $line,
+        Product $product,
         int $year,
         int $month
     ) {
@@ -230,22 +230,22 @@ class SecuritiesService extends Service
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
         $qb->select('count(' . self::TBL . '.id)')
             ->where('IDENTITY(' . self::TBL . '.company) = :company_id')
-            ->andWhere('IDENTITY(' . self::TBL . '.line) = :line_id')
+            ->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id')
             ->andWhere(self::TBL . '.start_date >= :this_month')
             ->andWhere(self::TBL . '.start_date < :next_month');
 
         $qb->setParameters([
             'company_id' => (string) $issuer->getId(),
-            'line_id' => (string) $line->getId(),
+            'product_id' => (string) $product->getId(),
             'this_month' => $thisMonth,
             'next_month' => $nextMonth
         ]);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function sumForIssuerAndLineBetweenDates(
+    public function sumForIssuerAndProductBetweenDates(
         Company $issuer,
-        Line $line,
+        Product $product,
         DateTime $startTime,
         DateTime $endTime = null
     ) {

@@ -4,7 +4,7 @@ namespace ConsoleBundle\Command;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
-use SecuritiesService\Data\Database\Entity\Line;
+use SecuritiesService\Data\Database\Entity\Product;
 use SecuritiesService\Data\Database\Entity\Region;
 use SecuritiesService\Data\Database\Entity\Security;
 use DateTime;
@@ -67,14 +67,14 @@ class ImportCommand extends ContainerAwareCommand
             $security->setIsin($isin);
         }
         $security->setName($row['SECURITY_NAME']);
-        $security->setLine($this->getLine($row));
+        $security->setProduct($this->getProduct($row));
         $security->setCompany($this->getCompany($row));
         $security->setCurrency($this->getCurrency($row));
 
         $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
-        $startDate = DateTime::createFromFormat('d/m/Y',$row['SECURITY_START_DATE']);
+        $startDate = DateTime::createFromFormat('U',strtotime($row['SECURITY_START_DATE']));
         $security->setStartDate($startDate);
-        $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('d/m/Y',$row['MATURITY_DATE']) : null;
+        $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('U',strtotime($row['MATURITY_DATE'])) : null;
         $security->setMaturityDate($endDate);
         $security->setCoupon(($row['COUPON_RATE'] != 'N/A') ? floatval($row['COUPON_RATE'])/100 : null);
 
@@ -83,23 +83,23 @@ class ImportCommand extends ContainerAwareCommand
         return $security;
     }
 
-    function getLine($row)
+    function getProduct($row)
     {
-        $lineNumber = $row['PRA_ITEM_4748'];
-        $lineName = $row['PRA_ITEM_4748'];
-        $repo = $this->em->getRepository('SecuritiesService:Line');
-        $line = $repo->findOneBy(
-            ['number' => $lineNumber]
+        $productNumber = $row['PRA_ITEM_4748'];
+        $productName = $row['PRA_ITEM_4748_NAME'];
+        $repo = $this->em->getRepository('SecuritiesService:Product');
+        $product = $repo->findOneBy(
+            ['number' => $productNumber]
         );
-        if ($line) {
-            return $line;
+        if ($product) {
+            return $product;
         }
-        $line = new Line();
-        $line->setNumber($lineNumber);
-        $line->setName($lineName);
-        $this->em->persist($line);
+        $product = new Product();
+        $product->setNumber($productNumber);
+        $product->setName($productName);
+        $this->em->persist($product);
         $this->em->flush();
-        return $line;
+        return $product;
     }
 
 //    function getMarket($row)

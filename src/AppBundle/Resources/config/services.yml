@@ -12,12 +12,16 @@ services:
         tags:
             - { name: twig.extension }
 
+  app.services.buckets:
+      class: SecuritiesService\Service\BucketsService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.issuers:
       class: SecuritiesService\Service\IssuersService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
-  app.services.lines:
-      class: SecuritiesService\Service\LinesService
+  app.services.products:
+      class: SecuritiesService\Service\ProductsService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
   app.services.securities:

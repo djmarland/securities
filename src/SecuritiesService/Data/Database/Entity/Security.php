@@ -92,18 +92,18 @@ class Security extends Entity
     }
 
     /**
-     * @ORM\ManyToOne(targetEntity="Line")
+     * @ORM\ManyToOne(targetEntity="Product")
      */
-    private $line;
+    private $product;
 
-    public function getLine()
+    public function getProduct()
     {
-        return $this->line;
+        return $this->product;
     }
 
-    public function setLine($line)
+    public function setProduct($product)
     {
-        $this->line = $line;
+        $this->product = $product;
     }
 
     /**

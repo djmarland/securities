@@ -71,8 +71,8 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeLine', 'all');
-        $this->toView('lines', $this->getLinesForIssuer($issuer));
+        $this->toView('activeProduct', 'all');
+        $this->toView('products', $this->getProductsForIssuer($issuer));
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $result->getTotal());
@@ -90,17 +90,17 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $line = $this->getLine($request);
+        $product = $this->getProduct($request);
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
         $securitiesService = $this->get('app.services.securities');
         $result = $securitiesService
-            ->findAndCountByIssuerAndLine($issuer, $line, $perPage, $currentPage);
+            ->findAndCountByIssuerAndProduct($issuer, $product, $perPage, $currentPage);
 
         $totalRaised = $securitiesService
-            ->sumByIssuerAndLine($issuer, $line);
+            ->sumByIssuerAndProduct($issuer, $product);
 
         $securityPresenters = [];
         $securities = $result->getDomainModels();
@@ -110,8 +110,8 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeLine', $line ? $line->getId() : 'all');
-        $this->toView('lines', $this->getLinesForIssuer($issuer));
+        $this->toView('activeProduct', $product ? $product->getId() : 'all');
+        $this->toView('products', $this->getProductsForIssuer($issuer));
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $result->getTotal());
@@ -129,32 +129,33 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $lines = $this->getLinesForIssuer($issuer);
-        $buckets = Bucket::getAllBuckets(new \DateTime()); // @todo - use global app time
+        $products = $this->getProductsForIssuer($issuer);
+        $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
+        $buckets = $buckets->getDomainModels();
 
         $tableData = [];
         $bucketTotals = [];
         $absoluteTotal = 0;
-        foreach($lines as $line) {
-            $lineData = (object) [
-                'name' => $line->getName(),
+        foreach($products as $product) {
+            $productData = (object) [
+                'name' => $product->getName(),
                 'buckets' => [],
                 'total' => 0
             ];
             foreach($buckets as $key => $bucket) {
                 $amount = rand(0,1000); // @todo - real value
-                $lineData->total += $amount;
-                if (!isset($lineData->buckets[$key])) {
-                    $lineData->buckets[$key] = 0;
+                $productData->total += $amount;
+                if (!isset($productData->buckets[$key])) {
+                    $productData->buckets[$key] = 0;
                 }
                 if (!isset($bucketTotals[$key])) {
                     $bucketTotals[$key] = 0;
                 }
-                $lineData->buckets[$key] = $amount;
+                $productData->buckets[$key] = $amount;
                 $bucketTotals[$key] += $amount;
                 $absoluteTotal += $amount;
             }
-            $tableData[] = $lineData;
+            $tableData[] = $productData;
         }
 
         // @todo - create a twig helper for displaying numbers
@@ -186,12 +187,12 @@ class IssuersController extends Controller
             }
         }
 
-        $lines = $this->getLinesForIssuer($issuer);
-        $lineCounts = [];
+        $products = $this->getProductsForIssuer($issuer);
+        $productCounts = [];
         $graphData = [
-            array_map(function($line) {
-                return 'Line ' . $line->getName();
-            }, $lines)
+            array_map(function($product) {
+                return 'Product ' . $product->getName();
+            }, $products)
         ];
         array_unshift($graphData[0], 'Month');
         $graphData[0][] = (object) [
@@ -213,24 +214,24 @@ class IssuersController extends Controller
             11 => 'Nov',
             12 => 'Dec',
         ];
-        // for each month, count how many of each line type were issued
+        // for each month, count how many of each product type were issued
         $securitiesService = $this->get('app.services.securities');
-        foreach($lines as $line) {
-            $lineYear = (object) [
-                'line' => $line,
+        foreach($products as $product) {
+            $productYear = (object) [
+                'product' => $product,
                 'months' => []
             ];
             foreach ($months as $month => $name) {
-                $count = $securitiesService->countByIssuerLineForMonth(
+                $count = $securitiesService->countByIssuerProductForMonth(
                     $issuer,
-                    $line,
+                    $product,
                     $year,
                     $month
                 );
                 $monthCounts[$month][] = $count;
-                $lineYear->months[$month] = $count ? $count : '-';
+                $productYear->months[$month] = $count ? $count : '-';
             }
-            $lineCounts[] = $lineYear;
+            $productCounts[] = $productYear;
         }
 
         foreach($months as $num => $month) {
@@ -241,9 +242,9 @@ class IssuersController extends Controller
         }
 
         $this->toView('months', $months);
-        $this->toView('lines', $lines);
+        $this->toView('products', $products);
         $this->toView('graphData', $graphData);
-        $this->toView('lineCounts', $lineCounts);
+        $this->toView('productCounts', $productCounts);
         $this->toView('years', $this->getYearsForIssuer($issuer)); // @todo
         $this->toView('activeYear', $year);
         return $this->renderTemplate('issuers:issuance');
@@ -265,23 +266,23 @@ class IssuersController extends Controller
         return $year;
     }
 
-    private function getLine(Request $request)
+    private function getProduct(Request $request)
     {
-        $lineID = $request->get('line_id');
-        if (is_null($lineID)) {
+        $productID = $request->get('product_id');
+        if (is_null($productID)) {
             return null;
         }
 
-        $lineParamInt = (int) $lineID;
-        if ($lineID !== (string) $lineParamInt ||
-            $lineParamInt <= 0) {
+        $productParamInt = (int) $productID;
+        if ($productID !== (string) $productParamInt ||
+            $productParamInt <= 0) {
             throw new HttpException(404, 'Invalid ID');
         }
 
-        $result = $this->get('app.services.lines')
-            ->findById(new ID((int) $lineParamInt));
+        $result = $this->get('app.services.products')
+            ->findById(new ID((int) $productParamInt));
         if (!$result->hasResult()) {
-            throw new HttpException(404, 'Line ' . $lineID . ' does not exist.');
+            throw new HttpException(404, 'Product ' . $productID . ' does not exist.');
         }
         return $result->getDomainModel();
     }
@@ -315,9 +316,9 @@ class IssuersController extends Controller
         ];
     }
 
-    private function getLinesForIssuer(Company $issuer): array
+    private function getProductsForIssuer(Company $issuer): array
     {
-        $result = $this->get('app.services.lines')->findAllByIssuer($issuer);
+        $result = $this->get('app.services.products')->findAllByIssuer($issuer);
         return $result->getDomainModels();
     }
 }

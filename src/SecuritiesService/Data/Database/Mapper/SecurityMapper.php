@@ -14,7 +14,7 @@ class SecurityMapper extends Mapper
     {
         $id = new ID($item->getId());
         $isin = new ISIN($item->getIsin());
-        $line = $this->mapperFactory->getDomainModel($item->getLine());
+        $product = $this->mapperFactory->getDomainModel($item->getProduct());
         $company = $this->mapperFactory->getDomainModel($item->getCompany());
         $currency = $this->mapperFactory->getDomainModel($item->getCurrency());
 
@@ -26,7 +26,7 @@ class SecurityMapper extends Mapper
             $item->getName(),
             $item->getStartDate(),
             $item->getMoneyRaised(),
-            $line,
+            $product,
             $company,
             $currency,
             $item->getMaturityDate(),

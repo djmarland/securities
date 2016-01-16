@@ -29,17 +29,17 @@
         <table class="table table--striped">
             <thead>
             <tr>
-                <th>Line</th>
+                <th>Product</th>
                 {% for month in months %}
                     <th>{{ month }}</th>
                 {% endfor %}
             </tr>
             </thead>
             <tbody>
-            {% for line in lineCounts %}
+            {% for product in productCounts %}
                 <tr>
-                    <th>{{ line.line.name }}</th>
-                    {% for count in line.months %}
+                    <th>{{ product.product.name }}</th>
+                    {% for count in product.months %}
                         <td>{{ count }}</td>
                     {% endfor %}
                 </tr>

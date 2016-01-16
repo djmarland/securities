@@ -4,6 +4,7 @@ namespace SecuritiesService\Domain\Entity;
 
 use DateTimeImmutable;
 use SecuritiesService\Domain\ValueObject\Bucket;
+use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use DateTime;
@@ -18,7 +19,7 @@ class Security extends Entity
         string $name,
         DateTime $startDate,
         float $moneyRaised,
-        Line $line,
+        Product $product,
         Company $company,
         Currency $currency,
         DateTime $maturityDate = null,
@@ -35,7 +36,7 @@ class Security extends Entity
         $this->startDate = $startDate;
         $this->currency = $currency;
         $this->moneyRaised = $moneyRaised;
-        $this->line = $line;
+        $this->product = $product;
         $this->company = $company;
         $this->maturityDate = $maturityDate;
         $this->coupon = $coupon;
@@ -92,7 +93,7 @@ class Security extends Entity
     }
 
     /**
-     * @var string
+     * @var float
      */
     private $moneyRaised;
 
@@ -102,17 +103,17 @@ class Security extends Entity
     }
 
     /**
-     * @var string
+     * @var Product
      */
-    private $line;
+    private $product;
 
-    public function getLine(): Line
+    public function getProduct(): Product
     {
-        return $this->line;
+        return $this->product;
     }
 
     /**
-     * @var string
+     * @var Currency
      */
     private $currency;
 
@@ -122,7 +123,7 @@ class Security extends Entity
     }
 
     /**
-     * @var string
+     * @var Company
      */
     private $company;
 
@@ -131,18 +132,31 @@ class Security extends Entity
         return $this->company;
     }
 
+    private $contractualBucket;
+
     public function getContractualMaturityBucket()
     {
-        return new Bucket($this->startDate, $this->maturityDate);
+        if (!$this->contractualBucket) {
+            if ($this->maturityDate) {
+                $this->contractualBucket = new Bucket($this->startDate, $this->maturityDate);
+            } else {
+                $this->contractualBucket = new BucketUndated($this->startDate);
+            }
+        }
+        return $this->contractualBucket;
     }
 
-    public function getResidualMaturityBucket($startTime = null)
-    {
-        if (!$startTime) {
-            $startTime = new DateTime();
-            // @todo - use application time. Also figure out how to use DateTimeImmutable everywhere
-        }
+    private $residualBucket;
 
-        return new Bucket($startTime, $this->maturityDate);
+    public function getResidualMaturityBucketForDate(DateTime $startDate) //@todo - use DateTime immutable everywhere
+    {
+        if (!$this->residualBucket) {
+            if ($this->maturityDate) {
+                $this->residualBucket = new Bucket($startDate, $this->maturityDate);
+            } else {
+                $this->residualBucket = new BucketUndated($startDate);
+            }
+        }
+        return $this->residualBucket;
     }
 }

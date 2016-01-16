@@ -5,13 +5,13 @@ namespace SecuritiesService\Service;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\ValueObject\ID;
 
-class LinesService extends Service
+class ProductsService extends Service
 {
-    const LINE_ENTITY = 'Line';
+    const PRODUCT_ENTITY = 'Product';
 
     public function findAll(): ServiceResultInterface
     {
-        $qb = $this->getQueryBuilder(self::LINE_ENTITY);
+        $qb = $this->getQueryBuilder(self::PRODUCT_ENTITY);
         $qb->select('tbl');
         $qb->orderBy('tbl.name', 'ASC');;
         $result = $qb->getQuery()->getResult();
@@ -22,13 +22,13 @@ class LinesService extends Service
         ID $id
     ): ServiceResultInterface {
         $result = $this->entityManager
-            ->find('SecuritiesService:Line', $id);
+            ->find('SecuritiesService:Product', $id);
         return $this->getServiceResult($result);
     }
 
     public function findAllByIssuer(Company $company): ServiceResultInterface
     {
-        // @todo - actually make this query (needs to go via "securities, grouped and unique lines"
+        // @todo - actually make this query (needs to go via "securities, grouped and unique products"
         return $this->findAll();
     }
 }

@@ -5,7 +5,7 @@ namespace SecuritiesService\Domain\Entity;
 use SecuritiesService\Domain\ValueObject\ID;
 use DateTime;
 
-class Line extends Entity
+class Product extends Entity
 {
     public function __construct(
         ID $id,

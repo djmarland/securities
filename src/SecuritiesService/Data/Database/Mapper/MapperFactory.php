@@ -4,7 +4,7 @@ namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Data\Database\Entity\Entity as EntityOrm;
-use SecuritiesService\Data\Database\Entity\Line as LineOrm;
+use SecuritiesService\Data\Database\Entity\Product as ProductOrm;
 use SecuritiesService\Data\Database\Entity\Security as SecurityOrm;
 use SecuritiesService\Data\Database\Entity\Company as CompanyOrm;
 use SecuritiesService\Data\Database\Entity\Currency as CurrencyOrm;
@@ -35,8 +35,8 @@ class MapperFactory
             return $this->createCurrency();
         }
 
-        if ($item instanceof LineOrm) {
-            return $this->createLine();
+        if ($item instanceof ProductOrm) {
+            return $this->createProduct();
         }
     }
 
@@ -52,10 +52,10 @@ class MapperFactory
         return $settingsMapper;
     }
 
-    public function createLine(): LineMapper
+    public function createProduct(): ProductMapper
     {
-        $lineMapper = new LineMapper($this);
-        return $lineMapper;
+        $productMapper = new ProductMapper($this);
+        return $productMapper;
     }
 
     public function createCompany(): CompanyMapper

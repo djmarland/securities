@@ -34,8 +34,8 @@ issuers_show:
   defaults: { _controller: AppBundle:Issuers:show }
 
 issuers_securities:
-  path:     /issuers/{issuer_id}/securities/{line_id}
-  defaults: { _controller: AppBundle:Issuers:securities, line_id: null }
+  path:     /issuers/{issuer_id}/securities/{product_id}
+  defaults: { _controller: AppBundle:Issuers:securities, product_id: null }
 
 
 issuers_maturity_profile:

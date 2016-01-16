@@ -103,14 +103,14 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return 'N/A';
     }
 
-    public function getLine():string
+    public function getProduct():string
     {
-        return (string) $this->security->getLine()->getNumber();
+        return (string) $this->security->getProduct()->getName();
     }
 
     public function getResidualMaturity():string
     {
-        $bucket = $this->security->getResidualMaturityBucket();
+        $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime); // @todo - inject app time
         return (string) $bucket;
     }
 
