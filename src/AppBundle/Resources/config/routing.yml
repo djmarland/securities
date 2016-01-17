@@ -67,3 +67,12 @@ groups_securities:
 groups_yield:
   path:     /groups/{group_id}/yield/{year}
   defaults: { _controller: AppBundle:Groups:yield, year: null }
+
+# Reports
+reports_list:
+  path:     /reports
+  defaults: { _controller: AppBundle:Reports:list }
+
+reports_fsa54:
+  path:     /reports/fsa54
+  defaults: { _controller: AppBundle:Reports:fsa54 }

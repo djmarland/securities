@@ -1,0 +1,14 @@
+{% block body %}
+    <h1 class="g-unit">Reports</h1>
+    <div class="grid">
+        <div class="g 1/5@xl">
+            <nav><ul>
+                <li>Fsa50</li>
+                <li><a href="{{ path('reports_fsa54') }}">Fsa54</a></li>
+            </ul></nav>
+        </div>
+        <div class="g 4/5@xl">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

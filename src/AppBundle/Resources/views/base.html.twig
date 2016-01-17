@@ -46,6 +46,7 @@
         <ul class="nav__list page-limit"
             ><li class="nav__item"><a class="nav__link {% if currentSection == 'securities' %}nav__link--active{% endif %}" href="{{ path('securities_list') }}">Securities</a></li
             ><li class="nav__item"><a class="nav__link {% if currentSection == 'issuers' %}nav__link--active{% endif %}" href="{{ path('groups_list') }}">Issuers</a></li
+            ><li class="nav__item"><a class="nav__link {% if currentSection == 'reports' %}nav__link--active{% endif %}" href="{{ path('reports_list') }}">Reports</a></li
             ><li class="nav__item"><a class="nav__link {% if currentSection == 'about' %}nav__link--active{% endif %}" href="{{ path('about') }}">About</a></li
         ></ul>
     </nav>
@@ -74,5 +75,15 @@
     </div>
 </template>
 <script src="{{ 'bootstrap.js'|asset_path }}"></script>
+<script>
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+    ga('create', 'UA-72513973-1', 'auto');
+    ga('send', 'pageview');
+
+</script>
 </body>
 </html>
