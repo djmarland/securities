@@ -30,6 +30,7 @@
                     <p class="text--center">Drawing graph...</p>
                 </div>
             </div>
+            <noscript>
             <table class="table table--striped" id="chart-table">
                 <thead>
                     <th>Year</th>
@@ -44,6 +45,7 @@
                     {% endfor %}
                 </tbody>
             </table>
+            </noscript>
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script>
                 google.charts.load('current', {'packages':['corechart']});
