@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use DateInterval;
 use DateTime;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Company;
@@ -341,5 +342,62 @@ class SecuritiesService extends Service
     {
         $string = '1/' . $month . '/' . $year . ' 00:00:00';
         return DateTimeImmutable::createFromFormat('d/m/Y H:i:s', $string);
+    }
+
+
+    public function sumForProductGroupedByCurrencyForYearToDate(
+        DateTimeImmutable $endDate,
+        Product $product = null
+    ) {
+        /*
+         * select DATE_FORMAT(start_date, '%m') as m, p.name, count(*)
+         * from securities left join products as p on product_id = p.id
+         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+         */
+        $currencyTbl = 'product';
+
+        $year = $endDate->format('Y');
+
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select([
+            self::TBL,
+            'sum(' . self::TBL . '.money_raised) as s',
+            $currencyTbl
+        ])
+            ->where('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year')
+            ->andWhere(self::TBL . '.start_date <= :end_date')
+            ->leftJoin(self::TBL . '.currency', $currencyTbl);
+
+        $params =[
+            'year' => $year,
+            'end_date' => $endDate
+        ];
+
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+            $params['product_id'] = (string) $product->getId();
+        }
+
+        $qb->groupBy($currencyTbl . '.id')
+            ->setParameters($params);
+
+
+        /*
+         * List of:
+         * 0 => Security
+         * c => count
+         * m => month
+        */
+        $results = $qb->getQuery()->getResult();
+
+        $currencies = [];
+        foreach ($results as $result) {
+            $currency = $this->getDomainModel($result[0]->getCurrency());
+            $code = $currency->getCode();
+            $total = (int) $result['s'];
+            $currencies[$code] = $total;
+        }
+
+        return $currencies;
     }
 }

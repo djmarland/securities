@@ -5,24 +5,32 @@
 {% block content %}
     <h2 class="g-unit">Fsa54</h2>
     <div class="grid">
-        <div id="chart-area" class="g g--align-center" style="height: 400px">
+        <div id="chart-area" class="g g--align-center" style="height: 600px">
             <p class="text--center">Drawing graph...</p>
         </div>
         <div class="g">
             <table class="table table--striped">
                 <thead>
-                    <tr>
-                        <th>Currency</th>
-                        <th>2015</th>
-                        <th>2014</th>
-                    </tr>
+                <tr>
+                    {% for heading in headings %}
+                        <th>{{ heading }}</th>
+                    {% endfor %}
+                </tr>
                 </thead>
                 <tbody>
-                    <tr>
-                        <td>USD</td>
-                        <td>4.24</td>
-                        <td>6.57</td>
-                    </tr>
+                    {% for row in rows %}
+                        <tr>
+                            {% for k, col in row %}
+                            <td>
+                                {% if k == 0 %}
+                                    {{ col }}
+                                {% else %}
+                                    £{{ col|number_format }}m
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
                 </tbody>
             </table>
         </div>
@@ -33,17 +41,24 @@
             var sourceData = {{ graphData|json_encode|raw }},
                     data = google.visualization.arrayToDataTable(sourceData),
                     options = {
-                        height: 400,
+                        height: 600,
                         legend: {position: 'right'},
                         backgroundColor: 'transparent',
+                        axisTitlesPosition: 'out',
                         animation: {
                             duration: 400,
                             startup: true
                         },
+                        vAxis: {
+                            title: 'Currency'
+                        },
+                        hAxis: {
+                            title: '£m'
+                        },
                         chartArea: {
                             left: 64,
                             top: 24,
-                            height: 352,
+                            height: 552,
                             width: '75%'
                         },
                         axisTitlesPosition: 'in',
