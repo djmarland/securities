@@ -2,21 +2,9 @@
 
 {% block body %}
     <h1 class="g-unit">{{ meta.title }}</h1>
-    <p class="g-unit text--right d">{{ pagination.total }} results</p>
-    {% set letter = null %}
+    <ul class="list--unstyled">
     {%  for group in groups %}
-        {% if group.letter != letter %}
-            {% if letter != null %}
-                </ul>
-                </div>
-            {% endif %}
-            {% set letter = group.letter %}
-            <div class="card card--padded g-unit">
-            <h2>{{ letter }}</h2>
-            <ul>
-        {% endif %}
-        <li>{% include group.templatePath with group.vars only %}</li>
+        <li class="g-unit">{% include group.templatePath with group.vars only %}</li>
     {%  endfor %}
     </ul>
-    </div>
 {% endblock %}

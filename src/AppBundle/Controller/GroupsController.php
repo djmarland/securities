@@ -15,34 +15,37 @@ class GroupsController extends Controller
     public function initialize(Request $request)
     {
         parent::initialize($request);
-        $this->toView('currentSection', 'groups');
+        $this->toView('currentSection', 'issuers');
     }
 
     public function listAction()
     {
-        $perPage = 1500;
-        $currentPage = $this->getCurrentPage();
-
-        $result = $this->get('app.services.groups')
-            ->findAndCountAll($perPage, $currentPage);
+        $result = $this->get('app.services.issuers')
+            ->findAllInGroups();
 
         $groupPresenters = [];
-        $groups = $result->getDomainModels();
-        if (!empty($groups)) {
-            foreach ($groups as $group) {
-                $groupPresenters[] = new GroupPresenter($group);
+        $companies = $result->getDomainModels();
+        $prevGroup = null;
+        $collectedCompanies = [];
+        if (!empty($companies)) {
+            foreach ($companies as $company) {
+                $group = $company->getParentGroup();
+                if ($group != $prevGroup) {
+                    if ($prevGroup) {
+                        $groupPresenters[] = new GroupPresenter($prevGroup, $collectedCompanies);
+                    }
+                    $prevGroup = $group;
+                    $collectedCompanies = [];
+                }
+                $collectedCompanies[] = $company;
+            }
+            if ($prevGroup) {
+                $groupPresenters[] = new GroupPresenter($prevGroup, $collectedCompanies);
             }
         }
 
-        $this->setTitle('Groups');
+        $this->setTitle('Issuers');
         $this->toView('groups', $groupPresenters);
-        $this->toView('total', $result->getTotal());
-
-        $this->setPagination(
-            $result->getTotal(),
-            $currentPage,
-            $perPage
-        );
 
         return $this->renderTemplate('groups:list');
     }
@@ -51,6 +54,11 @@ class GroupsController extends Controller
     {
         $group = $this->getGroup($request);
 
+        $result = $this->get('app.services.issuers')
+            ->findAllByGroup($group);
+
+        $issuers = $result->getDomainModels();
+        $this->toView('issuers', $issuers);
         return $this->renderTemplate('groups:show');
     }
 
@@ -117,8 +125,11 @@ class GroupsController extends Controller
         $yieldData = $result->getDomainModel();
 
         $graphData = [];
-        foreach ($yieldData->getDataPoints() as $pointYear => $point) {
-            $graphData[] = [(int) $pointYear, $point];
+
+        if ($yieldData) {
+            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
+                $graphData[] = [(int)$pointYear, $point];
+            }
         }
 
         $this->toView('graphData', $graphData);

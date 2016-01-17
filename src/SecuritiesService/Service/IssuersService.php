@@ -111,4 +111,17 @@ class IssuersService extends Service
         $result = $qb->getQuery()->getResult();
         return $this->getServiceResult($result);
     }
+
+    public function findAllInGroups(): ServiceResultInterface {
+        $groupTbl = 'g';
+
+        $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
+        $qb->select(self::TBL, $groupTbl)
+            ->leftJoin(self::TBL . '.parentGroup', $groupTbl)
+            ->addOrderBy($groupTbl . '.name', 'ASC')
+            ->addOrderBy(self::TBL . '.name', 'ASC');
+
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
+    }
 }

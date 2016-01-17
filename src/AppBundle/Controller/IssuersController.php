@@ -236,33 +236,33 @@ class IssuersController extends Controller
             12 => 'Dec',
         ];
         // for each month, count how many of each product type were issued
-//        $securitiesService = $this->get('app.services.securities');
-        foreach($products as $product) {
-            $productYear = (object) [
-                'product' => $product,
-                'months' => []
-            ];
-            foreach ($months as $month => $name) {
-//                $count = $securitiesService->countByIssuerProductForMonth(
-//                    $issuer,
-//                    $product,
-//                    $year,
-//                    $month
-//                );
-                $count = $results[$month][$product->getId()->getValue()]->total ?? 0;
-                $monthCounts[$month][] = $count;
-                $productYear->months[$month] = $count ? $count : '-';
+        $hasData = !empty($products);
+        if ($hasData) {
+            foreach ($products as $product) {
+                $productYear = (object)[
+                    'product' => $product,
+                    'months' => []
+                ];
+                foreach ($months as $month => $name) {
+                    $count = $results[$month][$product->getId()->getValue()]->total ?? 0;
+                    if (!isset($monthCounts[$month])) {
+                        $monthCounts[$month] = [];
+                    }
+                    $monthCounts[$month][] = $count;
+                    $productYear->months[$month] = $count ? $count : '-';
+                }
+                $productCounts[] = $productYear;
             }
-            $productCounts[] = $productYear;
+
+            foreach ($months as $num => $month) {
+                $row = [
+                    $month
+                ];
+                $graphData[] = array_merge($row, $monthCounts[$num], ['']);
+            }
         }
 
-        foreach($months as $num => $month) {
-            $row = [
-                $month
-            ];
-            $graphData[] = array_merge($row, $monthCounts[$num], ['']);
-        }
-
+        $this->toView('hasData', $hasData);
         $this->toView('months', $months);
         $this->toView('products', $products);
         $this->toView('graphData', $graphData);

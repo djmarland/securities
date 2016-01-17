@@ -46,36 +46,70 @@
             </table>
             <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
             <script>
-                google.charts.load('current', {'packages':['line']});
+                google.charts.load('current', {'packages':['corechart']});
                 google.charts.setOnLoadCallback(drawChart);
                 function drawChart() {
                     var data = new google.visualization.DataTable(),
                         options = {
                             height: 400,
+                            curveType: 'function',
                             legend: {position:'none'},
-                            backgroundColor: {fill:'#fafafa'},
-                            colors: ['#3a0676'],
-                            axes: {
-                                x: {
-                                    0: {side: 'top'}
-                                }
+                            axisTitlesPosition: 'out',
+                            lineWidth: 6,
+                            pointSize: 0,
+                            vAxis: {
+                                title: '%'
                             },
-                            animation: {
-                                duration: 2000,
-                                startup: true,
-                                easing: 'out'
+                            hAxis: {
+                                title: 'Year',
+                                maxValue: 30
+                            },
+                            backgroundColor: 'transparent',
+                            colors: ['#3a0676'],
+                            chartArea: {
+                                left: 64,
+                                top: 24,
+                                height: 324,
+                                width: '92%'
                             },
                             pointsVisible: true
                         },
-                        chart;
+                        rows = {{ graphData|json_encode|raw }},
+                        len = rows.length,
+                        chart, i, largest = 0;
                     data.addColumn('number', 'Year');
                     data.addColumn('number', '%');
+                    data.insertRows(0, [rows[0]]);
 
-                    data.addRows({{ graphData|json_encode|raw }});
+                    for(i=0;i<len;i++) {
+                        if (rows[i][1] > largest) {
+                            largest = rows[i][1];
+                        }
+                    }
+                    console.log(largest);
+                    options.vAxis.maxValue = Math.ceil(largest);
 
-                    chart = new google.charts.Line(document.getElementById('chart-area'));
-                    chart.draw(data, google.charts.Line.convertOptions(options));
+                    chart = new google.visualization.LineChart(document.getElementById('chart-area'));
+                    chart.draw(data, options);
                     document.getElementById('chart-table').style.display = 'none';
+
+                    function addRow(row) {
+                        data.insertRows(row, [rows[row]]);
+                        chart.draw(data, options);
+                        row++;
+                        if (row < len) {
+                            setTimeout(function() {
+                                addRow(row);
+                            },5);
+                        } else {
+                            options.pointSize = 12;
+                            chart.draw(data, options);
+                        }
+                    }
+
+                    setTimeout(function() {
+                        addRow(1);
+                    },50)
                 }
             </script>
         {% else %}

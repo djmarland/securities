@@ -10,8 +10,11 @@ class GroupPresenter extends Presenter implements GroupPresenterInterface
 
     private $group;
 
+    private $companies;
+
     public function __construct(
         ParentGroup $group,
+        array $companies,
         array $options = [
         ]
     )
@@ -19,11 +22,17 @@ class GroupPresenter extends Presenter implements GroupPresenterInterface
         parent::__construct(null, $options);
 
         $this->group = $group;
+        $this->companies = $companies;
     }
 
     public function getName():string
     {
         return ucwords(strtolower($this->group->getName()));
+    }
+
+    public function getCompanies():array
+    {
+        return $this->companies;
     }
 
     public function getID():string
