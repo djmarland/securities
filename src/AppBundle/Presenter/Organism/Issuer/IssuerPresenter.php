@@ -23,7 +23,7 @@ class IssuerPresenter extends Presenter implements IssuerPresenterInterface
 
     public function getName():string
     {
-        return ucwords(strtolower($this->issuer->getName()));
+        return $this->issuer->getName();
     }
 
     public function getID():string

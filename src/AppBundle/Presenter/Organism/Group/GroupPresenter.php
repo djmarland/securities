@@ -27,7 +27,7 @@ class GroupPresenter extends Presenter implements GroupPresenterInterface
 
     public function getName():string
     {
-        return ucwords(strtolower($this->group->getName()));
+        return $this->group->getName();
     }
 
     public function getCompanies():array
