@@ -10,9 +10,9 @@ use SecuritiesService\Domain\ValueObject\BucketUndated;
 
 class BucketsService extends Service
 {
-    public function getAll(
+    private function generateBuckets(
         DateTime $startDate
-    ) {
+    ): array {
         $buckets = array_map(function($bucket) use ($startDate) {
             $endDate = null;
             $seconds = $bucket['upper'] ?? null;
@@ -37,11 +37,32 @@ class BucketsService extends Service
         }, Bucket::BUCKET_BOUNDARIES);
 
         $buckets[] = new BucketUndated($startDate);
+        return $buckets;
+    }
 
+    public function getAll(
+        DateTime $startDate
+    ): ServiceResultInterface {
+        $buckets = $this->generateBuckets($startDate);
         return new ServiceResult(
             $buckets,
             count($buckets)
         );
+    }
+
+    public function findByKey(
+        string $key,
+        DateTime $startDate
+    ): ServiceResultInterface {
+        $buckets = $this->generateBuckets($startDate);
+        foreach ($buckets as $bucket) {
+            if ($bucket->getKey() == $key) {
+                return new ServiceResult(
+                    $bucket
+                );
+            }
+        }
+        return new ServiceResultEmpty();
     }
 
     public function getBucketFromDates(

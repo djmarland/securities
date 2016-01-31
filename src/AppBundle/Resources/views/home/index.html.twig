@@ -5,14 +5,14 @@
     <div class="grid">
         <div class="g 3/5@xl">
             <div class="card card--padded">
+                <h2 class="g-unit">Upcoming maturities</h2>
+                {% include '@partials/securities-list.html.twig' %}
                 <p>
-                    Enter an ISIN, security or company name <br />
-                    <a href="{{ path('securities_list') }}">View all securities</a> | <a href="{{ path('issuers_list') }}">View all issuers</a>
+                    <a class="link--button" href="{{ path('securities_list') }}">View all securities</a>
                 </p>
             </div>
         </div>
         <div class="g 2/5@xl">
-            <div>
                 <div class="card card--padded g-unit">
                     <div class="grid">
                     <div class="g 1/2@xl">
@@ -25,7 +25,7 @@
                     </div>
                     <div class="g 1/2@xl">
                         <p class="text--center">
-                            <a class="link--hidden" href="{{ path('issuers_list') }}">
+                            <a class="link--hidden" href="{{ path('groups_list') }}">
                                 Issuers<br />
                                 <span class="a">{{ issuersCount }}</span>
                             </a>
@@ -68,7 +68,6 @@
                             chart.draw(data, options);
                         }
                     </script>
-                </div>
             </div>
         </div>
     </div>

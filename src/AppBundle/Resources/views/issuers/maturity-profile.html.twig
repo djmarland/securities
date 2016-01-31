@@ -24,7 +24,7 @@
                             <a href="{{ path('issuers_securities', {
                                     issuer_id : issuer.id,
                                     product : row.product.id,
-                                    bucket : column.bucket.id
+                                    bucket : column.bucket.key
                                 })
                             }}">
                                 £{{ column.amount|number_format }}m

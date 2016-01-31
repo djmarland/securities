@@ -88,7 +88,7 @@ class PaginationPresenter extends Presenter implements PaginationPresenterInterf
      */
     private function generateUrl($page)
     {
-        $queryParts = array();
+        $queryParts = [];
         $prefix = '';
         $path = '';
         // check if there already is a query string
@@ -107,6 +107,8 @@ class PaginationPresenter extends Presenter implements PaginationPresenterInterf
         // (to prevent duplicate URLs)
         if ($page !== 1) {
             $queryParts['page'] = $page;
+        }
+        if (!empty($queryParts)) {
             $path = '?' . http_build_query($queryParts);
         }
         $url = $prefix . $path;

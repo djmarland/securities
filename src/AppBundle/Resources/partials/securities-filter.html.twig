@@ -1,0 +1,56 @@
+<form method="get">
+    <div class="grid">
+        <div class="g 1/4@xl">
+            <h2 class="c">Filter:</h2>
+        </div>
+        <div class="g 3/4@xl">
+            <div>
+                <p>
+                    <label>
+                    Product: <select name="product">
+                        <option value="">All</option>
+                        {% for product in filter.products %}
+                            <option value="{{ product.id }}"
+                                    {% if filter.activeProduct == product.id %}
+                                        selected
+                                    {% endif %}
+                            >{{ product.name }}</option>
+                        {% endfor %}
+                    </select>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Currency: <select name="currency">
+                            <option value="">All</option>
+                            {% for currency in filter.currencies %}
+                                <option value="{{ currency.code }}"
+                                        {% if filter.activeCurrency == currency.code %}
+                                            selected
+                                        {% endif %}
+                                >{{ currency.code }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </p>
+                <p>
+                    <label>
+                        Maturity Date: <select name="bucket">
+                            <option value="">Any</option>
+                            {% for bucket in filter.buckets %}
+                                <option value="{{ bucket.key }}"
+                                        {% if filter.activeBucket == bucket.key %}
+                                            selected
+                                        {% endif %}
+                                >{{ bucket.name }}</option>
+                            {% endfor %}
+                        </select>
+                    </label>
+                </p>
+                <p>
+                    <button type="submit" class="btn">Go</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</form>

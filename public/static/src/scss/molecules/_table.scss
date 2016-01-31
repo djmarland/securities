@@ -2,7 +2,7 @@
     width: 100%;
     border-collapse: collapse;
     td,th {
-        @extend .island-squeezed;
+        padding: $grid-unit-small;
         text-align: left;
     }
 }

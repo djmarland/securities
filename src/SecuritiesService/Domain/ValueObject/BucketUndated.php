@@ -18,4 +18,9 @@ class BucketUndated extends Bucket
     {
         return self::UNDATED;
     }
+
+    public function getKey(): string
+    {
+        return strtolower(self::UNDATED);
+    }
 }

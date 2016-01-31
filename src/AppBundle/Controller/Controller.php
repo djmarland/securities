@@ -76,7 +76,10 @@ class Controller extends BaseController implements ControllerInterface
         $pagination = new PaginationPresenter(
             $total,
             $currentPage,
-            $perPage
+            $perPage,
+            [
+                'hrefPrefix' => '?' . $this->request->getQueryString()
+            ]
         );
 
         if (!$pagination->isValid()) {

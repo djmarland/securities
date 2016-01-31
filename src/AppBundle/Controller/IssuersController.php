@@ -2,10 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\ID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -13,6 +13,8 @@ use DateTimeImmutable;
 
 class IssuersController extends Controller
 {
+    use SecurityFilter;
+
     public function initialize(Request $request)
     {
         parent::initialize($request);
@@ -52,16 +54,16 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $perPage = 50;
-        $currentPage = $this->getCurrentPage();
-
         $securitiesService = $this->get('app.services.securities');
 
-        $result = $securitiesService
-            ->findAndCountByIssuer($issuer, $perPage, $currentPage);
+        $count = $securitiesService
+            ->countByIssuer($issuer);
 
         $totalRaised = $securitiesService
             ->sumByIssuer($issuer);
+
+        $result = $securitiesService
+            ->findLatestForIssuer($issuer, 5);
 
         $securityPresenters = [];
         $securities = $result->getDomainModels();
@@ -71,17 +73,10 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeProduct', 'all');
-        $this->toView('products', $this->getProductsForIssuer($issuer));
         $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('count', $count);
         $this->toView('securities', $securityPresenters);
-        $this->toView('total', $result->getTotal());
-
-        $this->setPagination(
-            $result->getTotal(),
-            $currentPage,
-            $perPage
-        );
+        $this->toView('hasSecurities', $count > 0);
 
         return $this->renderTemplate('issuers:show');
     }
@@ -90,18 +85,32 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $product = $this->getProduct($request);
-        $bucket = $this->getBucket($request);
+        $product = $this->setProductFilter($request);
+        $currency = $this->setCurrencyFilter($request);
+        $bucket = $this->setBucketFilter($request);
+
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
         $securitiesService = $this->get('app.services.securities');
         $result = $securitiesService
-            ->findAndCountByIssuerAndProduct($issuer, $product, $perPage, $currentPage);
+            ->findAndCountAllWithFilters(
+                $perPage,
+                $currentPage,
+                $product,
+                $currency,
+                $issuer,
+                $bucket
+            );
 
         $totalRaised = $securitiesService
-            ->sumByIssuerAndProduct($issuer, $product);
+            ->sumAllWithFilters(
+                $product,
+                $currency,
+                $issuer,
+                $bucket
+            );
 
         $securityPresenters = [];
         $securities = $result->getDomainModels();
@@ -111,8 +120,6 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeProduct', $product ? $product->getId() : 'all');
-        $this->toView('products', $this->getProductsForIssuer($issuer));
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $result->getTotal());
@@ -123,14 +130,14 @@ class IssuersController extends Controller
             $perPage
         );
 
-        return $this->renderTemplate('issuers:show');
+        return $this->renderTemplate('issuers:securities');
     }
 
     public function maturityProfileAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
 
-        $products = $this->getProductsForIssuer($issuer);
+        $products = $this->get('app.services.products')->findAll()->getDomainModels();
         $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
         $buckets = $buckets->getDomainModels();
 
@@ -272,27 +279,6 @@ class IssuersController extends Controller
         return $this->renderTemplate('issuers:issuance');
     }
 
-    private function getProduct(Request $request)
-    {
-        $productID = $request->get('product');
-        if (is_null($productID)) {
-            return null;
-        }
-
-        $productParamInt = (int) $productID;
-        if ($productID !== (string) $productParamInt ||
-            $productParamInt <= 0) {
-            throw new HttpException(404, 'Invalid ID');
-        }
-
-        $result = $this->get('app.services.products')
-            ->findById(new ID((int) $productParamInt));
-        if (!$result->hasResult()) {
-            throw new HttpException(404, 'Product ' . $productID . ' does not exist.');
-        }
-        return $result->getDomainModel();
-    }
-
     private function getBucket(Request $request)
     {
         $bucketID = $request->get('bucket');
@@ -341,11 +327,5 @@ class IssuersController extends Controller
         return [
             2016, 2015, 2014, 2013, 2012
         ];
-    }
-
-    private function getProductsForIssuer(Company $issuer): array
-    {
-        $result = $this->get('app.services.products')->findAllByIssuer($issuer);
-        return $result->getDomainModels();
     }
 }

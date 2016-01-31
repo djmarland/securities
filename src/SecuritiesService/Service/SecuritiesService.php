@@ -2,10 +2,11 @@
 
 namespace SecuritiesService\Service;
 
-use DateInterval;
 use DateTime;
 use DateTimeImmutable;
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
+use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
@@ -63,6 +64,129 @@ class SecuritiesService extends Service
             ->setFirstResult($this->getOffset($limit, $page));
         $result = $qb->getQuery()->getResult();
         return $this->getServiceResult($result);
+    }
+
+    public function findAndCountAllWithFilters(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        Product $product = null,
+        Currency $currency = null,
+        Company $issuer = null,
+        Bucket $bucket = null
+    ): ServiceResultInterface {
+
+        // count them first (cheaper if zero)
+        $count = $this->countAllWithFilters(
+            $product,
+            $currency,
+            $issuer,
+            $bucket);
+        if ($count == 0) {
+            return new ServiceResultEmpty();
+        }
+
+        // find the latest
+        $result = $this->findAllWithFilters(
+            $limit,
+            $page,
+            $product,
+            $currency,
+            $issuer,
+            $bucket
+        );
+        $result->setTotal($count);
+        return $result;
+    }
+
+    public function countAllWithFilters(
+        Product $product = null,
+        Currency $currency = null,
+        Company $issuer = null,
+        Bucket $bucket = null
+    ): int {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        $qb = $this->addFilters(
+            $qb,
+            $product,
+            $currency,
+            $issuer,
+            $bucket
+        );
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function sumAllWithFilters(
+        Product $product = null,
+        Currency $currency = null,
+        Company $issuer = null,
+        Bucket $bucket = null
+    ): int {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb = $this->addFilters(
+            $qb,
+            $product,
+            $currency,
+            $issuer,
+            $bucket
+        );
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findAllWithFilters(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        Product $product = null,
+        Currency $currency = null,
+        Company $issuer = null,
+        Bucket $bucket = null
+    ): ServiceResultInterface {
+        $qb = $this->selectWithJoins();
+        $qb = $this->addFilters(
+            $qb,
+            $product,
+            $currency,
+            $issuer,
+            $bucket
+        );
+        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
+    }
+
+    private function addFilters(
+        QueryBuilder $qb,
+        Product $product = null,
+        Currency $currency = null,
+        Company $issuer = null,
+        Bucket $bucket = null
+    ):QueryBuilder {
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id')
+                ->setParameter('product_id', $product->getId());
+        }
+        if ($currency) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.currency) = :currency_id')
+                ->setParameter('currency_id', $currency->getId());
+        }
+        if ($issuer) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
+                ->setParameter('company_id', $issuer->getId());
+        }
+        if ($bucket) {
+            if ($bucket instanceof BucketUndated) {
+                $qb->andWhere(self::TBL . '.maturity_date is NULL');
+            } else {
+                $qb->andWhere(self::TBL . '.maturity_date > :maturity_date_lower')
+                    ->andWhere(self::TBL . '.maturity_date <= :maturity_date_upper')
+                    ->setParameter('maturity_date_lower', $bucket->getStartDate())
+                    ->setParameter('maturity_date_upper', $bucket->getEndDate());
+            }
+        }
+        return $qb;
     }
 
     public function searchAndCount(
@@ -163,6 +287,20 @@ class SecuritiesService extends Service
         }
         $qb->setParameters($parameters);
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findLatestForIssuer(
+        Company $issuer,
+        int $limit = self::DEFAULT_LIMIT
+    ): ServiceResultInterface {
+        $qb = $this->selectWithJoins();
+        $qb->where('IDENTITY(' . self::TBL . '.company) = :company_id')
+            ->orderBy(self::TBL . '.start_date', 'DESC')
+            ->setMaxResults($limit);
+        $parameters = ['company_id' => (string) $issuer->getId()];
+        $qb->setParameters($parameters);
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
     }
 
     public function findByIssuer(
@@ -438,5 +576,18 @@ class SecuritiesService extends Service
         }
 
         return $products;
+    }
+
+    public function findUpcomingMaturities(
+        DateTimeImmutable $dateFrom,
+        int $limit = self::DEFAULT_LIMIT
+    ): ServiceResultInterface {
+        $qb = $this->selectWithJoins();
+        $qb->where(self::TBL . '.maturity_date > :end_from')
+            ->orderBy(self::TBL . '.maturity_date', 'ASC')
+            ->setMaxResults($limit)
+            ->setParameter('end_from', $dateFrom);
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
     }
 }

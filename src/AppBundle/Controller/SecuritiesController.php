@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\SecurityFilter;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use Symfony\Component\HttpFoundation\Request;
@@ -9,6 +10,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SecuritiesController extends Controller
 {
+    use SecurityFilter;
 
     public function initialize(Request $request)
     {
@@ -16,13 +18,24 @@ class SecuritiesController extends Controller
         $this->toView('currentSection', 'securities');
     }
 
-    public function listAction()
+    public function listAction(Request $request)
     {
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
+        $product = $this->setProductFilter($request);
+        $currency = $this->setCurrencyFilter($request);
+        $bucket = $this->setBucketFilter($request);
+
         $result = $this->get('app.services.securities')
-            ->findAndCountAll($perPage, $currentPage);
+            ->findAndCountAllWithFilters(
+                $perPage,
+                $currentPage,
+                $product,
+                $currency,
+                null,
+                $bucket
+            );
 
         $securityPresenters = [];
         $securities = $result->getDomainModels();

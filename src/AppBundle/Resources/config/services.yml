@@ -16,6 +16,10 @@ services:
       class: SecuritiesService\Service\BucketsService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
+  app.services.currencies:
+      class: SecuritiesService\Service\CurrenciesService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.groups:
       class: SecuritiesService\Service\GroupsService
       arguments: ["@doctrine.orm.default_entity_manager"]

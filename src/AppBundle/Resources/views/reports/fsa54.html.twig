@@ -4,6 +4,17 @@
 
 {% block content %}
     <h2 class="g-unit">FSA54</h2>
+    <p><form method="get">
+        <label>
+            Product: <select name="product">
+                <option value="">All</option>
+                {% for product in filter.products %}
+                    <option value="{{ product.id }}" {% if filter.activeProduct == product.id %}selected{% endif %}>{{ product.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit" class="btn">Go</button>
+    </form></p>
     <div class="grid">
         <div id="chart-area" class="g g--align-center" style="height: 600px">
             <p class="text--center">Drawing graph...</p>

@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Domain\Entity\Security;
 use AppBundle\Domain\ValueObject\{ID, ISIN};
+use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 
 class HomeController extends Controller
 {
@@ -17,6 +18,18 @@ class HomeController extends Controller
 
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
+
+
+        $upcomingResult = $this->get('app.services.securities')->findUpcomingMaturities(new \DateTimeImmutable(), 5);
+        $securityPresenters = [];
+        $securities = $upcomingResult->getDomainModels();
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security);
+            }
+        }
+
+        $this->toView('securities', $securityPresenters);
 
         $byProduct = [
             ['Funding Product', 'Number']

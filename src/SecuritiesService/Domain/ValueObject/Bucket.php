@@ -32,51 +32,61 @@ class Bucket
 
     const BUCKET_BOUNDARIES = [
         [
+            'key' => '2w',
             'name' => self::FORTNIGHT,
             'lower' => -1,
             'upper' => self::VALUE_WEEK * 2
         ],
         [
+            'key' => '1m',
             'name' => self::MONTH,
             'lower' => self::VALUE_WEEK * 2,
             'upper' => self::VALUE_MONTH
         ],
         [
+            'key' => '3m',
             'name' => self::THREE_MONTH,
             'lower' => self::VALUE_MONTH,
             'upper' => self::VALUE_MONTH * 3
         ],
         [
+            'key' => '6m',
             'name' => self::SIX_MONTH,
             'lower' => self::VALUE_MONTH * 3,
             'upper' => self::VALUE_MONTH * 6
         ],
         [
+            'key' => '1y',
             'name' => self::ONE_YEAR,
             'lower' => self::VALUE_MONTH * 6,
             'upper' => self::VALUE_YEAR
         ],
         [
+            'key' => '2y',
             'name' => self::TWO_YEARS,
             'lower' => self::VALUE_YEAR,
             'upper' => self::VALUE_YEAR * 2
         ],
         [
+            'key' => '5y',
             'name' => self::FIVE_YEARS,
             'lower' => self::VALUE_YEAR * 2,
             'upper' => self::VALUE_YEAR * 5
         ],
         [
+            'key' => '10y',
             'name' => self::TEN_YEARS,
             'lower' => self::VALUE_YEAR * 5,
             'upper' => self::VALUE_YEAR * 10
         ],
         [
+            'key' => '15y',
             'name' => self::FIFTEEN_YEARS,
             'lower' => self::VALUE_YEAR * 10,
             'upper' => self::VALUE_YEAR * 15
         ],
         [
+            'key' => '15yplus',
             'name' => self::FIFTEEN_YEARS_PLUS,
             'lower' => self::VALUE_YEAR * 15,
             'upper' => null
@@ -97,14 +107,14 @@ class Bucket
         $this->endDate = $endDate;
     }
 
-    private $id;
+    private $key;
 
-    public function getId(): int
+    public function getKey(): string
     {
-        if (!$this->id) {
-            $this->id = mt_rand(1,1000);
+        if (!$this->key) {
+            $this->key = $this->calculateKey();
         }
-        return $this->id;
+        return $this->key;
 
     }
 
@@ -136,6 +146,32 @@ class Bucket
         return null;
     }
 
+    private function calculateKey()
+    {
+        if (!$this->endDate) {
+            $openBucket = $this->getOpenBucket();
+            if ($openBucket) {
+                return $openBucket['key'];
+            }
+            return strtolower(self::UNKNOWN);
+        }
+
+        $diff = $this->endDate->getTimestamp() - $this->startDate->getTimestamp();
+        if ($diff < 0) {
+            return strtolower(self::COMPLETE);
+        }
+
+        foreach (Bucket::BUCKET_BOUNDARIES  as $bucket) {
+            // the first one that is within the bounds wins
+            if ($diff >= $bucket['lower']) {
+                if (!$bucket['upper'] || $diff < $bucket['upper']) {
+                    return $bucket['key'];
+                }
+            }
+        }
+        return self::UNKNOWN;
+    }
+
     private function calculateName()
     {
         if (!$this->endDate) {
@@ -153,8 +189,8 @@ class Bucket
 
         foreach (Bucket::BUCKET_BOUNDARIES  as $bucket) {
             // the first one that is within the bounds wins
-            if ($diff > $bucket['lower']) {
-                if (!$bucket['upper'] || $diff <= $bucket['upper']) {
+            if ($diff >= $bucket['lower']) {
+                if (!$bucket['upper'] || $diff < $bucket['upper']) {
                     return $bucket['name'];
                 }
             }
