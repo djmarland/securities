@@ -124,4 +124,20 @@ class IssuersService extends Service
         $result = $qb->getQuery()->getResult();
         return $this->getServiceResult($result);
     }
+
+    public function search(
+        string $query,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): ServiceResultInterface {
+        $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
+        $qb->where(self::TBL . '.name LIKE :query')
+            ->addOrderBy(self::TBL . '.name', 'ASC')
+            ->setParameters(['query' => '%' . $query . '%']);
+
+        $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
+    }
 }

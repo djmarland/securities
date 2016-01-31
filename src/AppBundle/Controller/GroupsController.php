@@ -102,49 +102,62 @@ class GroupsController extends Controller
     public function yieldAction(Request $request)
     {
         $group = $this->getGroup($request);
-
         $today = new DateTimeImmutable(); // @todo - use global app time
-        $year = $this->getYear($request, $today);
-        // @todo - move this logic into the shared method
-        if (is_null($year)) {
-            if ($today->format('m') == 1) {
-                // redirect january to last year, as we won't have any data yet
-                return $this->redirect(
-                    $this->generateUrl(
-                        'groups_yield',
-                        [
-                            'group_id' => $group->getId(),
-                            'year' => $today->format('Y')-1
-                        ]
-                    )
-                );
-            }
-        }
-
-        $result = $this->get('app.services.yields')->findByParentGroupForYear($group, $year);
-        $yieldData = $result->getDomainModel();
 
         $graphData = [];
+        $years = [];
+        $hasData = false;
 
-        if ($yieldData) {
-            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
-                $graphData[] = [(int)$pointYear, $point];
+        $largestValue = 0;
+
+        // last three years
+        for ($i = 0; $i < 3; $i++) {
+            $year = $today->sub(new \DateInterval('P' . $i . 'Y'));
+            $year = (int) $year->format('Y');
+            $years[] = $year;
+
+
+            $result = $this->get('app.services.yields')->findByParentGroupForYear($group, $year);
+            if (!$result->hasResult()) {
+                continue;
+            }
+            $hasData = true;
+            $yieldData = $result->getDomainModel();
+
+            foreach($yieldData->getDataPoints() as $pointYear => $point) {
+                $pointYear = (int) $pointYear;
+                if (!isset($graphData[$pointYear])) {
+                    $graphData[$pointYear] = [
+                        $pointYear,
+                        null,
+                        null,
+                        null
+                    ];
+                }
+                $graphData[$pointYear][$i+1] = $point;
+                if ($point > $largestValue) {
+                    $largestValue = $point;
+                }
             }
         }
 
-        $this->toView('graphData', $graphData);
-        $this->toView('yieldData', $yieldData);
-        $this->toView('activeYear', $year);
-        $this->toView('years', $this->getYearsForYieldCurves($group)); // @todo
-        return $this->renderTemplate('groups:yield');
-    }
+        $graphData = array_values($graphData);
+//        foreach($years as $y) {
+//            $graphData[] = array_values($y);
+//        }
+//        var_dump($graphData);die;
 
-    private function getYearsForYieldCurves(ParentGroup $issuer): array
-    {
-        // @todo - calculate valid years for this issuer
-        return [
-            2016, 2015, 2014
-        ];
+//        if ($yieldData) {
+//            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
+//                $graphData[] = [(int)$pointYear, $point];
+//            }
+//        }
+
+        $this->toView('graphData', $graphData);
+        $this->toView('hasData', $hasData);
+        $this->toView('largestPoint', $largestValue);
+        $this->toView('years', $years);
+        return $this->renderTemplate('groups:yield');
     }
 
     private function getGroup(Request $request)

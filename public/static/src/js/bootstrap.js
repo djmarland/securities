@@ -1,6 +1,7 @@
 (function() {
     "use strict";
 
+    /*
     var spinner = document.getElementById('loading-spinner'),
         mainPage = document.getElementById('main-body');
 
@@ -75,5 +76,5 @@
     ) {
         init();
     }
-
+    */
 })();

@@ -2,7 +2,10 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
+use InvalidArgumentException;
+use SecuritiesService\Domain\ValueObject\ISIN;
 use Symfony\Component\HttpFoundation\Request;
 
 class SearchController extends Controller
@@ -15,20 +18,40 @@ class SearchController extends Controller
 
     public function listAction()
     {
-        $perPage = 50;
-        $currentPage = $this->getCurrentPage();
-
         $query = $this->request->get('q', null);
         $this->setTitle('Search');
 
         if ($query) {
             $this->setTitle('Search - ' . $query);
 
+            try {
+
+                $isin = new ISIN($query);
+
+                $single = $this->get('app.services.securities')
+                    ->findByIsin($isin);
+
+                if ($single->hasResult()) {
+                    // if there was an exact match, just send you straight there
+                    return $this->redirectToRoute(
+                        'securities_show',
+                        [
+                            'isin' => $single->getDomainModel()->getIsin()
+                        ]
+                    );
+                }
+
+            } catch (InvalidArgumentException $e) {
+                // the given query was not an ISIN, move on
+            }
+
+
             $result = $this->get('app.services.securities')
-                ->searchAndCount($query, $perPage, $currentPage);
+                ->search($query, 20, 1);
 
             $securityPresenters = [];
             $securities = $result->getDomainModels();
+
             if (!empty($securities)) {
                 foreach ($securities as $security) {
                     $securityPresenters[] = new SecurityPresenter($security);
@@ -36,14 +59,23 @@ class SearchController extends Controller
             }
 
             $this->toView('securities', $securityPresenters);
-            $this->toView('total', $result->getTotal());
-            $this->toView('hasResults', $result->getTotal() > 0);
+            $this->toView('hasSecurities', $result->hasResult());
 
-            $this->setPagination(
-                $result->getTotal(),
-                $currentPage,
-                $perPage
-            );
+            $issuersResult = $this->get('app.services.issuers')
+                ->search($query, 20, 1);
+
+            $issuerPresenters = [];
+            $issuers = $issuersResult->getDomainModels();
+
+            if (!empty($issuers)) {
+                foreach ($issuers as $issuer) {
+                    $issuerPresenters[] = new IssuerPresenter($issuer);
+                }
+            }
+
+            $this->toView('issuers', $issuerPresenters);
+            $this->toView('hasIssuers', $issuersResult->hasResult());
+
             return $this->renderTemplate('search:list');
         }
 

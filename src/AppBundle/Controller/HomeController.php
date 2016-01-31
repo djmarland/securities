@@ -13,13 +13,21 @@ class HomeController extends Controller
 
         $securitiesCount = $this->get('app.services.securities')->countAll();
         $issuersCount = $this->get('app.services.issuers')->countAll();
+        $productCounts = $this->get('app.services.securities')->countsByProduct();
 
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
 
-        $this->toView('byProduct', [
-
-        ]);
+        $byProduct = [
+            ['Funding Product', 'Number']
+        ];
+        foreach ($productCounts as $pc) {
+            $byProduct[] = [
+                $pc->product->getName(),
+                $pc->count
+            ];
+        }
+        $this->toView('byProduct', $byProduct);
         return $this->renderTemplate('home:index');
     }
 

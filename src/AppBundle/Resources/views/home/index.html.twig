@@ -40,14 +40,7 @@
                     <script>
                         google.charts.setOnLoadCallback(drawChart);
                         function drawChart() {
-                            var data = google.visualization.arrayToDataTable([
-                                ['Funding Product', 'Total'],
-                                ['Non-dated capital resources',     11],
-                                ['Unsecured senior securities',      2],
-                                ['Dated subordinated securities',  2],
-                                ['Covered bonds', 2],
-                                ['Securitisations',    7]
-                            ]);
+                            var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
 
                             var options = {
                                 height: 300,

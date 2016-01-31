@@ -3,28 +3,10 @@
 {% use "AppBundle::groups/_base.html.twig" %}
 
 {% block content %}
-    <div class="g-unit">
-        <div class="grid grid--flush">
-            <div class="g 1/2@xl">
-                <h2>Yield {{ activeYear }}</h2>
-            </div>
-            <div class="g 1/2@xl text--right g--align-center">
-                <div>
-                    <h3 class="invisible">Year:</h3>
-                    <ol class="inline list--inline">
-                        {% for year in years %}
-                            <li><a class="link--button
-                                {% if activeYear == year %}link--button-active{% endif %}
-                                " href="{{ path('groups_yield', { group_id : group.id, year : year }) }}">{{ year }}</a></li>
-                        {% endfor %}
-                    </ol>
-                </div>
-            </div>
-        </div>
-    </div>
+    <h2>Yield</h2>
     <div>
-        {% if yieldData %}
-            <p class="g-unit">Currency: {{ yieldData.currency.code }}</p>
+        {% if hasData %}
+            <p class="g-unit">Currency: TBC</p>
             <div class="grid g-unit">
                 <div id="chart-area" class="g g--align-center" style="height: 400px">
                     <p class="text--center">Drawing graph...</p>
@@ -34,13 +16,16 @@
             <table class="table table--striped" id="chart-table">
                 <thead>
                     <th>Year</th>
-                    <th>Value</th>
+                    {% for year in years %}
+                        <th>{{ year }}</th>
+                    {% endfor %}
                 </thead>
                 <tbody>
-                    {% for year, value in yieldData.dataPoints %}
+                    {% for row in graphData %}
                         <tr>
-                            <td>{{ year }}</td>
-                            <td>{{ value }}%</td>
+                            {% for column in row %}
+                                <td>{{ column }}</td>
+                            {% endfor %}
                         </tr>
                     {% endfor %}
                 </tbody>
@@ -53,7 +38,7 @@
                         options = {
                             height: 400,
                             curveType: 'function',
-                            legend: {position:'none'},
+                            legend: {position:'top'},
                             axisTitlesPosition: 'out',
                             lineWidth: 6,
                             pointSize: 0,
@@ -65,7 +50,7 @@
                                 maxValue: 30
                             },
                             backgroundColor: 'transparent',
-                            colors: ['#3a0676'],
+                            colors: ['#3a0676','#6B4498','#CEC1DD'],
                             chartArea: {
                                 left: 64,
                                 top: 24,
@@ -74,19 +59,18 @@
                             },
                             pointsVisible: true
                         },
+                        years = {{ years|json_encode|raw }},
                         rows = {{ graphData|json_encode|raw }},
                         len = rows.length,
                         chart, i, largest = 0;
                     data.addColumn('number', 'Year');
-                    data.addColumn('number', '%');
+                    for (i=0;i<years.length;i++) {
+                        data.addColumn('number', years[i]);
+                    }
                     data.insertRows(0, [rows[0]]);
 
-                    for(i=0;i<len;i++) {
-                        if (rows[i][1] > largest) {
-                            largest = rows[i][1];
-                        }
-                    }
-                    options.vAxis.maxValue = Math.ceil(largest);
+                    options.vAxis.maxValue = Math.ceil({{ largestPoint }});
+                    options.vAxis.minValue = 0;
 
                     chart = new google.visualization.LineChart(document.getElementById('chart-area'));
                     chart.draw(data, options);
@@ -98,7 +82,7 @@
                         if (row < len) {
                             setTimeout(function() {
                                 addRow(row);
-                            },5);
+                            },1);
                         } else {
                             options.pointSize = 12;
                             chart.draw(data, options);
@@ -111,7 +95,7 @@
                 }
             </script>
         {% else %}
-            <p>No data available for {{ group.name }} in {{ activeYear }}</p>
+            <p>No data available for {{ group.name }}</p>
         {% endif %}
     </div>
 {% endblock %}

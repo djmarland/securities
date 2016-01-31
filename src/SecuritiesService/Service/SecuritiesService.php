@@ -86,7 +86,7 @@ class SecuritiesService extends Service
     {
         $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
-        $qb->andWhere(self::TBL . '.isin LIKE ?0');
+        $qb->where(self::TBL . '.name LIKE ?0');
         $qb->setParameters(['%' . $query . '%']);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -97,7 +97,7 @@ class SecuritiesService extends Service
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
         $qb = $this->selectWithJoins();
-        $qb->andWhere(self::TBL . '.isin LIKE :query');
+        $qb->where(self::TBL . '.name LIKE :query');
         $qb->setParameters(['query' => '%' . $query . '%']);
 
         $qb->setMaxResults($limit)
@@ -399,5 +399,44 @@ class SecuritiesService extends Service
         }
 
         return $currencies;
+    }
+
+    public function countsByProduct()
+    {
+        /*
+         * select p.name, count(s.id)
+         * from securities as s left join products as p on s.product_id = p.id
+         * group by p.id;
+         */
+        $productTable = 'product';
+
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select([
+            self::TBL,
+            'count(' . self::TBL . '.id) as c',
+            $productTable
+        ])
+            ->leftJoin(self::TBL . '.product', $productTable);
+
+        $qb->groupBy($productTable . '.id');
+
+        /*
+         * List of:
+         * 0 => Security
+         * c => count
+        */
+        $results = $qb->getQuery()->getResult();
+
+        $products = [];
+        foreach ($results as $result) {
+            $product = $this->getDomainModel($result[0]->getProduct());
+            $total = (int) $result['c'];
+            $products[] = (object) [
+                'product' => $product,
+                'count' => $total
+            ];
+        }
+
+        return $products;
     }
 }

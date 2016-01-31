@@ -42,6 +42,11 @@ class ServiceResult implements ServiceResultInterface
         return $this->total;
     }
 
+    public function getResultCount(): int
+    {
+        return count($this->domainModels);
+    }
+
     public function getDomainModels(): array
     {
         return $this->domainModels;
