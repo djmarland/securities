@@ -189,20 +189,21 @@ class IssuersController extends Controller
         $today = new DateTimeImmutable(); // @todo - use global app time
         $year = $this->getYear($request, $today);
         if (is_null($year)) {
+            $year = $today->format('Y');
             if ($today->format('m') == 1) {
                 // redirect january to last year, as we won't have any data yet
-                return $this->redirect(
-                    $this->generateUrl(
-                        'issuers_issuance',
-                        [
-                            'issuer_id' => $issuer->getId(),
-                            'year' => $today->format('Y')-1
-                        ]
-                    )
-                );
+                $year = $year-1;
             }
+            return $this->redirect(
+                $this->generateUrl(
+                    'issuers_issuance',
+                    [
+                        'issuer_id' => $issuer->getId(),
+                        'year' => $year
+                    ]
+                )
+            );
         }
-
 
         $results = $this->get('app.services.securities')->countProductsByIssuerForYear(
             $issuer,

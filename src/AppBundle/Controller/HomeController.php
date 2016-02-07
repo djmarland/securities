@@ -44,6 +44,11 @@ class HomeController extends Controller
         return $this->renderTemplate('home:index');
     }
 
+    public function aboutAction()
+    {
+        return $this->renderTemplate('home:about');
+    }
+
     public function styleguideAction()
     {
         return $this->renderTemplate('home:styleguide');
