@@ -2,16 +2,20 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Group\GroupPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
+use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use DateTimeImmutable;
-use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Service\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GroupsController extends Controller
 {
+    use SecurityFilter;
+
     public function initialize(Request $request)
     {
         parent::initialize($request);
@@ -95,6 +99,52 @@ class GroupsController extends Controller
     public function securitiesAction(Request $request)
     {
         $group = $this->getGroup($request);
+
+        $product = $this->setProductFilter($request);
+        $currency = $this->setCurrencyFilter($request);
+        $bucket = $this->setBucketFilter($request);
+
+        $filter = new SecuritiesFilter(
+            $product,
+            $currency,
+            $bucket
+        );
+
+        $perPage = 50;
+        $currentPage = $this->getCurrentPage();
+
+        $securitiesService = $this->get('app.services.securities');
+        $result = $securitiesService
+            ->findAndCountByGroup(
+                $group,
+                $perPage,
+                $currentPage,
+                $filter
+            );
+
+        $totalRaised = $securitiesService
+            ->sumByGroup(
+                $group,
+                $filter
+            );
+
+        $securityPresenters = [];
+        $securities = $result->getDomainModels();
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security);
+            }
+        }
+
+        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('securities', $securityPresenters);
+        $this->toView('total', $result->getTotal());
+
+        $this->setPagination(
+            $result->getTotal(),
+            $currentPage,
+            $perPage
+        );
 
         return $this->renderTemplate('groups:securities');
     }

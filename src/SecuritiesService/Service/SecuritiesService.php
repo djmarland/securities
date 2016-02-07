@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Currency;
+use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
@@ -64,6 +65,89 @@ class SecuritiesService extends Service
             ->setFirstResult($this->getOffset($limit, $page));
         $result = $qb->getQuery()->getResult();
         return $this->getServiceResult($result);
+    }
+
+    public function findAndCountByGroup(
+        ParentGroup $group,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        SecuritiesFilter $filter = null
+    ): ServiceResultInterface {
+        // count them first (cheaper if zero)
+        $count = $this->countByGroup(
+            $group,
+            $filter
+        );
+        if ($count == 0) {
+            return new ServiceResultEmpty();
+        }
+
+        // find the latest
+        $result = $this->findByGroup(
+            $group,
+            $limit,
+            $page,
+            $filter
+        );
+        $result->setTotal($count);
+        return $result;
+    }
+
+    public function countByGroup(
+        ParentGroup $group,
+        SecuritiesFilter $filter = null
+    ): int {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+
+        $qb->leftJoin(self::TBL . '.company', 'co');
+        $qb->leftJoin('co.parentGroup', 'p');
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        $qb->andWhere('p.id = :group_id')
+            ->setParameter('group_id', (string) $group->getId());
+
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function findByGroup(
+        ParentGroup $group,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        SecuritiesFilter $filter = null
+    ): ServiceResultInterface {
+        $qb = $this->selectWithJoins();
+
+        $qb->leftJoin('co.parentGroup', 'p');
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        $qb->andWhere('p.id = :group_id')
+            ->setParameter('group_id', (string) $group->getId());
+
+        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
+        $result = $qb->getQuery()->getResult();
+        return $this->getServiceResult($result);
+    }
+
+    public function sumByGroup(
+        ParentGroup $group,
+        SecuritiesFilter $filter = null
+    ): int {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->leftJoin(self::TBL . '.company', 'co');
+        $qb->leftJoin('co.parentGroup', 'p');
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        $qb->andWhere('p.id = :group_id')
+            ->setParameter('group_id', (string) $group->getId());
+
+        $qb->select('sum(' . self::TBL . '.money_raised)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findAndCountAllWithFilters(
