@@ -703,7 +703,7 @@ class SecuritiesService extends Service
 
         $products = [];
         foreach ($results as $result) {
-            $product = $this->getDomainModel($result[0]->getProduct());
+            $product = $this->getDomainModel($result[0]['product'], 'Product');
             $total = (int) $result['c'];
             $products[] = (object) [
                 'product' => $product,
