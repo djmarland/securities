@@ -3,20 +3,17 @@
 namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
-use SecuritiesService\Data\Database\Entity\Entity as EntityOrm;
 use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class CurrencyMapper extends Mapper
 {
-    public function getDomainModel(EntityOrm $item): Entity
+    public function getDomainModel(array $item): Entity
     {
-        $id = new ID($item->getId());
+        $id = new ID($item['id']);
         $currency = new Currency(
             $id,
-            $item->getCreatedAt(),
-            $item->getUpdatedAt(),
-            $item->getCode()
+            $item['code']
         );
         return $currency;
     }

@@ -2,6 +2,8 @@
 
 namespace SecuritiesService\Service;
 
+use Doctrine\ORM\Query;
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\ValueObject\ID;
 
@@ -14,8 +16,7 @@ class ProductsService extends Service
         $qb = $this->getQueryBuilder(self::PRODUCT_ENTITY);
         $qb->select('tbl');
         $qb->orderBy('tbl.name', 'ASC');;
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByID(
@@ -30,5 +31,11 @@ class ProductsService extends Service
     {
         // @todo - actually make this query (needs to go via "securities, grouped and unique products"
         return $this->findAll();
+    }
+
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'Product')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }

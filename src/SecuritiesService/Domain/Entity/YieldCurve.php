@@ -3,23 +3,16 @@
 namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\ID;
-use DateTime;
 
 class YieldCurve extends Entity
 {
     public function __construct(
         ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt,
         int $year,
         Currency $currency,
         array $dataPoints
     ) {
-        parent::__construct(
-            $id,
-            $createdAt,
-            $updatedAt
-        );
+        parent::__construct($id);
 
         $this->year = $year;
         $this->currency = $currency;

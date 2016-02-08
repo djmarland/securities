@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class CurrenciesService extends Service
@@ -33,8 +34,7 @@ class CurrenciesService extends Service
         $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
         $qb->select(self::TBL);
         $qb->orderBy(self::TBL . '.code', 'ASC');
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByID(
@@ -48,7 +48,11 @@ class CurrenciesService extends Service
                 'id' => $id
             ]);
 
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
+    }
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'Currency')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }

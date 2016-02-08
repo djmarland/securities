@@ -8,24 +8,11 @@ use DateTime;
 
 class Currency extends Entity
 {
-
-    /**
-     * @param ID $id
-     * @param $createdAt
-     * @param $updatedAt
-     * @param $code
-     */
     public function __construct(
         ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt,
         string $code
     ) {
-        parent::__construct(
-            $id,
-            $createdAt,
-            $updatedAt
-        );
+        parent::__construct($id);
 
         $this->code = $code;
     }

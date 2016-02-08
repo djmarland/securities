@@ -1,0 +1,82 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::reports/_base.html.twig" %}
+
+{% block content %}
+    <h2 class="g-unit">FSA50</h2>
+    <div><form method="get">
+        <label>
+            Product: <select name="product">
+                <option value="">All</option>
+                {% for product in filter.products %}
+                    <option value="{{ product.id }}" {% if filter.activeProduct == product.id %}selected{% endif %}>{{ product.name }}</option>
+                {% endfor %}
+            </select>
+        </label>
+        <button type="submit" class="btn">Go</button>
+    </form></div>
+    <div class="grid">
+        <div id="chart-area" class="g g--align-center" style="height: 600px">
+            <p class="text--center">Drawing graph...</p>
+        </div>
+        <div class="g">
+            <table class="table table--striped">
+                <thead>
+                <tr>
+                    {% for heading in headings %}
+                        <th>{{ heading }}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                    {% for row in rows %}
+                        <tr>
+                            {% for k, col in row %}
+                            <td>
+                                {% if k == 0 %}
+                                    {{ col }}
+                                {% else %}
+                                    £{{ col|number_format }}m
+                                {% endif %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+    <script>
+        google.charts.setOnLoadCallback(drawChart);
+        function drawChart() {
+            var sourceData = {{ graphData|json_encode|raw }},
+                    data = google.visualization.arrayToDataTable(sourceData),
+                    options = {
+                        height: 600,
+                        legend: {position: 'right'},
+                        backgroundColor: 'transparent',
+                        axisTitlesPosition: 'out',
+                        animation: {
+                            duration: 400,
+                            startup: true
+                        },
+                        vAxis: {
+                            title: 'Currency'
+                        },
+                        hAxis: {
+                            title: '£m'
+                        },
+                        chartArea: {
+                            left: 64,
+                            top: 24,
+                            height: 552,
+                            width: '75%'
+                        },
+                        axisTitlesPosition: 'in',
+                        colors: ['#3A0676', '#E6E0EE', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD']
+                    },
+                    chart = new google.visualization.BarChart(document.getElementById('chart-area'));
+            chart.draw(data, options);
+        }
+    </script>
+{% endblock %}

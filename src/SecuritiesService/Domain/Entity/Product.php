@@ -9,16 +9,10 @@ class Product extends Entity
 {
     public function __construct(
         ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt,
         int $number,
         string $name
     ) {
-        parent::__construct(
-            $id,
-            $createdAt,
-            $updatedAt
-        );
+        parent::__construct($id);
 
         $this->name = $name;
         $this->number = $number;

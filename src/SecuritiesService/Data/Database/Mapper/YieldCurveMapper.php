@@ -9,16 +9,14 @@ use SecuritiesService\Domain\ValueObject\ID;
 
 class YieldCurveMapper extends Mapper
 {
-    public function getDomainModel(EntityOrm $item): Entity
+    public function getDomainModel(array $item): Entity
     {
-        $id = new ID($item->getId());
-        $currency = $this->mapperFactory->getDomainModel($item->getCurrency());
-        $dataPoints = (array) json_decode($item->getDataPoints());
+        $id = new ID($item['id']);
+        $currency = $this->mapperFactory->createCurrency()->getDomainModel($item['currency']);
+        $dataPoints = (array) json_decode($item['dataPoints']);
         $model = new YieldCurve(
             $id,
-            $item->getCreatedAt(),
-            $item->getUpdatedAt(),
-            $item->getYear(),
+            $item['year'],
             $currency,
             $dataPoints
         );

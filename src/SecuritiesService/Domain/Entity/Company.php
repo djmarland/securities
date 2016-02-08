@@ -3,30 +3,22 @@
 namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\ID;
-use DateTime;
 
 class Company extends Entity
 {
     public function __construct(
         ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt,
         string $name,
+        Country $country = null,
         ParentGroup $parentGroup = null
     ) {
-        parent::__construct(
-            $id,
-            $createdAt,
-            $updatedAt
-        );
+        parent::__construct($id);
 
         $this->name = $name;
         $this->parentGroup = $parentGroup;
+        $this->country = $country;
     }
 
-    /**
-     * @var string
-     */
     private $name;
 
     public function getName(): string
@@ -34,13 +26,28 @@ class Company extends Entity
         return $this->name;
     }
 
+    private $parentGroup;
+
+    public function getParentGroup(): ParentGroup
+    {
+        if (is_null($this->parentGroup)) {
+            // @todo, use a proper exception
+            throw new \Exception('Tried to get parent group data without requesting it up front');
+        }
+        return $this->parentGroup;
+    }
+
     /**
      * @var ParentGroup|null
      */
-    private $parentGroup;
+    private $country;
 
-    public function getParentGroup()
+    public function getCountry(): Country
     {
-        return $this->parentGroup;
+        if (is_null($this->country)) {
+            // @todo, use a proper exception
+            throw new \Exception('Tried to get country data without requesting it up front');
+        }
+        return $this->country;
     }
 }

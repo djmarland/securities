@@ -4,6 +4,7 @@ namespace SecuritiesService\Service;
 
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
 
 abstract class Service
@@ -21,54 +22,54 @@ abstract class Service
         $this->entityManager = $entityManager;
     }
 
-    public function getEntity(string $name): EntityRepository
+    protected function getEntity(string $name): EntityRepository
     {
         return $this->entityManager
             ->getRepository('SecuritiesService:' . $name);
     }
 
-    public function getQueryBuilder(string $name) {
+    protected function getQueryBuilder(string $name) {
         $entity = $this->getEntity($name);
         return $entity->createQueryBuilder(self::TBL);
     }
 
-    public function getDomainModel($item)
+    protected function getDomainModel($item, $type)
     {
-        $models = $this->getDomainModels($item);
+        // @todo - potential bug here if we ever pass an array of results into this method
+        $models = $this->getDomainModels([$item], $type);
         if ($models) {
             return reset($models);
         }
         return null;
     }
 
-    public function getDomainModels($items)
+    protected function getDomainModels($items, $type)
     {
         if (!$items) {
             return null;
         }
-        if (!is_array($items)) {
-            $items = [$items];
-        }
+        $items = ensure_array($items);
 
         $mapperFactory = new MapperFactory();
         $domainModels = array();
+        $mapper = $mapperFactory->createMapper($type);
         foreach ($items as $item) {
-            $mapper = $mapperFactory->getMapper($item);
             $domainModels[] = $mapper->getDomainModel($item);
         }
         return $domainModels;
     }
 
-    public function getOffset(
+    protected function getOffset(
         int $limit,
         int $page
     ): int {
         return ($limit * ($page - 1));
     }
 
-    public function getServiceResult($result)
+    protected function getServiceResult(QueryBuilder $qb, $type)
     {
-        $data = $this->getDomainModels($result);
+        $result = $qb->getQuery()->getArrayResult();
+        $data = $this->getDomainModels($result, $type);
 
         if ($data) {
             return new ServiceResult($data);

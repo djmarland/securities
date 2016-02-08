@@ -3,6 +3,8 @@ namespace SecuritiesService\Data\Database\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
+// @todo - don't use snake case everywhere
+
 /**
 * @ORM\Entity
 * @ORM\HasLifecycleCallbacks()

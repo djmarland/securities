@@ -15,19 +15,10 @@ abstract class Entity
 {
     const KEY_PREFIX = null;
 
-    /**
-     * @param ID $id
-     * @param DateTime $createdAt
-     * @param DateTime $updatedAt
-     */
     public function __construct(
-        ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt
+        ID $id
     ) {
         $this->id = $id;
-        $this->createdAt = $createdAt;
-        $this->updatedAt = $updatedAt;
     }
 
     /**
@@ -38,25 +29,5 @@ abstract class Entity
     public function getId(): ID
     {
         return $this->id;
-    }
-
-    /**
-     * @var \DateTime
-     */
-    protected $createdAt;
-
-    public function getCreatedAt(): DateTime
-    {
-        return $this->createdAt;
-    }
-
-    /**
-     * @var \DateTime
-     */
-    protected $updatedAt;
-
-    public function getUpdatedAt(): DateTime
-    {
-        return $this->updatedAt;
     }
 }

@@ -3,21 +3,29 @@
 namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
-use SecuritiesService\Data\Database\Entity\Entity as EntityOrm;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class CompanyMapper extends Mapper
 {
-    public function getDomainModel(EntityOrm $item): Entity
+    public function getDomainModel(array $item): Entity
     {
-        $id = new ID($item->getId());
-        $parentGroup = $this->mapperFactory->getDomainModel($item->getParentGroup());
+        $id = new ID($item['id']);
+        $parentGroup = null;
+        $country = null;
+
+        if (isset($item['parentGroup'])) {
+            $parentGroup = $this->mapperFactory->createParentGroup()->getDomainModel($item['parentGroup']);
+        }
+
+        if (isset($item['country'])) {
+            $parentGroup = $this->mapperFactory->createCountry()->getDomainModel($item['country']);
+        }
+
         $currency = new Company(
             $id,
-            $item->getCreatedAt(),
-            $item->getUpdatedAt(),
-            $item->getName(),
+            $item['name'],
+            $country,
             $parentGroup
         );
         return $currency;

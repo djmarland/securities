@@ -76,3 +76,7 @@ reports_list:
 reports_fsa54:
   path:     /reports/fsa54
   defaults: { _controller: AppBundle:Reports:fsa54 }
+
+reports_fsa50:
+  path:     /reports/fsa50
+  defaults: { _controller: AppBundle:Reports:fsa50 }

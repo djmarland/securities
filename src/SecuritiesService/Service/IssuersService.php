@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\ValueObject\ID;
 
@@ -42,8 +43,7 @@ class IssuersService extends Service
         $qb->orderBy(self::TBL . '.name', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findAndCountAllByGroup(
@@ -91,8 +91,7 @@ class IssuersService extends Service
             'parent_group_id' => (string) $group->getId()
         ]);
 
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByID(
@@ -108,8 +107,7 @@ class IssuersService extends Service
                 'id' => $id
             ]);
 
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findAllInGroups(): ServiceResultInterface {
@@ -121,8 +119,7 @@ class IssuersService extends Service
             ->addOrderBy($groupTbl . '.name', 'ASC')
             ->addOrderBy(self::TBL . '.name', 'ASC');
 
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function search(
@@ -137,7 +134,11 @@ class IssuersService extends Service
 
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
+    }
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'Company')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }

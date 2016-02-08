@@ -63,8 +63,7 @@ class SecuritiesService extends Service
         $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findAndCountByGroup(
@@ -129,8 +128,7 @@ class SecuritiesService extends Service
         $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function sumByGroup(
@@ -237,8 +235,7 @@ class SecuritiesService extends Service
         $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     private function addFilters(
@@ -310,19 +307,18 @@ class SecuritiesService extends Service
 
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByIsin(ISIN $isin): ServiceResultInterface
     {
-        $entity = $this->getEntity(self::SECURITY_ENTITY);
+        $qb = $this->selectWithJoins()
+            ->where(self::TBL . '.isin = :isin')
+            ->setParameters([
+                'isin' => $isin
+            ]);
 
-        $result = $entity->findBy(
-            ['isin' => $isin]
-        );
-
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findAndCountByIssuer(
@@ -383,8 +379,7 @@ class SecuritiesService extends Service
             ->setMaxResults($limit);
         $parameters = ['company_id' => (string) $issuer->getId()];
         $qb->setParameters($parameters);
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByIssuer(
@@ -412,8 +407,7 @@ class SecuritiesService extends Service
             $parameters['product_id'] = (string) $product->getId();
         }
         $qb->setParameters($parameters);
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function sumByIssuer(
@@ -499,10 +493,10 @@ class SecuritiesService extends Service
          * c => count
          * m => month
         */
-        $results = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getArrayResult();
         $months = [];
         foreach ($results as $result) {
-            $product = $this->getDomainModel($result[0]->getProduct());
+            $product = $this->getDomainModel($result[0]['product'], 'Product');
             $total = (int) $result['c'];
             $month = (int) $result['m'];
             if (!isset($months[$month])) {
@@ -610,17 +604,75 @@ class SecuritiesService extends Service
          * c => count
          * m => month
         */
-        $results = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getArrayResult();
 
         $currencies = [];
         foreach ($results as $result) {
-            $currency = $this->getDomainModel($result[0]->getCurrency());
+            $currency = $this->getDomainModel($result[0]['currency'], 'Currency');
             $code = $currency->getCode();
             $total = (int) $result['s'];
             $currencies[$code] = $total;
         }
 
         return $currencies;
+    }
+
+    public function sumForProductGroupedByCountryForYearToDate(
+        DateTimeImmutable $endDate,
+        Product $product = null
+    ) {
+        /*
+         * select c.name, sum(*)
+         * from securities left join products as p on product_id = p.id
+         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+         */
+        $companyTbl = 'company';
+        $countryTbl = 'country';
+
+        $year = $endDate->format('Y');
+
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select([
+            self::TBL,
+            'sum(' . self::TBL . '.money_raised) as s',
+            $companyTbl,
+            $countryTbl
+        ])
+            ->where('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year')
+            ->andWhere(self::TBL . '.start_date <= :end_date')
+            ->leftJoin(self::TBL . '.company', $companyTbl)
+            ->leftJoin($companyTbl . '.country', $countryTbl);
+
+        $params =[
+            'year' => $year,
+            'end_date' => $endDate
+        ];
+
+        if ($product) {
+            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
+            $params['product_id'] = (string) $product->getId();
+        }
+
+        $qb->groupBy($countryTbl . '.id')
+            ->setParameters($params);
+
+
+        /*
+         * List of:
+         * 0 => Security
+         * s => sum
+        */
+        $results = $qb->getQuery()->getArrayResult();
+
+        $countries = [];
+        foreach ($results as $result) {
+            $country = $this->getDomainModel($result[0]['company']['country'], 'Country');
+            $code = $country->getName();
+            $total = (int) $result['s'];
+            $countries[$code] = $total;
+        }
+
+        return $countries;
     }
 
     public function countsByProduct()
@@ -647,7 +699,7 @@ class SecuritiesService extends Service
          * 0 => Security
          * c => count
         */
-        $results = $qb->getQuery()->getResult();
+        $results = $qb->getQuery()->getArrayResult();
 
         $products = [];
         foreach ($results as $result) {
@@ -671,7 +723,11 @@ class SecuritiesService extends Service
             ->orderBy(self::TBL . '.maturity_date', 'ASC')
             ->setMaxResults($limit)
             ->setParameter('end_from', $dateFrom);
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
+    }
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'Security')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }

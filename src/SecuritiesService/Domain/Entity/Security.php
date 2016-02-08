@@ -2,7 +2,6 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use DateTimeImmutable;
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\ID;
@@ -13,8 +12,6 @@ class Security extends Entity
 {
     public function __construct(
         ID $id,
-        DateTime $createdAt,
-        DateTime $updatedAt,
         ISIN $isin,
         string $name,
         DateTime $startDate,
@@ -25,11 +22,7 @@ class Security extends Entity
         DateTime $maturityDate = null,
         float $coupon = null
     ) {
-        parent::__construct(
-            $id,
-            $createdAt,
-            $updatedAt
-        );
+        parent::__construct($id);
 
         $this->name = $name;
         $this->isin = $isin;

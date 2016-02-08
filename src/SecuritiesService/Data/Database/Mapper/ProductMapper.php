@@ -9,15 +9,13 @@ use SecuritiesService\Domain\ValueObject\ID;
 
 class ProductMapper extends Mapper
 {
-    public function getDomainModel(EntityOrm $item): Entity
+    public function getDomainModel(array $item): Entity
     {
-        $id = new ID($item->getId());
+        $id = new ID($item['id']);
         $product = new Product(
             $id,
-            $item->getCreatedAt(),
-            $item->getUpdatedAt(),
-            $item->getNumber(),
-            $item->getName()
+            $item['number'],
+            $item['name']
         );
         return $product;
     }

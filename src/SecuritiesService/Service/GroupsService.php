@@ -2,11 +2,12 @@
 
 namespace SecuritiesService\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class GroupsService extends Service
 {
-    const COMPANY_ENTITY = 'ParentGroup';
+    const GROUP_ENTITY = 'ParentGroup';
 
     public function findAndCountAll(
         int $limit = self::DEFAULT_LIMIT,
@@ -27,7 +28,7 @@ class GroupsService extends Service
 
     public function countAll(): int
     {
-        $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
+        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
         $qb->select('count(tbl.id)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -36,20 +37,29 @@ class GroupsService extends Service
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
-        $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
+        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
         $qb->select('tbl');
         $qb->orderBy('tbl.name', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
     }
 
     public function findByID(
         ID $id
     ): ServiceResultInterface {
-        $result = $this->entityManager
-            ->find('SecuritiesService:ParentGroup', $id);
-        return $this->getServiceResult($result);
+        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.id = :id')
+            ->setParameters([
+                'id' => $id
+            ]);
+
+        return $this->getServiceResult($qb);
+    }
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'ParentGroup')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }

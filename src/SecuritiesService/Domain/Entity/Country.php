@@ -5,15 +5,17 @@ namespace SecuritiesService\Domain\Entity;
 use SecuritiesService\Domain\ValueObject\ID;
 use DateTime;
 
-class ParentGroup extends Entity
+class Country extends Entity
 {
     public function __construct(
         ID $id,
-        string $name
+        string $name,
+        ParentGroup $parentGroup = null
     ) {
         parent::__construct($id);
 
         $this->name = $name;
+        $this->parentGroup = $parentGroup;
     }
 
     /**
@@ -24,5 +26,15 @@ class ParentGroup extends Entity
     public function getName(): string
     {
         return $this->name;
+    }
+
+    /**
+     * @var ParentGroup|null
+     */
+    private $parentGroup;
+
+    public function getParentGroup()
+    {
+        return $this->parentGroup;
     }
 }

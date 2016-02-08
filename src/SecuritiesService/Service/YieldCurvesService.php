@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\ParentGroup;
 
 class YieldCurvesService extends Service
@@ -26,7 +27,11 @@ class YieldCurvesService extends Service
                 'parent_group_id' => $parentGroup->getId()
             ]);
 
-        $result = $qb->getQuery()->getResult();
-        return $this->getServiceResult($result);
+        return $this->getServiceResult($qb);
+    }
+
+    protected function getServiceResult(QueryBuilder $qb, $type = 'YieldCurve')
+    {
+        return parent::getServiceResult($qb, $type);
     }
 }
