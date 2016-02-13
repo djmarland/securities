@@ -3,21 +3,23 @@
 namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\ID;
-use DateTime;
 
-class ParentGroup extends Entity
+class Sector extends Entity
 {
     public function __construct(
         ID $id,
         string $name,
-        Sector $sector = null
+        Industry $industry = null
     ) {
         parent::__construct($id);
 
         $this->name = $name;
-        $this->sector = $sector;
+        $this->industry = $industry;
     }
 
+    /**
+     * @var string
+     */
     private $name;
 
     public function getName(): string
@@ -25,14 +27,14 @@ class ParentGroup extends Entity
         return $this->name;
     }
 
-    private $sector;
+    private $industry;
 
-    public function getSector(): Sector
+    public function getIndustry(): Industry
     {
-        if (is_null($this->sector)) {
+        if (is_null($this->industry)) {
             // @todo, use a proper exception
-            throw new \Exception('Tried to get sector data without requesting it up front');
+            throw new \Exception('Tried to get industry data without requesting it up front');
         }
-        return $this->sector;
+        return $this->industry;
     }
 }

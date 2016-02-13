@@ -4,12 +4,15 @@ namespace ConsoleBundle\Command;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
+use SecuritiesService\Data\Database\Entity\Industry;
 use SecuritiesService\Data\Database\Entity\ParentGroup;
 use SecuritiesService\Data\Database\Entity\Product;
 use SecuritiesService\Data\Database\Entity\Region;
+use SecuritiesService\Data\Database\Entity\Sector;
 use SecuritiesService\Data\Database\Entity\Security;
 use DateTime;
 use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
+use Symfony\Component\Console\Helper\ProgressBar;
 use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
@@ -45,10 +48,14 @@ class ImportCommand extends Command
         $this->em = $this->getContainer()->get('doctrine')->getManager();
 
         $output->writeln('Processing');
+        $totalCount = count($data);
+        $progress = new ProgressBar($output, $totalCount);
+        $progress->start();
         foreach ($data as $row) {
-            $output->write('.');
             $this->processRow($row);
+            $progress->advance();
         }
+        $progress->finish();
         $output->writeln('');
         $output->writeln('Done');
     }
@@ -100,23 +107,6 @@ class ImportCommand extends Command
         return $product;
     }
 
-//    function getMarket($row)
-//    {
-//        $name = $row['Market'];
-//        $repo = $this->em->getRepository('SecuritiesService:Market');
-//        $market = $repo->findOneBy(
-//            ['name' => $name]
-//        );
-//        if ($market) {
-//            return $market;
-//        }
-//        $market = new Market();
-//        $market->setName($name);
-//        $this->em->persist($market);
-//        $this->em->flush();
-//        return $market;
-//    }
-
     function getCompany($row)
     {
         $name = $row['COMPANY_NAME'];
@@ -142,10 +132,9 @@ class ImportCommand extends Command
         $currency = $repo->findOneBy(
             ['code' => $code]
         );
-        if ($currency) {
-            return $currency;
+        if (!$currency) {
+            $currency = new Currency();
         }
-        $currency = new Currency();
         $currency->setCode($code);
         $this->em->persist($currency);
         $this->em->flush();
@@ -159,68 +148,48 @@ class ImportCommand extends Command
         $parentGroup = $repo->findOneBy(
             ['name' => $name]
         );
-        if ($parentGroup) {
-            return $parentGroup;
+        if (!$parentGroup) {
+            $parentGroup = new ParentGroup();
         }
-        $parentGroup = new ParentGroup();
         $parentGroup->setName($name);
+        $parentGroup->setSector($this->getSector($row));
         $this->em->persist($parentGroup);
         $this->em->flush();
         return $parentGroup;
     }
 
-//    function getSecurityType($row)
-//    {
-//        $name = $row['Security Description'];
-//        $repo = $this->em->getRepository('SecuritiesService:SecurityType');
-//        $securityType = $repo->findOneBy(
-//            ['name' => $name]
-//        );
-//        if ($securityType) {
-//            return $securityType;
-//        }
-//        $securityType = new SecurityType();
-//        $securityType->setName($name);
-//        $this->em->persist($securityType);
-//        $this->em->flush();
-//        return $securityType;
-//    }
-//
-//    function getMarketSector($row)
-//    {
-//        $code = $row['Market Sector Code'];
-//        $repo = $this->em->getRepository('SecuritiesService:MarketSector');
-//        $marketSector = $repo->findOneBy(
-//            ['sector_code' => $code]
-//        );
-//        if ($marketSector) {
-//            return $marketSector;
-//        }
-//        $marketSector = new MarketSector();
-//        $marketSector->setSectorCode($code);
-//        $this->em->persist($marketSector);
-//        $this->em->flush();
-//        return $marketSector;
-//    }
-//
-//    function getMarketSegment($row)
-//    {
-//        $code = $row['Market Segment Code'];
-//        $name = $row['Market Segment'];
-//        $repo = $this->em->getRepository('SecuritiesService:MarketSegment');
-//        $marketSegment = $repo->findOneBy(
-//            ['code' => $name]
-//        );
-//        if ($marketSegment) {
-//            return $marketSegment;
-//        }
-//        $marketSegment = new MarketSegment();
-//        $marketSegment->setName($name);
-//        $marketSegment->setCode($code);
-//        $this->em->persist($marketSegment);
-//        $this->em->flush();
-//        return $marketSegment;
-//    }
+    function getSector($row)
+    {
+        $name = $row['ICB_SECTOR'];
+        $repo = $this->em->getRepository('SecuritiesService:Sector');
+        $sector = $repo->findOneBy(
+            ['name' => $name]
+        );
+        if (!$sector) {
+            $sector = new Sector();
+        }
+        $sector->setName($name);
+        $sector->setIndustry($this->getIndustry($row));
+        $this->em->persist($sector);
+        $this->em->flush();
+        return $sector;
+    }
+
+    function getIndustry($row)
+    {
+        $name = $row['ICB_INDUSTRY'];
+        $repo = $this->em->getRepository('SecuritiesService:Industry');
+        $industry = $repo->findOneBy(
+            ['name' => $name]
+        );
+        if (!$industry) {
+            $industry = new Industry();
+        }
+        $industry->setName($name);
+        $this->em->persist($industry);
+        $this->em->flush();
+        return $industry;
+    }
 
 
     function getCountry($row)

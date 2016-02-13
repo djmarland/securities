@@ -6,14 +6,13 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="parent_groups")})
+ * @ORM\Table(name="industries")})
  */
-class ParentGroup extends Entity
+class Industry extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
 
-    /** Getters/Setters */
     public function getName()
     {
         return $this->name;
@@ -22,20 +21,5 @@ class ParentGroup extends Entity
     public function setName($name)
     {
         $this->name = $name;
-    }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Sector")
-     */
-    private $sector;
-
-    public function getSector()
-    {
-        return $this->sector;
-    }
-
-    public function setSector($sector)
-    {
-        $this->sector = $sector;
     }
 }

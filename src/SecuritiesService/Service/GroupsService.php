@@ -7,7 +7,7 @@ use SecuritiesService\Domain\ValueObject\ID;
 
 class GroupsService extends Service
 {
-    const GROUP_ENTITY = 'ParentGroup';
+    const SERVICE_ENTITY = 'ParentGroup';
 
     public function findAndCountAll(
         int $limit = self::DEFAULT_LIMIT,
@@ -28,7 +28,7 @@ class GroupsService extends Service
 
     public function countAll(): int
     {
-        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(tbl.id)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -37,7 +37,7 @@ class GroupsService extends Service
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
     ): ServiceResultInterface {
-        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('tbl');
         $qb->orderBy('tbl.name', 'ASC');
         $qb->setMaxResults($limit)
@@ -48,12 +48,30 @@ class GroupsService extends Service
     public function findByID(
         ID $id
     ): ServiceResultInterface {
-        $qb = $this->getQueryBuilder(self::GROUP_ENTITY);
-        $qb->select(self::TBL)
+        $sectorTbl = 's';
+        $industryTbl = 'i';
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, $sectorTbl, $industryTbl)
             ->where(self::TBL . '.id = :id')
+            ->leftJoin(self::TBL . '.sector', $sectorTbl)
+            ->leftJoin($sectorTbl . '.industry', $industryTbl)
             ->setParameters([
-                'id' => $id
+                'id' => (string) $id
             ]);
+
+        return $this->getServiceResult($qb);
+    }
+
+
+    public function findAllInSectors(): ServiceResultInterface {
+        $sectorTbl = 's';
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, $sectorTbl)
+            ->leftJoin(self::TBL . '.sector', $sectorTbl)
+            ->addOrderBy($sectorTbl . '.name', 'ASC')
+            ->addOrderBy(self::TBL . '.name', 'ASC');
 
         return $this->getServiceResult($qb);
     }

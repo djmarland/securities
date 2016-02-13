@@ -2,7 +2,6 @@
 
 namespace SecuritiesService\Data\Database\Mapper;
 
-
 /**
  * Factory to create mappers as needed
  */
@@ -17,24 +16,9 @@ class MapperFactory
         return $this->$mapperMethod();
     }
 
-    public function createSecurity(): SecurityMapper
-    {
-        return new SecurityMapper($this);
-    }
-
-    public function createProduct(): ProductMapper
-    {
-        return new ProductMapper($this);
-    }
-
     public function createCompany(): CompanyMapper
     {
         return new CompanyMapper($this);
-    }
-
-    public function createParentGroup(): ParentGroupMapper
-    {
-        return new ParentGroupMapper($this);
     }
 
     public function createCountry(): CountryMapper
@@ -45,6 +29,31 @@ class MapperFactory
     public function createCurrency(): CurrencyMapper
     {
         return new CurrencyMapper($this);
+    }
+
+    public function createIndustry(): IndustryMapper
+    {
+        return new IndustryMapper($this);
+    }
+
+    public function createParentGroup(): ParentGroupMapper
+    {
+        return new ParentGroupMapper($this);
+    }
+
+    public function createProduct(): ProductMapper
+    {
+        return new ProductMapper($this);
+    }
+
+    public function createSecurity(): SecurityMapper
+    {
+        return new SecurityMapper($this);
+    }
+
+    public function createSector(): SectorMapper
+    {
+        return new SectorMapper($this);
     }
 
     public function createYieldCurve(): YieldCurveMapper

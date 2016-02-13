@@ -24,6 +24,10 @@ services:
       class: SecuritiesService\Service\GroupsService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
+  app.services.industries:
+      class: SecuritiesService\Service\IndustriesService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.issuers:
       class: SecuritiesService\Service\IssuersService
       arguments: ["@doctrine.orm.default_entity_manager"]
@@ -34,6 +38,10 @@ services:
 
   app.services.securities:
       class: SecuritiesService\Service\SecuritiesService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.sectors:
+      class: SecuritiesService\Service\SectorsService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
   app.services.yields:

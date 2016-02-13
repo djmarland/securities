@@ -1,5 +1,15 @@
 {% block body %}
-    <h1 class="g-unit">{{ meta.title }}</h1>
+    <div class="g-unit">
+        <h1>{{ meta.title }}</h1>
+        {% if group.sector %}
+        <p class="h-d">
+            {% if group.sector.industry %}
+            <a href="{{ path('industries_show', { industry_id : group.sector.industry.id }) }}">{{ group.sector.industry.name }}</a> &gt;
+            {% endif %}
+            <a href="{{ path('sectors_show', { sector_id : group.sector.id }) }}">{{ group.sector.name }}</a>
+        </p>
+    </div>
+    {% endif %}
     <div class="grid">
         <div class="g 1/5@xl">
             <nav><ul>

@@ -68,6 +68,32 @@ groups_yield:
   path:     /groups/{group_id}/yield
   defaults: { _controller: AppBundle:Groups:yield }
 
+# Industries
+industries_list:
+  path:     /industries
+  defaults: { _controller: AppBundle:Industries:list }
+
+industries_show:
+  path:     /industries/{industry_id}
+  defaults: { _controller: AppBundle:Industries:show }
+
+industries_securities:
+  path:     /industries/{industry_id}/securities
+  defaults: { _controller: AppBundle:Industries:securities }
+
+# Industries
+sectors_list:
+  path:     /sectors
+  defaults: { _controller: AppBundle:Sectors:list }
+
+sectors_show:
+  path:     /sectors/{sector_id}
+  defaults: { _controller: AppBundle:Sectors:show }
+
+sectors_securities:
+  path:     /sectors/{sector_id}/securities
+  defaults: { _controller: AppBundle:Sectors:securities }
+
 # Reports
 reports_list:
   path:     /reports

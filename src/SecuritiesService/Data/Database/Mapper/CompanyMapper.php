@@ -19,7 +19,7 @@ class CompanyMapper extends Mapper
         }
 
         if (isset($item['country'])) {
-            $parentGroup = $this->mapperFactory->createCountry()->getDomainModel($item['country']);
+            $country = $this->mapperFactory->createCountry()->getDomainModel($item['country']);
         }
 
         $currency = new Company(

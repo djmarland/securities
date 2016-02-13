@@ -1,0 +1,12 @@
+{% block body %}
+    <div class="g-unit">
+    <h1>{{ meta.title }}</h1>
+    <div class="grid">
+        <div class="g 1/5@xl">
+            <nav>NAV</nav>
+        </div>
+        <div class="g 4/5@xl">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+{% endblock %}

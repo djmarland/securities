@@ -1,0 +1,10 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">{{ meta.title }}</h1>
+    <ul class="list--unstyled">
+        {%  for industry in industries %}
+            <li class="g-unit">{% include industry.templatePath with industry.vars only %}</li>
+        {%  endfor %}
+    </ul>
+{% endblock %}

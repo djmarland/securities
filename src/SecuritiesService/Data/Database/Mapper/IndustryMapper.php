@@ -3,19 +3,18 @@
 namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
-use SecuritiesService\Domain\Entity\Product;
+use SecuritiesService\Domain\Entity\Industry;
 use SecuritiesService\Domain\ValueObject\ID;
 
-class ProductMapper extends Mapper
+class IndustryMapper extends Mapper
 {
     public function getDomainModel(array $item): Entity
     {
         $id = new ID($item['id']);
-        $product = new Product(
+        $currency = new Industry(
             $id,
-            $item['number'],
             $item['name']
         );
-        return $product;
+        return $currency;
     }
 }
