@@ -15,7 +15,9 @@
     "doctrine/doctrine-bundle": "~1.4",
     "doctrine/migrations": "dev-master",
     "doctrine/doctrine-migrations-bundle": "dev-master",
-    "beberlei/DoctrineExtensions": "^1.0"
+    "beberlei/DoctrineExtensions": "^1.0",
+    "squizlabs/php_codesniffer": "^2.5",
+    "escapestudios/symfony2-coding-standard": "~2.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~4",
