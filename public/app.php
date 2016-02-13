@@ -4,7 +4,7 @@ use Symfony\Component\HttpFoundation\Request;
 header_remove('X-Powered-By');
 date_default_timezone_set('Europe/London');
 
-require __DIR__ . '/../app/autoload.php';
+require __DIR__.'/../app/autoload.php';
 
 // safe default settings
 $env = 'prod';
@@ -24,7 +24,7 @@ if ('dev' == $env) {
 }
 
 
-require_once __DIR__ . '/../app/AppKernel.php';
+require_once __DIR__.'/../app/AppKernel.php';
 
 $kernel = new AppKernel($env, $debugMode);
 $kernel->loadClassCache();
