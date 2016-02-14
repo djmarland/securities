@@ -1,0 +1,10 @@
+<li>
+    <a href="{{ finderitem.url }}">{{ finderitem.title }}</a>
+    {% if finderitem.items %}
+        <ul class="finder__sub">
+        {% for item in finderitem.items %}
+            {% include item.templatePath with item.vars only %}
+        {% endfor %}
+        </ul>
+    {% endif %}
+</li>

@@ -9,6 +9,13 @@ class IndustriesService extends Service
 {
     const SERVICE_ENTITY = 'Industry';
 
+    public function findAll(): ServiceResultInterface {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('tbl');
+        $qb->orderBy('tbl.name', 'ASC');
+        return $this->getServiceResult($qb);
+    }
+
     public function findByID(
         ID $id
     ): ServiceResultInterface {

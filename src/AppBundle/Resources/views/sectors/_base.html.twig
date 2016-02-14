@@ -1,11 +1,18 @@
 {% block body %}
-    <div class="g-unit">
-    <h1>{{ meta.title }}</h1>
     <div class="grid">
-        <div class="g 1/5@xl">
-            <nav>NAV</nav>
+        <div class="g 1/4@xl">
+            {#
+            {% include finder.templatePath with finder.vars only %}
+            #}
         </div>
-        <div class="g 4/5@xl">
+        <div class="g 3/4@xl">
+            <div>
+                <h1>{{ meta.title }}</h1>
+                <ul class="list--inline">
+                    <li><a href="#" class="link--button">Securities</a></li>
+                    <li><a href="#" class="link--button">Yield Curve</a></li>
+                </ul>
+            </div>
             {% block content %}{% endblock %}
         </div>
     </div>

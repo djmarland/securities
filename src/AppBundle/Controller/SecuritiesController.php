@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -11,6 +12,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class SecuritiesController extends Controller
 {
     use SecurityFilter;
+    use Finder;
 
     public function initialize(Request $request)
     {
@@ -54,6 +56,8 @@ class SecuritiesController extends Controller
             $currentPage,
             $perPage
         );
+
+        $this->setFinder();
 
         return $this->renderTemplate('securities:list');
     }

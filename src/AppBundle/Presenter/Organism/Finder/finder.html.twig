@@ -1,0 +1,8 @@
+<div class="finder">
+    <ul>
+        <li><a href="{{ path('securities_list') }}">All</a></li>
+        {% for item in finder.items %}
+            {% include item.templatePath with item.vars only %}
+        {% endfor %}
+    </ul>
+</div>

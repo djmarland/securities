@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class IndustriesController extends Controller
 {
     use SecurityFilter;
+    use Finder;
 
     public function initialize(Request $request)
     {
@@ -79,6 +81,8 @@ class IndustriesController extends Controller
 //        $this->toView('securities', $securityPresenters);
 //        $this->toView('hasSecurities', $count > 0);
 
+
+
         return $this->renderTemplate('industries:show');
     }
 
@@ -131,6 +135,7 @@ class IndustriesController extends Controller
             $perPage
         );
 
+
         return $this->renderTemplate('issuers:securities');
     }
 
@@ -152,6 +157,11 @@ class IndustriesController extends Controller
 
         $this->setTitle($industry->getName());
         $this->toView('industry', $industry);
+
+
+        // I'm looking at an industry, so I need to pass in that industry
+        $this->setFinder($industry);
+
         return $industry;
     }
 }
