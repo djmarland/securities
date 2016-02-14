@@ -38,7 +38,7 @@ class YieldCurve extends Entity
         $this->type = $type;
     }
 
-    /** @ORM\Column(type="string") */
+    /** @ORM\Column(type="text",length=5000) */
     private $dataPoints;
 
     /** Getters/Setters */
