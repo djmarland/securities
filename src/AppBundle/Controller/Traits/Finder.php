@@ -25,7 +25,7 @@ trait Finder
         );
 
         // is the finder in an initial state (nothing selected)?
-        $initial = (!$industry && !$sector && !$group);
+        $initial = (!$industry && !$sector && !$group && !$issuer);
 
         $finder = new FinderPresenter($items, $initial);
 

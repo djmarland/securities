@@ -11,7 +11,6 @@ class FinderPresenter extends Presenter
 
     public function __construct(
         array $items,
-        string $listName = null,
         bool $initial = true
     )
     {
