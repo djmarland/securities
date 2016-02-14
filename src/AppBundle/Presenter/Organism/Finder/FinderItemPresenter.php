@@ -8,11 +8,15 @@ class FinderItemPresenter extends Presenter
 {
     private $url;
     private $title;
+    private $active;
     private $items;
+    private $listName;
 
     public function __construct(
         string $url,
         string $title,
+        bool $active,
+        string $listName = null,
         array $items = null
     )
     {
@@ -20,7 +24,9 @@ class FinderItemPresenter extends Presenter
 
         $this->url = $url;
         $this->title = $title;
+        $this->active = $active;
         $this->items = $items;
+        $this->listName = $listName;
     }
 
     public function getTitle():string
@@ -33,11 +39,26 @@ class FinderItemPresenter extends Presenter
         return $this->url;
     }
 
+    public function isActive():bool
+    {
+        return $this->active;
+    }
+
     public function getItems()
     {
         if (!empty($this->items)) {
             return $this->items;
         }
         return null;
+    }
+
+    public function getHeading()
+    {
+        return $this->listName;
+    }
+
+    public function getClass()
+    {
+        return ($this->isActive()) ? 'finder__active' : '';
     }
 }

@@ -14,6 +14,13 @@ search:
   path:     /search
   defaults: { _controller: AppBundle:Search:list }
 
+# Overview
+overview:
+  path:     /overview
+  defaults: { _controller: AppBundle:Overview:show }
+
+# @todo - Overview - issuance, maturity-profile, yield curves, etc
+
 # Securities
 securities_list:
   path:     /securities

@@ -1,25 +1,28 @@
 {% block body %}
-    <div class="g-unit">
-        <h1>{{ meta.title }}</h1>
-        {% if group.sector %}
-        <p class="h-d">
-            {% if group.sector.industry %}
-            <a href="{{ path('industries_show', { industry_id : group.sector.industry.id }) }}">{{ group.sector.industry.name }}</a> &gt;
-            {% endif %}
-            <a href="{{ path('sectors_show', { sector_id : group.sector.id }) }}">{{ group.sector.name }}</a>
-        </p>
-    </div>
-    {% endif %}
     <div class="grid">
-        <div class="g 1/5@xl">
-            <nav><ul>
-                    <li><a href="{{ path('groups_issuers', { group_id : group.id }) }}">Issuers</a></li>
-                    <li><a href="{{ path('groups_securities', { group_id : group.id }) }}">Securities</a></li>
-                    <li><a href="{{ path('groups_yield', { group_id : group.id }) }}">Yield Curve</a></li>
-                </ul></nav>
+        <div class="g 1/4@xl">
+            {% include finder.templatePath with finder.vars only %}
         </div>
-        <div class="g 4/5@xl">
-            {% block content %}{% endblock %}
+        <div class="g 3/4@xl">
+            <div>
+                <div class="g-unit">
+                    <h1>{{ meta.title }}</h1>
+                    {% if group.sector %}
+                        <p class="h-d">
+                            {% if group.sector.industry %}
+                                <a href="{{ path('industries_show', { industry_id : group.sector.industry.id }) }}">{{ group.sector.industry.name }}</a> &gt;
+                            {% endif %}
+                            <a href="{{ path('sectors_show', { sector_id : group.sector.id }) }}">{{ group.sector.name }}</a>
+                        </p>
+                    {% endif %}
+                </div>
+                <nav><ul class="list--inline">
+                    <li><a class="link--button" href="{{ path('groups_issuers', { group_id : group.id }) }}">Issuers</a></li>
+                    <li><a class="link--button" href="{{ path('groups_securities', { group_id : group.id }) }}">Securities</a></li>
+                    <li><a class="link--button" href="{{ path('groups_yield', { group_id : group.id }) }}">Yield Curve</a></li>
+                </ul></nav>
+                {% block content %}{% endblock %}
+            </div>
         </div>
     </div>
 {% endblock %}

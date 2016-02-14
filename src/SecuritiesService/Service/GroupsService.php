@@ -3,6 +3,7 @@
 namespace SecuritiesService\Service;
 
 use Doctrine\ORM\QueryBuilder;
+use SecuritiesService\Domain\Entity\Sector;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class GroupsService extends Service
@@ -42,6 +43,20 @@ class GroupsService extends Service
         $qb->orderBy('tbl.name', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
+        return $this->getServiceResult($qb);
+    }
+
+    public function findAllBySector(
+        Sector $sector
+    ): ServiceResultInterface {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where('IDENTITY(' . self::TBL . '.sector) = :sector_id')
+            ->orderBy(self::TBL . '.name', 'ASC')
+            ->setParameters([
+                'sector_id' => (string) $sector->getId()
+            ]);
+
         return $this->getServiceResult($qb);
     }
 

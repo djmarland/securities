@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Group\GroupPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
@@ -15,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class GroupsController extends Controller
 {
     use SecurityFilter;
+    use Finder;
 
     public function initialize(Request $request)
     {
@@ -225,6 +227,12 @@ class GroupsController extends Controller
             throw new HttpException(404, 'Group ' . $id . ' does not exist.');
         }
         $group = $result->getDomainModel();
+        $sector = $group->getSector();
+        $industry = $sector->getIndustry();
+
+        // I'm looking at a group, so I need to pass in that group,
+        // and it's parent sector + industry
+        $this->setFinder($industry, $sector, $group);
 
         $this->setTitle($group->getName());
         $this->toView('group', $group);

@@ -1,10 +1,11 @@
-<li>
-    <a href="{{ finderitem.url }}">{{ finderitem.title }}</a>
+<li class="finder__item">
+    <a href="{{ finderitem.url }}" class="finder__link {{ finderitem.class }}">{{ finderitem.title }}</a>
     {% if finderitem.items %}
-        <ul class="finder__sub">
+        <h2 class="h-f finder__heading">{{ finderitem.heading }}</h2>
+        <ol class="finder__list finder__sub">
         {% for item in finderitem.items %}
             {% include item.templatePath with item.vars only %}
         {% endfor %}
-        </ul>
+        </ol>
     {% endif %}
 </li>

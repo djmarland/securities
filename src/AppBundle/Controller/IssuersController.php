@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -14,6 +15,7 @@ use DateTimeImmutable;
 class IssuersController extends Controller
 {
     use SecurityFilter;
+    use Finder;
 
     public function initialize(Request $request)
     {
@@ -73,6 +75,7 @@ class IssuersController extends Controller
             }
         }
 
+        $this->toView('activeTab', 'overview');
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', $count);
         $this->toView('securities', $securityPresenters);
@@ -120,6 +123,7 @@ class IssuersController extends Controller
             }
         }
 
+        $this->toView('activeTab', 'securities');
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $result->getTotal());
@@ -175,6 +179,7 @@ class IssuersController extends Controller
         }
 
         // @todo - create a twig helper for displaying numbers
+        $this->toView('activeTab', 'maturity-profile');
         $this->toView('buckets', $buckets);
         $this->toView('tableData', $tableData);
         $this->toView('absoluteTotal', $absoluteTotal);
@@ -270,6 +275,7 @@ class IssuersController extends Controller
             }
         }
 
+        $this->toView('activeTab', 'issuance');
         $this->toView('hasData', $hasData);
         $this->toView('months', $months);
         $this->toView('products', $products);
@@ -316,6 +322,13 @@ class IssuersController extends Controller
             throw new HttpException(404, 'Issuer ' . $id . ' does not exist.');
         }
         $issuer = $result->getDomainModel();
+        $group = $issuer->getParentGroup();
+        $sector = $group->getSector();
+        $industry = $sector->getIndustry();
+
+        // I'm looking at a group, so I need to pass in that issuer,
+        // and it's parent group, sector + industry
+        $this->setFinder($industry, $sector, $group, $issuer);
 
         $this->setTitle($issuer->getName());
         $this->toView('issuer', $issuer);

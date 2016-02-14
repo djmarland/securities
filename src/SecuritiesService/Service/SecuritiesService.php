@@ -55,6 +55,13 @@ class SecuritiesService extends Service
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function sumAll(): int
+    {
+        $qb = $this->getQueryBuilder(self::SECURITY_ENTITY);
+        $qb->select('sum(' . self::TBL . '.money_raised)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findAll(
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE

@@ -98,11 +98,15 @@ class IssuersService extends Service
         ID $id
     ): ServiceResultInterface {
         $groupTbl = 'g';
+        $sectorTbl = 's';
+        $industryTbl = 'i';
 
         $qb = $this->getQueryBuilder(self::COMPANY_ENTITY);
-        $qb->select(self::TBL, $groupTbl)
+        $qb->select(self::TBL, $groupTbl, $sectorTbl, $industryTbl)
             ->where(self::TBL . '.id = :id')
             ->leftJoin(self::TBL . '.parentGroup', $groupTbl)
+            ->leftJoin($groupTbl . '.sector', $sectorTbl)
+            ->leftJoin($sectorTbl . '.industry', $industryTbl)
             ->setParameters([
                 'id' => $id
             ]);

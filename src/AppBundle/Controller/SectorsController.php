@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -12,6 +13,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class SectorsController extends Controller
 {
     use SecurityFilter;
+    use Finder;
 
     public function initialize(Request $request)
     {
@@ -149,6 +151,11 @@ class SectorsController extends Controller
             throw new HttpException(404, 'Sector ' . $id . ' does not exist.');
         }
         $sector = $result->getDomainModel();
+        $industry = $sector->getIndustry();
+
+        // I'm looking at a sector, so I need to pass in that sector,
+        // and it's parent industry
+        $this->setFinder($industry, $sector);
 
         $this->setTitle($sector->getName());
         $this->toView('sector', $sector);
