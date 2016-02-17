@@ -10,6 +10,9 @@
                 <li><a href="#" class="link--button">Securities</a></li>
                 <li><a href="#" class="link--button">Yield Curve</a></li>
             </ul>
+            <div class="g">
+                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
+            </div>
         </div>
         {% block content %}{% endblock %}
     </div>

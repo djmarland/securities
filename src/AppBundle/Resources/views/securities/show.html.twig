@@ -1,6 +1,9 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
+    <div>
+        {% include('@partials/advert.html.twig') with { adType : 'isin'} %}
+    </div>
     <h1 class="g-unit">{{ meta.title }}</h1>
     {% include security.templatePath with security.vars only %}
 {% endblock %}
