@@ -2,7 +2,7 @@
     {% if security.includeLink %}
         <div class="card">
         <h2 class="island-squashed h-c">
-            <a class="security__link" href="{{ path('securities_show',{'isin':security.isin}) }}">
+            <a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
                 {{ security.title }}
             </a>
         </h2>

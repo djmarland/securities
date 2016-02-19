@@ -13,7 +13,7 @@
     <tbody>
     {%  for security in securities %}
         <tr>
-            <td><a class="security__link" href="{{ path('securities_show',{'isin':security.isin}) }}">
+            <td><a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
                 {{ security.isin }}
             </a></td>
             <td>{{ security.maturityDate }}</td>

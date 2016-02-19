@@ -14,7 +14,7 @@
                     {% for year in years %}
                         <li><a class="link--button
                             {% if activeYear == year %}link--button-active{% endif %}
-                            " href="{{ path('issuers_issuance', { issuer_id : issuer.id, year : year }) }}">{{ year }}</a></li>
+                            " href="{{ path('issuer_issuance', { issuer_id : issuer.id, year : year }) }}">{{ year }}</a></li>
                     {% endfor %}
                 </ol>
             </div>

@@ -1,8 +1,8 @@
 <div class="card card--padded">
-    <h3 class="g-unit"><a href="{{ path('sectors_show',{sector_id:sector.id}) }}">{{ sector.name }}</a></h3>
+    <h3 class="g-unit"><a href="{{ path('sector_show',{sector_id:sector.id}) }}">{{ sector.name }}</a></h3>
     <ul class="grid">
     {% for group in sector.groups %}
-        <li class="g 1/2@l 1/3@xl"><a class="link--button" href="{{ path('groups_show',{group_id:group.id}) }}">{{ group.name }}</a></li>
+        <li class="g 1/2@l 1/3@xl"><a class="link--button" href="{{ path('group_show',{group_id:group.id}) }}">{{ group.name }}</a></li>
     {% endfor %}
     </ul>
 </div>

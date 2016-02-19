@@ -10,7 +10,7 @@
             <h2 class="g-unit">Latest issuance</h2>
                 {% if hasSecurities %}
                     {% include '@partials/securities-list.html.twig' %}
-                    <p><a class="link--button" href="{{ path('issuers_securities', { issuer_id : issuer.id }) }}">Show all</a></p>
+                    <p><a class="link--button" href="{{ path('issuer_securities', { issuer_id : issuer.id }) }}">Show all</a></p>
                 {% else %}
                     <p>No securities have been issued by {{ issuer.name }}</p>
                 {% endif %}
@@ -19,7 +19,7 @@
         <div class="g 1/4@xl">
             <div>
                 <div class="card card--padded g-unit text--center">
-                    <a class="link--hidden" href="{{ path('issuers_securities', { issuer_id : issuer.id }) }}">
+                    <a class="link--hidden" href="{{ path('issuer_securities', { issuer_id : issuer.id }) }}">
                         <h2 class="d">Securities</h2>
                         <p class="a">{{ count }}</p>
                     </a>

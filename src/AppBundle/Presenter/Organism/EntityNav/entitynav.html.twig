@@ -1,0 +1,7 @@
+<nav><ul class="tabs">{%
+    for item in entitynav.items
+        %}<li class="tabs__tab {% if item.isActive %}tabs__tab--active{% endif %}"
+        ><a class="tabs__link" href="{{ path(item.routeName,item.routeParams) }}">{{ item.text }}</a></li
+        >{%
+    endfor
+%}</ul></nav>

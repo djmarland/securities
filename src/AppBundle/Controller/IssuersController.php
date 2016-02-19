@@ -4,11 +4,13 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 use DateTimeImmutable;
@@ -79,11 +81,11 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeTab', 'overview');
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', $count);
         $this->toView('securities', $securityPresenters);
         $this->toView('hasSecurities', $count > 0);
+        $this->toView('entityNav', new EntityNavPresenter($issuer, 'show'));
 
         return $this->renderTemplate('issuers:show');
     }
@@ -92,48 +94,44 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $product = $this->setProductFilter($request);
-        $currency = $this->setCurrencyFilter($request);
-        $bucket = $this->setBucketFilter($request);
-
+        $filter = new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setCurrencyFilter($request),
+            $this->setBucketFilter($request)
+        );
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
-        $securitiesService = $this->get('app.services.securities');
-        $result = $securitiesService
-            ->findAndCountAllWithFilters(
-                $perPage,
-                $currentPage,
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
-
-        $totalRaised = $securitiesService
-            ->sumAllWithFilters(
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
+        $securitiesService = $this->get('app.services.securities_by_issuer');
+        $total = $securitiesService->count($issuer, $filter);
+        $totalRaised = 0;
+        $securities = [];
+        if ($total) {
+            $securities = $securitiesService
+                ->find(
+                    $issuer,
+                    $filter,
+                    $perPage,
+                    $currentPage
+                );
+            $totalRaised = $securitiesService->sum($issuer, $filter);
+        }
 
         $securityPresenters = [];
-        $securities = $result->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);
             }
         }
 
-        $this->toView('activeTab', 'securities');
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
-        $this->toView('total', $result->getTotal());
+        $this->toView('total', $total);
+        $this->toView('entityNav', new EntityNavPresenter($issuer, 'securities'));
 
         $this->setPagination(
-            $result->getTotal(),
+            $total,
             $currentPage,
             $perPage
         );
@@ -145,13 +143,18 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $products = $this->get('app.services.products')->findAll()->getDomainModels();
+        $products = $this->get('app.services.products')->findAll();
         $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
-        $buckets = $buckets->getDomainModels();
 
         $tableData = [];
         $bucketTotals = [];
         $absoluteTotal = 0;
+
+        $filter = new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setBucketFilter($request)
+        );
+
         foreach($products as $product) {
             $rowData = (object) [
                 'product' => $product,
@@ -159,10 +162,9 @@ class IssuersController extends Controller
                 'total' => 0
             ];
             foreach($buckets as $key => $bucket) {
-                $amount = $this->get('app.services.securities')->sumByIssuerProductAndBucket(
+                $amount = $this->get('app.services.securities_by_issuer')->sum(
                     $issuer,
-                    $product,
-                    $bucket
+                    $filter
                 );
                 $rowData->total += $amount;
                 $empty = (object) [
@@ -183,11 +185,11 @@ class IssuersController extends Controller
         }
 
         // @todo - create a twig helper for displaying numbers
-        $this->toView('activeTab', 'maturity-profile');
         $this->toView('buckets', $buckets);
         $this->toView('tableData', $tableData);
         $this->toView('absoluteTotal', $absoluteTotal);
         $this->toView('bucketTotals', $bucketTotals);
+        $this->toView('entityNav', new EntityNavPresenter($issuer, 'maturity_profile'));
         return $this->renderTemplate('issuers:maturity-profile');
     }
 
@@ -205,7 +207,7 @@ class IssuersController extends Controller
             }
             return $this->redirect(
                 $this->generateUrl(
-                    'issuers_issuance',
+                    'issuer_issuance',
                     [
                         'issuer_id' => $issuer->getId(),
                         'year' => $year
@@ -214,7 +216,7 @@ class IssuersController extends Controller
             );
         }
 
-        $results = $this->get('app.services.securities')->countProductsByIssuerForYear(
+        $results = $this->get('app.services.securities_by_issuer')->productCountsByMonthForYear(
             $issuer,
             $year
         );
@@ -279,7 +281,6 @@ class IssuersController extends Controller
             }
         }
 
-        $this->toView('activeTab', 'issuance');
         $this->toView('hasData', $hasData);
         $this->toView('months', $months);
         $this->toView('products', $products);
@@ -287,28 +288,8 @@ class IssuersController extends Controller
         $this->toView('productCounts', $productCounts);
         $this->toView('years', $this->getYearsForIssuer($issuer)); // @todo
         $this->toView('activeYear', $year);
+        $this->toView('entityNav', new EntityNavPresenter($issuer, 'issuance'));
         return $this->renderTemplate('issuers:issuance');
-    }
-
-    private function getBucket(Request $request)
-    {
-        $bucketID = $request->get('bucket');
-        if (is_null($bucketID)) {
-            return null;
-        }
-
-        $bucketParamInt = (int) $bucketID;
-        if ($bucketID !== (string) $bucketParamInt ||
-            $bucketParamInt <= 0) {
-            throw new HttpException(404, 'Invalid ID');
-        }
-
-        $result = $this->get('app.services.buckets')
-            ->findById(new ID((int) $bucketParamInt));
-        if (!$result->hasResult()) {
-            throw new HttpException(404, 'Product ' . $bucketID . ' does not exist.');
-        }
-        return $result->getDomainModel();
     }
 
     private function getIssuer(Request $request)

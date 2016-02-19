@@ -7,7 +7,7 @@ use AppBundle\Controller\Traits\SecurityFilter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
-use SecuritiesService\Service\SecuritiesFilter;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -35,23 +35,17 @@ class SecuritiesController extends Controller
         );
 
         $total = $this->get('app.services.securities')
-            ->countAllWithFilters(
-                $product,
-                $currency,
-                null,
-                $bucket
+            ->countAllFiltered(
+                $filter
             );
 
         $securities = [];
         if ($total) {
             $securities = $this->get('app.services.securities')
-                ->findAllWithFilters(
+                ->findAllFiltered(
+                    $filter,
                     $perPage,
-                    $currentPage,
-                    $product,
-                    $currency,
-                    null,
-                    $bucket
+                    $currentPage
                 );
         }
 

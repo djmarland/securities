@@ -70,43 +70,25 @@ class SecuritiesService extends Service
         $qb = $filter->apply($qb, self::TBL);
         $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb = $this->paginate($qb, $limit, $page);
-        return $this->getServiceResult($qb);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
 
     public function countAllFiltered(
-        Product $product = null,
-        Currency $currency = null,
-        Company $issuer = null,
-        Bucket $bucket = null
+        SecuritiesFilter $filter
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
-        $qb = $this->addFilters(
-            $qb,
-            $product,
-            $currency,
-            $issuer,
-            $bucket
-        );
+        $qb = $filter->apply($qb, self::TBL);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function sumAllFiltered(
-        Product $product = null,
-        Currency $currency = null,
-        Company $issuer = null,
-        Bucket $bucket = null
+        SecuritiesFilter $filter
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('sum(' . self::TBL . '.money_raised)');
-        $qb = $this->addFilters(
-            $qb,
-            $product,
-            $currency,
-            $issuer,
-            $bucket
-        );
+        $qb = $filter->apply($qb, self::TBL);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 

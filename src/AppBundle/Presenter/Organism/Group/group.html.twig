@@ -1,5 +1,5 @@
 <div class="card card--padded">
-    <h3 class="g-unit"><a href="{{ path('groups_show',{group_id:group.id}) }}">{{ group.name }}</a></h3>
+    <h3 class="g-unit"><a href="{{ path('group_show',{group_id:group.id}) }}">{{ group.name }}</a></h3>
     <ul class="grid">
     {% for issuer in group.companies %}
         <li class="g 1/2@l 1/3@xl"><a class="link--button" href="{{ path('issuers_show',{issuer_id:issuer.id}) }}">{{ issuer.name }}</a></li>

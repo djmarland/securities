@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -84,6 +85,7 @@ class IndustriesController extends Controller
 
 
 
+        $this->toView('entityNav', new EntityNavPresenter($industry, 'show'));
         return $this->renderTemplate('industries:show');
     }
 
@@ -132,7 +134,22 @@ class IndustriesController extends Controller
             $perPage
         );
 
+        $this->toView('entityNav', new EntityNavPresenter($industry, 'securities'));
         return $this->renderTemplate('industries:securities');
+    }
+
+    public function maturityProfileAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($industry, 'maturity_profile'));
+        return $this->renderTemplate('groups:maturity-profile');
+    }
+
+    public function issuanceAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
+        return $this->renderTemplate('groups:issuance');
     }
 
     private function getIndustry(Request $request)

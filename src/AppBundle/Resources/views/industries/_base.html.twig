@@ -5,10 +5,8 @@
     </div>
     <div class="g 3/4@xl">
         <div>
-            <h1>{{ meta.title }}</h1>
-            <ul class="list--inline">
-                <li><a href="{{ path('industries_securities', { industry_id : industry.id }) }}" class="link--button">Securities</a></li>
-            </ul>
+            <h1 class="h-b">{{ industry.name }}</h1>
+            {% include entityNav.templatePath with entityNav.vars only %}
             <div class="g">
                 {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
             </div>

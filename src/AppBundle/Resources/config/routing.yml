@@ -22,90 +22,115 @@ overview:
 # @todo - Overview - issuance, maturity-profile, yield curves, etc
 
 # Securities
-securities_list:
+security_list:
   path:     /securities
   defaults: { _controller: AppBundle:Securities:list }
 
-securities_show:
+security_show:
   path:     /securities/{isin}
   defaults: { _controller: AppBundle:Securities:show }
   requirements:
     isin:  "[A-Z0-9]{12}"
 
 # Issuers
-issuers_list:
+issuer_list:
   path:     /issuers
   defaults: { _controller: AppBundle:Issuers:list }
 
-issuers_show:
+issuer_show:
   path:     /issuers/{issuer_id}
   defaults: { _controller: AppBundle:Issuers:show }
 
-issuers_securities:
+issuer_securities:
   path:     /issuers/{issuer_id}/securities
   defaults: { _controller: AppBundle:Issuers:securities }
 
 
-issuers_maturity_profile:
+issuer_maturity_profile:
   path:     /issuers/{issuer_id}/maturity-profile
-  defaults: { _controller: AppBundle:Issuers:maturityProfile, year: null }
+  defaults: { _controller: AppBundle:Issuers:maturityProfile }
 
-issuers_issuance:
+issuer_issuance:
   path:     /issuers/{issuer_id}/issuance/{year}
   defaults: { _controller: AppBundle:Issuers:issuance, year: null }
 
 # Groups
-groups_list:
+group_list:
   path:     /groups
   defaults: { _controller: AppBundle:Groups:list }
 
-groups_show:
+group_show:
   path:     /groups/{group_id}
   defaults: { _controller: AppBundle:Groups:show }
 
-groups_securities:
+group_issuance:
+  path:     /groups/{group_id}/issuance
+  defaults: { _controller: AppBundle:Groups:issuance, year: null }
+
+group_securities:
   path:     /groups/{group_id}/securities
   defaults: { _controller: AppBundle:Groups:securities }
 
-groups_yield:
+group_maturity_profile:
+  path:     /groups/{group_id}/maturity-profile
+  defaults: { _controller: AppBundle:Groups:maturityProfile }
+
+group_yield:
   path:     /groups/{group_id}/yield
   defaults: { _controller: AppBundle:Groups:yield }
 
+
 # Industries
-industries_list:
+industry_list:
   path:     /industries
   defaults: { _controller: AppBundle:Industries:list }
 
-industries_show:
+industry_show:
   path:     /industries/{industry_id}
   defaults: { _controller: AppBundle:Industries:show }
 
-industries_securities:
+industry_securities:
   path:     /industries/{industry_id}/securities
   defaults: { _controller: AppBundle:Industries:securities }
 
+industry_maturity_profile:
+  path:     /industries/{industry_id}/maturity-profile
+  defaults: { _controller: AppBundle:Industries:maturityProfile }
+
+industry_issuance:
+  path:     /industries/{industry_id}/issuance
+  defaults: { _controller: AppBundle:Industries:issuance, year: null }
+
 # Sectors
-sectors_list:
+sector_list:
   path:     /sectors
   defaults: { _controller: AppBundle:Sectors:list }
 
-sectors_show:
+sector_show:
   path:     /sectors/{sector_id}
   defaults: { _controller: AppBundle:Sectors:show }
 
-sectors_securities:
+sector_securities:
   path:     /sectors/{sector_id}/securities
   defaults: { _controller: AppBundle:Sectors:securities }
 
+sector_maturity_profile:
+  path:     /sectors/{sector_id}/maturity-profile
+  defaults: { _controller: AppBundle:Sectors:maturityProfile }
+
+sector_issuance:
+  path:     /sectors/{sector_id}/issuance
+  defaults: { _controller: AppBundle:Sectors:issuance, year: null }
+
 # Reports
-reports_list:
+report_list:
   path:     /reports
   defaults: { _controller: AppBundle:Reports:list }
 
-reports_fsa54:
+report_fsa54:
   path:     /reports/fsa54
   defaults: { _controller: AppBundle:Reports:fsa54 }
 
-reports_fsa50:
+report_fsa50:
   path:     /reports/fsa50
   defaults: { _controller: AppBundle:Reports:fsa50 }

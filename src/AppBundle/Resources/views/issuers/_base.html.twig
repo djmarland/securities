@@ -9,48 +9,23 @@
             {% if issuer.parentGroup %}
                 <span class="h-context h-f">
                     {% if issuer.parentGroup.sector.industry %}
-                            <a href="{{ path('industries_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
+                            <a href="{{ path('industry_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
                                 {{ issuer.parentGroup.sector.industry.name }}
                             </a> &gt;
                     {% endif %}
                     {% if issuer.parentGroup.sector %}
-                            <a href="{{ path('sectors_show', { sector_id : issuer.parentGroup.sector.id }) }}">
+                            <a href="{{ path('sector_show', { sector_id : issuer.parentGroup.sector.id }) }}">
                                 {{ issuer.parentGroup.sector.name }}
                             </a> &gt;
                     {% endif %}
-                    <a href="{{ path('groups_show', { group_id : issuer.parentGroup.id }) }}">
+                    <a href="{{ path('group_show', { group_id : issuer.parentGroup.id }) }}">
                         {{ issuer.parentGroup.name }}
                     </a><span class="invisible"> &gt;</span>
                 </span>
             {% endif %}
             {{ issuer.name }}
         </h1>
-        <nav><ul class="tabs"
-            ><li class="tabs__tab {% if activeTab == 'overview' %}tabs__tab--active{% endif %}"
-                ><a class="tabs__link" href="{{ path(
-                    'issuers_show',
-                    { issuer_id : issuer.id }
-                ) }}">Overview</a
-            ></li
-            ><li class="tabs__tab {% if activeTab == 'securities' %}tabs__tab--active{% endif %}"
-                ><a class="tabs__link" href="{{ path(
-                    'issuers_securities',
-                    { issuer_id : issuer.id }
-                ) }}">Securities</a
-            ></li
-            ><li class="tabs__tab {% if activeTab == 'maturity-profile' %}tabs__tab--active{% endif %}"
-                ><a class="tabs__link" href="{{ path(
-                    'issuers_maturity_profile',
-                    { issuer_id : issuer.id }
-                ) }}">Maturity Profile</a
-            ></li
-            ><li class="tabs__tab {% if activeTab == 'issuance' %}tabs__tab--active{% endif %}"
-                ><a class="tabs__link" href="{{ path(
-                    'issuers_issuance',
-                    { issuer_id : issuer.id }
-                ) }}">Issuance</a
-            ></li
-        ></ul></nav>
+        {% include entityNav.templatePath with entityNav.vars only %}
         {% block content %}{% endblock %}
     </div>
 </div>

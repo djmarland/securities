@@ -21,7 +21,7 @@
                 {% for column in row.columns %}
                     <td>
                         {% if column.amount != 0 %}
-                            <a href="{{ path('issuers_securities', {
+                            <a href="{{ path('issuer_securities', {
                                     issuer_id : issuer.id,
                                     product : row.product.id,
                                     bucket : column.bucket.key
@@ -37,7 +37,7 @@
                 <td>
                     <strong>
                         {% if row.total != 0 %}
-                            <a href="{{ path('issuers_securities', {
+                            <a href="{{ path('issuer_securities', {
                                     issuer_id : issuer.id,
                                     product : row.product.id
                                 })

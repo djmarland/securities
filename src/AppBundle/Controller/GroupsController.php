@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Group\GroupPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -64,6 +65,7 @@ class GroupsController extends Controller
             ->findAllByGroup($group);
 
         $this->toView('issuers', $issuers);
+        $this->toView('entityNav', new EntityNavPresenter($group, 'show'));
         return $this->renderTemplate('groups:show');
     }
 
@@ -112,7 +114,22 @@ class GroupsController extends Controller
             $perPage
         );
 
+        $this->toView('entityNav', new EntityNavPresenter($group, 'securities'));
         return $this->renderTemplate('groups:securities');
+    }
+
+    public function maturityProfileAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
+        return $this->renderTemplate('groups:maturity-profile');
+    }
+
+    public function issuanceAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($group, 'issuance'));
+        return $this->renderTemplate('groups:issuance');
     }
 
     public function yieldAction(Request $request)

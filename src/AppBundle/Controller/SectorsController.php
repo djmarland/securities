@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -82,7 +83,22 @@ class SectorsController extends Controller
 //        $this->toView('securities', $securityPresenters);
 //        $this->toView('hasSecurities', $count > 0);
 
+        $this->toView('entityNav', new EntityNavPresenter($sector, 'show'));
         return $this->renderTemplate('sectors:show');
+    }
+
+    public function maturityProfileAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
+        return $this->renderTemplate('groups:maturity-profile');
+    }
+
+    public function issuanceAction(Request $request)
+    {
+        throw new HttpException(404, 'Not yet');
+        $this->toView('entityNav', new EntityNavPresenter($group, 'issuance'));
+        return $this->renderTemplate('groups:issuance');
     }
 
     public function securitiesAction(Request $request)
@@ -130,6 +146,7 @@ class SectorsController extends Controller
             $perPage
         );
 
+        $this->toView('entityNav', new EntityNavPresenter($sector, 'securities'));
         return $this->renderTemplate('sectors:securities');
     }
 
