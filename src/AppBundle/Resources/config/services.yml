@@ -40,6 +40,26 @@ services:
       class: SecuritiesService\Service\SecuritiesService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
+  app.services.securities_by_group:
+      class: SecuritiesService\Service\Securities\ByGroupService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.securities_by_industry:
+      class: SecuritiesService\Service\Securities\ByIndustryService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.securities_by_issuer:
+      class: SecuritiesService\Service\Securities\ByIssuerService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.securities_by_sector:
+      class: SecuritiesService\Service\Securities\BySectorService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
+  app.services.securities_search:
+      class: SecuritiesService\Service\Securities\SearchService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.sectors:
       class: SecuritiesService\Service\SectorsService
       arguments: ["@doctrine.orm.default_entity_manager"]

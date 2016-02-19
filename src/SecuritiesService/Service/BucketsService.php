@@ -42,12 +42,8 @@ class BucketsService extends Service
 
     public function getAll(
         DateTime $startDate
-    ): ServiceResultInterface {
-        $buckets = $this->generateBuckets($startDate);
-        return new ServiceResult(
-            $buckets,
-            count($buckets)
-        );
+    ): array {
+        return $this->generateBuckets($startDate);
     }
 
     public function findByKey(

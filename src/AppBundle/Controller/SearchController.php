@@ -46,12 +46,10 @@ class SearchController extends Controller
             }
 
 
-            $result = $this->get('app.services.securities')
-                ->search($query, 20, 1);
+            $securities = $this->get('app.services.securities_search')
+                ->byName($query, 20, 1);
 
             $securityPresenters = [];
-            $securities = $result->getDomainModels();
-
             if (!empty($securities)) {
                 foreach ($securities as $security) {
                     $securityPresenters[] = new SecurityPresenter($security);
@@ -59,14 +57,12 @@ class SearchController extends Controller
             }
 
             $this->toView('securities', $securityPresenters);
-            $this->toView('hasSecurities', $result->hasResult());
+            $this->toView('hasSecurities',!empty($securities));
 
-            $issuersResult = $this->get('app.services.issuers')
+            $issuers = $this->get('app.services.issuers')
                 ->search($query, 20, 1);
 
             $issuerPresenters = [];
-            $issuers = $issuersResult->getDomainModels();
-
             if (!empty($issuers)) {
                 foreach ($issuers as $issuer) {
                     $issuerPresenters[] = new IssuerPresenter($issuer);
@@ -74,7 +70,7 @@ class SearchController extends Controller
             }
 
             $this->toView('issuers', $issuerPresenters);
-            $this->toView('hasIssuers', $issuersResult->hasResult());
+            $this->toView('hasIssuers', !empty($issuers));
 
             return $this->renderTemplate('search:list');
         }

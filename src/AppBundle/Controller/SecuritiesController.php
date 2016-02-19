@@ -4,8 +4,10 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
+use SecuritiesService\Service\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -25,22 +27,35 @@ class SecuritiesController extends Controller
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
-        $product = $this->setProductFilter($request);
-        $currency = $this->setCurrencyFilter($request);
-        $bucket = $this->setBucketFilter($request);
 
-        $result = $this->get('app.services.securities')
-            ->findAndCountAllWithFilters(
-                $perPage,
-                $currentPage,
+        $filter = new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setCurrencyFilter($request),
+            $this->setBucketFilter($request)
+        );
+
+        $total = $this->get('app.services.securities')
+            ->countAllWithFilters(
                 $product,
                 $currency,
                 null,
                 $bucket
             );
 
+        $securities = [];
+        if ($total) {
+            $securities = $this->get('app.services.securities')
+                ->findAllWithFilters(
+                    $perPage,
+                    $currentPage,
+                    $product,
+                    $currency,
+                    null,
+                    $bucket
+                );
+        }
+
         $securityPresenters = [];
-        $securities = $result->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);
@@ -49,10 +64,10 @@ class SecuritiesController extends Controller
 
         $this->setTitle('Securities');
         $this->toView('securities', $securityPresenters);
-        $this->toView('total', $result->getTotal());
+        $this->toView('total', $total);
 
         $this->setPagination(
-            $result->getTotal(),
+            $total,
             $currentPage,
             $perPage
         );
@@ -65,11 +80,11 @@ class SecuritiesController extends Controller
     public function showAction(Request $request)
     {
         $isin = $request->get('isin');
-        $result = $this->get('app.services.securities')
-            ->findByIsin(new ISIN($isin));
 
-        $security = $result->getDomainModel();
-        if (!$security) {
+        try {
+            $security = $this->get('app.services.securities')
+                ->findByIsin(new ISIN($isin));
+        } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Security ' . $isin . ' does not exist.');
         }
 

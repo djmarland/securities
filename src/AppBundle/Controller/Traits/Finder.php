@@ -39,8 +39,7 @@ trait Finder
         Company $issuer = null
     ) {
         $industries = $this->get('app.services.industries')
-            ->findAll()
-            ->getDomainModels();
+            ->findAll();
 
         $items = [];
         foreach ($industries as $ind) {
@@ -64,8 +63,7 @@ trait Finder
         Company $issuer = null
     ) {
         $sectors = $this->get('app.services.sectors')
-            ->findAllByIndustry($industry)
-            ->getDomainModels();
+            ->findAllByIndustry($industry);
 
         $items = [];
         foreach ($sectors as $sec) {
@@ -88,8 +86,7 @@ trait Finder
         Company $issuer = null
     ) {
         $groups = $this->get('app.services.groups')
-            ->findAllBySector($sector)
-            ->getDomainModels();
+            ->findAllBySector($sector);
 
         $items = [];
         foreach ($groups as $gr) {
@@ -111,8 +108,7 @@ trait Finder
         Company $issuer = null
     ) {
         $issuers = $this->get('app.services.issuers')
-            ->findAllByGroup($group)
-            ->getDomainModels();
+            ->findAllByGroup($group);
 
         $items = [];
         foreach ($issuers as $iss) {

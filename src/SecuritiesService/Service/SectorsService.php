@@ -4,27 +4,33 @@ namespace SecuritiesService\Service;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Industry;
+use SecuritiesService\Domain\Entity\Sector;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class SectorsService extends Service
 {
     const SERVICE_ENTITY = 'Sector';
 
-    public function findAndCountAll(
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
+    public function findByID(
+        ID $id
+    ): Sector {
+        $industryTbl = 'i';
 
-        // count them first (cheaper if zero)
-        $count = $this->countAll();
-        if (0 == $count) {
-            return new ServiceResultEmpty();
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, $industryTbl)
+            ->where(self::TBL . '.id = :id')
+            ->leftJoin(self::TBL . '.industry', $industryTbl)
+            ->setParameters([
+                'id' => $id
+            ]);
+
+        $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        if (empty($results)) {
+            throw new EntityNotFoundException;
         }
 
-        // find the latest
-        $result = $this->findAll($limit, $page);
-        $result->setTotal($count);
-        return $result;
+        return reset($results);
     }
 
     public function countAll(): int
@@ -37,41 +43,22 @@ class SectorsService extends Service
     public function findAll(
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
+    ): array {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL);
         $qb->orderBy(self::TBL . '.name', 'ASC');
-        $qb->setMaxResults($limit)
-            ->setFirstResult($this->getOffset($limit, $page));
-        return $this->getServiceResult($qb);
+        $qb = $this->paginate($qb, $limit, $page);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function findAndCountAllByIndustry(
-        Industry $industry,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
-
-        // count them first (cheaper if zero)
-        $count = $this->countAllByIndustry($industry);
-        if (0 == $count) {
-            return new ServiceResultEmpty();
-        }
-
-        // find the latest
-        $result = $this->findAllByIndustry($industry, $limit, $page);
-        $result->setTotal($count);
-        return $result;
-    }
-
-    public function countAllByIndustry(
-        Industry $indsutry
+    public function countByIndustry(
+        Industry $industry
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)')
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
             ->setParameters([
-                'industry_id' => (string) $indsutry->getId()
+                'industry_id' => (string) $industry->getId()
             ]);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -80,37 +67,19 @@ class SectorsService extends Service
         Industry $industry,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
+    ): array {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL)
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
             ->orderBy(self::TBL . '.name', 'ASC')
-            ->setMaxResults($limit)
-            ->setFirstResult($this->getOffset($limit, $page))
             ->setParameters([
                 'industry_id' => (string) $industry->getId()
             ]);
-
-        return $this->getServiceResult($qb);
+        $qb = $this->paginate($qb, $limit, $page);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function findByID(
-        ID $id
-    ): ServiceResultInterface {
-        $industryTbl = 'i';
-
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL, $industryTbl)
-            ->where(self::TBL . '.id = :id')
-            ->leftJoin(self::TBL . '.industry', $industryTbl)
-            ->setParameters([
-                'id' => $id
-            ]);
-
-        return $this->getServiceResult($qb);
-    }
-
-    public function findAllInIndustries(): ServiceResultInterface {
+    public function findAllInIndustries(): array {
         $industryTbl = 'i';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -119,11 +88,6 @@ class SectorsService extends Service
             ->addOrderBy($industryTbl . '.name', 'ASC')
             ->addOrderBy(self::TBL . '.name', 'ASC');
 
-        return $this->getServiceResult($qb);
-    }
-
-    protected function getServiceResult(QueryBuilder $qb, $type = 'Sector')
-    {
-        return parent::getServiceResult($qb, $type);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 }

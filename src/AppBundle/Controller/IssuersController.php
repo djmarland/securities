@@ -7,6 +7,7 @@ use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,11 +29,15 @@ class IssuersController extends Controller
         $perPage = 1500;
         $currentPage = $this->getCurrentPage();
 
-        $result = $this->get('app.services.issuers')
-            ->findAndCountAll($perPage, $currentPage);
+        $total = $this->get('app.services.issuers')
+            ->countAll();
+        $issuers = [];
+        if ($total) {
+            $issuers = $this->get('app.services.issuers')
+                ->findAll($perPage, $currentPage);
+        }
 
         $issuerPresenters = [];
-        $issuers = $result->getDomainModels();
         if (!empty($issuers)) {
             foreach ($issuers as $issuer) {
                 $issuerPresenters[] = new IssuerPresenter($issuer);
@@ -41,10 +46,10 @@ class IssuersController extends Controller
 
         $this->setTitle('Issuers');
         $this->toView('issuers', $issuerPresenters);
-        $this->toView('total', $result->getTotal());
+        $this->toView('total', $total);
 
         $this->setPagination(
-            $result->getTotal(),
+            $total,
             $currentPage,
             $perPage
         );
@@ -56,19 +61,18 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $securitiesService = $this->get('app.services.securities');
+        $securitiesService = $this->get('app.services.securities_by_issuer');
 
         $count = $securitiesService
-            ->countByIssuer($issuer);
+            ->count($issuer);
 
         $totalRaised = $securitiesService
-            ->sumByIssuer($issuer);
+            ->sum($issuer);
 
-        $result = $securitiesService
-            ->findLatestForIssuer($issuer, 5);
+        $securities = $securitiesService
+            ->findLatest($issuer, 5);
 
         $securityPresenters = [];
-        $securities = $result->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);
@@ -315,13 +319,13 @@ class IssuersController extends Controller
             throw new HttpException(404, 'Invalid ID');
         }
 
-        $result = $this->get('app.services.issuers')
-            ->findByID(new ID((int) $id));
-
-        if (!$result->hasResult()) {
+        try {
+            $issuer = $this->get('app.services.issuers')
+                ->findByID(new ID((int)$id));
+        } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Issuer ' . $id . ' does not exist.');
         }
-        $issuer = $result->getDomainModel();
+
         $group = $issuer->getParentGroup();
         $sector = $group->getSector();
         $industry = $sector->getIndustry();

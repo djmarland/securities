@@ -6,6 +6,8 @@ use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\ValueObject\ID;
 
 abstract class Service
 {
@@ -15,11 +17,13 @@ abstract class Service
     const DEFAULT_PAGE = 1;
 
     protected $entityManager;
+    protected $mapperFactory;
 
     public function __construct(
         EntityManager $entityManager
     ) {
         $this->entityManager = $entityManager;
+        $this->mapperFactory = new MapperFactory();
     }
 
     protected function getEntity(string $name): EntityRepository
@@ -28,35 +32,41 @@ abstract class Service
             ->getRepository('SecuritiesService:' . $name);
     }
 
-    protected function getQueryBuilder(string $name) {
+    protected function getQueryBuilder(string $name): QueryBuilder {
         $entity = $this->getEntity($name);
         return $entity->createQueryBuilder(self::TBL);
     }
 
-    protected function getDomainModel($item, $type)
-    {
-        // @todo - potential bug here if we ever pass an array of results into this method
-        $models = $this->getDomainModels([$item], $type);
-        if ($models) {
-            return reset($models);
+    protected function getDomainFromQuery(
+        QueryBuilder $query,
+        string $entityType
+    ): array {
+        $result = $query->getQuery()->getArrayResult();
+        $entities = [];
+        $mapper = $this->mapperFactory->createMapper($entityType);
+        foreach ($result as $item) {
+            $entities[] = $mapper->getDomainModel($item);
         }
-        return null;
+        return $entities;
     }
 
-    protected function getDomainModels($items, $type)
-    {
-        if (!$items) {
-            return null;
-        }
-        $items = ensure_array($items);
+    protected function simplefindById(
+        ID $id,
+        string $type
+    ) {
+        $qb = $this->getQueryBuilder($type);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.id = :id')
+            ->setParameters([
+                'id' => $id
+            ]);
 
-        $mapperFactory = new MapperFactory();
-        $domainModels = array();
-        $mapper = $mapperFactory->createMapper($type);
-        foreach ($items as $item) {
-            $domainModels[] = $mapper->getDomainModel($item);
+        $results = $this->getDomainFromQuery($qb, $type);
+        if (empty($results)) {
+            throw new EntityNotFoundException;
         }
-        return $domainModels;
+
+        return reset($results);
     }
 
     protected function getOffset(
@@ -66,14 +76,12 @@ abstract class Service
         return ($limit * ($page - 1));
     }
 
-    protected function getServiceResult(QueryBuilder $qb, $type)
-    {
-        $result = $qb->getQuery()->getArrayResult();
-        $data = $this->getDomainModels($result, $type);
-
-        if ($data) {
-            return new ServiceResult($data);
-        }
-        return new ServiceResultEmpty();
+    protected function paginate(
+        QueryBuilder $qb,
+        int $limit,
+        int $page
+    ) {
+        return $qb->setMaxResults($limit)
+            ->setFirstResult($this->getOffset($limit, $page));
     }
 }

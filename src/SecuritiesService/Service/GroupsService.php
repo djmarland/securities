@@ -2,67 +2,18 @@
 
 namespace SecuritiesService\Service;
 
-use Doctrine\ORM\QueryBuilder;
+use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\Entity\Sector;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
 
 class GroupsService extends Service
 {
     const SERVICE_ENTITY = 'ParentGroup';
 
-    public function findAndCountAll(
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
-
-        // count them first (cheaper if zero)
-        $count = $this->countAll();
-        if (0 == $count) {
-            return new ServiceResultEmpty();
-        }
-
-        // find the latest
-        $result = $this->findAll($limit, $page);
-        $result->setTotal($count);
-        return $result;
-    }
-
-    public function countAll(): int
-    {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('count(tbl.id)');
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-
-    public function findAll(
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): ServiceResultInterface {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('tbl');
-        $qb->orderBy('tbl.name', 'ASC');
-        $qb->setMaxResults($limit)
-            ->setFirstResult($this->getOffset($limit, $page));
-        return $this->getServiceResult($qb);
-    }
-
-    public function findAllBySector(
-        Sector $sector
-    ): ServiceResultInterface {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL)
-            ->where('IDENTITY(' . self::TBL . '.sector) = :sector_id')
-            ->orderBy(self::TBL . '.name', 'ASC')
-            ->setParameters([
-                'sector_id' => (string) $sector->getId()
-            ]);
-
-        return $this->getServiceResult($qb);
-    }
-
     public function findByID(
         ID $id
-    ): ServiceResultInterface {
+    ): ParentGroup {
         $sectorTbl = 's';
         $industryTbl = 'i';
 
@@ -75,11 +26,30 @@ class GroupsService extends Service
                 'id' => (string) $id
             ]);
 
-        return $this->getServiceResult($qb);
+        $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        if (empty($results)) {
+            throw new EntityNotFoundException;
+        }
+
+        return reset($results);
+    }
+
+    public function findAllBySector(
+        Sector $sector
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where('IDENTITY(' . self::TBL . '.sector) = :sector_id')
+            ->orderBy(self::TBL . '.name', 'ASC')
+            ->setParameters([
+                'sector_id' => (string) $sector->getId()
+            ]);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
 
-    public function findAllInSectors(): ServiceResultInterface {
+    public function findAllInSectors(): array {
         $sectorTbl = 's';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -88,11 +58,7 @@ class GroupsService extends Service
             ->addOrderBy($sectorTbl . '.name', 'ASC')
             ->addOrderBy(self::TBL . '.name', 'ASC');
 
-        return $this->getServiceResult($qb);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    protected function getServiceResult(QueryBuilder $qb, $type = 'ParentGroup')
-    {
-        return parent::getServiceResult($qb, $type);
-    }
 }

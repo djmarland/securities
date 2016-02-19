@@ -17,9 +17,7 @@
                     {% endif %}
                 </div>
                 <nav><ul class="list--inline">
-                    <li><a class="link--button" href="{{ path('groups_issuers', { group_id : group.id }) }}">Issuers</a></li>
                     <li><a class="link--button" href="{{ path('groups_securities', { group_id : group.id }) }}">Securities</a></li>
-                    <li><a class="link--button" href="{{ path('groups_yield', { group_id : group.id }) }}">Yield Curve</a></li>
                 </ul></nav>
                 {% block content %}{% endblock %}
             </div>

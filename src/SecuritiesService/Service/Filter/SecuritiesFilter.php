@@ -1,6 +1,6 @@
 <?php
 
-namespace SecuritiesService\Service;
+namespace SecuritiesService\Service\Filter;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Currency;

@@ -32,7 +32,7 @@ trait SecurityFilter
         $this->filter['activeProduct'] = null;
         $id = $this->getAndCheckId($request, 'product');
         $this->filter['products'] = $this->get('app.services.products')
-            ->findAll()->getDomainModels();
+            ->findAll();
         $product = null;
         if ($id) {
             foreach ($this->filter['products'] as $p) {
@@ -59,7 +59,7 @@ trait SecurityFilter
         }
 
         $this->filter['currencies'] = $this->get('app.services.currencies')
-            ->findAll()->getDomainModels();
+            ->findAll();
         $currency = null;
         if ($code) {
             foreach ($this->filter['currencies'] as $c) {
@@ -83,7 +83,7 @@ trait SecurityFilter
         $key = $request->get('bucket', null);
 
         $this->filter['buckets'] = $this->get('app.services.buckets')
-            ->getAll(new DateTime)->getDomainModels(); // @todo - use application time (or re-write buckets)
+            ->getAll(new DateTime); // @todo - use application time (or re-write buckets)
         $bucket = null;
         if ($key) {
             foreach ($this->filter['buckets'] as $c) {

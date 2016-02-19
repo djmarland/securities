@@ -7,8 +7,7 @@
         <div>
             <h1>{{ meta.title }}</h1>
             <ul class="list--inline">
-                <li><a href="#" class="link--button">Securities</a></li>
-                <li><a href="#" class="link--button">Yield Curve</a></li>
+                <li><a href="{{ path('industries_securities', { industry_id : industry.id }) }}" class="link--button">Securities</a></li>
             </ul>
             <div class="g">
                 {% include('@partials/advert.html.twig') with { adType : 'overview'} %}

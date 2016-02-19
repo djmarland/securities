@@ -6,7 +6,9 @@ use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -23,11 +25,10 @@ class SectorsController extends Controller
 
     public function listAction()
     {
-        $result = $this->get('app.services.groups')
+        $groups = $this->get('app.services.groups')
             ->findAllInSectors();
 
         $sectorPresenters = [];
-        $groups = $result->getDomainModels();
         $prevSector = null;
         $collectedGroups = [];
         if (!empty($groups)) {
@@ -86,37 +87,33 @@ class SectorsController extends Controller
 
     public function securitiesAction(Request $request)
     {
-        $issuer = $this->getIssuer($request);
+        $sector = $this->getSector($request);
 
-        $product = $this->setProductFilter($request);
-        $currency = $this->setCurrencyFilter($request);
-        $bucket = $this->setBucketFilter($request);
-
+        $filter = new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setCurrencyFilter($request),
+            $this->setBucketFilter($request)
+        );
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
-        $securitiesService = $this->get('app.services.securities');
-        $result = $securitiesService
-            ->findAndCountAllWithFilters(
-                $perPage,
-                $currentPage,
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
-
-        $totalRaised = $securitiesService
-            ->sumAllWithFilters(
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
+        $securitiesService = $this->get('app.services.securities_by_sector');
+        $total = $securitiesService->count($sector, $filter);
+        $totalRaised = 0;
+        $securities = [];
+        if ($total) {
+            $securities = $securitiesService
+                ->find(
+                    $sector,
+                    $filter,
+                    $perPage,
+                    $currentPage
+                );
+            $totalRaised = $securitiesService->sum($sector, $filter);
+        }
 
         $securityPresenters = [];
-        $securities = $result->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);
@@ -125,15 +122,15 @@ class SectorsController extends Controller
 
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
-        $this->toView('total', $result->getTotal());
+        $this->toView('total', $total);
 
         $this->setPagination(
-            $result->getTotal(),
+            $total,
             $currentPage,
             $perPage
         );
 
-        return $this->renderTemplate('issuers:securities');
+        return $this->renderTemplate('sectors:securities');
     }
 
     private function getSector(Request $request)
@@ -144,13 +141,13 @@ class SectorsController extends Controller
             throw new HttpException(404, 'Invalid ID');
         }
 
-        $result = $this->get('app.services.sectors')
-            ->findByID(new ID((int) $id));
-
-        if (!$result->hasResult()) {
+        try {
+            $sector = $this->get('app.services.sectors')
+                ->findByID(new ID((int)$id));
+        } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Sector ' . $id . ' does not exist.');
         }
-        $sector = $result->getDomainModel();
+
         $industry = $sector->getIndustry();
 
         // I'm looking at a sector, so I need to pass in that sector,

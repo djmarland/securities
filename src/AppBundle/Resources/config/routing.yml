@@ -63,10 +63,6 @@ groups_show:
   path:     /groups/{group_id}
   defaults: { _controller: AppBundle:Groups:show }
 
-groups_issuers:
-  path:     /groups/{group_id}/issuers
-  defaults: { _controller: AppBundle:Groups:issuers }
-
 groups_securities:
   path:     /groups/{group_id}/securities
   defaults: { _controller: AppBundle:Groups:securities }
@@ -88,7 +84,7 @@ industries_securities:
   path:     /industries/{industry_id}/securities
   defaults: { _controller: AppBundle:Industries:securities }
 
-# Industries
+# Sectors
 sectors_list:
   path:     /sectors
   defaults: { _controller: AppBundle:Sectors:list }

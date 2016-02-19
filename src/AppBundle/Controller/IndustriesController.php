@@ -6,7 +6,9 @@ use AppBundle\Controller\Traits\Finder;
 use AppBundle\Controller\Traits\SecurityFilter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -23,11 +25,10 @@ class IndustriesController extends Controller
 
     public function listAction()
     {
-        $result = $this->get('app.services.sectors')
+        $sectors = $this->get('app.services.sectors')
             ->findAllInIndustries();
 
         $industryPresenters = [];
-        $sectors = $result->getDomainModels();
         $prevIndustry = null;
         $collectedSectors = [];
         if (!empty($sectors)) {
@@ -90,35 +91,31 @@ class IndustriesController extends Controller
     {
         $industry = $this->getIndustry($request);
 
-        $product = $this->setProductFilter($request);
-        $currency = $this->setCurrencyFilter($request);
-        $bucket = $this->setBucketFilter($request);
-
+        $filter = new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setCurrencyFilter($request),
+            $this->setBucketFilter($request)
+        );
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
-        $securitiesService = $this->get('app.services.securities');
-        $result = $securitiesService
-            ->findAndCountAllWithFilters(
-                $perPage,
-                $currentPage,
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
-
-        $totalRaised = $securitiesService
-            ->sumAllWithFilters(
-                $product,
-                $currency,
-                $issuer,
-                $bucket
-            );
+        $securitiesService = $this->get('app.services.securities_by_industry');
+        $total = $securitiesService->count($industry, $filter);
+        $totalRaised = 0;
+        $securities = [];
+        if ($total) {
+            $securities = $securitiesService
+                ->find(
+                    $industry,
+                    $filter,
+                    $perPage,
+                    $currentPage
+                );
+            $totalRaised = $securitiesService->sum($industry, $filter);
+        }
 
         $securityPresenters = [];
-        $securities = $result->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);
@@ -127,16 +124,15 @@ class IndustriesController extends Controller
 
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
-        $this->toView('total', $result->getTotal());
+        $this->toView('total', $total);
 
         $this->setPagination(
-            $result->getTotal(),
+            $total,
             $currentPage,
             $perPage
         );
 
-
-        return $this->renderTemplate('issuers:securities');
+        return $this->renderTemplate('industries:securities');
     }
 
     private function getIndustry(Request $request)
@@ -147,13 +143,12 @@ class IndustriesController extends Controller
             throw new HttpException(404, 'Invalid ID');
         }
 
-        $result = $this->get('app.services.industries')
-            ->findByID(new ID((int) $id));
-
-        if (!$result->hasResult()) {
+        try {
+            $industry = $this->get('app.services.industries')
+                ->findByID(new ID((int)$id));
+        } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Industry ' . $id . ' does not exist.');
         }
-        $industry = $result->getDomainModel();
 
         $this->setTitle($industry->getName());
         $this->toView('industry', $industry);

@@ -12,11 +12,13 @@ class ReportsController extends Controller
 
     public function listAction()
     {
+        throw new HttpException(404, 'Not yet');
         return $this->renderTemplate('reports:list');
     }
 
     public function fsa50Action(Request $request)
     {
+        throw new HttpException(404, 'Not yet');
         $products = $this->get('app.services.products')
             ->findAll()->getDomainModels();
 
@@ -87,6 +89,7 @@ class ReportsController extends Controller
 
     public function fsa54Action(Request $request)
     {
+        throw new HttpException(404, 'Not yet');
         $products = $this->get('app.services.products')
             ->findAll()->getDomainModels();
 
