@@ -8,22 +8,22 @@
                 <h2 class="g-unit">Upcoming maturities</h2>
                 {% include '@partials/securities-list.html.twig' %}
                 <p>
-                    <a class="link--button" href="{{ path('securities_list') }}">View all securities</a>
+                    <a class="link--button" href="{{ path('security_list') }}">View all securities</a>
                 </p>
             </div>
         </div>
         <div class="g 2/5@xl">
                 <div class="card card--padded g-unit">
                     <h2 class="g-unit">New</h2>
-                    <a class="link--button" href="{{ path('industries_list') }}">Industries</a>
-                    <a class="link--button" href="{{ path('reports_fsa50') }}">FSA50 report</a>
-                    <a class="link--button" href="{{ path('securities_list') }}">Filterable Securities</a>
+                    <a class="link--button" href="{{ path('industry_list') }}">Industries</a>
+                    <a class="link--button" href="{{ path('report_fsa50') }}">FSA50 report</a>
+                    <a class="link--button" href="{{ path('security_list') }}">Filterable Securities</a>
                 </div>
                 <div class="card card--padded g-unit">
                     <div class="grid">
                     <div class="g 1/2@xl">
                         <p class="text--center">
-                            <a class="link--hidden" href="{{ path('securities_list') }}">
+                            <a class="link--hidden" href="{{ path('security_list') }}">
                                 Securities<br />
                                 <span class="a">{{ securitiesCount }}</span>
                             </a>
@@ -31,7 +31,7 @@
                     </div>
                     <div class="g 1/2@xl">
                         <p class="text--center">
-                            <a class="link--hidden" href="{{ path('groups_list') }}">
+                            <a class="link--hidden" href="{{ path('group_list') }}">
                                 Issuers<br />
                                 <span class="a">{{ issuersCount }}</span>
                             </a>

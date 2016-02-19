@@ -2,26 +2,26 @@
 
 namespace SecuritiesService\Domain\ValueObject;
 
-class ID
+class UUID
 {
 
     /**
-     * @param $id
+     * @param $uuid
      */
     public function __construct(
-        int $id
+        string $uuid
     ) {
-        $this->id = $id;
+        $this->uuid = $uuid;
     }
 
     /**
      * @var int
      */
-    private $id;
+    private $uuid;
 
     public function getValue(): int
     {
-        return $this->id;
+        return $this->uuid;
     }
 
     public function __toString(): string

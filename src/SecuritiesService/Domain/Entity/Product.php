@@ -2,13 +2,12 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use SecuritiesService\Domain\ValueObject\ID;
-use DateTime;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class Product extends Entity
 {
     public function __construct(
-        ID $id,
+        UUID $id,
         int $number,
         string $name
     ) {

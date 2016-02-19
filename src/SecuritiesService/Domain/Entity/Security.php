@@ -4,14 +4,14 @@ namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use DateTime;
 
 class Security extends Entity
 {
     public function __construct(
-        ID $id,
+        UUID $id,
         ISIN $isin,
         string $name,
         DateTime $startDate,

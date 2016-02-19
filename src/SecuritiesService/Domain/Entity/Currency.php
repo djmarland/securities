@@ -2,14 +2,13 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use SecuritiesService\Domain\ValueObject\ID;
-use SecuritiesService\Domain\ValueObject\ISIN;
+use SecuritiesService\Domain\ValueObject\UUID;
 use DateTime;
 
 class Currency extends Entity
 {
     public function __construct(
-        ID $id,
+        UUID $id,
         string $code
     ) {
         parent::__construct($id);

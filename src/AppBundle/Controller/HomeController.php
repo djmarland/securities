@@ -20,9 +20,8 @@ class HomeController extends Controller
         $this->toView('issuersCount', number_format($issuersCount));
 
 
-        $upcomingResult = $this->get('app.services.securities')->findUpcomingMaturities(new \DateTimeImmutable(), 5);
+        $securities = $this->get('app.services.securities')->findUpcomingMaturities(new \DateTimeImmutable(), 5);
         $securityPresenters = [];
-        $securities = $upcomingResult->getDomainModels();
         if (!empty($securities)) {
             foreach ($securities as $security) {
                 $securityPresenters[] = new SecurityPresenter($security);

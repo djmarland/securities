@@ -2,12 +2,12 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class Company extends Entity
 {
     public function __construct(
-        ID $id,
+        UUID $id,
         string $name,
         Country $country = null,
         ParentGroup $parentGroup = null

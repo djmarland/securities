@@ -2,13 +2,12 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use SecuritiesService\Domain\ValueObject\ID;
-use DateTime;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class ParentGroup extends Entity
 {
     public function __construct(
-        ID $id,
+        UUID $id,
         string $name,
         Sector $sector = null
     ) {

@@ -2,10 +2,7 @@
 
 namespace SecuritiesService\Domain\Entity;
 
-use SecuritiesService\Domain\ValueObject\ID;
-use SecuritiesService\Domain\ValueObject\IDUnset;
-use SecuritiesService\Domain\ValueObject\Key;
-use DateTime;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 /**
  * Class Entity
@@ -16,7 +13,7 @@ abstract class Entity
     const KEY_PREFIX = null;
 
     public function __construct(
-        ID $id
+        UUID $id
     ) {
         $this->id = $id;
     }
@@ -26,7 +23,7 @@ abstract class Entity
      */
     protected $id;
 
-    public function getId(): ID
+    public function getId(): UUID
     {
         return $this->id;
     }

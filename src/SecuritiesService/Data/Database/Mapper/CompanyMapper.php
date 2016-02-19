@@ -4,13 +4,13 @@ namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class CompanyMapper extends Mapper
 {
     public function getDomainModel(array $item): Entity
     {
-        $id = new ID($item['id']);
+        $id = new UUID($item['id']);
         $parentGroup = null;
         $country = null;
 

@@ -3,13 +3,14 @@ namespace SecuritiesService\Data\Database\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use DateTime;
+use Ramsey\Uuid\Uuid;
 
 abstract class Entity
 {
     /**
      * @ORM\Id
-     * @ORM\Column(type="integer")
-     * @ORM\GeneratedValue(strategy="AUTO")
+     * @ORM\Column(type="uuid_binary")
+     * @ORM\GeneratedValue(strategy="NONE")
      */
     protected $id;
 
@@ -22,6 +23,11 @@ abstract class Entity
      * @ORM\Column(type="datetime", nullable=false)
      */
     protected $updated_at;
+
+    public function __construct()
+    {
+        $this->id = Uuid::uuid4();
+    }
 
 
     /** Getters/Setters */
