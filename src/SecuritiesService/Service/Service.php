@@ -8,6 +8,7 @@ use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 abstract class Service
 {
@@ -50,20 +51,20 @@ abstract class Service
         return $entities;
     }
 
-    protected function simplefindById(
-        ID $id,
+    protected function simpleFindByUUID(
+        UUID $id,
         string $type
     ) {
         $qb = $this->getQueryBuilder($type);
         $qb->select(self::TBL)
             ->where(self::TBL . '.id = :id')
             ->setParameters([
-                'id' => $id
+                'id' => $id->getBinary()
             ]);
 
         $results = $this->getDomainFromQuery($qb, $type);
         if (empty($results)) {
-            throw new EntityNotFoundException;
+            throw new EntityNotFoundException('No such item with ID ' . $id);
         }
 
         return reset($results);

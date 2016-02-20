@@ -54,7 +54,7 @@ class ByIndustryService extends SecuritiesService
         Industry $industry
     ) {
         return $qb->andWhere('s.id = :s_id')
-            ->setParameter('s_id', (string) $industry->getId());
+            ->setParameter('s_id', (string) $industry->getId()->getBinary());
     }
 
     private function queryForScalar(

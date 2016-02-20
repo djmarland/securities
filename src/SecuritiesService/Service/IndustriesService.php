@@ -5,15 +5,16 @@ namespace SecuritiesService\Service;
 use SecuritiesService\Domain\Entity\Industry;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class IndustriesService extends Service
 {
     const SERVICE_ENTITY = 'Industry';
 
-    public function findByID(
-        ID $id
+    public function findByUUID(
+        UUID $id
     ): Industry {
-        return parent::simplefindById($id, self::SERVICE_ENTITY);
+        return parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
     }
 
     public function findAll(): array {

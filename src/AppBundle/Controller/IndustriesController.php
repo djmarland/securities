@@ -8,7 +8,8 @@ use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\Exception\ValidationException;
+use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -141,30 +142,28 @@ class IndustriesController extends Controller
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-        $this->toView('entityNav', new EntityNavPresenter($industry, 'maturity_profile'));
-        return $this->renderTemplate('groups:maturity-profile');
+//        $this->toView('entityNav', new EntityNavPresenter($industry, 'maturity_profile'));
+//        return $this->renderTemplate('groups:maturity-profile');
     }
 
     public function issuanceAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
-        return $this->renderTemplate('groups:issuance');
+//        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
+//        return $this->renderTemplate('groups:issuance');
     }
 
     private function getIndustry(Request $request)
     {
         $id = $request->get('industry_id');
 
-        if ($id !== (string) (int) $id) {
-            throw new HttpException(404, 'Invalid ID');
-        }
-
         try {
             $industry = $this->get('app.services.industries')
-                ->findByID(new ID((int)$id));
+                ->findByUUID(UUID::createFromString($id));
+        } catch (ValidationException $e) {
+            throw new HttpException(404, $e->getMessage());
         } catch (EntityNotFoundException $e) {
-            throw new HttpException(404, 'Industry ' . $id . ' does not exist.');
+            throw new HttpException(404, $e->getMessage());
         }
 
         $this->setTitle($industry->getName());

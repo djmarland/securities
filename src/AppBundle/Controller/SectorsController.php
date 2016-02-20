@@ -8,7 +8,9 @@ use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -154,15 +156,13 @@ class SectorsController extends Controller
     {
         $id = $request->get('sector_id');
 
-        if ($id !== (string) (int) $id) {
-            throw new HttpException(404, 'Invalid ID');
-        }
-
         try {
             $sector = $this->get('app.services.sectors')
-                ->findByID(new ID((int)$id));
+                ->findByUUID(UUID::createFromString($id));
+        } catch (ValidationException $e) {
+            throw new HttpException(404, $e->getMessage());
         } catch (EntityNotFoundException $e) {
-            throw new HttpException(404, 'Sector ' . $id . ' does not exist.');
+            throw new HttpException(404, $e->getMessage());
         }
 
         $industry = $sector->getIndustry();

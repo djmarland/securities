@@ -30,7 +30,7 @@ security_show:
   path:     /securities/{isin}
   defaults: { _controller: AppBundle:Securities:show }
   requirements:
-    isin:  "[A-Z0-9]{12}"
+    isin:  "[A-Za-z0-9]{12}" # catching lowercase here, so we can redirect it to uppercase
 
 # Issuers
 issuer_list:

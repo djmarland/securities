@@ -63,7 +63,7 @@ class ByIssuerService extends SecuritiesService
         Company $issuer
     ) {
         return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
-            ->setParameter('company_id', (string) $issuer->getId());
+            ->setParameter('company_id', (string) $issuer->getId()->getBinary());
     }
 
     private function queryForScalar(
@@ -104,7 +104,7 @@ class ByIssuerService extends SecuritiesService
         $qb->groupBy($productTbl . '.id','m');
 
         $qb->setParameters([
-            'company_id' => (string) $issuer->getId(),
+            'company_id' => (string) $issuer->getId()->getBinary(),
             'year' => (string) $year
         ]);
 

@@ -53,7 +53,7 @@ class BySectorService extends SecuritiesService
         Sector $sector
     ) {
         return $qb->andWhere('s.id = :s_id')
-            ->setParameter('s_id', (string) $sector->getId());
+            ->setParameter('s_id', (string) $sector->getId()->getBinary());
     }
 
     private function queryForScalar(

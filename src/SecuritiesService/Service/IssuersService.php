@@ -2,18 +2,17 @@
 
 namespace SecuritiesService\Service;
 
-use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class IssuersService extends Service
 {
     const SERVICE_ENTITY = 'Company';
 
-    public function findByID(
-        ID $id
+    public function findByUUID(
+        UUID $id
     ): Company {
         $groupTbl = 'g';
         $sectorTbl = 's';
@@ -26,7 +25,7 @@ class IssuersService extends Service
             ->leftJoin($groupTbl . '.sector', $sectorTbl)
             ->leftJoin($sectorTbl . '.industry', $industryTbl)
             ->setParameters([
-                'id' => $id
+                'id' => $id->getBinary()
             ]);
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -65,7 +64,7 @@ class IssuersService extends Service
             ->where('IDENTITY(' . self::TBL . '.parentGroup) = :parent_group_id')
             ->orderBy(self::TBL . '.name', 'ASC')
             ->setParameters([
-                'parent_group_id' => (string) $group->getId()
+                'parent_group_id' => $group->getId()->getBinary()
             ]);
 
         $qb = $this->paginate($qb, $limit, $page);

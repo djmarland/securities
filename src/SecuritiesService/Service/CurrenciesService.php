@@ -2,19 +2,23 @@
 
 namespace SecuritiesService\Service;
 
-use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Currency;
-use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class CurrenciesService extends Service
 {
     const SERVICE_ENTITY = 'Currency';
 
-    public function findByID(
-        ID $id
+    public function findByUUID(
+        UUID $id
     ): Currency {
-        parent::simplefindById($id, self::SERVICE_ENTITY);
+        parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
+    }
+
+    public function findByCode(
+        $code
+    ) {
+        // @todo - currencies should use codes
     }
 
     public function findAll(): array {

@@ -2,18 +2,17 @@
 
 namespace SecuritiesService\Service;
 
-use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Industry;
 use SecuritiesService\Domain\Entity\Sector;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class SectorsService extends Service
 {
     const SERVICE_ENTITY = 'Sector';
 
-    public function findByID(
-        ID $id
+    public function findByUUID(
+        UUID $id
     ): Sector {
         $industryTbl = 'i';
 
@@ -22,7 +21,7 @@ class SectorsService extends Service
             ->where(self::TBL . '.id = :id')
             ->leftJoin(self::TBL . '.industry', $industryTbl)
             ->setParameters([
-                'id' => $id
+                'id' => $id->getBinary()
             ]);
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -58,7 +57,7 @@ class SectorsService extends Service
         $qb->select('count(' . self::TBL . '.id)')
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
             ->setParameters([
-                'industry_id' => (string) $industry->getId()
+                'industry_id' => $industry->getId()->getBinary()
             ]);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -73,7 +72,7 @@ class SectorsService extends Service
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
             ->orderBy(self::TBL . '.name', 'ASC')
             ->setParameters([
-                'industry_id' => (string) $industry->getId()
+                'industry_id' => $industry->getId()->getBinary()
             ]);
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

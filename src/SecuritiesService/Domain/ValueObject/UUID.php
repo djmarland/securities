@@ -2,24 +2,34 @@
 
 namespace SecuritiesService\Domain\ValueObject;
 
+use Ramsey\Uuid\Uuid as UuidProvider;
+use Ramsey\Uuid\UuidInterface as UuidProviderInterface;
+use SecuritiesService\Domain\Exception\ValidationException;
+
 class UUID
 {
+    private $uuid;
 
-    /**
-     * @param $uuid
-     */
     public function __construct(
-        string $uuid
+        UuidProviderInterface $uuid
     ) {
         $this->uuid = $uuid;
     }
 
-    /**
-     * @var int
-     */
-    private $uuid;
+    public static function createFromString($string)
+    {
+        if (!UuidProvider::isValid($string)) {
+            throw new ValidationException('Invalid ID');
+        }
+        return new self(UuidProvider::fromString($string));
+    }
 
-    public function getValue(): int
+    public function getBinary()
+    {
+        return $this->uuid->getBytes();
+    }
+
+    public function getValue(): UuidProvider
     {
         return $this->uuid;
     }

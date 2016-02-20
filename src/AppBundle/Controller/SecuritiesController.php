@@ -74,6 +74,11 @@ class SecuritiesController extends Controller
     public function showAction(Request $request)
     {
         $isin = $request->get('isin');
+        $upper = strtoupper($isin);
+
+        if ($isin !== $upper) {
+            return $this->redirectToRoute('security_show', ['isin' => $upper], 301);
+        }
 
         try {
             $security = $this->get('app.services.securities')

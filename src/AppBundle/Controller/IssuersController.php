@@ -9,7 +9,9 @@ use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -296,15 +298,13 @@ class IssuersController extends Controller
     {
         $id = $request->get('issuer_id');
 
-        if ($id !== (string) (int) $id) {
-            throw new HttpException(404, 'Invalid ID');
-        }
-
         try {
             $issuer = $this->get('app.services.issuers')
-                ->findByID(new ID((int)$id));
+                ->findByUUID(UUID::createFromString($id));
+        } catch (ValidationException $e) {
+            throw new HttpException(404, $e->getMessage());
         } catch (EntityNotFoundException $e) {
-            throw new HttpException(404, 'Issuer ' . $id . ' does not exist.');
+            throw new HttpException(404, $e->getMessage());
         }
 
         $group = $issuer->getParentGroup();

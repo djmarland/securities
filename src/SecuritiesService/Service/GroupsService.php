@@ -5,14 +5,14 @@ namespace SecuritiesService\Service;
 use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\Entity\Sector;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class GroupsService extends Service
 {
     const SERVICE_ENTITY = 'ParentGroup';
 
-    public function findByID(
-        ID $id
+    public function findByUUID(
+        UUID $id
     ): ParentGroup {
         $sectorTbl = 's';
         $industryTbl = 'i';
@@ -23,7 +23,7 @@ class GroupsService extends Service
             ->leftJoin(self::TBL . '.sector', $sectorTbl)
             ->leftJoin($sectorTbl . '.industry', $industryTbl)
             ->setParameters([
-                'id' => (string) $id
+                'id' => $id->getBinary()
             ]);
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -42,7 +42,7 @@ class GroupsService extends Service
             ->where('IDENTITY(' . self::TBL . '.sector) = :sector_id')
             ->orderBy(self::TBL . '.name', 'ASC')
             ->setParameters([
-                'sector_id' => (string) $sector->getId()
+                'sector_id' => $sector->getId()->getBinary()
             ]);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

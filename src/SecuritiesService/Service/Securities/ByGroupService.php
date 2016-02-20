@@ -52,7 +52,7 @@ class ByGroupService extends SecuritiesService
         ParentGroup $group
     ) {
         return $qb->andWhere('p.id = :group_id')
-            ->setParameter('group_id', (string) $group->getId());
+            ->setParameter('group_id', (string) $group->getId()->getBinary());
     }
 
     private function queryForScalar(

@@ -17,7 +17,7 @@
                 <th>Description</th><td>{{ security.name }}</td>
             </tr>
             <tr>
-                <th>Issuer:</th><td><a href="{{ path('issuers_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
+                <th>Issuer:</th><td><a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
             </tr>
             <tr>
                 <th>Amount raised (£m):</th><td>{{ security.amount }}</td>
