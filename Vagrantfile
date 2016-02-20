@@ -1,31 +1,29 @@
 # -*- mode: ruby -*-
-# vi: set ft=ruby :
 
-# Vagrantfile API/syntax version. Don't touch unless you know what you're doing!
-VAGRANTFILE_API_VERSION = "2"
-VM_DISPLAY_NAME = "PHP7-Securities"
-VM_HOSTNAME = "securities.app"
+dir = File.dirname(File.expand_path(__FILE__))
 
-Vagrant.configure(VAGRANTFILE_API_VERSION) do |config|
-  config.ssh.password = "vagrant"
-  config.ssh.insert_key = false
+require 'yaml'
+require "#{dir}/puphpet/ruby/deep_merge.rb"
+require "#{dir}/puphpet/ruby/to_bool.rb"
+require "#{dir}/puphpet/ruby/puppet.rb"
 
-  if Vagrant.has_plugin?("vagrant-proxyconf")
-    config.proxy.http     = $HTTP_PROXY
-    config.proxy.https    = $HTTPS_PROXY
-    config.proxy.no_proxy = "localhost,127.0.0.1"
-  end
+configValues = YAML.load_file("#{dir}/puphpet/config.yaml")
 
-  config.vm.hostname = VM_HOSTNAME
-  config.vm.box = "bento/ubuntu-14.04"
-  config.vm.provision :shell, path: "vagrant/bootstrap.sh", privileged: false
-  config.vm.synced_folder ".", "/home/vagrant",
-	group: "www-data", mount_options: ["dmode=775,fmode=664"]
-  config.vm.network "forwarded_port", guest: 80, host: 8001, auto_correct: true
+provider = ENV['VAGRANT_DEFAULT_PROVIDER']
+if File.file?("#{dir}/puphpet/config-#{provider}.yaml")
+  custom = YAML.load_file("#{dir}/puphpet/config-#{provider}.yaml")
+  configValues.deep_merge!(custom)
+end
 
-  config.vm.provider :virtualbox do |vb|
-    vb.customize ["modifyvm", :id, "--name", VM_DISPLAY_NAME]
-    vb.name = VM_DISPLAY_NAME
-  end
+if File.file?("#{dir}/puphpet/config-custom.yaml")
+  custom = YAML.load_file("#{dir}/puphpet/config-custom.yaml")
+  configValues.deep_merge!(custom)
+end
 
+data = configValues['vagrantfile']
+
+Vagrant.require_version '>= 1.8.1'
+
+Vagrant.configure('2') do |config|
+  eval File.read("#{dir}/puphpet/vagrant/Vagrantfile-#{data['target']}")
 end

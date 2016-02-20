@@ -1,5 +1,4 @@
 <?php
-phpinfo();die;
 use Symfony\Component\HttpFoundation\Request;
 
 header_remove('X-Powered-By');

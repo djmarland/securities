@@ -355,6 +355,7 @@ AddDefaultCharset utf-8
     RewriteEngine On
     RewriteCond %{HTTPS} !=on
     RewriteCond %{HTTP_HOST} !127
+    RewriteCond %{HTTP_HOST} !isin.app
     RewriteCond %{REMOTE_ADDR} !=::1
     RewriteRule ^(.*)$ https://%{HTTP_HOST}/$1 [R=301,L]
  </IfModule>
