@@ -97,9 +97,9 @@ class SecuritiesService extends Service
 //        Product $product = null
 //    ) {
 //        /*
-//         * select DATE_FORMAT(start_date, '%m') as m, p.name, count(*)
+//         * select DATE_FORMAT(startDate, '%m') as m, p.name, count(*)
 //         * from securities left join products as p on product_id = p.id
-//         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+//         * where company_id = 29 and DATE_FORMAT(startDate, '%Y') = "2012" group by p.name,m;
 //         */
 //        $currencyTbl = 'product';
 //
@@ -111,8 +111,8 @@ class SecuritiesService extends Service
 //            'sum(' . self::TBL . '.moneyRaised) as s',
 //            $currencyTbl
 //        ])
-//            ->where('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year')
-//            ->andWhere(self::TBL . '.start_date <= :end_date')
+//            ->where('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year')
+//            ->andWhere(self::TBL . '.startDate <= :end_date')
 //            ->leftJoin(self::TBL . '.currency', $currencyTbl);
 //
 //        $params =[
@@ -155,7 +155,7 @@ class SecuritiesService extends Service
 //        /*
 //         * select c.name, sum(*)
 //         * from securities left join products as p on product_id = p.id
-//         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+//         * where company_id = 29 and DATE_FORMAT(startDate, '%Y') = "2012" group by p.name,m;
 //         */
 //        $companyTbl = 'company';
 //        $countryTbl = 'country';
@@ -169,8 +169,8 @@ class SecuritiesService extends Service
 //            $companyTbl,
 //            $countryTbl
 //        ])
-//            ->where('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year')
-//            ->andWhere(self::TBL . '.start_date <= :end_date')
+//            ->where('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year')
+//            ->andWhere(self::TBL . '.startDate <= :end_date')
 //            ->leftJoin(self::TBL . '.company', $companyTbl)
 //            ->leftJoin($companyTbl . '.country', $countryTbl);
 //

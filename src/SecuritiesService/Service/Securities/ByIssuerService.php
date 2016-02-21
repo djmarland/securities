@@ -63,9 +63,9 @@ class ByIssuerService extends SecuritiesService
         int $year
     ): array {
         /*
-         * select DATE_FORMAT(start_date, '%m') as m, p.name, count(*)
+         * select DATE_FORMAT(startDate, '%m') as m, p.name, count(*)
          * from securities left join products as p on product_id = p.id
-         * where company_id = 29 and DATE_FORMAT(start_date, '%Y') = "2012" group by p.name,m;
+         * where company_id = 29 and DATE_FORMAT(startDate, '%Y') = "2012" group by p.name,m;
          */
         $productTbl = 'product';
 
@@ -73,11 +73,11 @@ class ByIssuerService extends SecuritiesService
         $qb = $this->where($qb, $issuer);
         $qb->select([
             self::TBL,
-            'DATE_FORMAT(' . self::TBL . '.start_date, \'%m\') as m',
+            'DATE_FORMAT(' . self::TBL . '.startDate, \'%m\') as m',
             'count(' . self::TBL . '.id) as c',
             $productTbl,
         ])
-            ->andWhere('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year');
+            ->andWhere('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year');
 
         $qb->leftJoin(self::TBL . '.product', $productTbl);
         $qb->groupBy($productTbl . '.id', 'm');
