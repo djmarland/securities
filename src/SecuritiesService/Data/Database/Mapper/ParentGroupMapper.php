@@ -3,25 +3,31 @@
 namespace SecuritiesService\Data\Database\Mapper;
 
 use SecuritiesService\Domain\Entity\Entity;
+use SecuritiesService\Domain\Entity\Null\NullParentGroup;
 use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class ParentGroupMapper extends Mapper
 {
-    public function getDomainModel(array $item): Entity
+    public function getDomainModel(array $item = null): Entity
     {
+        if (!$item) {
+            // a group was called, but the result was null
+            return new NullParentGroup();
+        }
+
         $id = new UUID($item['id']);
         $sector = null;
 
-        if (isset($item['sector'])) {
+        if (array_key_exists('sector', $item)) {
             $sector = $this->mapperFactory->createSector()->getDomainModel($item['sector']);
         }
 
-        $currency = new ParentGroup(
+        $group = new ParentGroup(
             $id,
             $item['name'],
             $sector
         );
-        return $currency;
+        return $group;
     }
 }

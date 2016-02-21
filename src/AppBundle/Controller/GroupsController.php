@@ -207,8 +207,12 @@ class GroupsController extends Controller
             throw new HttpException(404, $e->getMessage());
         }
 
+        $industry = null;
         $sector = $group->getSector();
-        $industry = $sector->getIndustry();
+
+        if ($sector) {
+            $industry = $sector->getIndustry();
+        }
 
         // I'm looking at a group, so I need to pass in that group,
         // and it's parent sector + industry

@@ -2,6 +2,8 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use SecuritiesService\Domain\Entity\Null\NullParentGroup;
+use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class Company extends Entity
@@ -28,11 +30,13 @@ class Company extends Entity
         return $this->name;
     }
 
-    public function getParentGroup(): ParentGroup
+    public function getParentGroup()
     {
+        if ($this->parentGroup instanceof NullParentGroup) {
+            return null;
+        }
         if (is_null($this->parentGroup)) {
-            // @todo, use a proper exception
-            throw new \Exception('Tried to get parent group data without requesting it up front');
+            throw new DataNotSetException('Tried to get parent group data without requesting it up front');
         }
         return $this->parentGroup;
     }
@@ -40,8 +44,7 @@ class Company extends Entity
     public function getCountry(): Country
     {
         if (is_null($this->country)) {
-            // @todo, use a proper exception
-            throw new \Exception('Tried to get country data without requesting it up front');
+            throw new DataNotSetException('Tried to get parent group data without requesting it up front');
         }
         return $this->country;
     }

@@ -304,9 +304,16 @@ class IssuersController extends Controller
             throw new HttpException(404, $e->getMessage());
         }
 
+        $sector = null;
+        $industry = null;
+
         $group = $issuer->getParentGroup();
-        $sector = $group->getSector();
-        $industry = $sector->getIndustry();
+        if ($group) {
+            $sector = $group->getSector();
+        }
+        if ($sector) {
+            $industry = $sector->getIndustry();
+        }
 
         // I'm looking at a group, so I need to pass in that issuer,
         // and it's parent group, sector + industry

@@ -2,6 +2,8 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use SecuritiesService\Domain\Entity\Null\NullIndustry;
+use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class Sector extends Entity
@@ -23,11 +25,13 @@ class Sector extends Entity
         return $this->name;
     }
 
-    public function getIndustry(): Industry
+    public function getIndustry()
     {
+        if ($this->industry instanceof NullIndustry) {
+            return null;
+        }
         if (is_null($this->industry)) {
-            // @todo, use a proper exception
-            throw new \Exception('Tried to get industry data without requesting it up front');
+            throw new DataNotSetException('Tried to get industry data without requesting it up front');
         }
         return $this->industry;
     }

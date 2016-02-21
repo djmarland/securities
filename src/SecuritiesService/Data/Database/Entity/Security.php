@@ -16,6 +16,12 @@ class Security extends Entity
     private $name;
     /** @ORM\Column(type="string", length=12, unique=true) */
     private $isin;
+//    /** @ORM\Column(type="string") */
+//    private $market;
+//    /** @ORM\Column(type="string") */
+//    private $tidm;
+//    /** @ORM\Column(type="string") */
+//    private $description;
     /** @ORM\Column(type="float") */
     private $moneyRaised;
     /** @ORM\Column(type="date") */
@@ -40,6 +46,36 @@ class Security extends Entity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getMarket()
+    {
+        return $this->market;
+    }
+
+    public function setMarket($market)
+    {
+        $this->market = $market;
+    }
+
+    public function getTIDM()
+    {
+        return $this->tidm;
+    }
+
+    public function setTIDM($tidm)
+    {
+        $this->tidm = $tidm;
+    }
+
+    public function getDescription()
+    {
+        return $this->description;
+    }
+
+    public function setDescription($description)
+    {
+        $this->description = $description;
     }
 
     public function getIsin()

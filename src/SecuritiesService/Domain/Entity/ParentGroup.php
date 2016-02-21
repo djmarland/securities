@@ -2,6 +2,8 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use SecuritiesService\Domain\Entity\Null\NullSector;
+use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class ParentGroup extends Entity
@@ -25,11 +27,13 @@ class ParentGroup extends Entity
         return $this->name;
     }
 
-    public function getSector(): Sector
+    public function getSector()
     {
+        if ($this->sector instanceof NullSector) {
+            return null;
+        }
         if (is_null($this->sector)) {
-            // @todo, use a proper exception
-            throw new \Exception('Tried to get sector data without requesting it up front');
+            throw new DataNotSetException('Tried to get sector data without requesting it up front');
         }
         return $this->sector;
     }
