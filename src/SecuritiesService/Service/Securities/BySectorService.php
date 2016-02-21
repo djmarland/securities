@@ -44,7 +44,7 @@ class BySectorService extends SecuritiesService
         SecuritiesFilter $filter = null
     ): int {
         $qb = $this->queryForScalar($sector, $filter);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -52,8 +52,8 @@ class BySectorService extends SecuritiesService
         QueryBuilder $qb,
         Sector $sector
     ) {
-        return $qb->andWhere('s.id = :s_id')
-            ->setParameter('s_id', (string) $sector->getId()->getBinary());
+        return $qb->andWhere('s.id = :sId')
+            ->setParameter('sId', (string) $sector->getId()->getBinary());
     }
 
     private function queryForScalar(

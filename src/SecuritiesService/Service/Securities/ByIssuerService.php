@@ -41,7 +41,7 @@ class ByIssuerService extends SecuritiesService
         SecuritiesFilter $filter = null
     ): int {
         $qb = $this->queryForScalar($issuer, $filter);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 

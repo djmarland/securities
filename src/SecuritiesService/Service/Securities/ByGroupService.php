@@ -43,7 +43,7 @@ class ByGroupService extends SecuritiesService
         SecuritiesFilter $filter = null
     ): int {
         $qb = $this->queryForScalar($group, $filter);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -51,8 +51,8 @@ class ByGroupService extends SecuritiesService
         QueryBuilder $qb,
         ParentGroup $group
     ) {
-        return $qb->andWhere('p.id = :group_id')
-            ->setParameter('group_id', (string) $group->getId()->getBinary());
+        return $qb->andWhere('p.id = :groupId')
+            ->setParameter('groupId', (string) $group->getId()->getBinary());
     }
 
     private function queryForScalar(

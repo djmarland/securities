@@ -45,7 +45,7 @@ class ByIndustryService extends SecuritiesService
         SecuritiesFilter $filter = null
     ): int {
         $qb = $this->queryForScalar($industry, $filter);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -53,8 +53,8 @@ class ByIndustryService extends SecuritiesService
         QueryBuilder $qb,
         Industry $industry
     ) {
-        return $qb->andWhere('s.id = :s_id')
-            ->setParameter('s_id', (string) $industry->getId()->getBinary());
+        return $qb->andWhere('s.id = :sId')
+            ->setParameter('sId', (string) $industry->getId()->getBinary());
     }
 
     private function queryForScalar(

@@ -54,7 +54,7 @@ class SecuritiesService extends Service
     public function sumAll(): int
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -85,7 +85,7 @@ class SecuritiesService extends Service
         SecuritiesFilter $filter
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('sum(' . self::TBL . '.money_raised)');
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
         $qb = $filter->apply($qb, self::TBL);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -108,7 +108,7 @@ class SecuritiesService extends Service
 //        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
 //        $qb->select([
 //            self::TBL,
-//            'sum(' . self::TBL . '.money_raised) as s',
+//            'sum(' . self::TBL . '.moneyRaised) as s',
 //            $currencyTbl
 //        ])
 //            ->where('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year')
@@ -165,7 +165,7 @@ class SecuritiesService extends Service
 //        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
 //        $qb->select([
 //            self::TBL,
-//            'sum(' . self::TBL . '.money_raised) as s',
+//            'sum(' . self::TBL . '.moneyRaised) as s',
 //            $companyTbl,
 //            $countryTbl
 //        ])
