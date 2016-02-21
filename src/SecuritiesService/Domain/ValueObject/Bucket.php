@@ -35,69 +35,68 @@ class Bucket
             'key' => '2w',
             'name' => self::FORTNIGHT,
             'lower' => -1,
-            'upper' => self::VALUE_WEEK * 2
+            'upper' => self::VALUE_WEEK * 2,
         ],
         [
             'key' => '1m',
             'name' => self::MONTH,
             'lower' => self::VALUE_WEEK * 2,
-            'upper' => self::VALUE_MONTH
+            'upper' => self::VALUE_MONTH,
         ],
         [
             'key' => '3m',
             'name' => self::THREE_MONTH,
             'lower' => self::VALUE_MONTH,
-            'upper' => self::VALUE_MONTH * 3
+            'upper' => self::VALUE_MONTH * 3,
         ],
         [
             'key' => '6m',
             'name' => self::SIX_MONTH,
             'lower' => self::VALUE_MONTH * 3,
-            'upper' => self::VALUE_MONTH * 6
+            'upper' => self::VALUE_MONTH * 6,
         ],
         [
             'key' => '1y',
             'name' => self::ONE_YEAR,
             'lower' => self::VALUE_MONTH * 6,
-            'upper' => self::VALUE_YEAR
+            'upper' => self::VALUE_YEAR,
         ],
         [
             'key' => '2y',
             'name' => self::TWO_YEARS,
             'lower' => self::VALUE_YEAR,
-            'upper' => self::VALUE_YEAR * 2
+            'upper' => self::VALUE_YEAR * 2,
         ],
         [
             'key' => '5y',
             'name' => self::FIVE_YEARS,
             'lower' => self::VALUE_YEAR * 2,
-            'upper' => self::VALUE_YEAR * 5
+            'upper' => self::VALUE_YEAR * 5,
         ],
         [
             'key' => '10y',
             'name' => self::TEN_YEARS,
             'lower' => self::VALUE_YEAR * 5,
-            'upper' => self::VALUE_YEAR * 10
+            'upper' => self::VALUE_YEAR * 10,
         ],
         [
             'key' => '15y',
             'name' => self::FIFTEEN_YEARS,
             'lower' => self::VALUE_YEAR * 10,
-            'upper' => self::VALUE_YEAR * 15
+            'upper' => self::VALUE_YEAR * 15,
         ],
         [
             'key' => '15yplus',
             'name' => self::FIFTEEN_YEARS_PLUS,
             'lower' => self::VALUE_YEAR * 15,
-            'upper' => null
-        ]
+            'upper' => null,
+        ],
     ];
 
     private $startDate;
-
     private $endDate;
-
     private $name;
+    private $key;
 
     public function __construct(
         DateTime $startDate,
@@ -107,7 +106,6 @@ class Bucket
         $this->endDate = $endDate;
     }
 
-    private $key;
 
     public function getKey(): string
     {
@@ -136,9 +134,14 @@ class Bucket
         return $this->name;
     }
 
+    public function __toString()
+    {
+        return (string) $this->getName();
+    }
+
     private function getOpenBucket()
     {
-        foreach (Bucket::BUCKET_BOUNDARIES  as $bucket) {
+        foreach (Bucket::BUCKET_BOUNDARIES as $bucket) {
             if (!$bucket['upper']) {
                 return $bucket;
             }
@@ -161,7 +164,7 @@ class Bucket
             return strtolower(self::COMPLETE);
         }
 
-        foreach (Bucket::BUCKET_BOUNDARIES  as $bucket) {
+        foreach (Bucket::BUCKET_BOUNDARIES as $bucket) {
             // the first one that is within the bounds wins
             if ($diff >= $bucket['lower']) {
                 if (!$bucket['upper'] || $diff < $bucket['upper']) {
@@ -187,7 +190,7 @@ class Bucket
             return self::COMPLETE;
         }
 
-        foreach (Bucket::BUCKET_BOUNDARIES  as $bucket) {
+        foreach (Bucket::BUCKET_BOUNDARIES as $bucket) {
             // the first one that is within the bounds wins
             if ($diff >= $bucket['lower']) {
                 if (!$bucket['upper'] || $diff < $bucket['upper']) {
@@ -196,10 +199,5 @@ class Bucket
             }
         }
         return self::UNKNOWN;
-    }
-
-    public function __toString()
-    {
-        return (string) $this->getName();
     }
 }

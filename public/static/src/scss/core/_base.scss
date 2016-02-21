@@ -67,3 +67,10 @@ a {
         padding-right: $grid-unit-large;
     }
 }
+
+/* Fix breaking the symfony debug bar */
+.sf-toolbar {
+    img, svg {
+        width: auto;
+    }
+}

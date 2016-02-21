@@ -15,12 +15,10 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         Security $security,
         array $options = [
             'includeLink' => true,
-            'showTitle' => true
+            'showTitle' => true,
         ]
-    )
-    {
+    ) {
         parent::__construct(null, $options);
-
         $this->security = $security;
     }
 
@@ -110,7 +108,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getResidualMaturity():string
     {
-        $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime); // @todo - inject app time
+        $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
         return (string) $bucket;
     }
 

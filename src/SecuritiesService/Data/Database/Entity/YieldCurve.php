@@ -12,6 +12,14 @@ class YieldCurve extends Entity
 {
     /** @ORM\Column(type="integer") */
     private $year;
+    /** @ORM\Column(type="string") */
+    private $type;
+    /** @ORM\Column(type="text",length=5000) */
+    private $dataPoints;
+    /** @ORM\ManyToOne(targetEntity="Currency") */
+    private $currency;
+    /** @ORM\ManyToOne(targetEntity="ParentGroup") */
+    private $parentGroup;
 
     /** Getters/Setters */
     public function getYear()
@@ -24,10 +32,6 @@ class YieldCurve extends Entity
         $this->year = $year;
     }
 
-    /** @ORM\Column(type="string") */
-    private $type;
-
-    /** Getters/Setters */
     public function getType()
     {
         return $this->type;
@@ -38,10 +42,6 @@ class YieldCurve extends Entity
         $this->type = $type;
     }
 
-    /** @ORM\Column(type="text",length=5000) */
-    private $dataPoints;
-
-    /** Getters/Setters */
     public function getDataPoints()
     {
         return $this->dataPoints;
@@ -52,11 +52,6 @@ class YieldCurve extends Entity
         $this->dataPoints = $dataPoints;
     }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Currency")
-     */
-    private $currency;
-
     public function getCurrency()
     {
         return $this->currency;
@@ -66,11 +61,6 @@ class YieldCurve extends Entity
     {
         $this->currency = $currency;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="ParentGroup")
-     */
-    private $parentGroup;
 
     public function getParentGroup()
     {

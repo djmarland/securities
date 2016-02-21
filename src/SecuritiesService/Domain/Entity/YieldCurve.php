@@ -6,6 +6,11 @@ use SecuritiesService\Domain\ValueObject\UUID;
 
 class YieldCurve extends Entity
 {
+
+    private $year;
+    private $currency;
+    private $dataPoints;
+
     public function __construct(
         UUID $id,
         int $year,
@@ -19,21 +24,15 @@ class YieldCurve extends Entity
         $this->dataPoints = $dataPoints;
     }
 
-    private $year;
-
     public function getYear()
     {
         return $this->year;
     }
 
-    private $currency;
-
     public function getCurrency()
     {
         return $this->currency;
     }
-
-    private $dataPoints;
 
     public function getDataPoints()
     {

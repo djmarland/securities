@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
-use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -16,8 +16,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IndustriesController extends Controller
 {
-    use SecurityFilter;
-    use Finder;
+    use SecurityFilterTrait;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {

@@ -6,6 +6,10 @@ use SecuritiesService\Domain\ValueObject\UUID;
 
 class Company extends Entity
 {
+    private $name;
+    private $parentGroup;
+    private $country;
+
     public function __construct(
         UUID $id,
         string $name,
@@ -19,14 +23,10 @@ class Company extends Entity
         $this->country = $country;
     }
 
-    private $name;
-
     public function getName(): string
     {
         return $this->name;
     }
-
-    private $parentGroup;
 
     public function getParentGroup(): ParentGroup
     {
@@ -36,11 +36,6 @@ class Company extends Entity
         }
         return $this->parentGroup;
     }
-
-    /**
-     * @var ParentGroup|null
-     */
-    private $country;
 
     public function getCountry(): Country
     {

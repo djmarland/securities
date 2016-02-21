@@ -2,14 +2,13 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
-use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
-use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
@@ -17,8 +16,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SectorsController extends Controller
 {
-    use SecurityFilter;
-    use Finder;
+    use SecurityFilterTrait;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {

@@ -2,8 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Domain\Entity\Security;
-use AppBundle\Domain\ValueObject\{ID, ISIN};
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 
 class HomeController extends Controller
@@ -30,13 +28,11 @@ class HomeController extends Controller
 
         $this->toView('securities', $securityPresenters);
 
-        $byProduct = [
-            ['Funding Product', 'Number']
-        ];
+        $byProduct = [['Funding Product', 'Number']];
         foreach ($productCounts as $pc) {
             $byProduct[] = [
                 $pc->product->getName(),
-                $pc->count
+                $pc->count,
             ];
         }
         $this->toView('byProduct', $byProduct);

@@ -48,7 +48,7 @@ class YieldCommand extends Command
         $output->writeln('Done');
     }
 
-    function processRow($row)
+    private function processRow($row)
     {
         $type = $row['CURVE_TYPE'];
         $year = $row['YEAR'];
@@ -65,10 +65,10 @@ class YieldCommand extends Command
         $this->em->flush();
     }
 
-    function getDataPoints($row)
+    private function getDataPoints($row)
     {
         $data = [];
-        foreach(range(1,30) as $point) {
+        foreach (range(1, 30) as $point) {
             $value = trim($row[$point], '%');
             if (empty($value)) {
                 $value = null;
@@ -80,7 +80,7 @@ class YieldCommand extends Command
         return json_encode($data);
     }
 
-    function getParentGroup($row)
+    private function getParentGroup($row)
     {
         $name = $row['COMPANY_SECTOR_INDUSTRY'];
         $repo = $this->em->getRepository('SecuritiesService:ParentGroup');
@@ -95,7 +95,7 @@ class YieldCommand extends Command
         throw new \Exception('No such parent group ' . $name);
     }
 
-    function getCurrency($row)
+    private function getCurrency($row)
     {
         $code = $row['CURRENCY'];
         $repo = $this->em->getRepository('SecuritiesService:Currency');

@@ -12,6 +12,8 @@ class ParentGroup extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+    /** @ORM\ManyToOne(targetEntity="Sector") */
+    private $sector;
 
     /** Getters/Setters */
     public function getName()
@@ -23,11 +25,6 @@ class ParentGroup extends Entity
     {
         $this->name = $name;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Sector")
-     */
-    private $sector;
 
     public function getSector()
     {

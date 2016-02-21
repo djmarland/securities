@@ -21,12 +21,12 @@ class SecurityMapper extends Mapper
             $id,
             $isin,
             $item['name'],
-            $item['start_date'],
-            $item['money_raised'],
+            $item['startDate'],
+            $item['moneyRaised'],
             $product,
             $company,
             $currency,
-            $item['maturity_date'],
+            $item['maturityDate'],
             $item['coupon']
         );
         return $security;

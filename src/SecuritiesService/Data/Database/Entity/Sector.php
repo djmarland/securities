@@ -12,6 +12,8 @@ class Sector extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+    /** @ORM\ManyToOne(targetEntity="Industry") */
+    private $industry;
 
     public function getName()
     {
@@ -22,11 +24,6 @@ class Sector extends Entity
     {
         $this->name = $name;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Industry")
-     */
-    private $industry;
 
     public function getIndustry()
     {

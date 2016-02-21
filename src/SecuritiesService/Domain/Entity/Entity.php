@@ -12,16 +12,14 @@ abstract class Entity
 {
     const KEY_PREFIX = null;
 
+    protected $id;
+
     public function __construct(
         UUID $id
     ) {
         $this->id = $id;
     }
 
-    /**
-     * @var string
-     */
-    protected $id;
 
     public function getId(): UUID
     {

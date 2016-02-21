@@ -6,6 +6,9 @@ use SecuritiesService\Domain\ValueObject\UUID;
 
 class Product extends Entity
 {
+    private $name;
+    private $number;
+
     public function __construct(
         UUID $id,
         int $number,
@@ -17,20 +20,10 @@ class Product extends Entity
         $this->number = $number;
     }
 
-    /**
-     * @var string
-     */
-    private $name;
-
     public function getName(): string
     {
         return $this->name;
     }
-
-    /**
-     * @var int
-     */
-    private $number;
 
     public function getNumber(): int
     {

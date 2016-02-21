@@ -3,34 +3,26 @@
 namespace AppBundle\Controller\Traits;
 
 use DateTime;
-use InvalidArgumentException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\Exception\ValidationException;
+use SecuritiesService\Domain\ValueObject\UUID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-trait SecurityFilter
+trait SecurityFilterTrait
 {
     private $filter = [];
-
-    private function getAndCheckId($request, $name)
-    {
-        $queryId = $request->get($name, null);
-        if (!$queryId) {
-            return null;
-        }
-
-        try {
-            $id = new ID($queryId);
-            return $id;
-        } catch (InvalidArgumentException $e) {
-            throw new HttpException(400, 'Invalid Product ID');
-        }
-    }
 
     public function setProductFilter(Request $request)
     {
         $this->filter['activeProduct'] = null;
-        $id = $this->getAndCheckId($request, 'product');
+        $id = $request->get('product', null);
+        if ($id) {
+            try {
+                $id = UUID::createFromString($id);
+            } catch (ValidationException $e) {
+                throw new HttpException(404, $e->getMessage());
+            }
+        }
         $this->filter['products'] = $this->get('app.services.products')
             ->findAll();
         $product = null;
@@ -43,7 +35,7 @@ trait SecurityFilter
             if (!$product) {
                 throw new HttpException(404, 'No such product');
             }
-            $this->filter['activeProduct'] = (string)$product->getId();
+            $this->filter['activeProduct'] = (string) $product->getId();
         }
         $this->toView('filter', $this->filter);
         return $product;
@@ -83,7 +75,7 @@ trait SecurityFilter
         $key = $request->get('bucket', null);
 
         $this->filter['buckets'] = $this->get('app.services.buckets')
-            ->getAll(new DateTime); // @todo - use application time (or re-write buckets)
+            ->getAll(new DateTime()); // @todo - use application time (or re-write buckets)
         $bucket = null;
         if ($key) {
             foreach ($this->filter['buckets'] as $c) {

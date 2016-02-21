@@ -22,13 +22,11 @@ class GroupsService extends Service
             ->where(self::TBL . '.id = :id')
             ->leftJoin(self::TBL . '.sector', $sectorTbl)
             ->leftJoin($sectorTbl . '.industry', $industryTbl)
-            ->setParameters([
-                'id' => $id->getBinary()
-            ]);
+            ->setParameter('id', $id->getBinary());
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
         if (empty($results)) {
-            throw new EntityNotFoundException;
+            throw new EntityNotFoundException();
         }
 
         return reset($results);
@@ -41,15 +39,14 @@ class GroupsService extends Service
         $qb->select(self::TBL)
             ->where('IDENTITY(' . self::TBL . '.sector) = :sector_id')
             ->orderBy(self::TBL . '.name', 'ASC')
-            ->setParameters([
-                'sector_id' => $sector->getId()->getBinary()
-            ]);
+            ->setParameter('sector_id', $sector->getId()->getBinary());
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
 
-    public function findAllInSectors(): array {
+    public function findAllInSectors(): array
+    {
         $sectorTbl = 's';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -60,5 +57,4 @@ class GroupsService extends Service
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
-
 }

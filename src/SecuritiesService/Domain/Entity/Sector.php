@@ -6,6 +6,8 @@ use SecuritiesService\Domain\ValueObject\UUID;
 
 class Sector extends Entity
 {
+    private $name;
+    private $industry;
     public function __construct(
         UUID $id,
         string $name,
@@ -16,18 +18,10 @@ class Sector extends Entity
         $this->name = $name;
         $this->industry = $industry;
     }
-
-    /**
-     * @var string
-     */
-    private $name;
-
     public function getName(): string
     {
         return $this->name;
     }
-
-    private $industry;
 
     public function getIndustry(): Industry
     {

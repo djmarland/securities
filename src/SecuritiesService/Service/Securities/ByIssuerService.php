@@ -54,29 +54,8 @@ class ByIssuerService extends SecuritiesService
         $qb->orderBy(self::TBL . '.isin', 'ASC');
         $qb->setMaxResults($limit);
 
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);;
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
-
-
-    private function where(
-        QueryBuilder $qb,
-        Company $issuer
-    ) {
-        return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
-            ->setParameter('company_id', (string) $issuer->getId()->getBinary());
-    }
-
-    private function queryForScalar(
-        Company $issuer,
-        SecuritiesFilter $filter = null
-    ): QueryBuilder {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        if ($filter) {
-            $qb = $filter->apply($qb, self::TBL);
-        }
-        return $this->where($qb, $issuer);
-    }
-
 
     /* Special Counts */
     public function productCountsByMonthForYear(
@@ -96,16 +75,16 @@ class ByIssuerService extends SecuritiesService
             self::TBL,
             'DATE_FORMAT(' . self::TBL . '.start_date, \'%m\') as m',
             'count(' . self::TBL . '.id) as c',
-            $productTbl
+            $productTbl,
         ])
             ->andWhere('DATE_FORMAT(' . self::TBL . '.start_date, \'%Y\') = :year');
 
         $qb->leftJoin(self::TBL . '.product', $productTbl);
-        $qb->groupBy($productTbl . '.id','m');
+        $qb->groupBy($productTbl . '.id', 'm');
 
         $qb->setParameters([
             'company_id' => (string) $issuer->getId()->getBinary(),
-            'year' => (string) $year
+            'year' => (string) $year,
         ]);
 
         /*
@@ -126,10 +105,28 @@ class ByIssuerService extends SecuritiesService
             }
             $months[$month][(int) $product->getId()->getValue()] = (object) [
                 'product' => $product,
-                'total' => $total
+                'total' => $total,
             ];
         }
         return $months;
     }
 
+    private function where(
+        QueryBuilder $qb,
+        Company $issuer
+    ) {
+        return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
+            ->setParameter('company_id', (string) $issuer->getId()->getBinary());
+    }
+
+    private function queryForScalar(
+        Company $issuer,
+        SecuritiesFilter $filter = null
+    ): QueryBuilder {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        return $this->where($qb, $issuer);
+    }
 }

@@ -3,20 +3,19 @@
 namespace SecuritiesService\Service;
 
 use Doctrine\ORM\Query;
-use Doctrine\ORM\QueryBuilder;
+
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Product;
-use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
+use SecuritiesService\Domain\ValueObject\UUID;
 
 class ProductsService extends Service
 {
     const SERVICE_ENTITY = 'Product';
 
     public function findByID(
-        ID $id
+        UUID $id
     ): Product {
-        return parent::findById($id, self::SERVICE_ENTITY);
+        return parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
     }
 
     public function findAll(): array

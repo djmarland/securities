@@ -15,10 +15,8 @@ class SectorPresenter extends Presenter implements SectorPresenterInterface
     public function __construct(
         Sector $sector,
         array $groups,
-        array $options = [
-        ]
-    )
-    {
+        array $options = []
+    ) {
         parent::__construct(null, $options);
 
         $this->sector = $sector;

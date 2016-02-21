@@ -24,7 +24,7 @@ class YieldCurvesService extends Service
             ->setParameters([
                 'year' => $year,
                 'type' => 'PROXY',
-                'parent_group_id' => (string) $parentGroup->getId()
+                'parent_group_id' => (string) $parentGroup->getId(),
             ]);
 
         return $this->getServiceResult($qb);

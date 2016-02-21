@@ -12,6 +12,8 @@ class Product extends Entity
 {
     /** @ORM\Column(type="integer", length=2) */
     private $number;
+    /** @ORM\Column(type="string", length=255) */
+    private $name;
 
     /** Getters/Setters */
     public function getNumber()
@@ -24,10 +26,6 @@ class Product extends Entity
         $this->number = $number;
     }
 
-    /** @ORM\Column(type="string", length=255) */
-    private $name;
-
-    /** Getters/Setters */
     public function getName()
     {
         return $this->name;

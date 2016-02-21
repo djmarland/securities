@@ -24,13 +24,11 @@ class IssuersService extends Service
             ->leftJoin(self::TBL . '.parentGroup', $groupTbl)
             ->leftJoin($groupTbl . '.sector', $sectorTbl)
             ->leftJoin($sectorTbl . '.industry', $industryTbl)
-            ->setParameters([
-                'id' => $id->getBinary()
-            ]);
+            ->setParameter('id', $id->getBinary());
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
         if (empty($results)) {
-            throw new EntityNotFoundException;
+            throw new EntityNotFoundException();
         }
 
         return reset($results);
@@ -63,15 +61,14 @@ class IssuersService extends Service
         $qb->select(self::TBL)
             ->where('IDENTITY(' . self::TBL . '.parentGroup) = :parent_group_id')
             ->orderBy(self::TBL . '.name', 'ASC')
-            ->setParameters([
-                'parent_group_id' => $group->getId()->getBinary()
-            ]);
+            ->setParameter('parent_group_id', $group->getId()->getBinary());
 
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function findAllInGroups(): array {
+    public function findAllInGroups(): array
+    {
         $groupTbl = 'g';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -91,7 +88,7 @@ class IssuersService extends Service
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->where(self::TBL . '.name LIKE :query')
             ->addOrderBy(self::TBL . '.name', 'ASC')
-            ->setParameters(['query' => '%' . $query . '%']);
+            ->setParameter('query', '%' . $query . '%');
 
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

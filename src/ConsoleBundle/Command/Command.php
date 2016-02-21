@@ -5,21 +5,21 @@ use Symfony\Bundle\FrameworkBundle\Command\ContainerAwareCommand;
 
 abstract class Command extends ContainerAwareCommand
 {
-    protected function csv_to_array($filename='', $delimiter=',')
+    protected function csvToArray($filename = '', $delimiter = ',')
     {
-        if(!file_exists($filename) || !is_readable($filename))
-            return FALSE;
+        if (!file_exists($filename) || !is_readable($filename)) {
+            return false;
+        }
 
-        $header = NULL;
+        $header = null;
         $data = array();
-        if (($handle = fopen($filename, 'r')) !== FALSE)
-        {
-            while (($row = fgetcsv($handle, 1000, $delimiter)) !== FALSE)
-            {
-                if(!$header)
+        if (($handle = fopen($filename, 'r')) !== false) {
+            while (($row = fgetcsv($handle, 1000, $delimiter)) !== false) {
+                if (!$header) {
                     $header = $row;
-                else
+                } else {
                     $data[] = array_combine($header, $row);
+                }
             }
             fclose($handle);
         }

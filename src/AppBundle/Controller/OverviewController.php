@@ -2,12 +2,12 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
+use AppBundle\Controller\Traits\FinderTrait;
 use Symfony\Component\HttpFoundation\Request;
 
 class OverviewController extends Controller
 {
-    use Finder;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {

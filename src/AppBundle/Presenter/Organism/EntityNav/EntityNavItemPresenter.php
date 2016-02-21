@@ -2,7 +2,6 @@
 
 namespace AppBundle\Presenter\Organism\EntityNav;
 
-
 class EntityNavItemPresenter
 {
     private $routeName;
@@ -15,7 +14,7 @@ class EntityNavItemPresenter
         array $routeParams,
         string $text,
         bool $active = false
-    ){
+    ) {
         $this->routeName = $routeName;
         $this->routeParams = $routeParams;
         $this->text = $text;

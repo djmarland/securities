@@ -2,16 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
-use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Group\GroupPresenter;
-use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
-use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +17,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class GroupsController extends Controller
 {
-    use SecurityFilter;
-    use Finder;
+    use SecurityFilterTrait;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -160,14 +158,14 @@ class GroupsController extends Controller
             $hasData = true;
             $yieldData = $result->getDomainModel();
 
-            foreach($yieldData->getDataPoints() as $pointYear => $point) {
+            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
                 $pointYear = (int) $pointYear;
                 if (!isset($graphData[$pointYear])) {
                     $graphData[$pointYear] = [
                         $pointYear,
                         null,
                         null,
-                        null
+                        null,
                     ];
                 }
                 $graphData[$pointYear][$i+1] = $point;

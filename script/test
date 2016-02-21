@@ -1,4 +1,5 @@
 #!/bin/sh
 
 vendor/bin/phpunit
-#vendor/bin/phpcs
+vendor/bin/phpcs
+

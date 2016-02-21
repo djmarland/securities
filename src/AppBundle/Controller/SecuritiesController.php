@@ -2,8 +2,8 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
-use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\SecurityFilterTrait;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
@@ -13,8 +13,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SecuritiesController extends Controller
 {
-    use SecurityFilter;
-    use Finder;
+    use SecurityFilterTrait;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -92,7 +92,7 @@ class SecuritiesController extends Controller
             $security,
             [
                 'showTitle' => false,
-                'includeLink' => false
+                'includeLink' => false,
             ]
         ));
         return $this->renderTemplate('securities:show');

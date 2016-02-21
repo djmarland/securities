@@ -22,13 +22,11 @@ class SecuritiesService extends Service
     {
         $qb = $this->selectWithJoins()
             ->where(self::TBL . '.isin = :isin')
-            ->setParameters([
-                'isin' => $isin
-            ]);
+            ->setParameter('isin', (string) $isin);
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
         if (empty($results)) {
-            throw new EntityNotFoundException;
+            throw new EntityNotFoundException();
         }
 
         return reset($results);
@@ -221,7 +219,7 @@ class SecuritiesService extends Service
         $qb->select([
             self::TBL,
             'count(' . self::TBL . '.id) as c',
-            $productTable
+            $productTable,
         ])
             ->leftJoin(self::TBL . '.product', $productTable);
 
@@ -241,7 +239,7 @@ class SecuritiesService extends Service
             $total = (int) $result['c'];
             $products[] = (object) [
                 'product' => $product,
-                'count' => $total
+                'count' => $total,
             ];
         }
 
@@ -253,8 +251,8 @@ class SecuritiesService extends Service
         int $limit = self::DEFAULT_LIMIT
     ): array {
         $qb = $this->selectWithJoins();
-        $qb->where(self::TBL . '.maturity_date > :end_from')
-            ->orderBy(self::TBL . '.maturity_date', 'ASC')
+        $qb->where(self::TBL . '.maturityDate > :end_from')
+            ->orderBy(self::TBL . '.maturityDate', 'ASC')
             ->setMaxResults($limit)
             ->setParameter('end_from', $dateFrom);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

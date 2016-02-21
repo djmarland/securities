@@ -9,7 +9,7 @@ use SecuritiesService\Domain\Entity\Industry;
 use SecuritiesService\Domain\Entity\ParentGroup;
 use SecuritiesService\Domain\Entity\Sector;
 
-trait Finder
+trait FinderTrait
 {
     public function setFinder(
         Industry $industry = null,

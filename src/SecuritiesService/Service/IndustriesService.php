@@ -3,8 +3,6 @@
 namespace SecuritiesService\Service;
 
 use SecuritiesService\Domain\Entity\Industry;
-use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class IndustriesService extends Service
@@ -17,7 +15,8 @@ class IndustriesService extends Service
         return parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('tbl');
         $qb->orderBy('tbl.name', 'ASC');

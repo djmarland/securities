@@ -6,6 +6,9 @@ use SecuritiesService\Domain\ValueObject\UUID;
 
 class ParentGroup extends Entity
 {
+    private $name;
+    private $sector;
+
     public function __construct(
         UUID $id,
         string $name,
@@ -17,14 +20,10 @@ class ParentGroup extends Entity
         $this->sector = $sector;
     }
 
-    private $name;
-
     public function getName(): string
     {
         return $this->name;
     }
-
-    private $sector;
 
     public function getSector(): Sector
     {

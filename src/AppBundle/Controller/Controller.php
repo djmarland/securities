@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Presenter\MasterPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
 use AppBundle\Security\Visitor;
+use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -12,25 +13,17 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Controller extends BaseController implements ControllerInterface
 {
-    /**
-     * @var int
-     */
-    protected $currentPage = 1;
 
-    /**
-     * @var MasterPresenter
-     */
+    /** @var MasterPresenter */
     public $masterViewPresenter;
 
-    /**
-     * @var Request
-     */
+    /** @var Request */
     public $request;
 
-    /**
-     * Setup common tasks for a controller
-     * @param Request $request
-     */
+    protected $currentPage = 1;
+    protected $appConfig;
+
+    /** Setup common tasks for a controller */
     public function initialize(Request $request)
     {
         $this->request = $request;
@@ -41,53 +34,6 @@ class Controller extends BaseController implements ControllerInterface
         $this->setSearchContext();
     }
 
-    protected function getCurrentPage()
-    {
-        $page = $this->request->get('page', 1);
-
-        // must be an integer string
-        if (
-            strval(intval($page)) !== strval($page) ||
-            $page < 1
-        ) {
-            throw new HttpException(404, 'No such page value');
-        }
-        return (int)$page;
-    }
-
-    protected function setSearchContext()
-    {
-        $search = $this->request->get('q', null);
-        $this->toView('searchContext', $search);
-        $this->toView('searchAutofocus', null);
-    }
-
-    /**
-     * @param int $total Total Results
-     * @param int $currentPage The current page value
-     * @param int $perPage How many per page
-     */
-    protected function setPagination(
-        $total,
-        $currentPage,
-        $perPage
-    ) {
-
-        $pagination = new PaginationPresenter(
-            $total,
-            $currentPage,
-            $perPage,
-            [
-                'hrefPrefix' => '?' . $this->request->getQueryString()
-            ]
-        );
-
-        if (!$pagination->isValid()) {
-            throw new HttpException(404, 'There are not this many pages');
-        }
-
-        $this->toView('pagination', $pagination);
-    }
 
     public function toView(
         string $key,
@@ -98,21 +44,55 @@ class Controller extends BaseController implements ControllerInterface
         return $this;
     }
 
-    /**
-     * @param $key
-     * @return mixed
-     * @throws \AppBundle\Domain\Exception\DataNotSetException
-     */
-    public function fromView($key)
+    public function fromView(string $key)
     {
         return $this->masterViewPresenter->get($key);
     }
-
 
     public function setTitle(string $title): Controller
     {
         $this->masterViewPresenter->setTitle($title);
         return $this;
+    }
+
+    protected function getCurrentPage(): int
+    {
+        $page = $this->request->get('page', 1);
+
+        // must be an integer string
+        if (strval(intval($page)) !== strval($page) ||
+            $page < 1
+        ) {
+            throw new HttpException(404, 'No such page value');
+        }
+        return (int) $page;
+    }
+
+    protected function setSearchContext()
+    {
+        $search = $this->request->get('q', null);
+        $this->toView('searchContext', $search);
+        $this->toView('searchAutofocus', null);
+    }
+
+    protected function setPagination(
+        int $total,
+        int $currentPage,
+        int $perPage
+    ) {
+
+        $pagination = new PaginationPresenter(
+            $total,
+            $currentPage,
+            $perPage,
+            ['hrefPrefix' => '?' . $this->request->getQueryString()]
+        );
+
+        if (!$pagination->isValid()) {
+            throw new HttpException(404, 'There are not this many pages');
+        }
+
+        $this->toView('pagination', $pagination);
     }
 
     protected function renderTemplate($template)
@@ -133,7 +113,7 @@ class Controller extends BaseController implements ControllerInterface
         return $this->render($path, $this->masterViewPresenter->getData());
     }
 
-    protected function getYear(Request $request, $today)
+    protected function getYear(Request $request, DateTimeImmutable $today)
     {
         $year = $request->get('year');
         if (is_null($year)) {

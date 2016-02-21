@@ -39,7 +39,7 @@ class ImportCommand extends Command
 
         $name = $input->getArgument('file');
 
-        $data = $this->csv_to_array($name);
+        $data = $this->csvToArray($name);
         if (!$data) {
             $output->writeln('No such file');
             return;
@@ -60,7 +60,8 @@ class ImportCommand extends Command
         $output->writeln('Done');
     }
 
-    function processRow($row) {
+    private function processRow($row)
+    {
         $isin = $row['ISIN'];
 
         $repo = $this->em->getRepository('SecuritiesService:Security');
@@ -77,9 +78,9 @@ class ImportCommand extends Command
         $security->setCurrency($this->getCurrency($row));
 
         $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
-        $startDate = DateTime::createFromFormat('U',strtotime($row['SECURITY_START_DATE']));
+        $startDate = DateTime::createFromFormat('U', strtotime($row['SECURITY_START_DATE']));
         $security->setStartDate($startDate);
-        $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('U',strtotime($row['MATURITY_DATE'])) : null;
+        $endDate = ($row['MATURITY_DATE'] != 'UNDATED') ? DateTime::createFromFormat('U', strtotime($row['MATURITY_DATE'])) : null;
         $security->setMaturityDate($endDate);
         $security->setCoupon(($row['COUPON_RATE'] != 'N/A') ? floatval($row['COUPON_RATE'])/100 : null);
 
@@ -88,7 +89,7 @@ class ImportCommand extends Command
         return $security;
     }
 
-    function getProduct($row)
+    private function getProduct($row)
     {
         $productNumber = $row['PRA_ITEM_4748'];
         $productName = $row['PRA_ITEM_4748_NAME'];
@@ -107,7 +108,7 @@ class ImportCommand extends Command
         return $product;
     }
 
-    function getCompany($row)
+    private function getCompany($row)
     {
         $name = $row['COMPANY_NAME'];
         $repo = $this->em->getRepository('SecuritiesService:Company');
@@ -125,7 +126,7 @@ class ImportCommand extends Command
         return $company;
     }
 
-    function getCurrency($row)
+    private function getCurrency($row)
     {
         $code = $row['TRADING_CURRENCY'];
         $repo = $this->em->getRepository('SecuritiesService:Currency');
@@ -141,7 +142,7 @@ class ImportCommand extends Command
         return $currency;
     }
 
-    function getParentGroup($row)
+    private function getParentGroup($row)
     {
         $name = $row['COMPANY_PARENT'];
         $repo = $this->em->getRepository('SecuritiesService:ParentGroup');
@@ -158,7 +159,7 @@ class ImportCommand extends Command
         return $parentGroup;
     }
 
-    function getSector($row)
+    private function getSector($row)
     {
         $name = $row['ICB_SECTOR'];
         $repo = $this->em->getRepository('SecuritiesService:Sector');
@@ -175,7 +176,7 @@ class ImportCommand extends Command
         return $sector;
     }
 
-    function getIndustry($row)
+    private function getIndustry($row)
     {
         $name = $row['ICB_INDUSTRY'];
         $repo = $this->em->getRepository('SecuritiesService:Industry');
@@ -192,7 +193,7 @@ class ImportCommand extends Command
     }
 
 
-    function getCountry($row)
+    private function getCountry($row)
     {
         $countryName = $row['COUNTRY_OF_INCORPORATION'];
 
@@ -212,7 +213,7 @@ class ImportCommand extends Command
         return $country;
     }
 
-    function getRegion($row)
+    private function getRegion($row)
     {
         $name = $row['WORLD_REGION'];
         $repo = $this->em->getRepository('SecuritiesService:Region');

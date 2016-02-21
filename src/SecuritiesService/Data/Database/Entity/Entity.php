@@ -14,15 +14,11 @@ abstract class Entity
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    protected $created_at;
+    /** @ORM\Column(type="datetime", nullable=false) */
+    protected $createdAt;
 
-    /**
-     * @ORM\Column(type="datetime", nullable=false)
-     */
-    protected $updated_at;
+    /* @ORM\Column(type="datetime", nullable=false) */
+    protected $updatedAt;
 
     public function __construct()
     {
@@ -38,12 +34,12 @@ abstract class Entity
 
     public function getCreatedAt()
     {
-        return $this->created_at;
+        return $this->createdAt;
     }
 
     public function getUpdatedAt()
     {
-        return $this->updated_at;
+        return $this->updatedAt;
     }
 
     /**
@@ -53,8 +49,8 @@ abstract class Entity
      */
     public function onCreate()
     {
-        $this->created_at = new \DateTime();
-        $this->updated_at = new \DateTime();
+        $this->createdAt = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 
     /**
@@ -64,6 +60,6 @@ abstract class Entity
      */
     public function onUpdate()
     {
-        $this->updated_at = new \DateTime();
+        $this->updatedAt = new \DateTime();
     }
 }

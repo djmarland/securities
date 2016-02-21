@@ -29,7 +29,7 @@ class ConstructorTest extends PHPUnit_Framework_TestCase
         return  [
             [''],
             ['12345678901'],
-            ['1234567890123']
+            ['1234567890123'],
         ];
     }
 }

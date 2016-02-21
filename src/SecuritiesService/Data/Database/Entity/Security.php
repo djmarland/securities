@@ -14,6 +14,22 @@ class Security extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+    /** @ORM\Column(type="string", length=12, unique=true) */
+    private $isin;
+    /** @ORM\Column(type="float") */
+    private $moneyRaised;
+    /** @ORM\Column(type="date") */
+    private $startDate;
+    /** @ORM\Column(type="date", nullable=true) */
+    private $maturityDate;
+    /** @ORM\Column(type="float", nullable=true) */
+    private $coupon;
+    /** @ORM\ManyToOne(targetEntity="Product") */
+    private $product;
+    /** @ORM\ManyToOne(targetEntity="Company") */
+    private $company;
+    /** @ORM\ManyToOne(targetEntity="Currency") */
+    private $currency;
 
     /** Getters/Setters */
     public function getName()
@@ -26,9 +42,6 @@ class Security extends Entity
         $this->name = $name;
     }
 
-    /** @ORM\Column(type="string", length=12, unique=true) */
-    private $isin;
-
     public function getIsin()
     {
         return $this->isin;
@@ -39,49 +52,35 @@ class Security extends Entity
         $this->isin = $isin;
     }
 
-
-
-    /** @ORM\Column(type="float") */
-    private $money_raised;
-
     public function getMoneyRaised()
     {
-        return $this->money_raised;
+        return $this->moneyRaised;
     }
 
-    public function setMoneyRaised($money_raised)
+    public function setMoneyRaised($moneyRaised)
     {
-        $this->money_raised = $money_raised;
+        $this->moneyRaised = $moneyRaised;
     }
-
-    /** @ORM\Column(type="date") */
-    private $start_date;
 
     public function getStartDate()
     {
-        return $this->start_date;
+        return $this->startDate;
     }
 
-    public function setStartDate($start_date)
+    public function setStartDate($startDate)
     {
-        $this->start_date = $start_date;
+        $this->startDate = $startDate;
     }
-
-    /** @ORM\Column(type="date", nullable=true) */
-    private $maturity_date;
 
     public function getMaturityDate()
     {
-        return $this->maturity_date;
+        return $this->maturityDate;
     }
 
-    public function setMaturityDate($maturity_date)
+    public function setMaturityDate($maturityDate)
     {
-        $this->maturity_date = $maturity_date;
+        $this->maturityDate = $maturityDate;
     }
-
-    /** @ORM\Column(type="float", nullable=true) */
-    private $coupon;
 
     public function getCoupon()
     {
@@ -93,11 +92,6 @@ class Security extends Entity
         $this->coupon = $coupon;
     }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Product")
-     */
-    private $product;
-
     public function getProduct()
     {
         return $this->product;
@@ -108,11 +102,6 @@ class Security extends Entity
         $this->product = $product;
     }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Company")
-     */
-    private $company;
-
     public function getCompany()
     {
         return $this->company;
@@ -122,11 +111,6 @@ class Security extends Entity
     {
         $this->company = $company;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Currency")
-     */
-    private $currency;
 
     public function getCurrency()
     {

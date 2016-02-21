@@ -11,21 +11,24 @@ abstract class Presenter
     const TWIG_SUFFIX = '.html.twig';
 
     /**
-     * @var object
+     * A unique generated ID for this object
+     * Only relevant for page renders that need a reference
+     *
+     * @var
      */
+    protected $uniqueId;
     protected $domainModel;
-
-    /**
-     * @var array
-     */
     protected $options = [
-        'classType' => 'Presenter'
+        'classType' => 'Presenter',
     ];
 
     /**
-     * @param object $domainModel optional
-     * @param array  $options     optional
+     * @var string
+     * Suffix for template, if there is a variation
+     * Call setTemplateVariation in child class to setup
      */
+    private $templateVariantSuffix = '';
+
     public function __construct(
         $domainModel = null,
         $options = []
@@ -36,9 +39,8 @@ abstract class Presenter
 
     /**
      * Convert the options to an object and return
-     * @return object
      */
-    public function getOptions()
+    public function getOptions(): \stdClass
     {
         return (object) $this->options;
     }
@@ -47,28 +49,64 @@ abstract class Presenter
      * Get the base property that the twig template will be expecting
      * to find it's variables under. Matches the presenter name (e.g item).
      * Therefore the Twig template would use {{ item.title }}
-     * @return string
      */
-    public function getBase()
+    public function getBase(): string
     {
         $classPath = $this->getClassPath();
         $parts = explode('/', $classPath);
         return end($parts);
     }
 
-    public function getVars()
+    public function getVars(): array
     {
         return [
-            $this->getBase() => $this
+            $this->getBase() => $this,
         ];
+    }
+
+    /**
+     * Get or generate a unique ID. Once generated once the same one will be used
+     * Only used for unique references in a single render
+     */
+    public function getUniqueID(): string
+    {
+        if (!$this->uniqueId) {
+            $parts = explode('\\', get_called_class());
+
+            $class = end($parts);
+            $this->uniqueId = 'View-' . $class . '-' . mt_rand();
+        }
+        return $this->uniqueId;
+    }
+
+    /**
+     * Full path to the twig template the presenter class renders
+     */
+    public function getTemplatePath(): string
+    {
+        return '@' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
+    }
+
+    /**
+     * Set the twig template suffix
+     * This can be used by Presenter classes in case they need to
+     * suffix their own variations. item-reversed for example
+     * would be set by calling setTemplateSuffix('reversed')
+     * The dash separation is added automatically
+     */
+    protected function setTemplateVariation($templateVariantSuffix = ''): string
+    {
+        if (empty($templateVariantSuffix)) {
+            $this->templateVariantSuffix = '';
+        }
+        $this->templateVariantSuffix = '-' . $templateVariantSuffix;
     }
 
     /**
      * Auto calculates the path to the Presenter Class
      * So that every presenter doesn't need to restate its template path and base
-     * @return string
      */
-    private function getClassPath()
+    private function getClassPath(): string
     {
         $className = get_called_class();
         // strip off the namespace
@@ -83,60 +121,5 @@ abstract class Presenter
         $parts[] = strtolower($last);
         // Recombobulate with forward slashes
         return implode('/', $parts);
-    }
-
-    /**
-     * @var string
-     * Suffix for template, if there is a variation
-     * Call setTemplateVariation in child class to setup
-     */
-    private $templateVariantSuffix = '';
-
-    /**
-     * Set the twig template suffix
-     * This can be used by Presenter classes in case they need to
-     * suffix their own variations. programme-reversed for example
-     * would be set by calling setTemplateSuffix('reversed')
-     * The dash separation is added automatically
-     * @return string
-     */
-    protected function setTemplateVariation($templateVariantSuffix = '')
-    {
-        if (empty($templateVariantSuffix)) {
-            $this->templateVariantSuffix = '';
-        }
-        $this->templateVariantSuffix = '-' . $templateVariantSuffix;
-    }
-    /**
-     * Full path to the twig template the presenter class renders
-     * @return string
-     */
-    public function getTemplatePath()
-    {
-        return '@' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
-    }
-
-    /**
-     * A unique generated ID for this object
-     * Only relevant for page renders that need a reference
-     *
-     * @var
-     */
-    protected $uniqueId;
-
-    /**
-     * Get or generate a unique ID. Once generated once the same one will be used
-     * Only used for unique references in a single render
-     * @return string
-     */
-    public function getUniqueID()
-    {
-        if (!$this->uniqueId) {
-            $parts = explode('\\', get_called_class());
-
-            $class = end($parts);
-            $this->uniqueId = 'View-' . $class . '-' . mt_rand();
-        }
-        return $this->uniqueId;
     }
 }

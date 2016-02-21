@@ -14,16 +14,16 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
 
     private $tabs = [
         'show' => [
-            'text' => 'Overview'
+            'text' => 'Overview',
         ],
         'securities' => [
-            'text' => 'Securities'
+            'text' => 'Securities',
         ],
         'maturity_profile' => [
-            'text' => 'Maturity profile'
+            'text' => 'Maturity profile',
         ],
         'issuance' => [
-            'text' => 'Issuance'
+            'text' => 'Issuance',
         ],
     ];
 
@@ -57,9 +57,7 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
 
     private function getRouteParams()
     {
-        return [
-            $this->getTypeNameFromEntity() . '_id' => $this->domainModel->getId()
-        ];
+        return [$this->getTypeNameFromEntity() . '_id' => $this->domainModel->getId()];
     }
 
     private function getTypeNameFromEntity()

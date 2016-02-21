@@ -12,6 +12,10 @@ class Company extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+    /** @ORM\ManyToOne(targetEntity="Country") */
+    private $country;
+    /** @ORM\ManyToOne(targetEntity="ParentGroup") */
+    private $parentGroup;
 
     /** Getters/Setters */
     public function getName()
@@ -24,11 +28,6 @@ class Company extends Entity
         $this->name = $name;
     }
 
-    /**
-     * @ORM\ManyToOne(targetEntity="Country")
-     */
-    private $country;
-
     public function getCountry()
     {
         return $this->country;
@@ -38,11 +37,6 @@ class Company extends Entity
     {
         $this->country = $country;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="ParentGroup")
-     */
-    private $parentGroup;
 
     public function getParentGroup()
     {

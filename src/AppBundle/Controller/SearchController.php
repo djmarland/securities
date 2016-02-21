@@ -4,7 +4,8 @@ namespace AppBundle\Controller;
 
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
-use InvalidArgumentException;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -34,15 +35,15 @@ class SearchController extends Controller
                 if ($single->hasResult()) {
                     // if there was an exact match, just send you straight there
                     return $this->redirectToRoute(
-                        'securities_show',
-                        [
-                            'isin' => $single->getDomainModel()->getIsin()
-                        ]
+                        'security_show',
+                        ['isin' => $single->getDomainModel()->getIsin()]
                     );
                 }
 
-            } catch (InvalidArgumentException $e) {
+            } catch (ValidationException $e) {
                 // the given query was not an ISIN, move on
+            } catch (EntityNotFoundException $e) {
+                // ISIN was not found, move on
             }
 
 
@@ -57,7 +58,7 @@ class SearchController extends Controller
             }
 
             $this->toView('securities', $securityPresenters);
-            $this->toView('hasSecurities',!empty($securities));
+            $this->toView('hasSecurities', !empty($securities));
 
             $issuers = $this->get('app.services.issuers')
                 ->search($query, 20, 1);

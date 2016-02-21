@@ -13,6 +13,9 @@ class Country extends Entity
     /** @ORM\Column(type="string", length=255) */
     private $name;
 
+    /** @ORM\ManyToOne(targetEntity="Region") */
+    private $region;
+
     /** Getters/Setters */
     public function getName()
     {
@@ -23,11 +26,6 @@ class Country extends Entity
     {
         $this->name = $name;
     }
-
-    /**
-     * @ORM\ManyToOne(targetEntity="Region")
-     */
-    private $region;
 
     public function getRegion()
     {

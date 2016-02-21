@@ -15,10 +15,8 @@ class IndustryPresenter extends Presenter implements IndustryPresenterInterface
     public function __construct(
         Industry $industry,
         array $sectors,
-        array $options = [
-        ]
-    )
-    {
+        array $options = []
+    ) {
         parent::__construct(null, $options);
 
         $this->industry = $industry;

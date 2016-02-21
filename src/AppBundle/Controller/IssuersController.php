@@ -2,15 +2,14 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\Finder;
-use AppBundle\Controller\Traits\SecurityFilter;
+use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
-use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
@@ -19,8 +18,8 @@ use DateTimeImmutable;
 
 class IssuersController extends Controller
 {
-    use SecurityFilter;
-    use Finder;
+    use SecurityFilterTrait;
+    use FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -157,21 +156,21 @@ class IssuersController extends Controller
             $this->setBucketFilter($request)
         );
 
-        foreach($products as $product) {
+        foreach ($products as $product) {
             $rowData = (object) [
                 'product' => $product,
                 'columns' => [],
-                'total' => 0
+                'total' => 0,
             ];
-            foreach($buckets as $key => $bucket) {
+            foreach ($buckets as $key => $bucket) {
                 $amount = $this->get('app.services.securities_by_issuer')->sum(
                     $issuer,
                     $filter
                 );
                 $rowData->total += $amount;
                 $empty = (object) [
-                    'bucket'=> $bucket,
-                    'amount' => 0
+                    'bucket' => $bucket,
+                    'amount' => 0,
                 ];
                 if (!isset($rowData->columns[$key])) {
                     $rowData->columns[$key] = $empty;
@@ -212,7 +211,7 @@ class IssuersController extends Controller
                     'issuer_issuance',
                     [
                         'issuer_id' => $issuer->getId(),
-                        'year' => $year
+                        'year' => $year,
                     ]
                 )
             );
@@ -225,20 +224,20 @@ class IssuersController extends Controller
         $products = [];
         // extract the products from the results
         foreach ($results as $month) {
-            foreach($month as $monthValue) {
+            foreach ($month as $monthValue) {
                 $products[$monthValue->product->getId()->getValue()] = $monthValue->product;
             }
         }
 
         $productCounts = [];
         $graphData = [
-            array_map(function($product) {
+            array_map(function ($product) {
                 return $product->getName();
-            }, $products)
+            }, $products),
         ];
         array_unshift($graphData[0], 'Month');
         $graphData[0][] = (object) [
-            'role' => 'annotation'
+            'role' => 'annotation',
         ];
         $monthCounts = [];
 
@@ -260,9 +259,9 @@ class IssuersController extends Controller
         $hasData = !empty($products);
         if ($hasData) {
             foreach ($products as $product) {
-                $productYear = (object)[
+                $productYear = (object) [
                     'product' => $product,
-                    'months' => []
+                    'months' => [],
                 ];
                 foreach ($months as $month => $name) {
                     $count = $results[$month][$product->getId()->getValue()]->total ?? 0;
@@ -276,9 +275,7 @@ class IssuersController extends Controller
             }
 
             foreach ($months as $num => $month) {
-                $row = [
-                    $month
-                ];
+                $row = [$month];
                 $graphData[] = array_merge($row, $monthCounts[$num], ['']);
             }
         }
@@ -324,7 +321,7 @@ class IssuersController extends Controller
     {
         // @todo - calculate valid years for this issuer
         return [
-            2016, 2015, 2014, 2013, 2012
+            2016, 2015, 2014, 2013, 2012,
         ];
     }
 }

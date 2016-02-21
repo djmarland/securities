@@ -15,10 +15,8 @@ class GroupPresenter extends Presenter implements GroupPresenterInterface
     public function __construct(
         ParentGroup $group,
         array $companies,
-        array $options = [
-        ]
-    )
-    {
+        array $options = []
+    ) {
         parent::__construct(null, $options);
 
         $this->group = $group;

@@ -12,12 +12,9 @@ class IssuerPresenter extends Presenter implements IssuerPresenterInterface
 
     public function __construct(
         Company $issuer,
-        array $options = [
-        ]
-    )
-    {
+        array $options = []
+    ) {
         parent::__construct(null, $options);
-
         $this->issuer = $issuer;
     }
 

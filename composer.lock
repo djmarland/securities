@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "f9519fcd73c6d9b36eb319bcad3e8966",
-    "content-hash": "07116932514f67f312e6c117c4099049",
+    "hash": "ba5948bc0741a74492486d2d5b6c735d",
+    "content-hash": "91e7f907a4521bc7f6dc2ee1aa983571",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -2056,6 +2056,52 @@
         }
     ],
     "packages-dev": [
+        {
+            "name": "escapestudios/symfony2-coding-standard",
+            "version": "2.9.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/escapestudios/Symfony2-coding-standard.git",
+                "reference": "c91624f1bf4a5fbf6bf7c796c541f15d3763bc94"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/escapestudios/Symfony2-coding-standard/zipball/c91624f1bf4a5fbf6bf7c796c541f15d3763bc94",
+                "reference": "c91624f1bf4a5fbf6bf7c796c541f15d3763bc94",
+                "shasum": ""
+            },
+            "require": {
+                "squizlabs/php_codesniffer": "~2.0"
+            },
+            "type": "coding-standard",
+            "extra": {
+                "branch-alias": {
+                    "dev-master": "2.x-dev"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Joos",
+                    "email": "david.joos@escapestudios.com"
+                },
+                {
+                    "name": "Community contributors",
+                    "homepage": "https://github.com/escapestudios/Symfony2-coding-standard/graphs/contributors"
+                }
+            ],
+            "description": "CodeSniffer ruleset for the Symfony2 coding standard",
+            "homepage": "https://github.com/escapestudios/Symfony2-coding-standard",
+            "keywords": [
+                "Coding Standard",
+                "Symfony2",
+                "phpcs"
+            ],
+            "time": "2016-01-22 12:43:53"
+        },
         {
             "name": "myclabs/deep-copy",
             "version": "1.5.0",

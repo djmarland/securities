@@ -21,7 +21,8 @@ class CurrenciesService extends Service
         // @todo - currencies should use codes
     }
 
-    public function findAll(): array {
+    public function findAll(): array
+    {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL);
         $qb->orderBy(self::TBL . '.code', 'ASC');

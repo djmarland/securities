@@ -6,6 +6,8 @@ use SecuritiesService\Domain\Exception\ValidationException;
 
 class ISIN
 {
+    private $isin;
+
     public function __construct(
         string $isin
     ) {
@@ -14,8 +16,6 @@ class ISIN
         }
         $this->isin = $isin;
     }
-
-    private $isin;
 
     public function getIsin(): string
     {

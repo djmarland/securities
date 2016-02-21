@@ -12,8 +12,7 @@ class FinderPresenter extends Presenter
     public function __construct(
         array $items,
         bool $initial = true
-    )
-    {
+    ) {
         parent::__construct(null, []);
         $this->items = $items;
         $this->initial = $initial;

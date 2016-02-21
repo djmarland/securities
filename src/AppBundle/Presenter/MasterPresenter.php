@@ -2,7 +2,6 @@
 
 namespace AppBundle\Presenter;
 
-
 /**
  * Class MasterPresenter
  * The entire set of page data is passed into this presenter
@@ -11,16 +10,12 @@ class MasterPresenter extends Presenter
 {
 
     private $data = [];
-
+    private $appConfig;
     private $meta = [
         'title' => '',
         'fullTitle' => '',
-        'siteTitle' => ''
+        'siteTitle' => '',
     ];
-
-    private $title = '';
-
-    private $appConfig;
 
     public function __construct($appConfig)
     {
@@ -31,19 +26,14 @@ class MasterPresenter extends Presenter
         $this->meta['siteTitle'] = $this->appConfig['title'];
     }
 
-    /**
-     * @param $key string
-     * @param $value mixed
-     * @param $allowedInFeed boolean whether this data should be public in feeds
-     */
     public function set(
-        $key,
+        string $key,
         $value,
-        $allowedInFeed = true
+        bool $allowedInFeed = true
     ) {
         $this->data[$key] = (object) [
             'data' => $value,
-            'inFeed' => $allowedInFeed
+            'inFeed' => $allowedInFeed,
         ];
     }
 
@@ -52,15 +42,13 @@ class MasterPresenter extends Presenter
         if (isset($this->data[$key])) {
             return $this->data[$key]->data;
         }
-        throw new \Exception; // todo - use a custom one
+        throw new \Exception(); // todo - use a custom one
     }
 
     public function getData()
     {
         // meta always present
-        $data = [
-            'meta' => $this->meta
-        ];
+        $data = ['meta' => $this->meta];
         ksort($this->data);
         foreach ($this->data as $key => $value) {
             $data[$key] = $value->data;
@@ -70,9 +58,7 @@ class MasterPresenter extends Presenter
 
     public function getFeedData()
     {
-        $data = (object) [
-            'meta' => (object) $this->meta
-        ];
+        $data = (object) ['meta' => (object) $this->meta];
         ksort($this->data);
         foreach ($this->data as $key => $value) {
             if ($value->inFeed) {

@@ -18,7 +18,8 @@ class UUID
 
     public static function createFromString($string)
     {
-        if (!UuidProvider::isValid($string)) {
+        $valid = UuidProvider::isValid($string);
+        if (!$valid) {
             throw new ValidationException('Invalid ID');
         }
         return new self(UuidProvider::fromString($string));
@@ -29,7 +30,7 @@ class UUID
         return $this->uuid->getBytes();
     }
 
-    public function getValue(): UuidProvider
+    public function getValue(): UuidProviderInterface
     {
         return $this->uuid;
     }

@@ -20,13 +20,11 @@ class SectorsService extends Service
         $qb->select(self::TBL, $industryTbl)
             ->where(self::TBL . '.id = :id')
             ->leftJoin(self::TBL . '.industry', $industryTbl)
-            ->setParameters([
-                'id' => $id->getBinary()
-            ]);
+            ->setParameter('id', $id->getBinary());
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
         if (empty($results)) {
-            throw new EntityNotFoundException;
+            throw new EntityNotFoundException();
         }
 
         return reset($results);
@@ -56,9 +54,7 @@ class SectorsService extends Service
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)')
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
-            ->setParameters([
-                'industry_id' => $industry->getId()->getBinary()
-            ]);
+            ->setParameter('industry_id', $industry->getId()->getBinary());
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -71,14 +67,13 @@ class SectorsService extends Service
         $qb->select(self::TBL)
             ->where('IDENTITY(' . self::TBL . '.industry) = :industry_id')
             ->orderBy(self::TBL . '.name', 'ASC')
-            ->setParameters([
-                'industry_id' => $industry->getId()->getBinary()
-            ]);
+            ->setParameter('industry_id', $industry->getId()->getBinary());
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function findAllInIndustries(): array {
+    public function findAllInIndustries(): array
+    {
         $industryTbl = 'i';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);

@@ -18,8 +18,7 @@ class FinderItemPresenter extends Presenter
         bool $active,
         string $listName = null,
         array $items = null
-    )
-    {
+    ) {
         parent::__construct(null, []);
 
         $this->url = $url;
@@ -52,12 +51,12 @@ class FinderItemPresenter extends Presenter
         return null;
     }
 
-    public function getHeading()
+    public function getHeading(): string
     {
         return $this->listName;
     }
 
-    public function getClass()
+    public function getClass(): string
     {
         return ($this->isActive()) ? 'finder__active' : '';
     }

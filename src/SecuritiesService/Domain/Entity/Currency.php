@@ -7,6 +7,8 @@ use DateTime;
 
 class Currency extends Entity
 {
+    private $code;
+
     public function __construct(
         UUID $id,
         string $code
@@ -15,11 +17,6 @@ class Currency extends Entity
 
         $this->code = $code;
     }
-
-    /**
-     * @var string
-     */
-    private $code;
 
     public function getCode(): string
     {

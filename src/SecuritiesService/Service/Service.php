@@ -7,7 +7,6 @@ use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\ID;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 abstract class Service
@@ -33,7 +32,8 @@ abstract class Service
             ->getRepository('SecuritiesService:' . $name);
     }
 
-    protected function getQueryBuilder(string $name): QueryBuilder {
+    protected function getQueryBuilder(string $name): QueryBuilder
+    {
         $entity = $this->getEntity($name);
         return $entity->createQueryBuilder(self::TBL);
     }
@@ -59,7 +59,7 @@ abstract class Service
         $qb->select(self::TBL)
             ->where(self::TBL . '.id = :id')
             ->setParameters([
-                'id' => $id->getBinary()
+                'id' => $id->getBinary(),
             ]);
 
         $results = $this->getDomainFromQuery($qb, $type);

@@ -10,6 +10,18 @@ use DateTime;
 
 class Security extends Entity
 {
+    private $name;
+    private $isin;
+    private $startDate;
+    private $maturityDate;
+    private $coupon;
+    private $moneyRaised;
+    private $product;
+    private $currency;
+    private $company;
+    private $contractualBucket;
+    private $residualBucket;
+
     public function __construct(
         UUID $id,
         ISIN $isin,
@@ -35,97 +47,51 @@ class Security extends Entity
         $this->coupon = $coupon;
     }
 
-    /**
-     * @var string
-     */
-    private $name;
 
     public function getName(): string
     {
         return $this->name;
     }
 
-    /**
-     * @var string
-     */
-    private $isin;
-
     public function getIsin(): string
     {
         return $this->isin;
     }
-
-    /**
-     * @var DateTime
-     */
-    private $startDate;
 
     public function getStartDate(): DateTime
     {
         return $this->startDate;
     }
 
-    /**
-     * @var DateTime|null
-     */
-    private $maturityDate;
-
     public function getMaturityDate()
     {
         return $this->maturityDate;
     }
-
-    /**
-     * @var float
-     */
-    private $coupon;
 
     public function getCoupon()
     {
         return $this->coupon;
     }
 
-    /**
-     * @var float
-     */
-    private $moneyRaised;
-
     public function getMoneyRaised(): float
     {
         return $this->moneyRaised;
     }
-
-    /**
-     * @var Product
-     */
-    private $product;
 
     public function getProduct(): Product
     {
         return $this->product;
     }
 
-    /**
-     * @var Currency
-     */
-    private $currency;
-
     public function getCurrency(): Currency
     {
         return $this->currency;
     }
 
-    /**
-     * @var Company
-     */
-    private $company;
-
     public function getCompany(): Company
     {
         return $this->company;
     }
-
-    private $contractualBucket;
 
     public function getContractualMaturityBucket()
     {
@@ -138,8 +104,6 @@ class Security extends Entity
         }
         return $this->contractualBucket;
     }
-
-    private $residualBucket;
 
     public function getResidualMaturityBucketForDate(DateTime $startDate) //@todo - use DateTime immutable everywhere
     {
