@@ -32,11 +32,11 @@ class SearchController extends Controller
                 $single = $this->get('app.services.securities')
                     ->findByIsin($isin);
 
-                if ($single->hasResult()) {
+                if ($single) {
                     // if there was an exact match, just send you straight there
                     return $this->redirectToRoute(
                         'security_show',
-                        ['isin' => $single->getDomainModel()->getIsin()]
+                        ['isin' => $single->getIsin()]
                     );
                 }
 
