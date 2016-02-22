@@ -51,11 +51,11 @@ class SecuritiesService extends Service
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function sumAll(): int
+    public function sumAll(): float
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     /* Filtered */

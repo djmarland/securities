@@ -43,10 +43,10 @@ class ByIndustryService extends SecuritiesService
     public function sum(
         Industry $industry,
         SecuritiesFilter $filter = null
-    ): int {
+    ): float {
         $qb = $this->queryForScalar($industry, $filter);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function issuanceYears(

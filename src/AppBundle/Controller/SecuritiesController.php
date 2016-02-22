@@ -29,10 +29,14 @@ class SecuritiesController extends Controller
 
         $filter = $this->setFilter($request);
 
-        $total = $this->get('app.services.securities')
+
+        $securitiesService = $this->get('app.services.securities');
+
+        $total = $securitiesService
             ->countAllFiltered(
                 $filter
             );
+        $totalRaised = 0;
 
         $securities = [];
         if ($total) {
@@ -42,6 +46,7 @@ class SecuritiesController extends Controller
                     $perPage,
                     $currentPage
                 );
+            $totalRaised = $securitiesService->sumAll($filter);
         }
 
         $securityPresenters = [];
@@ -52,6 +57,7 @@ class SecuritiesController extends Controller
         }
 
         $this->setTitle('Securities');
+        $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
 

@@ -48,7 +48,7 @@ class SearchController extends Controller
 
 
             $securities = $this->get('app.services.securities_search')
-                ->byName($query, 20, 1);
+                ->byName($query, 100, 1);
 
             $securityPresenters = [];
             if (!empty($securities)) {
@@ -61,7 +61,7 @@ class SearchController extends Controller
             $this->toView('hasSecurities', !empty($securities));
 
             $issuers = $this->get('app.services.issuers')
-                ->search($query, 20, 1);
+                ->search($query, 100, 1);
 
             $issuerPresenters = [];
             if (!empty($issuers)) {

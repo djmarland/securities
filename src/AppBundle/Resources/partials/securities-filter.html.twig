@@ -1,22 +1,27 @@
 <form method="get">
-    <div class="grid">
+    <div class="grid g-unit">
+        {% if filter.activeIssueDate %}
         <div class="g">
-            {% if filter.activeIssueDate %}
-                <div class="message text--center">
-                    Showing only securities issued between
-                    {{ filter.activeIssueDate.start.format('d M Y') }} and  {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
-                    <button type="submit" class="btn">X Remove date filter</button>
-                </div>
-            {% endif %}
+            <div class="message text--center">
+                Showing only securities issued between
+                {{ filter.activeIssueDate.start.format('d M Y') }} and
+                {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
+                <button type="submit" class="btn">X Remove date filter</button>
+            </div>
         </div>
-        <div class="g 1/4@xl">
-            <h2 class="c">Filter:</h2>
+        {% endif %}
+        <div class="g 3/7@xl">
+            <p>
+                The securities list shows all issued securities, with upcoming
+                maturities first. Use the filter to narrow the query.
+            </p>
         </div>
-        <div class="g 3/4@xl">
-            <div>
+        <div class="g 4/7@xl">
+            <div class="text--right">
+                <h3 class="c invisible">Filter:</h3>
                 <p>
                     <label>
-                    Product: <select name="product">
+                    <strong>Product: </strong><select name="product">
                         <option value="">All</option>
                         {% for product in filter.products %}
                             <option value="{{ product.number }}"
@@ -27,10 +32,8 @@
                         {% endfor %}
                     </select>
                     </label>
-                </p>
-                <p>
                     <label>
-                        Currency: <select name="currency">
+                        <strong>Currency: </strong><select name="currency">
                             <option value="">All</option>
                             {% for currency in filter.currencies %}
                                 <option value="{{ currency.code }}"
@@ -41,7 +44,6 @@
                             {% endfor %}
                         </select>
                     </label>
-                </p>
                 {#<p>
                     <label>
                         Maturity Date: <select name="bucket">
@@ -56,9 +58,7 @@
                         </select>
                     </label>
                 </p>#}
-                <p>
-                    <button type="submit" class="btn">Update filter{% if filter.activeIssueDate %} (will remove date){% endif %}</button>
-                </p>
+                <button type="submit" class="link--button">Update</button>
             </div>
         </div>
     </div>

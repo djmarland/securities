@@ -34,6 +34,6 @@ class IssuerPresenter extends Presenter implements IssuerPresenterInterface
         if (ctype_alpha($first)) {
             return strtoupper($first);
         }
-        return '#';
+        return '0-9';
     }
 }

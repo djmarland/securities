@@ -39,10 +39,10 @@ class ByIssuerService extends SecuritiesService
     public function sum(
         Company $issuer,
         SecuritiesFilter $filter = null
-    ): int {
+    ): float {
         $qb = $this->queryForScalar($issuer, $filter);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
-        return (int) $qb->getQuery()->getSingleScalarResult();
+        return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findLatest(
