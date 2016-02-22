@@ -3,20 +3,33 @@
 {% block body %}
     <h1 class="g-unit">{{ meta.title }}</h1>
     <p class="g-unit text--right d">{{ pagination.total }} results</p>
-    {% set letter = null %}
-    {%  for issuer in issuers %}
-        {% if issuer.letter != letter %}
-            {% if letter != null %}
-                </ul>
+    <div class="grid">
+        <div class="g 1/4@xl">
+            <div class="card card--padded">
+                <ol class="list--unstyled">
+                    {% for letter in letters %}
+                        <li>{%
+                            if letter.active
+                                %}<a href="#letter-{{ letter.text }}">{{ letter.text }}</a>{%
+                            else
+                                %}{{ letter.text }}{%
+                            endif %}</li>
+                    {% endfor %}
+                </ol>
+            </div>
+        </div>
+        <div class="g 3/4@xl">
+
+            {% for letter, group in groups %}
+                <div class="card card--padded g-unit" id="letter-{{ letter }}">
+                    <h2>{{ letter }}</h2>
+                    <ul>
+                        {%  for issuer in group %}
+                            <li>{% include issuer.templatePath with issuer.vars only %}</li>
+                        {%  endfor %}
+                    </ul>
                 </div>
-            {% endif %}
-            {% set letter = issuer.letter %}
-            <div class="card card--padded g-unit">
-            <h2>{{ letter }}</h2>
-            <ul>
-        {% endif %}
-        <li>{% include issuer.templatePath with issuer.vars only %}</li>
-    {%  endfor %}
-    </ul>
+            {%  endfor %}
+        </div>
     </div>
 {% endblock %}

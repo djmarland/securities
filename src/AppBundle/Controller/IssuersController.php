@@ -48,8 +48,26 @@ class IssuersController extends Controller
             }
         }
 
+        $letterGroups = [];
+        foreach ($issuerPresenters as $issuer) {
+            if (!isset($letterGroups[$issuer->getLetter()])) {
+                $letterGroups[$issuer->getLetter()] = [];
+            }
+            $letterGroups[$issuer->getLetter()][] = $issuer;
+        }
+
+        $allLetters = array_merge(['#'], range('A', 'Z'));
+        $letters = [];
+        foreach ($allLetters as $letter) {
+            $letters[] = (object) [
+                'text' => $letter,
+                'active' => isset($letterGroups[$letter]),
+            ];
+        }
+
         $this->setTitle('Issuers');
-        $this->toView('issuers', $issuerPresenters);
+        $this->toView('letters', $letters);
+        $this->toView('groups', $letterGroups);
         $this->toView('total', $total);
 
         $this->setPagination(

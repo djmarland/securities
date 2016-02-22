@@ -30,6 +30,10 @@ class IssuerPresenter extends Presenter implements IssuerPresenterInterface
 
     public function getLetter():string
     {
-        return substr($this->getName(), 0, 1);
+        $first = substr($this->getName(), 0, 1);
+        if (ctype_alpha($first)) {
+            return strtoupper($first);
+        }
+        return '#';
     }
 }
