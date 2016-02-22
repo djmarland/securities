@@ -5,13 +5,15 @@
     </div>
     <div class="g 3/4@xl">
         <div>
-            <h1 class="h-b">{{ industry.name }}</h1>
-            {% include entityNav.templatePath with entityNav.vars only %}
-            <div class="g">
+            <div class="g-unit">
                 {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
             </div>
+            <div class="g-unit">
+                <h1 class="h-b">{{ industry.name }}</h1>
+                {% include entityNav.templatePath with entityNav.vars only %}
+                {% block content %}{% endblock %}
+            </div>
         </div>
-        {% block content %}{% endblock %}
     </div>
     </div>
 {% endblock %}

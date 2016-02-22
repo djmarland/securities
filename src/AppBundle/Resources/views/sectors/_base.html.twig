@@ -1,28 +1,28 @@
 {% block body %}
-    <div class="grid">
-        <div class="g 1/4@xl">
-            {% include finder.templatePath with finder.vars only %}
-        </div>
-        <div class="g 3/4@xl">
-            <div>
-                <div class="g-unit">
-                    <h1 class="g-unit h-b">
-                        {% if sector.industry %}
-                            <span class="h-context h-f">
-                                <a href="{{ path('industry_show', { industry_id : sector.industry.id }) }}">
-                                    {{ sector.industry.name }}
-                                </a>
-                            </span>
-                        {% endif %}
-                        {{ sector.name }}
-                    </h1>
-                </div>
-                {% include entityNav.templatePath with entityNav.vars only %}
-                <div class="g">
-                    {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
-                </div>
+<div class="grid">
+    <div class="g 1/4@xl">
+        {% include finder.templatePath with finder.vars only %}
+    </div>
+    <div class="g 3/4@xl">
+        <div>
+            <div class="g-unit">
+                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
             </div>
+            <div class="g-unit">
+                <h1 class="g-unit h-b">
+                    {% if sector.industry %}
+                        <span class="h-context h-f">
+                            <a href="{{ path('industry_show', { industry_id : sector.industry.id }) }}">
+                                {{ sector.industry.name }}
+                            </a>
+                        </span>
+                    {% endif %}
+                    {{ sector.name }}
+                </h1>
+            </div>
+            {% include entityNav.templatePath with entityNav.vars only %}
             {% block content %}{% endblock %}
         </div>
     </div>
+</div>
 {% endblock %}

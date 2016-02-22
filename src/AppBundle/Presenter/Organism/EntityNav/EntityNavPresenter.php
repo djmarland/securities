@@ -62,6 +62,7 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
 
     private function getTypeNameFromEntity()
     {
+        // @todo - abstract this - somewhere
         if ($this->domainModel instanceof Company) {
             return 'issuer';
         }

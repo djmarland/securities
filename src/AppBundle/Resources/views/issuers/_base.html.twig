@@ -4,29 +4,34 @@
         {% include finder.templatePath with finder.vars only %}
     </div>
     <div class="g 3/4@xl">
-    <div>
-        <h1 class="g-unit h-b">
-            {% if issuer.parentGroup %}
-                <span class="h-context h-f">
-                    {% if issuer.parentGroup.sector %}
-                        {% if issuer.parentGroup.sector.industry %}
-                            <a href="{{ path('industry_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
-                                {{ issuer.parentGroup.sector.industry.name }}
-                            </a> &gt;
-                        {% endif %}
-                        <a href="{{ path('sector_show', { sector_id : issuer.parentGroup.sector.id }) }}">
-                            {{ issuer.parentGroup.sector.name }}
-                        </a> &gt;
+        <div>
+            <div class="g-unit">
+                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
+            </div>
+            <div class="g-unit">
+                <h1 class="g-unit h-b">
+                    {% if issuer.parentGroup %}
+                        <span class="h-context h-f">
+                            {% if issuer.parentGroup.sector %}
+                                {% if issuer.parentGroup.sector.industry %}
+                                    <a href="{{ path('industry_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
+                                        {{ issuer.parentGroup.sector.industry.name }}
+                                    </a> &gt;
+                                {% endif %}
+                                <a href="{{ path('sector_show', { sector_id : issuer.parentGroup.sector.id }) }}">
+                                    {{ issuer.parentGroup.sector.name }}
+                                </a> &gt;
+                            {% endif %}
+                            <a href="{{ path('group_show', { group_id : issuer.parentGroup.id }) }}">
+                                {{ issuer.parentGroup.name }}
+                            </a><span class="invisible"> &gt;</span>
+                        </span>
                     {% endif %}
-                    <a href="{{ path('group_show', { group_id : issuer.parentGroup.id }) }}">
-                        {{ issuer.parentGroup.name }}
-                    </a><span class="invisible"> &gt;</span>
-                </span>
-            {% endif %}
-            {{ issuer.name }}
-        </h1>
-        {% include entityNav.templatePath with entityNav.vars only %}
-        {% block content %}{% endblock %}
-    </div>
+                    {{ issuer.name }}
+                </h1>
+                {% include entityNav.templatePath with entityNav.vars only %}
+                {% block content %}{% endblock %}
+            </div>
+        </div>
 </div>
 {% endblock %}

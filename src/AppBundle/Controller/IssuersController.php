@@ -5,6 +5,8 @@ namespace AppBundle\Controller;
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
+use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
+use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Entity\Company;
@@ -14,7 +16,6 @@ use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
-use DateTimeImmutable;
 
 class IssuersController extends Controller
 {
@@ -95,11 +96,7 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
 
-        $filter = new SecuritiesFilter(
-            $this->setProductFilter($request),
-            $this->setCurrencyFilter($request),
-            $this->setBucketFilter($request)
-        );
+        $filter = $this->setFilter($request);
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
@@ -197,15 +194,11 @@ class IssuersController extends Controller
     public function issuanceAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
+        $years = $this->get('app.services.securities_by_issuer')->issuanceYears($issuer);
 
-        $today = new DateTimeImmutable(); // @todo - use global app time
-        $year = $this->getYear($request, $today);
-        if (is_null($year)) {
-            $year = $today->format('Y');
-            if ($today->format('m') == 1) {
-                // redirect january to last year, as we won't have any data yet
-                $year = $year-1;
-            }
+        $year = $this->getYear($request, $this->getApplicationTime());
+        if (is_null($year) && !empty($years)) {
+            $year = reset($years);
             return $this->redirect(
                 $this->generateUrl(
                     'issuer_issuance',
@@ -217,77 +210,31 @@ class IssuersController extends Controller
             );
         }
 
-        $results = $this->get('app.services.securities_by_issuer')->productCountsByMonthForYear(
-            $issuer,
-            $year
-        );
-        $products = [];
-        // extract the products from the results
-        foreach ($results as $month) {
-            foreach ($month as $monthValue) {
-                $products[$monthValue->product->getId()->getValue()] = $monthValue->product;
-            }
+        $this->toView('activeYear', $year);
+        $this->toView('years', $years);
+        $this->toView('entityNav', new EntityNavPresenter($issuer, 'issuance'));
+
+        $results = [];
+        if ($year) {
+            $results = $this->get('app.services.securities_by_issuer')->productCountsByMonthForYear(
+                $issuer,
+                $year
+            );
         }
 
-        $productCounts = [];
-        $graphData = [
-            array_map(function ($product) {
-                return $product->getName();
-            }, $products),
-        ];
-        array_unshift($graphData[0], 'Month');
-        $graphData[0][] = (object) [
-            'role' => 'annotation',
-        ];
-        $monthCounts = [];
-
-        $months = [
-            1 => 'Jan',
-            2 => 'Feb',
-            3 => 'Mar',
-            4 => 'Apr',
-            5 => 'May',
-            6 => 'Jun',
-            7 => 'Jul',
-            8 => 'Aug',
-            9 => 'Sep',
-            10 => 'Oct',
-            11 => 'Nov',
-            12 => 'Dec',
-        ];
-        // for each month, count how many of each product type were issued
-        $hasData = !empty($products);
-        if ($hasData) {
-            foreach ($products as $product) {
-                $productYear = (object) [
-                    'product' => $product,
-                    'months' => [],
-                ];
-                foreach ($months as $month => $name) {
-                    $count = $results[$month][$product->getId()->getValue()]->total ?? 0;
-                    if (!isset($monthCounts[$month])) {
-                        $monthCounts[$month] = [];
-                    }
-                    $monthCounts[$month][] = $count;
-                    $productYear->months[$month] = $count ? $count : '-';
-                }
-                $productCounts[] = $productYear;
-            }
-
-            foreach ($months as $num => $month) {
-                $row = [$month];
-                $graphData[] = array_merge($row, $monthCounts[$num], ['']);
-            }
+        $hasData = false;
+        $issuanceTable = null;
+        $issuanceGraph = null;
+        if (!empty($results)) {
+            $hasData = true;
+            $issuanceTable = new IssuanceTablePresenter($issuer, $results, $year);
+            $issuanceGraph = new IssuanceGraphPresenter($issuer, $results, $year);
         }
 
         $this->toView('hasData', $hasData);
-        $this->toView('months', $months);
-        $this->toView('products', $products);
-        $this->toView('graphData', $graphData);
-        $this->toView('productCounts', $productCounts);
-        $this->toView('years', $this->getYearsForIssuer($issuer)); // @todo
-        $this->toView('activeYear', $year);
-        $this->toView('entityNav', new EntityNavPresenter($issuer, 'issuance'));
+        $this->toView('issuanceTable', $issuanceTable);
+        $this->toView('issuanceGraph', $issuanceGraph);
+
         return $this->renderTemplate('issuers:issuance');
     }
 
@@ -322,13 +269,5 @@ class IssuersController extends Controller
         $this->setTitle($issuer->getName());
         $this->toView('issuer', $issuer);
         return $issuer;
-    }
-
-    private function getYearsForIssuer(Company $issuer): array
-    {
-        // @todo - calculate valid years for this issuer
-        return [
-            2016, 2015, 2014, 2013, 2012,
-        ];
     }
 }

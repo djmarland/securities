@@ -1,0 +1,29 @@
+<div class="table-container">
+<div class="table-wrap">
+<table class="table table--striped table--issuance">
+    <thead>
+    <tr>
+        <th>Product</th>{%
+        for heading in issuancetable.headings
+            %}<th>{{ heading }}</th>{%
+        endfor %}
+    </tr>
+    </thead>
+    <tbody>{%
+    for i, row in issuancetable.rows
+        %}<tr>{%
+            for j, col in row
+                %}<{{ col.element }}>{%
+                    if col.link
+                        %}<a data-index="{{ i }}-{{ j }}" href="{{ path(col.link.path, col.link.params) }}">{{ col.text }}</a>{%
+                    else
+                        %}{{ col.text }}{%
+                    endif
+            %}</{{ col.element }}>{%
+        endfor
+        %}</tr>{%
+    endfor
+    %}</tbody>
+</table>
+</div>
+</div>

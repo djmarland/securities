@@ -58,6 +58,22 @@ class ByIssuerService extends SecuritiesService
     }
 
     /* Special Counts */
+    public function issuanceYears(
+        Company $issuer
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->where($qb, $issuer);
+        $qb->select([
+            'DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') as y',
+        ])
+            ->distinct()
+            ->orderBy('y', 'DESC');
+        $results = $qb->getQuery()->getArrayResult();
+        return array_map(function ($result) {
+            return $result['y'];
+        }, $results);
+    }
+
     public function productCountsByMonthForYear(
         Company $issuer,
         int $year
@@ -103,7 +119,7 @@ class ByIssuerService extends SecuritiesService
             if (!isset($months[$month])) {
                 $months[$month] = [];
             }
-            $months[$month][(int) $product->getId()->getValue()] = (object) [
+            $months[$month][(string) $product->getId()] = (object) [
                 'product' => $product,
                 'total' => $total,
             ];

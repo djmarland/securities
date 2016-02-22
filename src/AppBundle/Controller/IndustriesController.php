@@ -6,6 +6,8 @@ use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
+use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
+use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
@@ -94,11 +96,7 @@ class IndustriesController extends Controller
     {
         $industry = $this->getIndustry($request);
 
-        $filter = new SecuritiesFilter(
-            $this->setProductFilter($request),
-            $this->setCurrencyFilter($request),
-            $this->setBucketFilter($request)
-        );
+        $filter = $this->setFilter($request);
 
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
@@ -148,9 +146,49 @@ class IndustriesController extends Controller
 
     public function issuanceAction(Request $request)
     {
-        throw new HttpException(404, 'Not yet');
-//        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
-//        return $this->renderTemplate('groups:issuance');
+        $industry = $this->getIndustry($request);
+        $years = $this->get('app.services.securities_by_industry')->issuanceYears($industry);
+
+        $year = $this->getYear($request, $this->getApplicationTime());
+        if (is_null($year) && !empty($years)) {
+            $year = reset($years);
+            return $this->redirect(
+                $this->generateUrl(
+                    'industry_issuance',
+                    [
+                        'industry_id' => $industry->getId(),
+                        'year' => $year,
+                    ]
+                )
+            );
+        }
+
+        $this->toView('activeYear', $year);
+        $this->toView('years', $years);
+        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
+
+        $results = [];
+        if ($year) {
+            $results = $this->get('app.services.securities_by_industry')->productCountsByMonthForYear(
+                $industry,
+                $year
+            );
+        }
+
+        $hasData = false;
+        $issuanceTable = null;
+        $issuanceGraph = null;
+        if (!empty($results)) {
+            $hasData = true;
+            $issuanceTable = new IssuanceTablePresenter($industry, $results, $year);
+            $issuanceGraph = new IssuanceGraphPresenter($industry, $results, $year);
+        }
+
+        $this->toView('hasData', $hasData);
+        $this->toView('issuanceTable', $issuanceTable);
+        $this->toView('issuanceGraph', $issuanceGraph);
+
+        return $this->renderTemplate('industries:issuance');
     }
 
     private function getIndustry(Request $request)

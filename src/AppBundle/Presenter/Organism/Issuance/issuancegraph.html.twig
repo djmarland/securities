@@ -1,0 +1,31 @@
+<div id="chart-area" style="height: 400px">
+    <p class="text--center">Drawing graph...</p>
+</div>
+<script>
+    google.charts.setOnLoadCallback(drawChart);
+    function drawChart() {
+        var data = google.visualization.arrayToDataTable({{ issuancegraph.data|json_encode|raw }}),
+            options = {{ issuancegraph.chartOptions|json_encode|raw }},
+            chart = new google.visualization.ColumnChart(document.getElementById('chart-area'));
+
+        google.visualization.events.addListener(chart, 'select', selectHandler);
+        chart.draw(data, options);
+
+        function selectHandler() {
+            var selectedItem = chart.getSelection()[0],
+                month,
+                productCol,
+                index,
+                link;
+            if (selectedItem) {
+                month = selectedItem.row + 1;
+                productCol = selectedItem.column - 1;
+                index = productCol + '-' + month;
+                link = document.querySelector('a[data-index="' + index + '"]');
+                if (link) {
+                    window.location.href=link.href;
+                }
+            }
+        }
+    }
+</script>

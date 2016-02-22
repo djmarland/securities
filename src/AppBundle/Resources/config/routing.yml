@@ -64,7 +64,7 @@ group_show:
   defaults: { _controller: AppBundle:Groups:show }
 
 group_issuance:
-  path:     /groups/{group_id}/issuance
+  path:     /groups/{group_id}/issuance/{year}
   defaults: { _controller: AppBundle:Groups:issuance, year: null }
 
 group_securities:
@@ -98,7 +98,7 @@ industry_maturity_profile:
   defaults: { _controller: AppBundle:Industries:maturityProfile }
 
 industry_issuance:
-  path:     /industries/{industry_id}/issuance
+  path:     /industries/{industry_id}/issuance/{year}
   defaults: { _controller: AppBundle:Industries:issuance, year: null }
 
 # Sectors
@@ -119,7 +119,7 @@ sector_maturity_profile:
   defaults: { _controller: AppBundle:Sectors:maturityProfile }
 
 sector_issuance:
-  path:     /sectors/{sector_id}/issuance
+  path:     /sectors/{sector_id}/issuance/{year}
   defaults: { _controller: AppBundle:Sectors:issuance, year: null }
 
 # Reports

@@ -133,11 +133,11 @@ class ImportCommand extends Command
         $startDate = $excelZeroPoint->add(new DateInterval('P' . $row['SECURITY_START_DATE'] . 'D'));
         $maturityDate = null;
         if (is_numeric($row['MATURITY_DATE'])) {
-            $startDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
+            $maturityDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
         }
 
         $security->setStartDate($startDate);
-        $security->setMaturityDate($startDate);
+        $security->setMaturityDate($maturityDate);
 
         $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
         $security->setCoupon(($row['COUPON_RATE'] != 'N/A') ? floatval($row['COUPON_RATE']) : null);

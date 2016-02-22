@@ -1,30 +1,33 @@
 {% block body %}
-    <div class="grid">
-        <div class="g 1/4@xl">
-            {% include finder.templatePath with finder.vars only %}
-        </div>
-        <div class="g 3/4@xl">
-            <div>
-                <div class="g-unit">
-                    <h1 class="g-unit h-b">
-                        {% if group.sector %}
-                            <span class="h-context h-f">
-                                {% if group.sector.industry %}
-                                    <a href="{{ path('industry_show', { industry_id : group.sector.industry.id }) }}">
-                                        {{ group.sector.industry.name }}
-                                    </a> &gt;
-                                {% endif %}
-                                <a href="{{ path('sector_show', { sector_id : group.sector.id }) }}">
-                                    {{ group.sector.name }}
-                                </a>
-                        </span>
-                        {% endif %}
-                        {{ group.name }}
-                    </h1>
-                </div>
-                {% include entityNav.templatePath with entityNav.vars only %}
-                {% block content %}{% endblock %}
+<div class="grid">
+    <div class="g 1/4@xl">
+        {% include finder.templatePath with finder.vars only %}
+    </div>
+    <div class="g 3/4@xl">
+        <div>
+            <div class="g-unit">
+                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
             </div>
+            <div class="g-unit">
+                <h1 class="g-unit h-b">
+                    {% if group.sector %}
+                        <span class="h-context h-f">
+                            {% if group.sector.industry %}
+                                <a href="{{ path('industry_show', { industry_id : group.sector.industry.id }) }}">
+                                    {{ group.sector.industry.name }}
+                                </a> &gt;
+                            {% endif %}
+                            <a href="{{ path('sector_show', { sector_id : group.sector.id }) }}">
+                                {{ group.sector.name }}
+                            </a>
+                        </span>
+                    {% endif %}
+                    {{ group.name }}
+                </h1>
+            </div>
+            {% include entityNav.templatePath with entityNav.vars only %}
+            {% block content %}{% endblock %}
         </div>
     </div>
+</div>
 {% endblock %}

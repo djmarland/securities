@@ -23,12 +23,15 @@ class Controller extends BaseController implements ControllerInterface
     protected $currentPage = 1;
     protected $appConfig;
 
+    private $applicationTime;
+
     /** Setup common tasks for a controller */
     public function initialize(Request $request)
     {
         $this->request = $request;
         $this->appConfig = $this->getParameter('app.config');
         $this->masterViewPresenter = new MasterPresenter($this->appConfig);
+        $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
         $this->toView('currentYear', date("Y"));
         $this->toView('currentSection', null);
         $this->setSearchContext();
@@ -53,6 +56,11 @@ class Controller extends BaseController implements ControllerInterface
     {
         $this->masterViewPresenter->setTitle($title);
         return $this;
+    }
+
+    protected function getApplicationTime(): DateTimeImmutable
+    {
+        return $this->applicationTime;
     }
 
     protected function getCurrentPage(): int

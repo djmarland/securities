@@ -18,6 +18,7 @@ class SecuritiesFilter
      */
     public function __construct(...$entities)
     {
+        // filter null entities
         $this->entities = array_filter($entities);
     }
 
@@ -30,13 +31,10 @@ class SecuritiesFilter
             if ($entity instanceof Product) {
                 $qb->andWhere('IDENTITY(' . $tbl . '.product) = :product_id')
                     ->setParameter('product_id', $entity->getId()->getBinary());
-            }
-            if ($entity instanceof Currency) {
+            } elseif ($entity instanceof Currency) {
                 $qb->andWhere('IDENTITY(' . $tbl . '.currency) = :currency_id')
                     ->setParameter('currency_id', $entity->getId()->getBinary());
-            }
-
-            if ($entity instanceof Bucket) {
+            } elseif ($entity instanceof Bucket) {
                 if ($entity instanceof BucketUndated) {
                     $qb->andWhere($tbl . '.maturityDate is NULL');
                 } else {
@@ -45,6 +43,11 @@ class SecuritiesFilter
                         ->setParameter('maturityDateLower', $entity->getStartDate())
                         ->setParameter('maturityDateUpper', $entity->getEndDate());
                 }
+            } elseif (isset($entity['start'])) {
+                $qb->andWhere($tbl . '.startDate >= :startDateLower')
+                    ->andWhere($tbl . '.startDate < :startDateUpper')
+                    ->setParameter('startDateLower', $entity['start'])
+                    ->setParameter('startDateUpper', $entity['end']);
             }
         }
 

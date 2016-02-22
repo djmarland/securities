@@ -27,12 +27,7 @@ class SecuritiesController extends Controller
         $perPage = 50;
         $currentPage = $this->getCurrentPage();
 
-
-        $filter = new SecuritiesFilter(
-            $this->setProductFilter($request),
-            $this->setCurrencyFilter($request),
-            $this->setBucketFilter($request)
-        );
+        $filter = $this->setFilter($request);
 
         $total = $this->get('app.services.securities')
             ->countAllFiltered(

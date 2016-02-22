@@ -1,5 +1,14 @@
 <form method="get">
     <div class="grid">
+        <div class="g">
+            {% if filter.activeIssueDate %}
+                <div class="message text--center">
+                    Showing only securities issued between
+                    {{ filter.activeIssueDate.start.format('d M Y') }} and  {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
+                    <button type="submit" class="btn">X Remove date filter</button>
+                </div>
+            {% endif %}
+        </div>
         <div class="g 1/4@xl">
             <h2 class="c">Filter:</h2>
         </div>
@@ -48,7 +57,7 @@
                     </label>
                 </p>
                 <p>
-                    <button type="submit" class="btn">Go</button>
+                    <button type="submit" class="btn">Update filter{% if filter.activeIssueDate %} (will remove date){% endif %}</button>
                 </p>
             </div>
         </div>

@@ -5,12 +5,23 @@ namespace AppBundle\Controller\Traits;
 use DateTime;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 trait SecurityFilterTrait
 {
     private $filter = [];
+
+    public function setFilter(Request $request)
+    {
+        return new SecuritiesFilter(
+            $this->setProductFilter($request),
+            $this->setCurrencyFilter($request),
+            $this->setBucketFilter($request),
+            $this->setIssueDateFilter($request)
+        );
+    }
 
     public function setProductFilter(Request $request)
     {
@@ -90,5 +101,29 @@ trait SecurityFilterTrait
         }
         $this->toView('filter', $this->filter);
         return $bucket;
+    }
+
+    public function setIssueDateFilter(Request $request)
+    {
+        $this->filter['activeIssueDate'] = null;
+
+        $date = $request->get('issueDate', null);
+
+        if ($date) {
+            if (!preg_match('/\d{4}-\d{2}/', $date)) {
+                throw new HttpException(404, 'No such bucket');
+            }
+            $date = $date . '-01T00:00:00Z';
+            $startDate = new \DateTimeImmutable($date);
+            $endDate = $startDate->add(new \DateInterval('P1M'));
+            $displayEnd = $endDate->sub(new \DateInterval('P1D'));
+            $this->filter['activeIssueDate'] = [
+                'start' => $startDate,
+                'end' => $endDate,
+                'displayEnd' => $displayEnd
+            ];
+        }
+        $this->toView('filter', $this->filter);
+        return $this->filter['activeIssueDate'];
     }
 }

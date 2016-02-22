@@ -9,3 +9,14 @@
 .h-context {
     display: block;
 }
+
+.text--prose {
+    max-width: 700px;
+    p {
+        // when part of prose, paragraphs get their spacing back
+        margin-bottom: $grid-unit-small;
+        @include mq($from: m) {
+            margin-bottom: $grid-unit-large;
+        }
+    }
+}
