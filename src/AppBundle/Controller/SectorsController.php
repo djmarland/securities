@@ -93,8 +93,8 @@ class SectorsController extends Controller
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
-        return $this->renderTemplate('groups:maturity-profile');
+//        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
+//        return $this->renderTemplate('groups:maturity-profile');
     }
 
     public function issuanceAction(Request $request)
@@ -102,9 +102,18 @@ class SectorsController extends Controller
         $sector = $this->getSector($request);
         $years = $this->get('app.services.securities_by_sector')->issuanceYears($sector);
 
+        // only show years after 3 years ago (@todo - abstract)
+        $currentYear = (int) $this->getApplicationTime()->format('Y');
+        $years = array_filter($years, function($year) use ($currentYear) {
+            return $year >= $currentYear-3;
+        });
         $year = $this->getYear($request, $this->getApplicationTime());
-        if (is_null($year) && !empty($years)) {
-            $year = reset($years);
+        if (is_null($year)) {
+            if (!empty($years)) {
+                $year = reset($years);
+            } else {
+                $year = $currentYear;
+            }
             return $this->redirect(
                 $this->generateUrl(
                     'sector_issuance',
@@ -117,6 +126,7 @@ class SectorsController extends Controller
         }
 
         $this->toView('activeYear', $year);
+
         $this->toView('years', $years);
         $this->toView('entityNav', new EntityNavPresenter($sector, 'issuance'));
 

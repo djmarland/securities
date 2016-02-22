@@ -213,9 +213,18 @@ class IssuersController extends Controller
         $issuer = $this->getIssuer($request);
         $years = $this->get('app.services.securities_by_issuer')->issuanceYears($issuer);
 
+        // only show years after 3 years ago (@todo - abstract)
+        $currentYear = (int) $this->getApplicationTime()->format('Y');
+        $years = array_filter($years, function($year) use ($currentYear) {
+            return $year >= $currentYear-3;
+        });
         $year = $this->getYear($request, $this->getApplicationTime());
-        if (is_null($year) && !empty($years)) {
-            $year = reset($years);
+        if (is_null($year)) {
+            if (!empty($years)) {
+                $year = reset($years);
+            } else {
+                $year = $currentYear;
+            }
             return $this->redirect(
                 $this->generateUrl(
                     'issuer_issuance',
