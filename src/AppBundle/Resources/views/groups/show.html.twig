@@ -7,7 +7,7 @@
         <div class="grid">
             <div class="g 2/3@xl">
                 <div>
-                    <h2 class="g-unit">Next Maturities</h2>
+                    <h2 class="g-unit">Bonds maturing</h2>
                     {% if hasSecurities %}
                         {% include '@partials/securities-simple-list.html.twig' %}
                         <p><a class="link--button" href="{{ path('group_securities', { group_id : group.id }) }}">Show all</a></p>

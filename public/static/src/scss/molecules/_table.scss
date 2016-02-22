@@ -50,6 +50,11 @@
     tbody > tr:nth-child(even) {
         background: $color-faint;
     }
+    tbody > tr:hover {
+        cursor: pointer;
+        background: $color-header-bg;
+        color: $color-header-text;
+    }
     tbody {
         border-bottom: solid 1px $color-faint;
     }
