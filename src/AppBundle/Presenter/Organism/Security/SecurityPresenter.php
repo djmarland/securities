@@ -2,6 +2,8 @@
 
 namespace AppBundle\Presenter\Organism\Security;
 
+use SecuritiesService\Domain\Entity\Company;
+use SecuritiesService\Domain\Entity\Country;
 use SecuritiesService\Domain\Entity\Security;
 use AppBundle\Presenter\Presenter;
 
@@ -93,6 +95,28 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return 'UNDATED';
     }
 
+    /**
+     * @todo - this should be more robust
+     */
+    public function getCompany(): Company
+    {
+        return $this->security->getCompany();
+    }
+
+    public function getInitialTerm()
+    {
+        $start = $this->security->getStartDate();
+        $end = $this->security->getMaturityDate();
+        return $this->dateDiff($start, $end);
+    }
+
+    public function getRemainingTerm()
+    {
+        $start = new \DateTimeImmutable(); // @todo - inject date
+        $end = $this->security->getMaturityDate();
+        return $this->dateDiff($start, $end);
+    }
+
     public function getDuration():string
     {
         return '';
@@ -122,5 +146,29 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     {
         $bucket = $this->security->getContractualMaturityBucket();
         return (string) $bucket;
+    }
+
+    // @todo - be more robust
+    private function dateDiff($start, $end)
+    {
+        $end = $end->getTimestamp();
+        $start = $start->getTimestamp();
+        $diff = $end - $start;
+
+        $year = 60*60*24*365;
+        $month = 60*60*24*29.8;
+        $years = (floor($diff/$year));
+        $remaining = $diff - ($years * $year);
+        $months = floor($remaining/$month);
+
+        $stringParts = [];
+        if ($years) {
+            $stringParts[] = $years . ' years';
+        }
+        if ($months) {
+            $stringParts[] = $months . ' months';
+        }
+
+        return implode(', ', $stringParts);
     }
 }

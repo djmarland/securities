@@ -1,18 +1,22 @@
-<table class="table table--striped g-unit">
-    <thead>
-        <tr>
-            <th>ISIN</th>
-            <th>Amount raised (£m)</th>
-            <th>Product</th>
-            <th>Maturity Date</th>
-            <th>Coupon</th>
-            <th>Currency</th>
-            <th>Exchange</th>
-        </tr>
-    </thead>
-    <tbody>
-    {%  for security in securities %}
-        {% include security.templatePath with security.vars only %}
-    {%  endfor %}
-    </tbody>
-</table>
+<div class="table-container">
+    <div class="table-wrap">
+        <table class="table table--striped g-unit">
+            <thead>
+                <tr>
+                    <th>ISIN</th>
+                    <th>Amount raised (£m)</th>
+                    <th>Product</th>
+                    <th>Maturity Date</th>
+                    <th>Coupon</th>
+                    <th>Currency</th>
+                    <th>Exchange</th>
+                </tr>
+            </thead>
+            <tbody>
+            {%  for security in securities %}
+                {% include security.templatePath with security.vars only %}
+            {%  endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>

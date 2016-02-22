@@ -6,9 +6,8 @@
                 {{ security.title }}
             </a>
         </h2>
-        {% endif %}
-        <{{ security.subH }} class="h-e h-lined island-squashed">LSE Security Information</{{ security.subH }}>
-    <table class="table g-unit">
+    {% endif %}
+        <table class="table g-unit table--lined">
         <tbody>
         <tr>
             <th>ISIN</th><td>{{ security.isin }}</td>
@@ -16,9 +15,54 @@
         <tr>
             <th>Description</th><td>{{ security.name }}</td>
         </tr>
+
         <tr>
-            <th>Issuer:</th><td><a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
+            <th>Product:</th><td>{{ security.product }}</td>
         </tr>
+        <tr>
+            <th>Issuer:</th>
+            <td><a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
+        </tr>
+        <tr>
+            <th>Country:</th>
+            <td>{{ security.company.country.name }}</td>
+        </tr>
+        {#
+        <tr>
+            <th>Region:</th>
+            <td>{{ security.company.country.region.name }}</td>
+        </tr>
+        #}
+        <tr>
+            <th>Parent group:</th>
+            <td>
+                {% if security.company.parentGroup %}
+                <a href="{{ path('group_show', { group_id : security.company.parentGroup.id }) }}">{{ security.company.parentGroup.name }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Sector:</th>
+            <td>
+                {% if security.company.parentGroup and security.company.parentGroup.sector %}
+                    <a href="{{
+                    path('sector_show', { sector_id : security.company.parentGroup.sector.id })
+                    }}">{{ security.company.parentGroup.sector.name }}</a>
+                {% endif %}
+            </td>
+        </tr>
+        <tr>
+            <th>Industry:</th>
+            <td>
+                {% if security.company.parentGroup and
+                    security.company.parentGroup.sector and
+                    security.company.parentGroup.sector.industry %}
+                    <a href="{{
+                    path('industry_show', { industry_id : security.company.parentGroup.sector.industry.id })
+                    }}">{{ security.company.parentGroup.sector.industry.name }}</a>
+                {% endif %}
+            </td>
+            </tr>
         <tr>
             <th>Amount raised (£m):</th><td>{{ security.amount }}</td>
         </tr>
@@ -26,33 +70,24 @@
             <th>Currency:</th><td>{{ security.currency }}</td>
         </tr>
         <tr>
-            <th>Start date:</th><td>{{ security.startDate }}</td>
+            <th>Issue date:</th><td>{{ security.startDate }}</td>
         </tr>
         <tr>
             <th>Maturity date:</th><td>{{ security.maturityDate }}</td>
         </tr>
         <tr>
-            <th>Duration:</th><td>{{ security.duration }}</td>
+            <th>Coupon:</th><td>{{ security.coupon }}</td>
         </tr>
         <tr>
-            <th>Coupon:</th><td>{{ security.coupon }}</td>
+            <th>Initial term:</th>
+            <td>{{ security.initialTerm }}</td>
+        </tr>
+        <tr>
+            <th>Remaining term:</th>
+            <td>{{ security.remainingTerm }}</td>
         </tr>
         </tbody>
     </table>
-    <{{ security.subH }} class="h-e h-lined island-squashed">PRA data item classifications</{{ security.subH }}>
-<table class="table">
-    <tbody>
-    <tr>
-        <th>Product:</th><td>{{ security.product }}</td>
-    </tr>
-    {#<tr>
-        <th>Residual maturity:</th><td>{{ security.residualMaturity }}</td>
-    </tr>
-    <tr>
-        <th>Contractual maturity:</th><td>{{ security.contractualMaturity }}</td>
-    </tr>#}
-    </tbody>
-</table>
 {% if security.includeLink %}
     </div>
 {% endif %}

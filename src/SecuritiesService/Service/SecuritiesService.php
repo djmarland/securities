@@ -21,8 +21,25 @@ class SecuritiesService extends Service
     /* Individual */
     public function findByIsin(ISIN $isin): Security
     {
-        $qb = $this->selectWithJoins()
-            ->where(self::TBL . '.isin = :isin')
+        $currency = 'c';
+        $company = 'co';
+        $product = 'p';
+        $country = 'cou';
+        $group = 'g';
+        $sector = 's';
+        $industry = 'i';
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, $currency, $company, $product, $country, $group, $sector, $industry);
+        $qb->leftJoin(self::TBL . '.currency', $currency);
+        $qb->leftJoin(self::TBL . '.company', $company);
+        $qb->leftJoin(self::TBL . '.product', $product);
+        $qb->leftJoin($company . '.country', $country);
+        $qb->leftJoin($company . '.parentGroup', $group);
+        $qb->leftJoin($group . '.sector', $sector);
+        $qb->leftJoin($sector . '.industry', $industry);
+
+        $qb->where(self::TBL . '.isin = :isin')
             ->setParameter('isin', (string) $isin);
 
         $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
