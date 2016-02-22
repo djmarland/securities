@@ -53,7 +53,9 @@ class SearchController extends Controller
             $securityPresenters = [];
             if (!empty($securities)) {
                 foreach ($securities as $security) {
-                    $securityPresenters[] = new SecurityPresenter($security);
+                    $securityPresenters[] = new SecurityPresenter($security, [
+                        'template' => 'simple',
+                    ]);
                 }
             }
 

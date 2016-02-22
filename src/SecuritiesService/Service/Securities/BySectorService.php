@@ -48,6 +48,21 @@ class BySectorService extends SecuritiesService
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
+
+    public function findNextMaturing(
+        Sector $sector,
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb->leftJoin('co.parentGroup', 'p');
+        $qb->leftJoin('p.sector', 's');
+        $qb = $this->where($qb, $sector);
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb->setMaxResults($limit);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
     public function issuanceYears(
         Sector $sector
     ): array {
@@ -124,6 +139,8 @@ class BySectorService extends SecuritiesService
         Sector $sector
     ): QueryBuilder {
         return $qb->andWhere('s.id = :sId')
+            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('sId', (string) $sector->getId()->getBinary());
     }
 

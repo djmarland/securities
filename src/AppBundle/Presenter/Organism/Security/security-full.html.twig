@@ -1,0 +1,59 @@
+<div class="security">
+    {% if security.includeLink %}
+    <div class="card">
+        <h2 class="island-squashed h-c">
+            <a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
+                {{ security.title }}
+            </a>
+        </h2>
+        {% endif %}
+        <{{ security.subH }} class="h-e h-lined island-squashed">LSE Security Information</{{ security.subH }}>
+    <table class="table g-unit">
+        <tbody>
+        <tr>
+            <th>ISIN</th><td>{{ security.isin }}</td>
+        </tr>
+        <tr>
+            <th>Description</th><td>{{ security.name }}</td>
+        </tr>
+        <tr>
+            <th>Issuer:</th><td><a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
+        </tr>
+        <tr>
+            <th>Amount raised (£m):</th><td>{{ security.amount }}</td>
+        </tr>
+        <tr>
+            <th>Currency:</th><td>{{ security.currency }}</td>
+        </tr>
+        <tr>
+            <th>Start date:</th><td>{{ security.startDate }}</td>
+        </tr>
+        <tr>
+            <th>Maturity date:</th><td>{{ security.maturityDate }}</td>
+        </tr>
+        <tr>
+            <th>Duration:</th><td>{{ security.duration }}</td>
+        </tr>
+        <tr>
+            <th>Coupon:</th><td>{{ security.coupon }}</td>
+        </tr>
+        </tbody>
+    </table>
+    <{{ security.subH }} class="h-e h-lined island-squashed">PRA data item classifications</{{ security.subH }}>
+<table class="table">
+    <tbody>
+    <tr>
+        <th>Product:</th><td>{{ security.product }}</td>
+    </tr>
+    {#<tr>
+        <th>Residual maturity:</th><td>{{ security.residualMaturity }}</td>
+    </tr>
+    <tr>
+        <th>Contractual maturity:</th><td>{{ security.contractualMaturity }}</td>
+    </tr>#}
+    </tbody>
+</table>
+{% if security.includeLink %}
+    </div>
+{% endif %}
+</div>

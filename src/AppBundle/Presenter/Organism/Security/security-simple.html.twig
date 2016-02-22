@@ -1,0 +1,23 @@
+<div class="security-simple">
+    <a class="security-simple__link" href="{{ path('security_show',{'isin':security.isin}) }}">
+        <h3 class="c security-simple__title card__heading island">{{ security.title }}</h3>
+        <div class="islet">
+            <table class="security-simple__table table table--tight">
+                <tbody>
+                    <tr>
+                        <th class="security-simple__th">Description:</th>
+                        <td>{{ security.name }}</td>
+                    </tr>
+                    <tr>
+                        <th>Maturity date:</th>
+                        <td>{{ security.maturityDate }}</td>
+                    </tr>
+                    <tr>
+                        <th>Amount raised:</th>
+                        <td>{{ security.amount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </a>
+</div>

@@ -3,5 +3,33 @@
 {% use "AppBundle::sectors/_base.html.twig" %}
 
 {% block content %}
-
+    <div class="g-unit">
+        <div class="grid">
+            <div class="g 2/3@xl">
+                <div>
+                    <h2 class="g-unit">Next Maturities</h2>
+                    {% if hasSecurities %}
+                        {% include '@partials/securities-simple-list.html.twig' %}
+                        <p><a class="link--button" href="{{ path('sector_securities', { sector_id : sector.id }) }}">Show all</a></p>
+                    {% else %}
+                        <p>No securities have been issued by {{ sector.name }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="g 1/3@xl">
+                <div>
+                    <div class="card card--padded g-unit text--center">
+                        <a class="link--hidden" href="{{ path('sector_securities', { sector_id : sector.id }) }}">
+                            <h2 class="d">Total securities</h2>
+                            <p class="a">{{ count }}</p>
+                        </a>
+                    </div>
+                    <div class="card card--padded g-unit text--center">
+                        <h2 class="d">Amount raised</h2>
+                        <p class="a">£{{ totalRaised }}m</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 {% endblock %}

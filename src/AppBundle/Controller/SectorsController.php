@@ -62,39 +62,40 @@ class SectorsController extends Controller
     {
         $sector = $this->getSector($request);
 
-//        $securitiesService = $this->get('app.services.securities');
-//
-//        $count = $securitiesService
-//            ->countByIssuer($issuer);
-//
-//        $totalRaised = $securitiesService
-//            ->sumByIssuer($issuer);
-//
-//        $result = $securitiesService
-//            ->findLatestForIssuer($issuer, 5);
-//
-//        $securityPresenters = [];
-//        $securities = $result->getDomainModels();
-//        if (!empty($securities)) {
-//            foreach ($securities as $security) {
-//                $securityPresenters[] = new SecurityPresenter($security);
-//            }
-//        }
-//
-//        $this->toView('totalRaised', number_format($totalRaised));
-//        $this->toView('count', $count);
-//        $this->toView('securities', $securityPresenters);
-//        $this->toView('hasSecurities', $count > 0);
+        $securitiesService = $this->get('app.services.securities_by_sector');
 
+        $count = $securitiesService
+            ->count($sector);
+
+        $totalRaised = $securitiesService
+            ->sum($sector);
+
+        $securities = $securitiesService
+            ->findNextMaturing($sector, 2);
+
+        $securityPresenters = [];
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security, [
+                    'template' => 'simple',
+                ]);
+            }
+        }
+
+        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('count', number_format($count));
+        $this->toView('securities', $securityPresenters);
+        $this->toView('hasSecurities', $count > 0);
         $this->toView('entityNav', new EntityNavPresenter($sector, 'show'));
+
         return $this->renderTemplate('sectors:show');
     }
 
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-//        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
-//        return $this->renderTemplate('groups:maturity-profile');
+//        $this->toView('entityNav', new EntityNavPresenter($sector, 'maturity_profile'));
+//        return $this->renderTemplate('sectors:maturity-profile');
     }
 
     public function issuanceAction(Request $request)

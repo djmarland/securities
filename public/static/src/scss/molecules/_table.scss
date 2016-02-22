@@ -55,6 +55,12 @@
     }
 }
 
+.table--tight {
+    td, th {
+        padding-top: 0;
+    }
+}
+
 // @todo - make it so this isn't needed
 .table--small {
     font-size: 80%;

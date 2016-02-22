@@ -49,6 +49,22 @@ class ByIndustryService extends SecuritiesService
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function findNextMaturing(
+        Industry $industry,
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb->leftJoin('co.parentGroup', 'p');
+        $qb->leftJoin('p.sector', 's');
+        $qb->leftJoin('s.industry', 'i');
+        $qb = $this->where($qb, $industry);
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb->setMaxResults($limit);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+
     public function issuanceYears(
         Industry $industry
     ): array {
@@ -126,6 +142,8 @@ class ByIndustryService extends SecuritiesService
         Industry $industry
     ) {
         return $qb->andWhere('i.id = :iId')
+            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('iId', (string) $industry->getId()->getBinary());
     }
 

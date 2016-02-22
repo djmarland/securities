@@ -9,17 +9,23 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 {
     const DATE_FORMAT = 'd/m/Y';
 
+    protected $options = [
+        'includeLink' => true,
+        'showTitle' => true,
+        'template' => null
+    ];
+
     private $security;
 
     public function __construct(
         Security $security,
-        array $options = [
-            'includeLink' => true,
-            'showTitle' => true,
-        ]
+        array $options = []
     ) {
         parent::__construct(null, $options);
         $this->security = $security;
+        if ($this->options['template']) {
+            $this->setTemplateVariation($this->options['template']);
+        }
     }
 
     public function includeLink()
@@ -65,7 +71,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getAmount():string
     {
-        return '£' . $this->security->getMoneyRaised() . 'm';
+        return '£' . number_format(round($this->security->getMoneyRaised(), 1)) . 'm';
     }
 
     public function getCurrency():string

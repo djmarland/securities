@@ -63,11 +63,32 @@ class GroupsController extends Controller
     {
         $group = $this->getGroup($request);
 
-        $issuers = $this->get('app.services.issuers')
-            ->findAllByGroup($group);
+        $securitiesService = $this->get('app.services.securities_by_group');
 
-        $this->toView('issuers', $issuers);
+        $count = $securitiesService
+            ->count($group);
+
+        $totalRaised = $securitiesService
+            ->sum($group);
+
+        $securities = $securitiesService
+            ->findNextMaturing($group, 2);
+
+        $securityPresenters = [];
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security, [
+                    'template' => 'simple',
+                ]);
+            }
+        }
+
+        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('count', number_format($count));
+        $this->toView('securities', $securityPresenters);
+        $this->toView('hasSecurities', $count > 0);
         $this->toView('entityNav', new EntityNavPresenter($group, 'show'));
+
         return $this->renderTemplate('groups:show');
     }
 

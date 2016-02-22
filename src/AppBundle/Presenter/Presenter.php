@@ -94,7 +94,7 @@ abstract class Presenter
      * would be set by calling setTemplateSuffix('reversed')
      * The dash separation is added automatically
      */
-    protected function setTemplateVariation($templateVariantSuffix = ''): string
+    protected function setTemplateVariation($templateVariantSuffix = '')
     {
         if (empty($templateVariantSuffix)) {
             $this->templateVariantSuffix = '';

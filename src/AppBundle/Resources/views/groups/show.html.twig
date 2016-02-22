@@ -3,13 +3,33 @@
 {% use "AppBundle::groups/_base.html.twig" %}
 
 {% block content %}
-    <h2 class="g-unit">Issuers</h2>
-    <ul class="grid">
-        {% for issuer in issuers %}
-            <li class="g 1/2@l 1/3@xl"><a class="link--button" href="{{ path('issuer_show',{issuer_id:issuer.id}) }}">{{ issuer.name }}</a></li>
-        {% endfor %}
-    </ul>
-    <div class="g">
-        {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
+    <div class="g-unit">
+        <div class="grid">
+            <div class="g 2/3@xl">
+                <div>
+                    <h2 class="g-unit">Next Maturities</h2>
+                    {% if hasSecurities %}
+                        {% include '@partials/securities-simple-list.html.twig' %}
+                        <p><a class="link--button" href="{{ path('group_securities', { group_id : group.id }) }}">Show all</a></p>
+                    {% else %}
+                        <p>No securities have been issued by {{ group.name }}</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="g 1/3@xl">
+                <div>
+                    <div class="card card--padded g-unit text--center">
+                        <a class="link--hidden" href="{{ path('group_securities', { group_id : group.id }) }}">
+                            <h2 class="d">Total securities</h2>
+                            <p class="a">{{ count }}</p>
+                        </a>
+                    </div>
+                    <div class="card card--padded g-unit text--center">
+                        <h2 class="d">Amount raised</h2>
+                        <p class="a">£{{ totalRaised }}m</p>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 {% endblock %}

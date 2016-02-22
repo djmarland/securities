@@ -94,6 +94,7 @@ class SecuritiesController extends Controller
             [
                 'showTitle' => false,
                 'includeLink' => false,
+                'template' => 'full',
             ]
         ));
         return $this->renderTemplate('securities:show');

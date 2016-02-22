@@ -62,32 +62,30 @@ class IndustriesController extends Controller
     {
         $industry = $this->getIndustry($request);
 
-//        $securitiesService = $this->get('app.services.securities');
-//
-//        $count = $securitiesService
-//            ->countByIssuer($issuer);
-//
-//        $totalRaised = $securitiesService
-//            ->sumByIssuer($issuer);
-//
-//        $result = $securitiesService
-//            ->findLatestForIssuer($issuer, 5);
-//
-//        $securityPresenters = [];
-//        $securities = $result->getDomainModels();
-//        if (!empty($securities)) {
-//            foreach ($securities as $security) {
-//                $securityPresenters[] = new SecurityPresenter($security);
-//            }
-//        }
-//
-//        $this->toView('totalRaised', number_format($totalRaised));
-//        $this->toView('count', $count);
-//        $this->toView('securities', $securityPresenters);
-//        $this->toView('hasSecurities', $count > 0);
+        $securitiesService = $this->get('app.services.securities_by_industry');
 
+        $count = $securitiesService
+            ->count($industry);
 
+        $totalRaised = $securitiesService
+            ->sum($industry);
 
+        $securities = $securitiesService
+            ->findNextMaturing($industry, 2);
+
+        $securityPresenters = [];
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security, [
+                    'template' => 'simple',
+                ]);
+            }
+        }
+
+        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('count', number_format($count));
+        $this->toView('securities', $securityPresenters);
+        $this->toView('hasSecurities', $count > 0);
         $this->toView('entityNav', new EntityNavPresenter($industry, 'show'));
         return $this->renderTemplate('industries:show');
     }

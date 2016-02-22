@@ -20,7 +20,7 @@ class ByIssuerService extends SecuritiesService
             $qb = $filter->apply($qb, self::TBL);
         }
         $qb = $this->where($qb, $issuer);
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
 
@@ -51,7 +51,19 @@ class ByIssuerService extends SecuritiesService
     ): array {
         $qb = $this->selectWithJoins();
         $qb = $this->where($qb, $issuer);
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb->setMaxResults($limit);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findNextMaturing(
+        Company $issuer,
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb = $this->where($qb, $issuer);
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -98,10 +110,7 @@ class ByIssuerService extends SecuritiesService
         $qb->leftJoin(self::TBL . '.product', $productTbl);
         $qb->groupBy($productTbl . '.id', 'm');
 
-        $qb->setParameters([
-            'company_id' => (string) $issuer->getId()->getBinary(),
-            'year' => (string) $year,
-        ]);
+        $qb->setParameter('year', (string) $year);
 
         /*
          * List of:
@@ -132,6 +141,8 @@ class ByIssuerService extends SecuritiesService
         Company $issuer
     ) {
         return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
+                ->andWhere(self::TBL . '.maturityDate > :now')
+            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('company_id', (string) $issuer->getId()->getBinary());
     }
 

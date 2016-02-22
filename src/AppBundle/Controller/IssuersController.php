@@ -95,17 +95,19 @@ class IssuersController extends Controller
             ->sum($issuer);
 
         $securities = $securitiesService
-            ->findLatest($issuer, 5);
+            ->findNextMaturing($issuer, 2);
 
         $securityPresenters = [];
         if (!empty($securities)) {
             foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
+                $securityPresenters[] = new SecurityPresenter($security, [
+                    'template' => 'simple',
+                ]);
             }
         }
 
         $this->toView('totalRaised', number_format($totalRaised));
-        $this->toView('count', $count);
+        $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
         $this->toView('hasSecurities', $count > 0);
         $this->toView('entityNav', new EntityNavPresenter($issuer, 'show'));

@@ -12,17 +12,7 @@
     </thead>
     <tbody>
     {%  for security in securities %}
-        <tr>
-            <td><a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
-                {{ security.isin }}
-            </a></td>
-            <td>{{ security.maturityDate }}</td>
-            <td>{{ security.amount }}</td>
-            <td>{{ security.coupon }}</td>
-            <td>{{ security.startDate }}</td>
-            <td>{{ security.currency }}</td>
-            <td>{{ security.product }}</td>
-        </tr>
+        {% include security.templatePath with security.vars only %}
     {%  endfor %}
     </tbody>
 </table>

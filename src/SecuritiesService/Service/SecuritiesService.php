@@ -3,6 +3,7 @@
 namespace SecuritiesService\Service;
 
 use DateTimeImmutable;
+use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\Product;
@@ -39,7 +40,8 @@ class SecuritiesService extends Service
         int $page = self::DEFAULT_PAGE
     ): array {
         $qb = $this->selectWithJoins();
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb = $this->where($qb);
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
@@ -48,6 +50,7 @@ class SecuritiesService extends Service
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
+        $qb = $this->where($qb);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -55,6 +58,7 @@ class SecuritiesService extends Service
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
+        $qb = $this->where($qb);
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -65,8 +69,9 @@ class SecuritiesService extends Service
         int $page = self::DEFAULT_PAGE
     ): array {
         $qb = $this->selectWithJoins();
+        $qb = $this->where($qb);
         $qb = $filter->apply($qb, self::TBL);
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
         $qb = $this->paginate($qb, $limit, $page);
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
@@ -77,6 +82,7 @@ class SecuritiesService extends Service
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
+        $qb = $this->where($qb);
         $qb = $filter->apply($qb, self::TBL);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
@@ -86,8 +92,17 @@ class SecuritiesService extends Service
     ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
+        $qb = $this->where($qb);
         $qb = $filter->apply($qb, self::TBL);
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    private function where(
+        QueryBuilder $qb
+    ) {
+        return $qb
+            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->setParameter('now', new \DateTime()); // @todo - inject application time
     }
 
 

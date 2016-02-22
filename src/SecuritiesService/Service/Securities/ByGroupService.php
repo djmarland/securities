@@ -47,6 +47,19 @@ class ByGroupService extends SecuritiesService
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function findNextMaturing(
+        ParentGroup $group,
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb->leftJoin('co.parentGroup', 'p');
+        $qb = $this->where($qb, $group);
+        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb->setMaxResults($limit);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
     public function issuanceYears(
         ParentGroup $group
     ): array {
@@ -117,6 +130,8 @@ class ByGroupService extends SecuritiesService
         ParentGroup $group
     ) {
         return $qb->andWhere('p.id = :groupId')
+            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('groupId', (string) $group->getId()->getBinary());
     }
 
