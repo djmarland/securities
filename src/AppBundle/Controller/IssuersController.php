@@ -55,7 +55,10 @@ class IssuersController extends Controller
             $letterGroups[$issuer->getLetter()][] = $issuer;
         }
 
-        $allLetters = array_merge(['0-9'], range('A', 'Z'));
+        // move numbers to the end
+        $letterGroups['0-9'] = array_shift($letterGroups);
+
+        $allLetters = array_merge(range('A', 'Z'), ['0-9']);
         $letters = [];
         foreach ($allLetters as $letter) {
             $letters[] = (object) [
