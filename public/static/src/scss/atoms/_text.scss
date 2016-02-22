@@ -12,11 +12,14 @@
 
 .text--prose {
     max-width: 700px;
-    p {
+    p, li, h1 {
         // when part of prose, paragraphs get their spacing back
         margin-bottom: $grid-unit-small;
         @include mq($from: m) {
             margin-bottom: $grid-unit-large;
         }
+    }
+    li {
+        list-style-position: outside;
     }
 }

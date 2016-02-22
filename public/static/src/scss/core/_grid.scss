@@ -22,6 +22,11 @@
     }
 }
 
+.g-central {
+    margin-left: auto;
+    margin-right: auto;
+}
+
 .g--align-center {
     @include flex-align(center);
 }
