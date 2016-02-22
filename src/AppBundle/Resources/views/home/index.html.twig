@@ -5,20 +5,27 @@
     <div class="grid">
         <div class="g 3/5@xl">
             <div class="card card--padded">
-                <h2 class="g-unit">Upcoming maturities</h2>
-                {% include '@partials/securities-list.html.twig' %}
-                <p>
-                    <a class="link--button" href="{{ path('security_list') }}">View all securities</a>
+                <p class="d g-unit">
+                    Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
+                    Search our site by ISIN, company, sector or industry for securities information
+                    relating to:
+                </p>
+                <ul class="g-unit">
+                    <li>Unsecured senior securities</li>
+                    <li>Dated & undated capital notes</li>
+                    <li>Structured products</li>
+                    <li>Covered bonds</li>
+                    <li>Securitisations</li>
+                </ul>
+                <p class="g-unit">
+                    Please read our
+                    <a href="{{ path('terms') }}">Terms and Conditions of Access of the Website</a>.
+                    All enquiries can be directed to
+                    <a href="mailto:contact@isinanalytics.com">contact@isinanalytics.com</a>.
                 </p>
             </div>
         </div>
         <div class="g 2/5@xl">
-                <div class="card card--padded g-unit">
-                    <h2 class="g-unit">New</h2>
-                    <a class="link--button" href="{{ path('industry_list') }}">Industries</a>
-                    <a class="link--button" href="{{ path('report_fsa50') }}">FSA50 report</a>
-                    <a class="link--button" href="{{ path('security_list') }}">Filterable Securities</a>
-                </div>
                 <div class="card card--padded g-unit">
                     <div class="grid">
                     <div class="g 1/2@xl">
