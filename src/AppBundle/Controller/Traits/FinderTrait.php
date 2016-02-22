@@ -11,12 +11,19 @@ use SecuritiesService\Domain\Entity\Sector;
 
 trait FinderTrait
 {
+    private $routeSuffix = 'show';
+
     public function setFinder(
+        $routeName = null,
         Industry $industry = null,
         Sector $sector = null,
         ParentGroup $group = null,
         Company $issuer = null
     ) {
+        if ($routeName) {
+            $this->routeSuffix = substr($routeName, strpos($routeName, '_'));
+        }
+
         $items = $this->getIndustryItems(
             $industry,
             $sector,
@@ -44,7 +51,7 @@ trait FinderTrait
         $items = [];
         foreach ($industries as $ind) {
             $title = $ind->getName();
-            $url = $this->generateUrl('industry_show', ['industry_id' => $ind->getId()]);
+            $url = $this->generateUrl('industry' . $this->routeSuffix, ['industry_id' => $ind->getId()]);
             $children = null;
             $active = false;
             if ($industry && $industry->getId() == $ind->getId()) {
@@ -68,7 +75,7 @@ trait FinderTrait
         $items = [];
         foreach ($sectors as $sec) {
             $title = $sec->getName();
-            $url = $this->generateUrl('sector_show', ['sector_id' => $sec->getId()]);
+            $url = $this->generateUrl('sector' . $this->routeSuffix, ['sector_id' => $sec->getId()]);
             $children = null;
             $active = false;
             if ($sector && $sector->getId() == $sec->getId()) {
@@ -91,7 +98,7 @@ trait FinderTrait
         $items = [];
         foreach ($groups as $gr) {
             $title = $gr->getName();
-            $url = $this->generateUrl('group_show', ['group_id' => $gr->getId()]);
+            $url = $this->generateUrl('group' . $this->routeSuffix, ['group_id' => $gr->getId()]);
             $children = null;
             $active = false;
             if ($group && $group->getId() == $gr->getId()) {
@@ -113,7 +120,7 @@ trait FinderTrait
         $items = [];
         foreach ($issuers as $iss) {
             $title = $iss->getName();
-            $url = $this->generateUrl('issuer_show', ['issuer_id' => $iss->getId()]);
+            $url = $this->generateUrl('issuer' . $this->routeSuffix, ['issuer_id' => $iss->getId()]);
             $active = false;
             if ($issuer && $issuer->getId() == $iss->getId()) {
                 $active = true;

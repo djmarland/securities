@@ -254,7 +254,7 @@ class GroupsController extends Controller
 
         // I'm looking at a group, so I need to pass in that group,
         // and it's parent sector + industry
-        $this->setFinder($industry, $sector, $group);
+        $this->setFinder($request->get('_route'), $industry, $sector, $group);
 
         $this->setTitle($group->getName());
         $this->toView('group', $group);

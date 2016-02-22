@@ -10,6 +10,10 @@ about:
   path:     /about
   defaults: { _controller: AppBundle:Home:about }
 
+terms:
+  path:     /terms
+  defaults: { _controller: AppBundle:Home:terms }
+
 search:
   path:     /search
   defaults: { _controller: AppBundle:Search:list }

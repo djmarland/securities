@@ -44,6 +44,11 @@ class HomeController extends Controller
         return $this->renderTemplate('home:about');
     }
 
+    public function termsAction()
+    {
+        return $this->renderTemplate('home:terms');
+    }
+
     public function styleguideAction()
     {
         return $this->renderTemplate('home:styleguide');

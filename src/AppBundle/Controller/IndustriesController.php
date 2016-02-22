@@ -209,7 +209,7 @@ class IndustriesController extends Controller
 
 
         // I'm looking at an industry, so I need to pass in that industry
-        $this->setFinder($industry);
+        $this->setFinder($request->get('_route'), $industry);
 
         return $industry;
     }

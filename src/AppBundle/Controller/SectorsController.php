@@ -206,7 +206,7 @@ class SectorsController extends Controller
 
         // I'm looking at a sector, so I need to pass in that sector,
         // and it's parent industry
-        $this->setFinder($industry, $sector);
+        $this->setFinder($request->get('_route'), $industry, $sector);
 
         $this->setTitle($sector->getName());
         $this->toView('sector', $sector);

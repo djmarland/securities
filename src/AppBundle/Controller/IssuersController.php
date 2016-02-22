@@ -9,7 +9,6 @@ use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
 use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
-use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -282,7 +281,7 @@ class IssuersController extends Controller
 
         // I'm looking at a group, so I need to pass in that issuer,
         // and it's parent group, sector + industry
-        $this->setFinder($industry, $sector, $group, $issuer);
+        $this->setFinder($request->get('_route'), $industry, $sector, $group, $issuer);
 
         $this->setTitle($issuer->getName());
         $this->toView('issuer', $issuer);
