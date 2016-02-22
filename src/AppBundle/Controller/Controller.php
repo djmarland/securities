@@ -9,6 +9,7 @@ use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class Controller extends BaseController implements ControllerInterface
@@ -103,11 +104,21 @@ class Controller extends BaseController implements ControllerInterface
         $this->toView('pagination', $pagination);
     }
 
+    protected function setCacheHeaders($response)
+    {
+        $response->setPublic();
+
+        $response->setMaxAge(600);
+        $response->setSharedMaxAge(600);
+    }
+
     protected function renderTemplate($template)
     {
         $format = $this->request->get('format', null);
         if ($format == 'json') {
-            return new JsonResponse($this->masterViewPresenter->getFeedData());
+            $response = new JsonResponse($this->masterViewPresenter->getFeedData());
+            $this->setCacheHeaders($response);
+            return $response;
         }
 
         $ext = 'html';
@@ -117,8 +128,11 @@ class Controller extends BaseController implements ControllerInterface
             throw new HttpException(404, 'Invalid Format');
         }
 
+        $response = new Response();
+        $this->setCacheHeaders($response);
+
         $path = 'AppBundle:' . $template . '.' . $ext . '.twig';
-        return $this->render($path, $this->masterViewPresenter->getData());
+        return $this->render($path, $this->masterViewPresenter->getData(), $response);
     }
 
     protected function getYear(Request $request, DateTimeImmutable $today)

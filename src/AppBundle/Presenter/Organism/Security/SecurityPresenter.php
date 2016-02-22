@@ -126,9 +126,9 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     {
         $coupon = $this->security->getCoupon();
         if ($coupon) {
-            return ($this->security->getCoupon() * 100) . '%';
+            return round(($this->security->getCoupon() * 100),2) . '%';
         }
-        return 'N/A';
+        return '-';
     }
 
     public function getProduct():string
@@ -163,12 +163,15 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
         $stringParts = [];
         if ($years) {
-            $stringParts[] = $years . ' years';
+            $stringParts[] = $years . ' year' . (($years > 1) ? 's' : '');
         }
         if ($months) {
-            $stringParts[] = $months . ' months';
+            $stringParts[] = $months . ' month'  . (($months > 1) ? 's' : '');
         }
 
+        if (empty($stringParts)) {
+            return 'Less than 1 month';
+        }
         return implode(', ', $stringParts);
     }
 }
