@@ -42,7 +42,7 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
                         'params' => [
                             $this->routeType() . '_id' => (string) $this->domainModel->getId(),
                             'issueDate' => $this->year . '-' . str_pad($monthNum, 2, '0', STR_PAD_LEFT),
-                            'product' => (string) $productResult['product']->getId()
+                            'product' => (string) $productResult['product']->getNumber()
                         ],
                     ];
                     $text = $productResult['months'][$monthNum];
