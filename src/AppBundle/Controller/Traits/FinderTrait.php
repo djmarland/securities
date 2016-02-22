@@ -11,7 +11,7 @@ use SecuritiesService\Domain\Entity\Sector;
 
 trait FinderTrait
 {
-    private $routeSuffix = 'show';
+    private $routeSuffix = '_show';
 
     public function setFinder(
         $routeName = null,
