@@ -26,20 +26,16 @@ trait SecurityFilterTrait
     public function setProductFilter(Request $request)
     {
         $this->filter['activeProduct'] = null;
-        $id = $request->get('product', null);
-        if ($id) {
-            try {
-                $id = UUID::createFromString($id);
-            } catch (ValidationException $e) {
-                throw new HttpException(404, $e->getMessage());
-            }
+        $number = $request->get('product', null);
+        if ($number && (string) (int) $number !== $number) {
+            throw new HttpException(404, 'Invalid ID');
         }
         $this->filter['products'] = $this->get('app.services.products')
             ->findAll();
         $product = null;
-        if ($id) {
+        if ($number) {
             foreach ($this->filter['products'] as $p) {
-                if ($p->getId() == $id) {
+                if ($p->getNumber() == $number) {
                     $product = $p;
                 }
             }

@@ -19,7 +19,7 @@
                     Product: <select name="product">
                         <option value="">All</option>
                         {% for product in filter.products %}
-                            <option value="{{ product.id }}"
+                            <option value="{{ product.number }}"
                                     {% if filter.activeProduct == product.id %}
                                         selected
                                     {% endif %}
@@ -42,7 +42,7 @@
                         </select>
                     </label>
                 </p>
-                <p>
+                {#<p>
                     <label>
                         Maturity Date: <select name="bucket">
                             <option value="">Any</option>
@@ -55,7 +55,7 @@
                             {% endfor %}
                         </select>
                     </label>
-                </p>
+                </p>#}
                 <p>
                     <button type="submit" class="btn">Update filter{% if filter.activeIssueDate %} (will remove date){% endif %}</button>
                 </p>
