@@ -126,7 +126,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     {
         $coupon = $this->security->getCoupon();
         if ($coupon) {
-            return round(($this->security->getCoupon() * 100),2) . '%';
+            return round($this->security->getCoupon(),2) . '%';
         }
         return '-';
     }
