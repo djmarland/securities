@@ -88,35 +88,37 @@
                         <p class="island text--center">Loading chart</p>
                     </div>
                     <script>
-                        google.charts.setOnLoadCallback(drawChart);
-                        function drawChart() {
-                            var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
+                        (function() {
+                            google.charts.setOnLoadCallback(drawChart);
+                            function drawChart() {
+                                var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
 
-                            var options = {
-                                height: 300,
-                                pieHole: 0.4,
-                                pieStartAngle: 20,
-                                backgroundColor: 'transparent',
-                                legend : {
-                                    position: 'left'
-                                },
-                                animation: {
-                                    duration: 800,
-                                    startup: true
-                                },
-                                chartArea : {
-                                    top: 24,
-                                    left: 24,
-                                    width: '90%',
-                                    height: 258
-                                },
-                                pieSliceText: 'none',
-                                colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
-                            };
+                                var options = {
+                                    height: 300,
+                                    pieHole: 0.4,
+                                    pieStartAngle: 20,
+                                    backgroundColor: 'transparent',
+                                    legend: {
+                                        position: 'left'
+                                    },
+                                    animation: {
+                                        duration: 800,
+                                        startup: true
+                                    },
+                                    chartArea: {
+                                        top: 24,
+                                        left: 24,
+                                        width: '90%',
+                                        height: 258
+                                    },
+                                    pieSliceText: 'none',
+                                    colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
+                                };
 
-                            var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
-                            chart.draw(data, options);
-                        }
+                                var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
+                                chart.draw(data, options);
+                            }
+                        })();
                     </script>
             </div>
         </div>

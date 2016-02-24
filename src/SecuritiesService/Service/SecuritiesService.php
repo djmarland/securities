@@ -118,7 +118,7 @@ class SecuritiesService extends Service
         QueryBuilder $qb
     ) {
         return $qb
-            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
             ->setParameter('now', new \DateTime()); // @todo - inject application time
     }
 
