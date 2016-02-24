@@ -141,7 +141,7 @@ class ByIssuerService extends SecuritiesService
         Company $issuer
     ) {
         return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
-                ->andWhere(self::TBL . '.maturityDate > :now')
+            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
             ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('company_id', (string) $issuer->getId()->getBinary());
     }

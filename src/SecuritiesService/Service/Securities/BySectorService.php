@@ -139,7 +139,7 @@ class BySectorService extends SecuritiesService
         Sector $sector
     ): QueryBuilder {
         return $qb->andWhere('s.id = :sId')
-            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
             ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('sId', (string) $sector->getId()->getBinary());
     }

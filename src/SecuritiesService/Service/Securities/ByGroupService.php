@@ -130,7 +130,7 @@ class ByGroupService extends SecuritiesService
         ParentGroup $group
     ) {
         return $qb->andWhere('p.id = :groupId')
-            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
             ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('groupId', (string) $group->getId()->getBinary());
     }

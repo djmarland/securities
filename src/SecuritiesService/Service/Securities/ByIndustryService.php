@@ -142,7 +142,7 @@ class ByIndustryService extends SecuritiesService
         Industry $industry
     ) {
         return $qb->andWhere('i.id = :iId')
-            ->andWhere(self::TBL . '.maturityDate > :now')
+            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
             ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('iId', (string) $industry->getId()->getBinary());
     }
