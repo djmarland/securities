@@ -20,7 +20,7 @@ class ByIssuerService extends SecuritiesService
             $qb = $filter->apply($qb, self::TBL);
         }
         $qb = $this->where($qb, $issuer);
-        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
 
@@ -63,7 +63,7 @@ class ByIssuerService extends SecuritiesService
     ): array {
         $qb = $this->selectWithJoins();
         $qb = $this->where($qb, $issuer);
-        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

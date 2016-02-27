@@ -3,6 +3,8 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Presenter\MasterPresenter;
+use AppBundle\Presenter\Organism\Adverts\AdvertsPresenter;
+use AppBundle\Presenter\Organism\EntityNav\AdvertPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
 use AppBundle\Security\Visitor;
 use DateTimeImmutable;
@@ -33,6 +35,7 @@ class Controller extends BaseController implements ControllerInterface
         $this->appConfig = $this->getParameter('app.config');
         $this->masterViewPresenter = new MasterPresenter($this->appConfig);
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
+        $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]));
         $this->toView('currentYear', date("Y"));
         $this->toView('currentSection', null);
         $this->setSearchContext();

@@ -1,0 +1,12 @@
+<div class="advert advert--{{ adverts.variant }}">
+    <p class="h-f text--right advert__notice">Advertisement</p>
+    {% if adverts.areActive %}
+    <ins class="adsbygoogle"
+         style="display:block"
+         data-ad-client="{{ adverts.clientId }}"
+         data-ad-slot="{{ adverts.slotId }}"
+         data-ad-format="auto"></ins>
+    {% else %}
+        Advert: {{ adverts.clientId }} (client id), {{ adverts.slotId }} (slot id) disabled on this environment
+    {% endif %}
+</div>

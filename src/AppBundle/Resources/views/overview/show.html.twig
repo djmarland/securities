@@ -25,7 +25,7 @@
                 </div>
             </div>
             <div class="g">
-                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
+                {% include adverts.templatePath with adverts.variantVars('overview') only %}
             </div>
         </div>
     </div>

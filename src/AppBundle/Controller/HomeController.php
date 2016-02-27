@@ -17,17 +17,6 @@ class HomeController extends Controller
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
 
-
-        $securities = $this->get('app.services.securities')->findUpcomingMaturities(new \DateTimeImmutable(), 5);
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
-            }
-        }
-
-        $this->toView('securities', $securityPresenters);
-
         $byProduct = [['Funding Product', 'Number']];
         foreach ($productCounts as $pc) {
             $byProduct[] = [

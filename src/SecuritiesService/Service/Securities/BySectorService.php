@@ -24,7 +24,7 @@ class BySectorService extends SecuritiesService
         }
         $qb = $this->where($qb, $sector);
 
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -57,7 +57,7 @@ class BySectorService extends SecuritiesService
         $qb->leftJoin('co.parentGroup', 'p');
         $qb->leftJoin('p.sector', 's');
         $qb = $this->where($qb, $sector);
-        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

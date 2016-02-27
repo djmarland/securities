@@ -221,7 +221,7 @@ class IssuersController extends Controller
 
         // only show years after 3 years ago (@todo - abstract)
         $currentYear = (int) $this->getApplicationTime()->format('Y');
-        $years = array_filter($years, function($year) use ($currentYear) {
+        $years = array_filter($years, function ($year) use ($currentYear) {
             return $year >= $currentYear-3;
         });
         $year = $this->getYear($request, $this->getApplicationTime());

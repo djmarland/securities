@@ -1,0 +1,7 @@
+imports:
+    - { resource: config.yml }
+
+parameters:
+    app.config:
+        title: "ISIN Analytics [beta]"
+        allowAdverts: false

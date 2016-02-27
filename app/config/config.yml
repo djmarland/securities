@@ -7,6 +7,7 @@ parameters:
     locale: en
     app.config:
         title: "ISIN Analytics"
+        allowAdverts: true
 
 framework:
     #esi:             ~
@@ -74,9 +75,11 @@ doctrine:
                 type: annotation
                 prefix: SecuritiesService\Data\Database\Entity
         dql:
-             datetime_functions:
-                 date: DoctrineExtensions\Query\Mysql\Date
-                 date_format: DoctrineExtensions\Query\Mysql\DateFormat
+            datetime_functions:
+                date: DoctrineExtensions\Query\Mysql\Date
+                date_format: DoctrineExtensions\Query\Mysql\DateFormat
+            string_functions:
+                ifnull: DoctrineExtensions\Query\Mysql\IfNull
 
 # Doctrine migrations
 doctrine_migrations:

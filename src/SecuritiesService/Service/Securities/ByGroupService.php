@@ -23,7 +23,7 @@ class ByGroupService extends SecuritiesService
         }
         $qb = $this->where($qb, $group);
 
-        $qb->orderBy(self::TBL . '.isin', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
@@ -54,7 +54,7 @@ class ByGroupService extends SecuritiesService
         $qb = $this->selectWithJoins();
         $qb->leftJoin('co.parentGroup', 'p');
         $qb = $this->where($qb, $group);
-        $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
+        $qb = $this->order($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

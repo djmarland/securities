@@ -116,7 +116,7 @@ trait SecurityFilterTrait
             $this->filter['activeIssueDate'] = [
                 'start' => $startDate,
                 'end' => $endDate,
-                'displayEnd' => $displayEnd
+                'displayEnd' => $displayEnd,
             ];
         }
         $this->toView('filter', $this->filter);

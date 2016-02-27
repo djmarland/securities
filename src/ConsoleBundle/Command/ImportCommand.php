@@ -140,7 +140,17 @@ class ImportCommand extends Command
         $security->setMaturityDate($maturityDate);
 
         $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
-        $security->setCoupon(($row['COUPON_RATE'] != 'N/A') ? floatval($row['COUPON_RATE']) : null);
+
+        $coupon = null;
+        if (strtolower($row['COUPON_RATE']) != 'n/a') {
+            $couponValue = floatval($row['COUPON_RATE']);
+            if (strpos($row['COUPON_RATE'], '%') !== false) {
+                $couponValue = $couponValue / 100;
+            }
+            $coupon = $couponValue;
+        }
+
+        $security->setCoupon($coupon);
 
 
 //        $security->setMarket($row['MARKET']);

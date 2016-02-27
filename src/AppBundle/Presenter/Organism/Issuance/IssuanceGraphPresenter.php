@@ -18,11 +18,9 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         array_unshift($graphData[0], 'Month');
 
         $months = $this->getMonths();
-        foreach($months as $monthNum => $monthName) {
+        foreach ($months as $monthNum => $monthName) {
             // for each month, set the count for each product
-            $row = [
-                $monthName
-            ];
+            $row = [$monthName];
             foreach ($products as $product) {
                 $row[] = $product['months'][$monthNum] ?? 0;
             }

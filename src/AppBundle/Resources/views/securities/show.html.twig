@@ -7,7 +7,7 @@
             {% include security.templatePath with security.vars only %}
         </div>
         <div class="g 1/4@xl">
-            {% include('@partials/advert.html.twig') with { adType : 'isin'} %}
+            {% include adverts.templatePath with adverts.variantVars('isin') only %}
         </div>
     </div>
 {% endblock %}

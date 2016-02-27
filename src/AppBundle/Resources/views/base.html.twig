@@ -27,7 +27,7 @@
     <link rel="stylesheet" href="{{ 'global.css'|asset_path }}" />
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>
-        google.charts.load('current', {'packages':['corechart']});
+        google.charts.load('43', {'packages':['corechart']});
     </script>
 <body class="{% block bodyClass %}{% endblock %}">
 {% block header %}
@@ -82,5 +82,9 @@
     ga('send', 'pageview');
 
 </script>
+{% if adverts.areActive %}
+    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+    <script>(adsbygoogle = window.adsbygoogle || []).push({});</script>
+{% endif %}
 </body>
 </html>

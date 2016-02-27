@@ -6,7 +6,7 @@
     <div class="g 3/4@xl">
         <div>
             <div class="g-unit">
-                {% include('@partials/advert.html.twig') with { adType : 'overview'} %}
+                {% include adverts.templatePath with adverts.variantVars('overview') only %}
             </div>
             <div class="g-unit">
                 <h1 class="g-unit h-b">

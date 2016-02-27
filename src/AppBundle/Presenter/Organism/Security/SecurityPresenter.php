@@ -14,7 +14,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     protected $options = [
         'includeLink' => true,
         'showTitle' => true,
-        'template' => null
+        'template' => null,
     ];
 
     private $security;
@@ -73,7 +73,8 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getAmount():string
     {
-        return '£' . number_format(round($this->security->getMoneyRaised(), 1)) . 'm';
+        $val = number_format($this->security->getMoneyRaised(), 2);
+        return '£' . $val . 'm';
     }
 
     public function getCurrency():string
@@ -92,7 +93,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         if ($date) {
             return $this->security->getMaturityDate()->format(self::DATE_FORMAT);
         }
-        return 'UNDATED';
+        return 'Undated';
     }
 
     /**
@@ -103,30 +104,39 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->security->getCompany();
     }
 
-    public function getInitialTerm()
+    public function getInitialTerm(): string
     {
+        $end = $this->security->getMaturityDate();
+        if (!$end) {
+            return '-';
+        }
+
         $start = $this->security->getStartDate();
-        $end = $this->security->getMaturityDate();
         return $this->dateDiff($start, $end);
     }
 
-    public function getRemainingTerm()
+    public function getRemainingTerm(): string
     {
-        $start = new \DateTimeImmutable(); // @todo - inject date
         $end = $this->security->getMaturityDate();
+        if (!$end) {
+            return '-';
+        }
+        $start = new \DateTimeImmutable(); // @todo - inject date
         return $this->dateDiff($start, $end);
     }
 
-    public function getDuration():string
+    public function getDuration(): string
     {
         return '';
     }
 
-    public function getCoupon():string
+    public function getCoupon(): string
     {
+        // coupon values are in decimal, so to display as %
+        // we have to multiple by 100
         $coupon = $this->security->getCoupon();
         if ($coupon) {
-            return round($this->security->getCoupon(),2) . '%';
+            return (round($this->security->getCoupon()*100, 2)) . '%';
         }
         return '-';
     }
@@ -136,13 +146,13 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return (string) $this->security->getProduct()->getName();
     }
 
-    public function getResidualMaturity():string
+    public function getResidualMaturity(): string
     {
         $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
         return (string) $bucket;
     }
 
-    public function getContractualMaturity():string
+    public function getContractualMaturity(): string
     {
         $bucket = $this->security->getContractualMaturityBucket();
         return (string) $bucket;
@@ -166,7 +176,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
             $stringParts[] = $years . ' year' . (($years > 1) ? 's' : '');
         }
         if ($months) {
-            $stringParts[] = $months . ' month'  . (($months > 1) ? 's' : '');
+            $stringParts[] = $months . ' month' . (($months > 1) ? 's' : '');
         }
 
         if (empty($stringParts)) {
