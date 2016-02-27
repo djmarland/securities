@@ -4,9 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Presenter\MasterPresenter;
 use AppBundle\Presenter\Organism\Adverts\AdvertsPresenter;
-use AppBundle\Presenter\Organism\EntityNav\AdvertPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
-use AppBundle\Security\Visitor;
 use DateTimeImmutable;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
