@@ -1,0 +1,11 @@
+<tr onclick="window.location.href='{{ path('security_show',{'isin':security.isin}) }}'">
+    <td><a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
+            {{ security.isin }}
+        </a></td>
+    <td>{{ security.amount }}</td>
+    <td>{{ security.product }}</td>
+    <td>{{ security.maturityDate }}</td>
+    <td>{{ security.coupon }}</td>
+    <td>{{ security.currency }}</td>
+    <td>LSE</td>{# @todo - store in database#}
+</tr>

@@ -4,7 +4,11 @@
   "type": "project",
   "description": "The \"Symfony Standard Edition\" distribution",
   "autoload": {
-    "psr-4": { "": "src/", "SymfonyStandard\\": "app/SymfonyStandard/" }
+    "psr-4": {
+      "": "src/",
+      "AppBundle\\Presenter\\": "src/AppBundle/Resources/views/Presenter/",
+      "SymfonyStandard\\": "app/SymfonyStandard/"
+    }
   },
   "require": {
     "php": "~5.5 || >=7",

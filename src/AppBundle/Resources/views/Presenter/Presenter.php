@@ -84,7 +84,7 @@ abstract class Presenter
      */
     public function getTemplatePath(): string
     {
-        return '@' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
+        return 'AppBundle:Presenter/' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
     }
 
     /**
@@ -110,7 +110,7 @@ abstract class Presenter
     {
         $className = get_called_class();
         // strip off the namespace
-        $classPath = str_replace('App\Presenter\\', '', $className);
+        $classPath = str_replace('AppBundle\Presenter\\', '', $className);
         // split by backslash
         $parts = explode('\\', $classPath);
         // get the last bit (the class name)
