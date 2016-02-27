@@ -128,18 +128,24 @@ class ImportCommand extends Command
         }
         $security->setName($row['SECURITY_NAME']);
 
-        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
+//        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
+//
+//        $startDate = $excelZeroPoint->add(new DateInterval('P' . $row['SECURITY_START_DATE'] . 'D'));
+//        $maturityDate = null;
+//        if (is_numeric($row['MATURITY_DATE'])) {
+//            $maturityDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
+//        }
 
-        $startDate = $excelZeroPoint->add(new DateInterval('P' . $row['SECURITY_START_DATE'] . 'D'));
+        $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['SECURITY_START_DATE']);
         $maturityDate = null;
-        if (is_numeric($row['MATURITY_DATE'])) {
-            $maturityDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
+        if ($row['MATURITY_DATE'] != 'UNDATED') {
+            $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['MATURITY_DATE']);
         }
 
         $security->setStartDate($startDate);
         $security->setMaturityDate($maturityDate);
 
-        $security->setMoneyRaised($row['MONEY_RAISE_GBP']);
+        $security->setMoneyRaised($row['MONEY_RAISED_GBP']);
 
         $coupon = null;
         if (strtolower($row['COUPON_RATE']) != 'n/a') {
