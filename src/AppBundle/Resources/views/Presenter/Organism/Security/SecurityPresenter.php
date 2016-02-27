@@ -161,15 +161,10 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     // @todo - be more robust
     private function dateDiff($start, $end)
     {
-        $end = $end->getTimestamp();
-        $start = $start->getTimestamp();
-        $diff = $end - $start;
+        $interval = $start->diff($end);
 
-        $year = 60*60*24*365;
-        $month = 60*60*24*29.8;
-        $years = (floor($diff/$year));
-        $remaining = $diff - ($years * $year);
-        $months = floor($remaining/$month);
+        $years = $interval->y;
+        $months = $interval->m;
 
         $stringParts = [];
         if ($years) {
