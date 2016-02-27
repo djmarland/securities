@@ -10,12 +10,17 @@ require __DIR__.'/../app/autoload.php';
 $env = 'prod';
 $debugMode = false;
 
-// override if we can
-$serverEnv = getenv('APP_ENV');
+// get env from hostname
+$hostname = $_SERVER['HTTP_HOST'] ?? null;
 
-if ($serverEnv && in_array($serverEnv, ['dev', 'prod'])) {
-    $env = $serverEnv;
-}
+$environments = [
+    'isin.app' => 'dev',
+    'beta.isinanalytics.com' => 'beta',
+    'alpha.isinanalytics.com' => 'alpha',
+    'www.isinanalytics.com' => 'prod',
+];
+
+$env = $environments[$hostname] ?? $env;
 
 if ('dev' == $env) {
     $env = 'dev';

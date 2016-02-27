@@ -138,7 +138,7 @@ class ImportCommand extends Command
 
         $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['SECURITY_START_DATE']);
         $maturityDate = null;
-        if ($row['MATURITY_DATE'] != 'UNDATED') {
+        if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $row['MATURITY_DATE'])) {
             $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['MATURITY_DATE']);
         }
 
