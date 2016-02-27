@@ -31,7 +31,7 @@ class AppKernel extends Kernel
     {
         $suffix = '';
         $env = $this->getEnvironment();
-        if (in_array($env, ['dev','console'])) {
+        if (in_array($env, ['dev','alpha','beta'])) {
             $suffix = '_' . $env;
         }
         $loader->load($this->getRootDir().'/config/' . static::CONFIG_FILE . $suffix . '.yml');
