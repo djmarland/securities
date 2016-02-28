@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "fa37bf534ff2e0c8c345efe1a0ae2f15",
-    "content-hash": "474285ab04dbb01091b5c8135dec8861",
+    "hash": "2ac3a53f86330d292fa66c2c3f4aad36",
+    "content-hash": "47b904f87ff67501f8943ac5cefcdf03",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -68,6 +68,54 @@
                 "orm"
             ],
             "time": "2015-11-12 13:25:24"
+        },
+        {
+            "name": "djmarland/isin",
+            "version": "v1.0.0",
+            "source": {
+                "type": "git",
+                "url": "https://github.com/djmarland/isin.git",
+                "reference": "c647df27e681b651ab31aca054269996560905bb"
+            },
+            "dist": {
+                "type": "zip",
+                "url": "https://api.github.com/repos/djmarland/isin/zipball/c647df27e681b651ab31aca054269996560905bb",
+                "reference": "c647df27e681b651ab31aca054269996560905bb",
+                "shasum": ""
+            },
+            "require": {
+                "php": ">=5.4"
+            },
+            "require-dev": {
+                "phpunit/phpunit": "^4.7|^5.0",
+                "squizlabs/php_codesniffer": "^2.3"
+            },
+            "type": "library",
+            "autoload": {
+                "psr-4": {
+                    "Djmarland\\ISIN\\": "src/ISIN/"
+                }
+            },
+            "notification-url": "https://packagist.org/downloads/",
+            "license": [
+                "MIT"
+            ],
+            "authors": [
+                {
+                    "name": "David Marland",
+                    "email": "davidm@rland.me.uk",
+                    "homepage": "http://rland.me.uk"
+                }
+            ],
+            "description": "A PHP Library for storing a validating an ISIN (International Securities Identification Number / ISO 6166)",
+            "homepage": "https://github.com/djmarland/isin",
+            "keywords": [
+                "6166",
+                "ISIN",
+                "iso 6166",
+                "iso6166"
+            ],
+            "time": "2016-02-28 21:46:02"
         },
         {
             "name": "doctrine/annotations",

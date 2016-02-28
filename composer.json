@@ -21,7 +21,8 @@
     "doctrine/doctrine-migrations-bundle": "~1.1",
     "beberlei/DoctrineExtensions": "^1.0",
     "ramsey/uuid": "^3.2",
-    "ramsey/uuid-doctrine": "^1.1"
+    "ramsey/uuid-doctrine": "^1.1",
+    "djmarland/isin": "^1.0"
   },
   "require-dev": {
     "phpunit/phpunit": "~5",
