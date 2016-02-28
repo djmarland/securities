@@ -82,6 +82,7 @@ class SectorsController extends Controller
             }
         }
 
+        $this->setTitle($sector->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
@@ -94,6 +95,7 @@ class SectorsController extends Controller
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
+//        $this->setTitle('Issuance ' . $year . ' - ' . $sector->getName());
 //        $this->toView('entityNav', new EntityNavPresenter($sector, 'maturity_profile'));
 //        return $this->renderTemplate('sectors:maturity-profile');
     }
@@ -148,6 +150,7 @@ class SectorsController extends Controller
             $issuanceGraph = new IssuanceGraphPresenter($sector, $results, $year);
         }
 
+        $this->setTitle('Issuance ' . $year . ' - ' . $sector->getName());
         $this->toView('hasData', $hasData);
         $this->toView('issuanceTable', $issuanceTable);
         $this->toView('issuanceGraph', $issuanceGraph);
@@ -186,6 +189,7 @@ class SectorsController extends Controller
             }
         }
 
+        $this->setTitle('Securities - ' . $sector->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
@@ -219,7 +223,6 @@ class SectorsController extends Controller
         // and it's parent industry
         $this->setFinder($request->get('_route'), $industry, $sector);
 
-        $this->setTitle($sector->getName());
         $this->toView('sector', $sector);
         return $sector;
     }

@@ -106,6 +106,7 @@ class IssuersController extends Controller
             }
         }
 
+        $this->setTitle($issuer->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
@@ -146,6 +147,7 @@ class IssuersController extends Controller
             }
         }
 
+        $this->setTitle('Securities - ' . $issuer->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
@@ -206,6 +208,7 @@ class IssuersController extends Controller
         }
 
         // @todo - create a twig helper for displaying numbers
+        $this->setTitle('Maturity Profile - ' . $issuer->getName());
         $this->toView('buckets', $buckets);
         $this->toView('tableData', $tableData);
         $this->toView('absoluteTotal', $absoluteTotal);
@@ -242,6 +245,7 @@ class IssuersController extends Controller
             );
         }
 
+        $this->setTitle('Issuance ' . $year . ' - ' . $issuer->getName());
         $this->toView('activeYear', $year);
         $this->toView('years', $years);
         $this->toView('entityNav', new EntityNavPresenter($issuer, 'issuance'));
@@ -298,7 +302,6 @@ class IssuersController extends Controller
         // and it's parent group, sector + industry
         $this->setFinder($request->get('_route'), $industry, $sector, $group, $issuer);
 
-        $this->setTitle($issuer->getName());
         $this->toView('issuer', $issuer);
         return $issuer;
     }

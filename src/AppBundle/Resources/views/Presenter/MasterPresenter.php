@@ -78,4 +78,10 @@ class MasterPresenter extends Presenter
         $this->meta['title'] = $title;
         $this->meta['fullTitle'] = $title . ' - ' . $this->appConfig['title'];
     }
+
+    // use this when you don't want the auto appended suffix
+    public function setFullTitle(string $title)
+    {
+        $this->meta['fullTitle'] = $title;
+    }
 }

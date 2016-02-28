@@ -24,6 +24,7 @@ class HomeController extends Controller
                 $pc->count,
             ];
         }
+        $this->masterViewPresenter->setFullTitle('ISIN Analytics - The Guide to London\'s Debt Capital Markets');
         $this->toView('byProduct', $byProduct);
         return $this->renderTemplate('home:index');
     }

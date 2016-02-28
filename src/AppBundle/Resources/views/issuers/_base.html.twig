@@ -1,3 +1,25 @@
+{% block context %}
+    {% if issuer.parentGroup %}
+        <span class="h-context h-f">
+            {% if issuer.parentGroup.sector %}
+                {% if issuer.parentGroup.sector.industry %}
+                    <a href="{{ path('industry_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
+                        {{ issuer.parentGroup.sector.industry.name }}
+                    </a> &gt;
+                {% endif %}
+                <a href="{{ path('sector_show', { sector_id : issuer.parentGroup.sector.id }) }}">
+                {{ issuer.parentGroup.sector.name }}
+            </a> &gt;
+            {% endif %}
+            <a href="{{ path('group_show', { group_id : issuer.parentGroup.id }) }}">
+                {{ issuer.parentGroup.name }}
+            </a><span class="invisible"> &gt;</span>
+        </span>
+    {% endif %}
+    {{ issuer.name }}
+{% endblock %}
+
+
 {% block body %}
 <div class="grid">
     <div class="g 1/4@xl">
@@ -9,26 +31,7 @@
                 {% include adverts.templatePath with adverts.variantVars('overview') only %}
             </div>
             <div class="g-unit">
-                <h1 class="g-unit h-b">
-                    {% if issuer.parentGroup %}
-                        <span class="h-context h-f">
-                            {% if issuer.parentGroup.sector %}
-                                {% if issuer.parentGroup.sector.industry %}
-                                    <a href="{{ path('industry_show', { industry_id : issuer.parentGroup.sector.industry.id }) }}">
-                                        {{ issuer.parentGroup.sector.industry.name }}
-                                    </a> &gt;
-                                {% endif %}
-                                <a href="{{ path('sector_show', { sector_id : issuer.parentGroup.sector.id }) }}">
-                                    {{ issuer.parentGroup.sector.name }}
-                                </a> &gt;
-                            {% endif %}
-                            <a href="{{ path('group_show', { group_id : issuer.parentGroup.id }) }}">
-                                {{ issuer.parentGroup.name }}
-                            </a><span class="invisible"> &gt;</span>
-                        </span>
-                    {% endif %}
-                    {{ issuer.name }}
-                </h1>
+                <p class="g-unit h-b">{{ block('context') }}</p>
                 {% include entityNav.templatePath with entityNav.vars only %}
                 {% block content %}{% endblock %}
             </div>

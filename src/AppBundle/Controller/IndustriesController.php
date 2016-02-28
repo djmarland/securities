@@ -82,6 +82,7 @@ class IndustriesController extends Controller
             }
         }
 
+        $this->setTitle($industry->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
@@ -121,6 +122,7 @@ class IndustriesController extends Controller
             }
         }
 
+        $this->setTitle('Securities - ' . $industry->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
@@ -138,6 +140,7 @@ class IndustriesController extends Controller
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
+//        $this->setTitle('Maturity Profile - ' . $industry->getName());
 //        $this->toView('entityNav', new EntityNavPresenter($industry, 'maturity_profile'));
 //        return $this->renderTemplate('groups:maturity-profile');
     }
@@ -191,6 +194,7 @@ class IndustriesController extends Controller
             $issuanceGraph = new IssuanceGraphPresenter($industry, $results, $year);
         }
 
+        $this->setTitle('Issuance ' . $year . ' - ' . $industry->getName());
         $this->toView('hasData', $hasData);
         $this->toView('issuanceTable', $issuanceTable);
         $this->toView('issuanceGraph', $issuanceGraph);
@@ -211,7 +215,6 @@ class IndustriesController extends Controller
             throw new HttpException(404, $e->getMessage());
         }
 
-        $this->setTitle($industry->getName());
         $this->toView('industry', $industry);
 
 

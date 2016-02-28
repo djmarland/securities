@@ -3,10 +3,56 @@
 {% block body %}
     <div class="grid">
         <div class="g 3/4@xl">
-            <h1 class="g-unit">{{ meta.title }}</h1>
+            <h1 class="b g-unit">{{ meta.title }}
+                {% if security.issuer %}
+                    <span class="invisible"> - {{ security.issuer }}</span>{% endif %}
+            </h1>
             {% include security.templatePath with security.vars only %}
         </div>
         <div class="g 1/4@xl">
+            <div class="card card--padded g-unit ">
+                <h2 class="d g-unit">ISIN Analytics is the gateway to London’s debt capital markets.</h2>
+                <ul class="list--spaced list--unstyled">
+                    {% if security.product %}
+                    <li>
+                        <a class="link--button link--block text--center" href="{{ path(
+                                'security_list',
+                                { product: security.productNumber }
+                        ) }}">
+                            See more {{ security.product }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if security.company and security.company.parentGroup %}
+                    <li>
+                        <a class="link--button link--block text--center" href="{{ path(
+                            'group_securities',
+                            { group_id: security.company.parentGroup.id }
+                        ) }}">
+                            See more from {{ security.company.parentGroup.name }}
+                        </a>
+                    </li>
+                    {% endif %}
+                    {% if security.company
+                        and security.company.parentGroup
+                        and security.company.parentGroup.sector
+                        and security.company.parentGroup.sector.industry %}
+                        <li>
+                            <a class="link--button link--block text--center" href="{{ path(
+                            'industry_securities',
+                            { industry_id: security.company.parentGroup.sector.industry.id }
+                            ) }}">
+                                See more from {{ security.company.parentGroup.sector.industry.name }}
+                            </a>
+                        </li>
+                    {% endif %}
+                    <li>
+                        <a class="link--button link--block text--center" href="{{ path('security_list') }}">
+                            Browse all securities
+                        </a>
+                    </li>
+                </ul>
+            </div>
             {% include adverts.templatePath with adverts.variantVars('isin') only %}
         </div>
     </div>

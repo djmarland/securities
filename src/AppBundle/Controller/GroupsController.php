@@ -83,6 +83,7 @@ class GroupsController extends Controller
             }
         }
 
+        $this->setTitle($group->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
@@ -123,6 +124,7 @@ class GroupsController extends Controller
             }
         }
 
+        $this->setTitle('Securities ' . $group->getName());
         $this->toView('totalRaised', number_format($totalRaised));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
@@ -140,8 +142,9 @@ class GroupsController extends Controller
     public function maturityProfileAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
-        return $this->renderTemplate('groups:maturity-profile');
+//        $this->setTitle('Issuance ' . $year . ' - ' . $group->getName());
+//        $this->toView('entityNav', new EntityNavPresenter($group, 'maturity_profile'));
+//        return $this->renderTemplate('groups:maturity-profile');
     }
 
     public function issuanceAction(Request $request)
@@ -193,6 +196,7 @@ class GroupsController extends Controller
             $issuanceGraph = new IssuanceGraphPresenter($group, $results, $year);
         }
 
+        $this->setTitle('Issuance ' . $year . ' - ' . $group->getName());
         $this->toView('hasData', $hasData);
         $this->toView('issuanceTable', $issuanceTable);
         $this->toView('issuanceGraph', $issuanceGraph);
@@ -203,47 +207,47 @@ class GroupsController extends Controller
     public function yieldAction(Request $request)
     {
         throw new HttpException(404, 'Not yet');
-        $group = $this->getGroup($request);
-        $today = new DateTimeImmutable(); // @todo - use global app time
-
-        $graphData = [];
-        $years = [];
-        $hasData = false;
-
-        $largestValue = 0;
-
-        // last three years
-        for ($i = 0; $i < 3; $i++) {
-            $year = $today->sub(new \DateInterval('P' . $i . 'Y'));
-            $year = (int) $year->format('Y');
-            $years[] = $year;
-
-
-            $result = $this->get('app.services.yields')->findByParentGroupForYear($group, $year);
-            if (!$result->hasResult()) {
-                continue;
-            }
-            $hasData = true;
-            $yieldData = $result->getDomainModel();
-
-            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
-                $pointYear = (int) $pointYear;
-                if (!isset($graphData[$pointYear])) {
-                    $graphData[$pointYear] = [
-                        $pointYear,
-                        null,
-                        null,
-                        null,
-                    ];
-                }
-                $graphData[$pointYear][$i+1] = $point;
-                if ($point > $largestValue) {
-                    $largestValue = $point;
-                }
-            }
-        }
-
-        $graphData = array_values($graphData);
+//        $group = $this->getGroup($request);
+//        $today = new DateTimeImmutable(); // @todo - use global app time
+//
+//        $graphData = [];
+//        $years = [];
+//        $hasData = false;
+//
+//        $largestValue = 0;
+//
+//        // last three years
+//        for ($i = 0; $i < 3; $i++) {
+//            $year = $today->sub(new \DateInterval('P' . $i . 'Y'));
+//            $year = (int) $year->format('Y');
+//            $years[] = $year;
+//
+//
+//            $result = $this->get('app.services.yields')->findByParentGroupForYear($group, $year);
+//            if (!$result->hasResult()) {
+//                continue;
+//            }
+//            $hasData = true;
+//            $yieldData = $result->getDomainModel();
+//
+//            foreach ($yieldData->getDataPoints() as $pointYear => $point) {
+//                $pointYear = (int) $pointYear;
+//                if (!isset($graphData[$pointYear])) {
+//                    $graphData[$pointYear] = [
+//                        $pointYear,
+//                        null,
+//                        null,
+//                        null,
+//                    ];
+//                }
+//                $graphData[$pointYear][$i+1] = $point;
+//                if ($point > $largestValue) {
+//                    $largestValue = $point;
+//                }
+//            }
+//        }
+//
+//        $graphData = array_values($graphData);
 //        foreach($years as $y) {
 //            $graphData[] = array_values($y);
 //        }
@@ -254,12 +258,12 @@ class GroupsController extends Controller
 //                $graphData[] = [(int)$pointYear, $point];
 //            }
 //        }
-
-        $this->toView('graphData', $graphData);
-        $this->toView('hasData', $hasData);
-        $this->toView('largestPoint', $largestValue);
-        $this->toView('years', $years);
-        return $this->renderTemplate('groups:yield');
+//
+//        $this->toView('graphData', $graphData);
+//        $this->toView('hasData', $hasData);
+//        $this->toView('largestPoint', $largestValue);
+//        $this->toView('years', $years);
+//        return $this->renderTemplate('groups:yield');
     }
 
     private function getGroup(Request $request)
@@ -286,7 +290,6 @@ class GroupsController extends Controller
         // and it's parent sector + industry
         $this->setFinder($request->get('_route'), $industry, $sector, $group);
 
-        $this->setTitle($group->getName());
         $this->toView('group', $group);
         return $group;
     }

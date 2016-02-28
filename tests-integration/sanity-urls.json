@@ -1,0 +1,183 @@
+[
+  {
+    "title" : "Homepage",
+    "path" : "/"
+  },
+  {
+    "title" : "Search",
+    "path" : "/search"
+  },
+  {
+    "title" : "Search Results",
+    "path" : "/search?q=a"
+  },
+  {
+    "title" : "Terms of Use",
+    "path" : "/terms"
+  },
+  {
+    "title" : "Privacy Policy",
+    "path" : "/privacy-policy"
+  },
+  {
+    "title" : "Issuers List",
+    "path" : "/issuers"
+  },
+  {
+    "title" : "Groups List",
+    "path" : "/groups"
+  },
+  {
+    "title" : "Sectors List",
+    "path" : "/sectors"
+  },
+  {
+    "title" : "Industries List",
+    "path" : "/industries"
+  },
+  {
+    "title" : "Overview",
+    "path" : "/overview"
+  },
+
+
+
+  {
+    "title" : "Securities",
+    "path" : "/securities"
+  },
+  {
+    "title" : "Securities with filter",
+    "path" : "/securities?product=41&currency=CAD"
+  },
+  {
+    "title" : "Securities with filter (no results)",
+    "path" : "/securities?product=43&currency=CAD"
+  },
+
+
+
+
+  {
+    "title" : "Industry Overview",
+    "path" : "/industries/dbfbee52-2ca9-42bd-90ad-165cb0f10bf4"
+  },
+  {
+    "title" : "Industry Securities",
+    "path" : "/industries/dbfbee52-2ca9-42bd-90ad-165cb0f10bf4/securities"
+  },
+  {
+    "title" : "Industry Securities (filtered)",
+    "path" : "/industries/dbfbee52-2ca9-42bd-90ad-165cb0f10bf4/securities?product=41&currency=EUR"
+  },
+  {
+    "title" : "Industry Securities (filter, no results)",
+    "path" : "/industries/dbfbee52-2ca9-42bd-90ad-165cb0f10bf4/securities?product=43&currency=AMD"
+  },
+  {
+    "title" : "Industry Issuance",
+    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance/2016"
+  },
+  {
+    "title" : "Industry Issuance (empty)",
+    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance/1950"
+  },
+
+
+
+
+
+
+
+  {
+    "title" : "Sector Overview",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106"
+  },
+  {
+    "title" : "Sector Securities",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/securities"
+  },
+  {
+    "title" : "Sector Securities (filtered)",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/securities?product=42&currency=GBP"
+  },
+  {
+    "title" : "Sector Securities (filter, no results)",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/securities?product=42&currency=CRC"
+  },
+  {
+    "title" : "Sector Issuance",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance/2016"
+  },
+  {
+    "title" : "Sector Issuance (empty)",
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance/1950"
+  },
+
+
+
+
+  {
+    "title" : "Group Overview",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3"
+  },
+  {
+    "title" : "Group Securities",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/securities"
+  },
+  {
+    "title" : "Group Securities (filtered)",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/securities?product=42&currency=GBP"
+  },
+  {
+    "title" : "Group Securities (filter, no results)",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/securities?product=42&currency=CRC"
+  },
+  {
+    "title" : "Group Issuance",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance/2016"
+  },
+  {
+    "title" : "Group Issuance (empty)",
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance/1950"
+  },
+
+
+
+
+  {
+    "title" : "Issuer Overview",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae"
+  },
+  {
+    "title" : "Issuer Securities",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/securities"
+  },
+  {
+    "title" : "Issuer Securities (filtered)",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/securities?product=42&currency=GBP"
+  },
+  {
+    "title" : "Issuer Securities (filter, no results)",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/securities?product=42&currency=CRC"
+  },
+  {
+    "title" : "Issuer Issuance",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance/2016"
+  },
+  {
+    "title" : "Issuer Issuance (empty)",
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance/1950"
+  },
+
+
+
+  {
+    "title" : "ISIN",
+    "path" : "/securities/XS0744444588"
+  },
+  {
+    "title" : "ISIN - Undated",
+    "path" : "/securities/GB0001411817"
+  }
+]

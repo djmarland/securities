@@ -3,7 +3,7 @@
 {% use "AppBundle::issuers/_base.html.twig" %}
 
 {% block content %}
-    <h2>Securities</h2>
+    <h1 class="c"><span class="invisible">{{ block('context') }} - </span>Securities</h1>
     <div class="g-unit">
         {% include '@partials/securities-filter.html.twig' %}
         <div class="grid grid--flush">

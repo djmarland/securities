@@ -151,6 +151,11 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return (string) $this->security->getProduct()->getName();
     }
 
+    public function getProductNumber():string
+    {
+        return (string) $this->security->getProduct()->getNumber();
+    }
+
     public function getResidualMaturity(): string
     {
         $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
