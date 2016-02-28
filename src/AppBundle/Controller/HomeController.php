@@ -38,6 +38,11 @@ class HomeController extends Controller
         return $this->renderTemplate('home:terms');
     }
 
+    public function privacyAction()
+    {
+        return $this->renderTemplate('home:privacy');
+    }
+
     public function styleguideAction()
     {
         return $this->renderTemplate('home:styleguide');
