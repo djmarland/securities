@@ -15,15 +15,19 @@ class MasterPresenter extends Presenter
         'title' => '',
         'fullTitle' => '',
         'siteTitle' => '',
+        'environment' => 'prod'
     ];
 
-    public function __construct($appConfig)
+    public function __construct($appConfig, $env = null)
     {
         parent::__construct();
         $this->appConfig = $appConfig;
         $this->meta['title'] = $this->appConfig['title'];
         $this->meta['fullTitle'] = $this->appConfig['title'];
         $this->meta['siteTitle'] = $this->appConfig['title'];
+        if ($env) {
+            $this->meta['environment'] = $env;
+        }
     }
 
     public function set(

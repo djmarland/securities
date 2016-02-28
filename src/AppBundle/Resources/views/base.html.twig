@@ -29,7 +29,7 @@
     <script>
         google.charts.load('43', {'packages':['corechart']});
     </script>
-<body class="{% block bodyClass %}{% endblock %}">
+<body class="{% block bodyClass %}{% endblock %}" data-env="{{ meta.environment }}">
 {% block header %}
 <div class="app">
     <header class="header">

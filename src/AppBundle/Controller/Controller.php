@@ -31,7 +31,10 @@ class Controller extends BaseController implements ControllerInterface
     {
         $this->request = $request;
         $this->appConfig = $this->getParameter('app.config');
-        $this->masterViewPresenter = new MasterPresenter($this->appConfig);
+        $this->masterViewPresenter = new MasterPresenter(
+            $this->appConfig,
+            $this->get('kernel')->getEnvironment()
+        );
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
         $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]));
         $this->toView('currentYear', date("Y"));

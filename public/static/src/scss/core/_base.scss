@@ -74,3 +74,24 @@ a {
         width: auto;
     }
 }
+
+/* Environment markers */
+body[data-env="dev"],
+body[data-env="alpha"],
+body[data-env="beta"] {
+    &:after {
+        position: absolute;
+        top: -20px;
+        left: -70px;
+        background: #a51111;
+        color: #fff;
+        font-weight: bold;
+        text-align: center;
+        z-index: 1000;
+        content: attr(data-env);
+        text-transform: uppercase;
+        padding: 48px 0 24px 0;
+        transform: rotate(-45deg);
+        width: 190px;
+    }
+}
