@@ -22,6 +22,8 @@ class Security extends Entity
 //    private $tidm;
 //    /** @ORM\Column(type="string") */
 //    private $description;
+    /** @ORM\Column(type="string", length=255) */
+    private $exchange;
     /** @ORM\Column(type="float") */
     private $moneyRaised;
     /** @ORM\Column(type="date") */
@@ -86,6 +88,16 @@ class Security extends Entity
     public function setIsin($isin)
     {
         $this->isin = $isin;
+    }
+
+    public function getExchange()
+    {
+        return $this->exchange;
+    }
+
+    public function setExchange($exchange)
+    {
+        $this->exchange = $exchange;
     }
 
     public function getMoneyRaised()

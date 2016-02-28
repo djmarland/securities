@@ -19,6 +19,7 @@ class Security extends Entity
     private $product;
     private $currency;
     private $company;
+    private $exchange;
     private $contractualBucket;
     private $residualBucket;
 
@@ -26,6 +27,7 @@ class Security extends Entity
         UUID $id,
         ISIN $isin,
         string $name,
+        string $exchange,
         DateTime $startDate,
         float $moneyRaised,
         Product $product,
@@ -37,6 +39,7 @@ class Security extends Entity
         parent::__construct($id);
 
         $this->name = $name;
+        $this->exchange = $exchange;
         $this->isin = $isin;
         $this->startDate = $startDate;
         $this->currency = $currency;
@@ -51,6 +54,11 @@ class Security extends Entity
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function getExchange(): string
+    {
+        return $this->exchange;
     }
 
     public function getIsin(): string

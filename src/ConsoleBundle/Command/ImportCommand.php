@@ -127,6 +127,7 @@ class ImportCommand extends Command
             $security->setIsin($isin);
         }
         $security->setName($row['SECURITY_NAME']);
+        $security->setExchange($row['SOURCE']);
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
 //
