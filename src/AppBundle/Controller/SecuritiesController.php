@@ -88,7 +88,12 @@ class SecuritiesController extends Controller
             throw new HttpException(404, 'Security ' . $isin . ' does not exist.');
         }
 
-        $this->setTitle($security->getISIN());
+        $title = $security->getISIN();
+        if ($security->getCompany()) {
+            $title .= ' - ' . $security->getCompany()->getName();
+        }
+
+        $this->setTitle($title);
         $this->toView('security', new SecurityPresenter(
             $security,
             [
