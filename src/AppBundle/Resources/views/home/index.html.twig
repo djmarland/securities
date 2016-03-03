@@ -4,111 +4,117 @@
 {% block body %}
     <div class="grid">
         <div class="g 3/5@xl">
-            <div class="card card--padded">
-                <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
-                <p class="d g-unit">
-                    Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
-                    Browse the site for ISIN, company, sector or industry information relating to:
-                </p>
-                <ul class="g-unit">
-                    <li>
-                        <a href="{{ path('security_list', { product : 40 }) }}">
-                            Unsecured senior securities
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('security_list', { product : 41 }) }}">
-                            Dated capital notes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('security_list', { product : 1 }) }}">
-                            Undated capital notes
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('security_list', { product : 42 }) }}">
-                            Structured products
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('security_list', { product : 43 }) }}">
-                            Covered bonds
-                        </a>
-                    </li>
-                    <li>
-                        <a href="{{ path('security_list', { product : 51 }) }}">
-                            Securitisations
-                        </a>
-                    </li>
-                </ul>
-                <p class="g-unit">
-                    Please read the
-                    <a href="{{ path('terms') }}">Terms and Conditions of Access of the Website</a>.
-                    All enquiries should be directed to
-                    <a href="mailto:contact@isinanalytics.com">contact@isinanalytics.com</a>.
-                </p>
+            <div class="card g-unit">
+                <div class="card--padded">
+                    <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
+                    <p class="d g-unit">
+                        Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
+                        Browse the site for ISIN, company, sector or industry information relating to:
+                    </p>
+                    <ul class="g-unit">
+                        <li>
+                            <a href="{{ path('security_list', { product : 40 }) }}">
+                                Unsecured senior securities
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_list', { product : 41 }) }}">
+                                Dated capital notes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_list', { product : 1 }) }}">
+                                Undated capital notes
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_list', { product : 42 }) }}">
+                                Structured products
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_list', { product : 43 }) }}">
+                                Covered bonds
+                            </a>
+                        </li>
+                        <li>
+                            <a href="{{ path('security_list', { product : 51 }) }}">
+                                Securitisations
+                            </a>
+                        </li>
+                    </ul>
+                    <p class="g-unit">
+                        Please read the
+                        <a href="{{ path('terms') }}">Terms and Conditions of Access of the Website</a>.
+                        All enquiries should be directed to
+                        <a href="mailto:contact@isinanalytics.com">contact@isinanalytics.com</a>.
+                    </p>
+                </div>
+            </div>
+            <div>
                 {% include adverts.templatePath with adverts.variantVars('overview') only %}
             </div>
         </div>
         <div class="g 2/5@xl">
-                <div class="card card--padded g-unit">
+            <div class="card g-unit">
+                <div class="card--padded">
                     <div class="grid">
-                    <div class="g 1/2@xl">
-                        <p class="text--center">
-                            <a class="link--hidden" href="{{ path('security_list') }}">
-                                Securities<br />
-                                <span class="a">{{ securitiesCount }}</span>
-                            </a>
-                        </p>
-                    </div>
-                    <div class="g 1/2@xl">
-                        <p class="text--center">
-                            <a class="link--hidden" href="{{ path('group_list') }}">
-                                Issuers<br />
-                                <span class="a">{{ issuersCount }}</span>
-                            </a>
-                        </p>
-                    </div>
+                        <div class="g 1/2@xl">
+                            <p class="text--center">
+                                <a class="link--hidden" href="{{ path('security_list') }}">
+                                    Securities<br />
+                                    <span class="a">{{ securitiesCount }}</span>
+                                </a>
+                            </p>
+                        </div>
+                        <div class="g 1/2@xl">
+                            <p class="text--center">
+                                <a class="link--hidden" href="{{ path('group_list') }}">
+                                    Issuers<br />
+                                    <span class="a">{{ issuersCount }}</span>
+                                </a>
+                            </p>
+                        </div>
                     </div>
                 </div>
-                <div class="card">
-                    <div id="chart-grouped" style="height: 300px">
-                        <p class="island text--center">Loading chart</p>
-                    </div>
-                    <script>
-                        (function() {
-                            google.charts.setOnLoadCallback(drawChart);
-                            function drawChart() {
-                                var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
+            </div>
+            <div class="card">
+                <div id="chart-grouped" style="height: 300px">
+                    <p class="island text--center">Loading chart</p>
+                </div>
+                <script>
+                    (function() {
+                        google.charts.setOnLoadCallback(drawChart);
+                        function drawChart() {
+                            var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
 
-                                var options = {
-                                    height: 300,
-                                    pieHole: 0.4,
-                                    pieStartAngle: 20,
-                                    backgroundColor: 'transparent',
-                                    legend: {
-                                        position: 'left'
-                                    },
-                                    animation: {
-                                        duration: 800,
-                                        startup: true
-                                    },
-                                    chartArea: {
-                                        top: 24,
-                                        left: 24,
-                                        width: '90%',
-                                        height: 258
-                                    },
-                                    pieSliceText: 'none',
-                                    colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
-                                };
+                            var options = {
+                                height: 300,
+                                pieHole: 0.4,
+                                pieStartAngle: 20,
+                                backgroundColor: 'transparent',
+                                legend: {
+                                    position: 'left'
+                                },
+                                animation: {
+                                    duration: 800,
+                                    startup: true
+                                },
+                                chartArea: {
+                                    top: 24,
+                                    left: 24,
+                                    width: '90%',
+                                    height: 258
+                                },
+                                pieSliceText: 'none',
+                                colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
+                            };
 
-                                var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
-                                chart.draw(data, options);
-                            }
-                        })();
-                    </script>
+                            var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
+                            chart.draw(data, options);
+                        }
+                    })();
+                </script>
             </div>
         </div>
     </div>

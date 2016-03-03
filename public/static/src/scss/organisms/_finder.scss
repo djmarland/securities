@@ -1,7 +1,13 @@
-.finder {
-    border-right: solid 1px $color-subtle;
-    padding-right: $grid-unit-large;
+@include mq($from: m) {
+    .finder-wrapper {
+        border-right: solid 1px $color-subtle;
+    }
+    .finder {
+        padding-right: $grid-unit-large;
+    }
 }
+
+
 .finder__list {
     list-style-type: square;
     list-style-position: outside;

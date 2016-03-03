@@ -1,9 +1,11 @@
-<div class="finder">
-    <h2 class="h-f finder__heading">Industries</h2>
-    <ol class="finder__list">
-        <li class="finder__item"><a href="{{ path('security_list') }}" class="finder__link {{ finder.allClass }}">All</a></li>
-        {% for item in finder.items %}
-            {% include item.templatePath with item.vars only %}
-        {% endfor %}
-    </ol>
+<div class="finder-wrapper">
+    <div class="finder">
+        <h2 class="h-f finder__heading">Industries</h2>
+        <ol class="finder__list">
+            <li class="finder__item"><a href="{{ path('security_list') }}" class="finder__link {{ finder.allClass }}">All</a></li>
+            {% for item in finder.items %}
+                {% include item.templatePath with item.vars only %}
+            {% endfor %}
+        </ol>
+    </div>
 </div>

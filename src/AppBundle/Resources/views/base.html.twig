@@ -32,36 +32,36 @@
 <body class="{% block bodyClass %}{% endblock %}" data-env="{{ meta.environment }}">
 {% block header %}
 <div class="app">
-    <header class="header">
-        <div class="page-limit">
-            <div id="masthead-content" class="header__content">
-            <div class="header__logo">
-                <a href="{{ path('home') }}">{{ meta.siteTitle }}</a>
+    <header><div class="header">
+            <div class="page-limit">
+                <div id="masthead-content" class="header__content">
+                <div class="header__logo">
+                    <a href="{{ path('home') }}">{{ meta.siteTitle }}</a>
+                </div>
+                <div id="search-container" class="header__search">{% include '@partials/search.html.twig' %}</div>
+                </div>
             </div>
-            <div id="search-container" class="header__search">{% include '@partials/search.html.twig' %}</div>
-            </div>
-        </div>
-    </header>
-    <nav class="nav">
-        <ul class="nav__list page-limit"
-            ><li class="nav__item"><a class="nav__link {% if currentSection == 'securities' %}nav__link--active{% endif %}" href="{{ path('security_list') }}">Securities</a></li
-            ><li class="nav__item"><a class="nav__link {% if currentSection == 'issuers' %}nav__link--active{% endif %}" href="{{ path('issuer_list') }}">Issuers</a></li
-            >{#<li class="nav__item"><a class="nav__link {% if currentSection == 'industries' %}nav__link--active{% endif %}" href="{{ path('industry_list') }}">Industries</a></li
-            ><li class="nav__item"><a class="nav__link {% if currentSection == 'about' %}nav__link--active{% endif %}" href="{{ path('about') }}">About</a></li
-        >#}</ul>
-    </nav>
-    <main class="main">
+    </div></header>
+    <nav><div class="nav">
+            <ul class="nav__list page-limit"
+                ><li class="nav__item"><a class="nav__link {% if currentSection == 'securities' %}nav__link--active{% endif %}" href="{{ path('security_list') }}">Securities</a></li
+                ><li class="nav__item"><a class="nav__link {% if currentSection == 'issuers' %}nav__link--active{% endif %}" href="{{ path('issuer_list') }}">Issuers</a></li
+                >{#<li class="nav__item"><a class="nav__link {% if currentSection == 'industries' %}nav__link--active{% endif %}" href="{{ path('industry_list') }}">Industries</a></li
+                ><li class="nav__item"><a class="nav__link {% if currentSection == 'about' %}nav__link--active{% endif %}" href="{{ path('about') }}">About</a></li
+            >#}</ul>
+    </div></nav>
+    <main><div class="main">
         <div class="page-limit" id="main-body">
 {% endblock %}
 {% block body %}{% endblock %}
 {% block footer %}
         </div>
-    </main>
-    <footer class="footer">
+    </div></main>
+    <footer><div class="footer">
         <div class="page-limit">
             &copy; {{ currentYear }} ISIN Analytics Ltd | <a href="{{ path('terms') }}">Terms of use</a> | <a href="{{ path('privacy_policy') }}">Privacy policy</a>
         </div>
-    </footer>
+    </div></footer>
 </div>
 {% endblock %}
 <template id="loading-spinner" class="hidden">
