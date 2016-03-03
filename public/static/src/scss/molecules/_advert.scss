@@ -1,7 +1,8 @@
 .advert {
     @extend .shadow;
-    background: $color-faint;
+    background: $color-card;
+    padding: 1px;
 }
 .advert__notice {
-    padding: $grid-unit-tiny;
+    padding: ($grid-unit-tiny - 1px) ($grid-unit-tiny - 1px) $grid-unit-tiny;
 }
