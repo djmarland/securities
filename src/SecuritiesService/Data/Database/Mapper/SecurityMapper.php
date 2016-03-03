@@ -13,9 +13,21 @@ class SecurityMapper extends Mapper
     {
         $id = new UUID($item['id']);
         $isin = new ISIN($item['isin']);
-        $product = $this->mapperFactory->createProduct()->getDomainModel($item['product']);
-        $company = $this->mapperFactory->createCompany()->getDomainModel($item['company']);
-        $currency = $this->mapperFactory->createCurrency()->getDomainModel($item['currency']);
+        $product = null;
+        $company = null;
+        $currency = null;
+
+        if (isset($item['product'])) {
+            $product = $this->mapperFactory->createProduct()->getDomainModel($item['product']);
+        }
+
+        if (isset($item['company'])) {
+            $company = $this->mapperFactory->createCompany()->getDomainModel($item['company']);
+        }
+
+        if (isset($item['currency'])) {
+            $currency = $this->mapperFactory->createCurrency()->getDomainModel($item['currency']);
+        }
 
         $security = new Security(
             $id,

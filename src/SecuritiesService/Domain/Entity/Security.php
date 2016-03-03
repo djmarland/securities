@@ -30,9 +30,9 @@ class Security extends Entity
         string $exchange,
         DateTime $startDate,
         float $moneyRaised,
-        Product $product,
-        Company $company,
-        Currency $currency,
+        Product $product = null,
+        Company $company = null,
+        Currency $currency = null,
         DateTime $maturityDate = null,
         float $coupon = null
     ) {

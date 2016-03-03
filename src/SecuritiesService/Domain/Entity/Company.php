@@ -30,6 +30,11 @@ class Company extends Entity
         return $this->name;
     }
 
+    public function getUrlKey(): string
+    {
+        return (string) $this->getId();
+    }
+
     public function getParentGroup()
     {
         if ($this->parentGroup instanceof NullParentGroup) {

@@ -63,6 +63,13 @@ class SecuritiesService extends Service
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
+    public function findAllSimple(): array
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
     public function countAll(): int
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
