@@ -1,0 +1,24 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+
+{% block body %}
+    <h1 class="g-unit">Admin</h1>
+
+    <div class="card card--padded g-unit">
+        <h2 class="g-unit">Get New File</h2>
+        <form method="POST">
+            <div>
+                <label for="input-file-id">Input file ID</label>
+                <input id="input-file-id" />
+            </div>
+            <div>
+                <button type="submit">Fetch</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card card--padded">
+        <h2 class="g-unit">Process File</h2>
+        <p>There are no differences to process</p>
+    </div>
+{% endblock %}
