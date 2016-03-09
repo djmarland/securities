@@ -80,8 +80,8 @@ body[data-env="dev"],
 body[data-env="alpha"],
 body[data-env="beta"] {
     &:after {
-        position: absolute;
-        top: -20px;
+        position: fixed;
+        bottom: -20px;
         left: -70px;
         background: #a51111;
         color: #fff;
@@ -90,8 +90,8 @@ body[data-env="beta"] {
         z-index: 1000;
         content: attr(data-env);
         text-transform: uppercase;
-        padding: 48px 0 24px 0;
-        transform: rotate(-45deg);
+        padding: 24px 0 48px 0;
+        transform: rotate(45deg);
         width: 190px;
     }
 }
