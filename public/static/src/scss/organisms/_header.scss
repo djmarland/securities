@@ -21,7 +21,7 @@
     @include flex-wrap();
 }
 .header__logo {
-    margin: 0 $grid-unit-large 0 0;
+    margin: 0;
     font-size: 1.4rem;
     font-weight: bolder;
     text-transform: uppercase;
@@ -32,8 +32,7 @@
 
 @include mq($from: m) {
     .header {
-        padding-top: $grid-unit-large;
-        padding-bottom: $grid-unit-large;
+        padding-bottom: 0;
     }
     .header__search {
         margin-left: $grid-unit-large * 2;
@@ -42,6 +41,7 @@
     .header__logo {
         margin-right: $grid-unit-large * 2;
         font-size: 2rem;
+        max-width: 320px;
     }
 }
 

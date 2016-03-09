@@ -36,7 +36,9 @@
             <div class="page-limit">
                 <div id="masthead-content" class="header__content">
                 <div class="header__logo">
-                    <a href="{{ path('home') }}">{{ meta.siteTitle }}</a>
+                    <a href="{{ path('home') }}">
+                        <img src="{{ 'logo.svg'|asset_path }}" alt="{{ meta.siteTitle }}"/>
+                    </a>
                 </div>
                 <div id="search-container" class="header__search">{% include '@partials/search.html.twig' %}</div>
                 </div>
@@ -71,7 +73,7 @@
         </svg>
     </div>
 </template>
-<script src="{{ 'bootstrap.js'|asset_path }}"></script>
+{#<script src="{{ 'bootstrap.js'|asset_path }}"></script>#}
 <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
 <script type="text/javascript">
     window.cookieconsent_options = {

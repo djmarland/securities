@@ -27,7 +27,15 @@ gulp.task('js', function() {
         .pipe(gulp.dest(manifestPath));
 });
 
-gulp.task('default', ['sass', 'js']);
+gulp.task('img', function() {
+    gulp.src(staticPathSrc + 'img/**/*.*')
+        .pipe(hash())
+        .pipe(gulp.dest(staticPathDist))
+        .pipe(hash.manifest(manifestFile))
+        .pipe(gulp.dest(manifestPath));
+});
+
+gulp.task('default', ['sass', 'js', 'img']);
 
 gulp.task('watch',function() {
     gulp.watch(staticPathSrc + 'scss/**/*.scss',['sass']);
