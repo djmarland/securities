@@ -23,7 +23,57 @@
     </div>
 
     <div class="card card--padded">
-        <h2 class="g-unit">Process File</h2>
-        <p>There are no differences to process</p>
+        <div id="process-ajax"></div>
     </div>
+
+    <script>
+        func = function() {
+            "use strict";
+            var spinner = document.getElementById('loading-spinner'),
+                processDiv = document.getElementById('process-ajax'),
+                spin = document.importNode(spinner.content, true);
+            processDiv.appendChild(spin);
+
+            var request = new XMLHttpRequest();
+            request.open('GET', '/admin/diff', true);
+
+            request.onload = function() {
+                var pButton, actionBar, diff,
+                    process = function() {
+                        var irequest = new XMLHttpRequest();
+                        irequest.open('GET', '/admin/process', true);
+                        irequest.onload = function() {
+                            diff = document.getElementById('diff');
+                            diff.outerHTML = this.response;
+                            diff = document.getElementById('diff');
+                            if (diff) {
+                                process();
+                            } else {
+                                document.getElementById('action-bar').innerHTML = '';
+                            }
+                        };
+                        irequest.send();
+                    };
+                processDiv.innerHTML = this.response;
+                diff = document.getElementById('diff');
+
+
+                if (diff) {
+                    diff.insertAdjacentHTML('afterend', '<div id="action-bar">' +
+                            '<p class="text--right">' +
+                            '<button id="process-button" class="link--button">Process now</button></p></div>');
+
+                    actionBar = document.getElementById('action-bar');
+                    pButton = document.getElementById('process-button');
+                    pButton.addEventListener('click', function() {
+                        actionBar.innerHTML = '';
+                        actionBar.appendChild(document.importNode(spinner.content, true));
+                        process();
+                    });
+                }
+            };
+            request.send();
+        };
+        window.onload = func;
+    </script>
 {% endblock %}

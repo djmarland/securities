@@ -31,6 +31,14 @@ admin:
   path:     /admin
   defaults: { _controller: AppBundle:Admin:index }
 
+admin_diff:
+  path:     /admin/diff
+  defaults: { _controller: AppBundle:Admin:diff }
+
+admin_process:
+  path:     /admin/process
+  defaults: { _controller: AppBundle:Admin:process }
+
 # Overview
 overview:
   path:     /overview

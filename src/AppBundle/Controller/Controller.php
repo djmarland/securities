@@ -26,6 +26,8 @@ class Controller extends BaseController implements ControllerInterface
 
     private $applicationTime;
 
+    protected $cacheTime = 600;
+
     /** Setup common tasks for a controller */
     public function initialize(Request $request)
     {
@@ -108,12 +110,17 @@ class Controller extends BaseController implements ControllerInterface
         $this->toView('pagination', $pagination);
     }
 
-    protected function setCacheHeaders($response)
+    protected function setCacheHeaders(Response $response)
     {
-        $response->setPublic();
+        if ($this->cacheTime) {
+            $response->setPublic();
 
-        $response->setMaxAge(600);
-        $response->setSharedMaxAge(600);
+            $response->setMaxAge($this->cacheTime);
+            $response->setSharedMaxAge($this->cacheTime);
+        } else {
+            $response->setPrivate();
+            $response->setMaxAge(0);
+        }
     }
 
     protected function renderTemplate($template)

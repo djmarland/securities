@@ -89,6 +89,12 @@ class ImportCommand extends Command
         $this->output->writeln('Done');
     }
 
+    public function single($row)
+    {
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->processRow($row);
+    }
+
     private function setProducts()
     {
         $this->output->writeln('Creating Products');
@@ -114,9 +120,20 @@ class ImportCommand extends Command
         $this->output->writeln('Products created');
     }
 
+    private function getRowValue($row, $key)
+    {
+        if (isset($row[$key])) {
+            $value = trim(utf8_encode($row[$key]));
+            if (!empty($value)) {
+                return $value;
+            }
+        }
+        return null;
+    }
+
     private function processRow($row)
     {
-        $isin = $row['ISIN'];
+        $isin = $this->getRowValue($row, 'ISIN');
 
         $repo = $this->em->getRepository('SecuritiesService:Security');
         $security = $repo->findOneBy(
@@ -126,8 +143,8 @@ class ImportCommand extends Command
             $security = new Security();
             $security->setIsin($isin);
         }
-        $security->setName($row['SECURITY_NAME']);
-        $security->setExchange($row['SOURCE']);
+        $security->setName($this->getRowValue($row, 'SECURITY_NAME'));
+        $security->setExchange($this->getRowValue($row, 'SOURCE'));
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
 //
@@ -137,21 +154,23 @@ class ImportCommand extends Command
 //            $maturityDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
 //        }
 
-        $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['SECURITY_START_DATE']);
-        $maturityDate = null;
-        if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $row['MATURITY_DATE'])) {
-            $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $row['MATURITY_DATE']);
+        $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $this->getRowValue($row, 'SECURITY_START_DATE'));
+        $maturityDate = $this->getRowValue($row, 'MATURITY_DATE');
+        if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
+            $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $maturityDate);
+        } else {
+            $maturityDate = null;
         }
 
         $security->setStartDate($startDate);
         $security->setMaturityDate($maturityDate);
 
-        $security->setMoneyRaised($row['MONEY_RAISED_GBP']);
+        $security->setMoneyRaised($this->getRowValue($row, 'MONEY_RAISED_GBP'));
 
         $coupon = null;
-        if (strtolower($row['COUPON_RATE']) != 'n/a') {
+        if (strtolower($this->getRowValue($row, 'COUPON_RATE')) != 'n/a') {
             $couponValue = floatval($row['COUPON_RATE']);
-            if (strpos($row['COUPON_RATE'], '%') !== false) {
+            if (strpos($this->getRowValue($row, 'COUPON_RATE'), '%') !== false) {
                 $couponValue = $couponValue / 100;
             }
             $coupon = $couponValue;
@@ -186,7 +205,7 @@ class ImportCommand extends Command
     private function getProduct($row)
     {
         $repo = $this->em->getRepository('SecuritiesService:Product');
-        $productNumber = $row['PRA_ITEM_4748'];
+        $productNumber = $this->getRowValue($row, 'PRA_ITEM_4748');
         $product = $repo->findOneBy(
             ['number' => $productNumber]
         );
@@ -198,7 +217,7 @@ class ImportCommand extends Command
 
     private function getCompany($row)
     {
-        $name = $row['COMPANY_NAME'];
+        $name = $this->getRowValue($row, 'COMPANY_NAME');
         $repo = $this->em->getRepository('SecuritiesService:Company');
         $company = $repo->findOneBy(
             ['name' => $name]
@@ -216,7 +235,7 @@ class ImportCommand extends Command
 
     private function getCurrency($row)
     {
-        $code = $row['TRADING_CURRENCY'];
+        $code = $this->getRowValue($row, 'TRADING_CURRENCY');
         $repo = $this->em->getRepository('SecuritiesService:Currency');
         $currency = $repo->findOneBy(
             ['code' => $code]
@@ -232,7 +251,7 @@ class ImportCommand extends Command
 
     private function getParentGroup($row)
     {
-        $name = $row['COMPANY_PARENT'];
+        $name = $this->getRowValue($row, 'COMPANY_PARENT');
         if ($this->isUnset($name)) {
             return null;
         }
@@ -253,7 +272,7 @@ class ImportCommand extends Command
 
     private function getSector($row)
     {
-        $name = $row['ICB_SECTOR'];
+        $name = $this->getRowValue($row, 'ICB_SECTOR');
         if ($this->isUnset($name)) {
             return null;
         }
@@ -273,7 +292,7 @@ class ImportCommand extends Command
 
     private function getIndustry($row)
     {
-        $name = $row['ICB_INDUSTRY'];
+        $name = $this->getRowValue($row, 'ICB_INDUSTRY');
         if ($this->isUnset($name)) {
             return null;
         }
@@ -293,7 +312,7 @@ class ImportCommand extends Command
 
     private function getCountry($row)
     {
-        $countryName = $row['COUNTRY_OF_INCORPORATION'];
+        $countryName = $this->getRowValue($row, 'COUNTRY_OF_INCORPORATION');
 
         $repo = $this->em->getRepository('SecuritiesService:Country');
         $country = $repo->findOneBy(
@@ -313,7 +332,7 @@ class ImportCommand extends Command
 
     private function getRegion($row)
     {
-        $name = $row['WORLD_REGION'];
+        $name = $this->getRowValue($row, 'WORLD_REGION');
         $repo = $this->em->getRepository('SecuritiesService:Region');
         $region = $repo->findOneBy(
             ['name' => $name]

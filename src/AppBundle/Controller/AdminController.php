@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use ConsoleBundle\Command\ImportCommand;
 use Symfony\Component\HttpFoundation\Request;
 
 class AdminController extends Controller
@@ -32,41 +33,71 @@ class AdminController extends Controller
 
     public function diffAction(Request $request)
     {
+        $this->cacheTime = null;
+
         // if the diff.json already exists and is not empty,
         // return the data from it
 
+        $filePath = $this->getParameter('kernel.cache_dir') . '/source_data/';
+
+        $diffPath = $filePath . 'diff.json';
+        if (file_exists($diffPath)) {
+            $diff = json_decode(file_get_contents($diffPath));
+
+            $this->toView('diffCount', count($diff));
+            if (empty($diff)) {
+                return $this->renderTemplate('admin:diff-done');
+            }
+            $this->toView('diffData', array_slice($diff, 0, 20));
+            return $this->renderTemplate('admin:diff-status');
+        }
+
         // if there is no latest.csv
         // return message saying, no source file
+        $latestPath = $filePath . 'latest.csv';
+        if (!file_exists($latestPath)) {
+            return $this->renderTemplate('admin:diff-no-source');
+        }
 
-
-
-        $filePath = $this->getParameter('kernel.app') . '/source_data/';
 
         $previous = [];
-        $previousPath = $filePath . 'processed.csv';
-        if (file_exists($previous)) {
-            $previous = $this->csvToArray($previousPath);
+        $previousPath = $filePath . 'processed_hashes.json';
+        if (file_exists($previousPath)) {
+            $previous = json_decode(file_get_contents($previousPath));
         }
 
-        $diff = [];
-        $diffPath = $filePath . 'diff.csv';
-        if (file_exists($diffPath)) {
-            $diff = json_decode(file_get_contents($diffPath);
-        }
-
-        $latestPath = $filePath . 'latest.csv';
+        $latestHashes = [];
+        $diffLines = [];
         $latest = $this->csvToArray($latestPath);
 
-        // generate an array of hashes from the processed.csv (probably already done)
+        foreach ($latest as $row) {
+            foreach ($row as $k => $value) {
+                $row[$k] = utf8_encode($value);
+            }
+            $hash = md5(serialize($row));
+            $latestHashes[] = $hash;
+            if (!in_array($hash, $previous)) {
+                $diffLines[] = $row;
+            }
+        }
+        if (count($diffLines) > 1000) {
+            return $this->renderTemplate('admin:diff-too-many');
+        }
 
-        // loop through the latest generating hashes for each row (md5(serialise($row))
-
-        // if the hash of the row is not in the processed hash table, add the row to the diff list
-
+        file_put_contents($filePath . 'latest_hashes.json', json_encode($latestHashes, JSON_PRETTY_PRINT));
+        $json = json_encode($diffLines, JSON_PRETTY_PRINT);
+        file_put_contents($filePath . 'diff.json', $json);
+        $this->toView('diffCount', count($diffLines));
+        if (empty($diffLines)) {
+            return $this->renderTemplate('admin:diff-done');
+        }
+        $this->toView('diffData', array_slice($diffLines, 0, 20));
+        return $this->renderTemplate('admin:diff-status');
     }
 
     public function processAction(Request $request)
     {
+        $this->cacheTime = null;
         // fetch the diff list
         // take the first X items from the top
         // process them
@@ -74,6 +105,43 @@ class AdminController extends Controller
 
         // if the diff list is empty, move latest.csv and latest_hash.json
         // into processed.csv and processed_hash.json
+
+        $filePath = $this->getParameter('kernel.cache_dir') . '/source_data/';
+
+        $diffPath = $filePath . 'diff.json';
+        if (file_exists($diffPath)) {
+            $diff = json_decode(file_get_contents($diffPath));
+
+            $this->toView('diffCount', count($diff));
+            if (empty($diff)) {
+                return $this->renderTemplate('admin:diff-done');
+            }
+
+            $command = new ImportCommand();
+            $command->setContainer($this->container);
+
+            for ($i = 0;$i<10;$i++) {
+                // todo - process the row
+                if (!empty($diff)) {
+                    $row = array_shift($diff);
+                    $command->single((array) $row);
+                }
+            }
+
+            // check if the diff is now empty. if so move files
+            if (empty($diff)) {
+                rename($filePath . '/latest.csv', $filePath . '/processed.csv');
+                rename($filePath . '/latest_hashes.json', $filePath . '/processed_hashes.json');
+            }
+
+            // re-save the diff
+            file_put_contents($diffPath, json_encode($diff, JSON_PRETTY_PRINT));
+
+            $this->toView('diffCount', count($diff));
+            $this->toView('diffData', array_slice($diff, 0, 20));
+            return $this->renderTemplate('admin:diff-status');
+        }
+        return $this->renderTemplate('admin:diff-done');
     }
 
     private function getNewFile(Request $request)
@@ -92,13 +160,18 @@ class AdminController extends Controller
             $data = $driveService->getFileData($id);
             $file = $driveService->getFile($data);
 
-            $filePath = $this->getParameter('kernel.app') . '/source_data';
+            $filePath = $this->getParameter('kernel.cache_dir') . '/source_data';
 
             if (!is_dir($filePath)) {
                 mkdir($filePath);
             }
             file_put_contents($filePath . '/latest.csv', $file);
-            $this->generateDiff();
+
+            // delete the diff file
+            if (file_exists($filePath . '/diff.json')) {
+                unlink($filePath . '/diff.json');
+            }
+
             $this->toView('formSuccess', 'Latest file was downloaded successfully');
         } catch (\Exception $e) {
             $this->toView('formError', $e->getMessage());
