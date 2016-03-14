@@ -1,0 +1,79 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+
+{% block body %}
+    <h1 class="g-unit">Admin</h1>
+
+    <div class="card card--padded g-unit">
+        <h2 class="g-unit">Get New File</h2>
+        {% if formError %}
+            <p><strong>{{ formError }}</strong></p>
+        {% elseif formSuccess %}
+            <p><strong>{{ formSuccess }}</strong></p>
+        {% endif %}
+        <form method="POST">
+            <div class="g-unit">
+                <label for="input-file-id" style="width: 20%; margin-right: 24px;">Input file</label>
+                <input id="input-file-id" name="input-file-id" value="{{ prevFileId }}" style="width:80%" />
+            </div>
+            <div>
+                <button type="submit" class="link--button">Fetch</button>
+            </div>
+        </form>
+    </div>
+
+    <div class="card card--padded">
+        <div id="process-ajax"></div>
+    </div>
+
+    <script>
+        func = function() {
+            "use strict";
+            var spinner = document.getElementById('loading-spinner'),
+                processDiv = document.getElementById('process-ajax'),
+                spin = document.importNode(spinner.content, true);
+            processDiv.appendChild(spin);
+
+            var request = new XMLHttpRequest();
+            request.open('GET', '/admin/diff', true);
+
+            request.onload = function() {
+                var pButton, actionBar, diff,
+                    process = function() {
+                        var irequest = new XMLHttpRequest();
+                        irequest.open('GET', '/admin/process', true);
+                        irequest.onload = function() {
+                            diff = document.getElementById('diff');
+                            diff.outerHTML = this.response;
+                            diff = document.getElementById('diff');
+                            if (diff) {
+                                process();
+                            } else {
+                                document.getElementById('action-bar').innerHTML = '';
+                            }
+                        };
+                        irequest.send();
+                    };
+                processDiv.innerHTML = this.response;
+                diff = document.getElementById('diff');
+
+
+                if (diff) {
+                    diff.insertAdjacentHTML('afterend', '<div id="action-bar">' +
+                            '<p class="text--right">' +
+                            '<button id="process-button" class="link--button">Process now</button></p></div>');
+
+                    actionBar = document.getElementById('action-bar');
+                    pButton = document.getElementById('process-button');
+                    pButton.addEventListener('click', function() {
+                        actionBar.innerHTML = '';
+                        actionBar.appendChild(document.importNode(spinner.content, true));
+                        process();
+                    });
+                }
+            };
+            request.send();
+        };
+        window.onload = func;
+    </script>
+{% endblock %}

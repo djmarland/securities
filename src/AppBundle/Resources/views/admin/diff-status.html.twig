@@ -1,0 +1,19 @@
+<div id="diff">
+<h2 class="g-unit">Changes still to be processed ({{ diffCount }})</h2>
+<div class="g-unit" style="max-height: 300px;overflow:auto">
+<table class="table table--striped">
+    <thead>
+    <tr>
+        <th>ISIN</th>
+        <th>Name</th>
+    </tr>
+    </thead>
+{% for row in diffData %}
+<tr>
+    <td>{{ row.ISIN }}</td>
+    <td>{{ row.SECURITY_NAME }}</td>
+</tr>
+{% endfor %}
+</table>
+</div>
+</div>
