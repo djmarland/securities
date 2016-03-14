@@ -23,7 +23,7 @@ class AdminController extends Controller
 
         // fetch the local copy of the file
 
-       // $filePath = $this->getParameter('kernel.cache_dir') . '/source_data/latest.csv';
+       // $filePath = $this->getParameter('kernel.root_dir') . '/../data/latest.csv';
 
 
         // check for differences against the last processed
@@ -38,7 +38,7 @@ class AdminController extends Controller
         // if the diff.json already exists and is not empty,
         // return the data from it
 
-        $filePath = $this->getParameter('kernel.cache_dir') . '/source_data/';
+        $filePath = $this->getParameter('kernel.root_dir') . '/../data/';
 
         $diffPath = $filePath . 'diff.json';
         if (file_exists($diffPath)) {
@@ -106,7 +106,7 @@ class AdminController extends Controller
         // if the diff list is empty, move latest.csv and latest_hash.json
         // into processed.csv and processed_hash.json
 
-        $filePath = $this->getParameter('kernel.cache_dir') . '/source_data/';
+        $filePath = $this->getParameter('kernel.root_dir') . '/../data/';
 
         $diffPath = $filePath . 'diff.json';
         if (file_exists($diffPath)) {
@@ -160,7 +160,7 @@ class AdminController extends Controller
             $data = $driveService->getFileData($id);
             $file = $driveService->getFile($data);
 
-            $filePath = $this->getParameter('kernel.cache_dir') . '/source_data';
+            $filePath = $this->getParameter('kernel.root_dir') . '/../data';
 
             if (!is_dir($filePath)) {
                 mkdir($filePath);

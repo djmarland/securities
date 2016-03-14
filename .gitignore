@@ -19,7 +19,8 @@
 /.npm/
 /.v8flags.3.14.5.9.vagrant.json
 /.ssh/
-/data/
+/data/*
+!/data/.gitkeep
 .mysql_history.TMP
 build/
 /isin/
