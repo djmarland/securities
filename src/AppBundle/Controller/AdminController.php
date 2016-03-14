@@ -123,8 +123,11 @@ class AdminController extends Controller
             for ($i = 0;$i<10;$i++) {
                 // todo - process the row
                 if (!empty($diff)) {
-                    $row = array_shift($diff);
-                    $command->single((array) $row);
+                    $row = (array) array_shift($diff);
+                    foreach ($row as $k => $v) {
+                        $row[$k] = utf8_decode($v);
+                    }
+                    $command->single($row);
                 }
             }
 
