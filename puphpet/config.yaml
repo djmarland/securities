@@ -19,13 +19,13 @@ vagrantfile:
                         check_guest_tools: 0
                         update_guest_tools: 0
                 machines:
-                    vflm_eokg5mhdtaij:
+                    vflm_uqsf6nh5fjgr:
                         id: IsinAnalytics
                         network:
                             private_network: 192.168.56.101
                         hostname: isin.dev
-                        memory: 512
-                        cpus: 1
+                        memory: '512'
+                        cpus: '1'
         provision:
             puppet:
                 manifests_path: puphpet/puppet/manifests
@@ -34,7 +34,7 @@ vagrantfile:
                     - '--verbose'
                     - '--hiera_config /vagrant/puphpet/puppet/hiera.yaml'
         synced_folder:
-            vflsf_0kcfzd5cls1f:
+            vflsf_ykpxwhvenbf5:
                 source: ./
                 target: /var/www/isin_analytics/
                 sync_type: default
@@ -113,7 +113,7 @@ nginx:
         names_hash_bucket_size: 128
     upstreams: {  }
     vhosts:
-        nxv_4933mzprbcg8:
+        nxv_3fxsfh3z3ga8:
             server_name: awesome.dev
             server_aliases:
                 - www.awesome.dev
@@ -133,7 +133,7 @@ nginx:
             rewrite_to_https: '1'
             spdy: '1'
             locations:
-                nxvl_xsenl9o64phv:
+                nxvl_h9t7imlum8k9:
                     location: /
                     autoindex: 'off'
                     internal: 'false'
@@ -146,7 +146,7 @@ nginx:
                     fastcgi_split_path: ''
                     proxy: ''
                     proxy_redirect: ''
-                nxvl_06pje0k09ei9:
+                nxvl_nwen8dtmwgur:
                     location: '~ \.php$'
                     autoindex: 'off'
                     internal: 'false'
@@ -179,7 +179,7 @@ apache:
         - proxy_fcgi
         - rewrite
     vhosts:
-        av_4y7qhk46jx8u:
+        av_0wwiwgez820b:
             servername: isin.app
             serveraliases:
                 - www.isin.app
@@ -198,7 +198,7 @@ apache:
             ssl_protocol: ''
             ssl_cipher: ''
             directories:
-                avd_q09st24jvltc:
+                avd_eu0aqeowxe4x:
                     path: /var/www
                     options:
                         - Indexes
@@ -210,7 +210,7 @@ apache:
                         - 'all granted'
                     custom_fragment: ''
                     files_match:
-                        avdfm_q0rn1notzd89:
+                        avdfm_p9h3dq31ygzb:
                             path: \.php$
                             sethandler: 'proxy:fcgi://127.0.0.1:9001'
                             custom_fragment: ''
@@ -234,7 +234,7 @@ php:
     fpm_ini:
         error_log: /var/log/php-fpm.log
     fpm_pools:
-        phpfp_qlooqk8wq9p1:
+        phpfp_q4d89get7yyi:
             ini:
                 prefix: www
                 listen: '127.0.0.1:9001'
@@ -310,15 +310,15 @@ mariadb:
         override_options: {  }
     adminer: 0
     users:
-        mariadbnu_rhljbzkde8la:
+        mariadbnu_b1mvj7i0b9qt:
             name: dbuser
             password: '123'
     databases:
-        mariadbnd_y28bt8k6qlpi:
+        mariadbnd_yrjctjg0k99m:
             name: dbname
             sql: ''
     grants:
-        mariadbng_lxeogd7zctqe:
+        mariadbng_9gipvnphubpy:
             user: dbuser
             table: '*.*'
             privileges:
@@ -331,15 +331,15 @@ mysql:
         override_options: {  }
     adminer: 0
     users:
-        mysqlnu_2elokll9d234:
+        mysqlnu_5wi80joes6pc:
             name: dbuser
             password: root
     databases:
-        mysqlnd_scapit2wkkay:
+        mysqlnd_8knqfb5vt1n3:
             name: app
             sql: ''
     grants:
-        mysqlng_dprxa0ayqepa:
+        mysqlng_sgoskw693mj7:
             user: dbuser
             table: '*.*'
             privileges:
@@ -370,7 +370,7 @@ redis:
         port: '6379'
 sqlite:
     install: '0'
-    adminer: '0'
+    adminer: 0
     databases: {  }
 mailhog:
     install: '0'
@@ -404,7 +404,7 @@ elastic_search:
         version: 2.1.0
         java_install: true
     instances:
-        esi_g0rwhdaf918u:
+        esi_nkgur81ycfq9:
             name: es-01
 solr:
     install: '0'

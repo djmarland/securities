@@ -10,7 +10,13 @@ class puphpet_firewall (
 
   class { ['puphpet::firewall::pre', 'puphpet::firewall::post', 'firewall']: }
 
-  each( $firewall['rules'] ) |$key, $rule| {
+  # config file could contain no rules key
+  $rules = array_true($firewall, 'rules') ? {
+    true    => $firewall['rules'],
+    default => { }
+  }
+
+  each( $rules ) |$key, $rule| {
     if is_string($rule['port']) {
       $ports = [$rule['port']]
     } else {
@@ -40,10 +46,12 @@ class puphpet_firewall (
       true  => $vm['ssh']['port'],
       false => 22,
     }
+  } else {
+    $vm_ssh_port = 22
+  }
 
-    if ! defined(Puphpet::Firewall::Port["${vm_ssh_port}"]) {
-      puphpet::firewall::port { "${vm_ssh_port}": }
-    }
+  if ! defined(Puphpet::Firewall::Port["${vm_ssh_port}"]) {
+    puphpet::firewall::port { "${vm_ssh_port}": }
   }
 
   # Opens up forwarded ports on locale machines; remote servers won't have these keys
