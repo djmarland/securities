@@ -9,5 +9,5 @@ parameters:
 security:
     firewalls:
         default:
-            anonymous: ~
+            anonymous: false
             http_basic: ~
