@@ -58,7 +58,7 @@ class ByIndustryService extends SecuritiesService
         $qb->leftJoin('p.sector', 's');
         $qb->leftJoin('s.industry', 'i');
         $qb = $this->where($qb, $industry);
-        $qb = $this->order($qb);
+        $qb = $this->orderByMaturing($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

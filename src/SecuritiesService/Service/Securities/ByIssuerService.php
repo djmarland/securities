@@ -63,7 +63,7 @@ class ByIssuerService extends SecuritiesService
     ): array {
         $qb = $this->selectWithJoins();
         $qb = $this->where($qb, $issuer);
-        $qb = $this->order($qb);
+        $qb = $this->orderByMaturing($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

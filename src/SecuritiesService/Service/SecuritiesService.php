@@ -308,11 +308,17 @@ class SecuritiesService extends Service
     protected function order(
         QueryBuilder $qb
     ): QueryBuilder {
+        return $qb->orderBy(self::TBL . '.startDate', 'DESC');
+    }
+
+    protected function orderByMaturing(
+        QueryBuilder $qb
+    ): QueryBuilder {
         return $qb->orderBy(
             'IFNULL(' . self::TBL . '.maturityDate, ' . self::TBL . '.isin), ' . self::TBL . '.isin'
         );
     }
-
+    
     private function where(
         QueryBuilder $qb
     ): QueryBuilder {

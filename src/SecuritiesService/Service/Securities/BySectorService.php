@@ -57,7 +57,7 @@ class BySectorService extends SecuritiesService
         $qb->leftJoin('co.parentGroup', 'p');
         $qb->leftJoin('p.sector', 's');
         $qb = $this->where($qb, $sector);
-        $qb = $this->order($qb);
+        $qb = $this->orderByMaturing($qb);
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

@@ -11,7 +11,7 @@ interface SecurityPresenterInterface
     public function getIssuerID():string;
     public function getAmount():string;
     public function getCurrency():string;
-    public function getStartDate():string;
+    public function getIssueDate():string;
     public function getMaturityDate():string;
     public function getDuration():string;
     public function getCoupon():string;

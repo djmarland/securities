@@ -97,7 +97,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->domainModel->getCurrency()->getCode();
     }
 
-    public function getStartDate():string
+    public function getIssueDate():string
     {
         return $this->domainModel->getStartDate()->format(self::DATE_FORMAT);
     }
