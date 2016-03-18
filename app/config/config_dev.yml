@@ -6,6 +6,12 @@ parameters:
         title: "ISIN Analytics [dev]"
         allowAdverts: false
 
+security:
+    firewalls:
+        admin:
+            pattern: ^/admin
+            anonymous: ~
+
 framework:
     router:
         resource: "%kernel.root_dir%/config/routing_dev.yml"

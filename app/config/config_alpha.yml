@@ -5,3 +5,9 @@ parameters:
     app.config:
         title: "ISIN Analytics [alpha]"
         allowAdverts: false
+
+security:
+    firewalls:
+        default:
+            anonymous: ~
+            http_basic: ~

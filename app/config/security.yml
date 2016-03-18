@@ -11,13 +11,15 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        default:
-            anonymous: ~
+        admin:
+            pattern: ^/admin
             http_basic: ~
 
+        default:
+            anonymous: ~
+
     access_control:
-        # require ROLE_ADMIN for /admin*
-        - { path: ^/admin, roles: ROLE_ADMIN }
+        - { roles: [ROLE_ADMIN, IS_AUTHENTICATED_ANONYMOUSLY] }
 
     encoders:
         Symfony\Component\Security\Core\User\User:
