@@ -6,7 +6,7 @@ use SecuritiesService\Domain\Entity\Null\NullSector;
 use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
-class ParentGroup extends Entity
+class ParentGroup extends Entity implements \JsonSerializable
 {
     private $name;
     private $sector;
@@ -36,5 +36,13 @@ class ParentGroup extends Entity
             throw new DataNotSetException('Tried to get sector data without requesting it up front');
         }
         return $this->sector;
+    }
+
+    public function jsonSerialize() {
+        return (object) [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'sector' => $this->getSector(),
+        ];
     }
 }

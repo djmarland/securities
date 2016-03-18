@@ -33,8 +33,15 @@ class MasterPresenter extends Presenter
     public function set(
         string $key,
         $value,
-        bool $allowedInFeed = true
+        bool $allowedInFeed = null
     ) {
+        if (is_null($allowedInFeed)) {
+            $allowedInFeed = true;
+            if (isset($this->data[$key])) {
+                $allowedInFeed = $this->data[$key]->inFeed;
+            }
+        }
+
         $this->data[$key] = (object) [
             'data' => $value,
             'inFeed' => $allowedInFeed,

@@ -17,14 +17,11 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         'template' => null,
     ];
 
-    private $security;
-
     public function __construct(
         Security $security,
         array $options = []
     ) {
-        parent::__construct(null, $options);
-        $this->security = $security;
+        parent::__construct($security, $options);
         if ($this->options['template']) {
             $this->setTemplateVariation($this->options['template']);
         }
@@ -53,50 +50,50 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getISIN(): string
     {
-        return $this->security->getIsin();
+        return $this->domainModel->getIsin();
     }
 
     public function getName(): string
     {
-        return $this->security->getName();
+        return $this->domainModel->getName();
     }
 
     public function getExchange(): string
     {
-        return $this->security->getExchange();
+        return $this->domainModel->getExchange();
     }
 
     public function getIssuer():string
     {
-        return $this->security->getCompany()->getName();
+        return $this->domainModel->getCompany()->getName();
     }
 
     public function getIssuerID():string
     {
-        return (string) $this->security->getCompany()->getId();
+        return (string) $this->domainModel->getCompany()->getId();
     }
 
     public function getAmount():string
     {
-        $val = number_format($this->security->getMoneyRaised(), 2);
+        $val = number_format($this->domainModel->getMoneyRaised(), 2);
         return '£' . $val . 'm';
     }
 
     public function getCurrency():string
     {
-        return $this->security->getCurrency()->getCode();
+        return $this->domainModel->getCurrency()->getCode();
     }
 
     public function getStartDate():string
     {
-        return $this->security->getStartDate()->format(self::DATE_FORMAT);
+        return $this->domainModel->getStartDate()->format(self::DATE_FORMAT);
     }
 
     public function getMaturityDate():string
     {
-        $date = $this->security->getMaturityDate();
+        $date = $this->domainModel->getMaturityDate();
         if ($date) {
-            return $this->security->getMaturityDate()->format(self::DATE_FORMAT);
+            return $this->domainModel->getMaturityDate()->format(self::DATE_FORMAT);
         }
         return 'Undated';
     }
@@ -106,23 +103,23 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
      */
     public function getCompany(): Company
     {
-        return $this->security->getCompany();
+        return $this->domainModel->getCompany();
     }
 
     public function getInitialTerm(): string
     {
-        $end = $this->security->getMaturityDate();
+        $end = $this->domainModel->getMaturityDate();
         if (!$end) {
             return '-';
         }
 
-        $start = $this->security->getStartDate();
+        $start = $this->domainModel->getStartDate();
         return $this->dateDiff($start, $end);
     }
 
     public function getRemainingTerm(): string
     {
-        $end = $this->security->getMaturityDate();
+        $end = $this->domainModel->getMaturityDate();
         if (!$end) {
             return '-';
         }
@@ -139,32 +136,32 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     {
         // coupon values are in decimal, so to display as %
         // we have to multiple by 100
-        $coupon = $this->security->getCoupon();
+        $coupon = $this->domainModel->getCoupon();
         if ($coupon) {
-            return (round($this->security->getCoupon()*100, 2)) . '%';
+            return (round($this->domainModel->getCoupon()*100, 2)) . '%';
         }
         return '-';
     }
 
     public function getProduct():string
     {
-        return (string) $this->security->getProduct()->getName();
+        return (string) $this->domainModel->getProduct()->getName();
     }
 
     public function getProductNumber():string
     {
-        return (string) $this->security->getProduct()->getNumber();
+        return (string) $this->domainModel->getProduct()->getNumber();
     }
 
     public function getResidualMaturity(): string
     {
-        $bucket = $this->security->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
+        $bucket = $this->domainModel->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
         return (string) $bucket;
     }
 
     public function getContractualMaturity(): string
     {
-        $bucket = $this->security->getContractualMaturityBucket();
+        $bucket = $this->domainModel->getContractualMaturityBucket();
         return (string) $bucket;
     }
 

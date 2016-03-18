@@ -4,7 +4,7 @@ namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\UUID;
 
-class Industry extends Entity
+class Industry extends Entity implements \JsonSerializable
 {
     private $name;
 
@@ -20,5 +20,12 @@ class Industry extends Entity
     public function getName(): string
     {
         return $this->name;
+    }
+
+    public function jsonSerialize() {
+        return (object) [
+            'id' => $this->getId(),
+            'name' => $this->getName()
+        ];
     }
 }

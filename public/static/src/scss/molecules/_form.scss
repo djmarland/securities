@@ -1,0 +1,17 @@
+.form {
+
+}
+.form__group {
+    margin-bottom: $grid-unit-large;
+}
+.form__label {
+    display: block;
+    margin-bottom: $grid-unit-tiny;
+    &:after {
+        content: ":";
+    }
+}
+.form__field {
+    width: 100%;
+    padding: $grid-unit-tiny;
+}

@@ -38,9 +38,9 @@ class Controller extends BaseController implements ControllerInterface
             $this->get('kernel')->getEnvironment()
         );
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
-        $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]));
-        $this->toView('currentYear', date("Y"));
-        $this->toView('currentSection', null);
+        $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]), false);
+        $this->toView('currentYear', date("Y"), false);
+        $this->toView('currentSection', null, false);
         $this->setSearchContext();
     }
 
@@ -48,7 +48,7 @@ class Controller extends BaseController implements ControllerInterface
     public function toView(
         string $key,
         $value,
-        $inFeed = true
+        $inFeed = null
     ): Controller {
         $this->masterViewPresenter->set($key, $value, $inFeed);
         return $this;
@@ -86,8 +86,8 @@ class Controller extends BaseController implements ControllerInterface
     protected function setSearchContext()
     {
         $search = $this->request->get('q', null);
-        $this->toView('searchContext', $search);
-        $this->toView('searchAutofocus', null);
+        $this->toView('searchContext', $search, false);
+        $this->toView('searchAutofocus', null, false);
     }
 
     protected function setPagination(
@@ -126,7 +126,7 @@ class Controller extends BaseController implements ControllerInterface
     protected function renderTemplate($template)
     {
         $format = $this->request->get('format', null);
-        if ($format == 'json') {
+        if ($format == 'json' || $template == 'json') {
             $response = new JsonResponse($this->masterViewPresenter->getFeedData());
             $this->setCacheHeaders($response);
             return $response;

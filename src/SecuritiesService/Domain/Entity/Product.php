@@ -2,9 +2,10 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use JsonSerializable;
 use SecuritiesService\Domain\ValueObject\UUID;
 
-class Product extends Entity
+class Product extends Entity implements JsonSerializable
 {
     private $name;
     private $number;
@@ -28,5 +29,12 @@ class Product extends Entity
     public function getNumber(): int
     {
         return $this->number;
+    }
+
+    public function jsonSerialize() {
+        return (object) [
+            'name' => $this->getName(),
+            'number' => $this->getNumber(),
+        ];
     }
 }

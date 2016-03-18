@@ -38,6 +38,6 @@ gulp.task('img', function() {
 gulp.task('default', ['sass', 'js', 'img']);
 
 gulp.task('watch',function() {
-    gulp.watch(staticPathSrc + 'scss/**/*.scss',['sass']);
-    gulp.watch(staticPathSrc + 'js/**/*.js',['js']);
+    gulp.watch(staticPathSrc + 'scss/**/*.scss',['default']);
+    gulp.watch(staticPathSrc + 'js/**/*.js',['default']);
 });

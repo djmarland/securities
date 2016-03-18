@@ -134,6 +134,9 @@ class ImportCommand extends Command
     private function processRow($row)
     {
         $isin = $this->getRowValue($row, 'ISIN');
+        if ($this->isUnset($isin)) {
+            throw new \Exception('An ISIN is required');
+        }
 
         $repo = $this->em->getRepository('SecuritiesService:Security');
         $security = $repo->findOneBy(
@@ -143,8 +146,16 @@ class ImportCommand extends Command
             $security = new Security();
             $security->setIsin($isin);
         }
-        $security->setName($this->getRowValue($row, 'SECURITY_NAME'));
-        $security->setExchange($this->getRowValue($row, 'SOURCE'));
+
+        $name = $this->getRowValue($row, 'SECURITY_NAME');
+        if ($name) {
+            $security->setName($name);
+        }
+
+        $source = $this->getRowValue($row, 'SOURCE');
+        if ($source) {
+            $security->setExchange($source);
+        }
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
 //
@@ -154,38 +165,59 @@ class ImportCommand extends Command
 //            $maturityDate = $excelZeroPoint->add(new DateInterval('P' . $row['MATURITY_DATE'] . 'D'));
 //        }
 
-        $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $this->getRowValue($row, 'SECURITY_START_DATE'));
+        $startDate = $this->getRowValue($row, 'SECURITY_START_DATE');
+        if ($startDate) {
+            $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $startDate);
+            $security->setStartDate($startDate);
+        }
         $maturityDate = $this->getRowValue($row, 'MATURITY_DATE');
-        if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
-            $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $maturityDate);
-        } else {
-            $maturityDate = null;
-        }
-
-        $security->setStartDate($startDate);
-        $security->setMaturityDate($maturityDate);
-
-        $security->setMoneyRaised($this->getRowValue($row, 'MONEY_RAISED_GBP'));
-
-        $coupon = null;
-        if (strtolower($this->getRowValue($row, 'COUPON_RATE')) != 'n/a') {
-            $couponValue = floatval($row['COUPON_RATE']);
-            if (strpos($this->getRowValue($row, 'COUPON_RATE'), '%') !== false) {
-                $couponValue = $couponValue / 100;
+        if ($maturityDate) {
+            if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
+                $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $maturityDate);
+            } else {
+                $maturityDate = null;
             }
-            $coupon = $couponValue;
+            $security->setMaturityDate($maturityDate);
         }
 
-        $security->setCoupon($coupon);
+        $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_GBP');
+        if ($moneyRaised) {
+            $security->setMoneyRaised($moneyRaised);
+        }
+
+        $coupon = $this->getRowValue($row, 'COUPON_RATE');
+        if ($coupon) {
+            if (strtolower($coupon) != 'n/a') {
+                $couponValue = floatval($row['COUPON_RATE']);
+                if (strpos($this->getRowValue($row, 'COUPON_RATE'), '%') !== false) {
+                    $couponValue = $couponValue / 100;
+                }
+                $coupon = $couponValue;
+            } else {
+                $coupon = null;
+            }
+            $security->setCoupon($coupon);
+        }
 
 
 //        $security->setMarket($row['MARKET']);
 //        $security->setTIDM($row['TIDM']);
 //        $security->setDescription($row['SECURITY_DESCRIPTION']);
 
-        $security->setProduct($this->getProduct($row));
-        $security->setCompany($this->getCompany($row));
-        $security->setCurrency($this->getCurrency($row));
+        $product = $this->getRowValue($row, 'PRA_ITEM_4748');
+        if ($product) {
+            $security->setProduct($this->getProduct($row));
+        }
+
+        $currency = $this->getRowValue($row, 'TRADING_CURRENCY');
+        if ($currency) {
+            $security->setCurrency($this->getCurrency($row));
+        }
+
+        $company = $this->getRowValue($row, 'COMPANY_NAME');
+        if ($company) {
+            $security->setCompany($this->getCompany($row));
+        }
 
         $this->em->persist($security);
         $this->em->flush();
@@ -194,7 +226,7 @@ class ImportCommand extends Command
 
     private function isUnset($value)
     {
-        return (in_array(strtolower($value), [
+        return (empty($value) || in_array(strtolower($value), [
             '#n/a',
             'n/a',
             'other',
@@ -226,8 +258,17 @@ class ImportCommand extends Command
             $company = new Company();
         }
         $company->setName($name);
-        $company->setCountry($this->getCountry($row));
-        $company->setParentGroup($this->getParentGroup($row));
+
+        $country = $this->getRowValue($row, 'COUNTRY_OF_INCORPORATION');
+        if ($country) {
+            $company->setCountry($this->getCountry($row));
+        }
+
+        $parent = $this->getRowValue($row, 'COMPANY_PARENT');
+        if ($parent) {
+            $company->setParentGroup($this->getParentGroup($row));
+        }
+        
         $this->em->persist($company);
         $this->em->flush();
         return $company;

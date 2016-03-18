@@ -1,12 +1,13 @@
 <?php
 
 namespace AppBundle\Presenter;
+use JsonSerializable;
 
 /**
  * Class Presenter
  * For those which the base Presenter classes inherit (for view logic)
  */
-abstract class Presenter
+abstract class Presenter implements JsonSerializable
 {
     const TWIG_SUFFIX = '.html.twig';
 
@@ -35,6 +36,10 @@ abstract class Presenter
     ) {
         $this->domainModel = $domainModel;
         $this->options = array_merge($this->options, $options);
+    }
+
+    public function jsonSerialize() {
+        return $this->domainModel;
     }
 
     /**

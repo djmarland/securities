@@ -31,13 +31,9 @@ admin:
   path:     /admin
   defaults: { _controller: AppBundle:Admin:index }
 
-admin_diff:
-  path:     /admin/diff
-  defaults: { _controller: AppBundle:Admin:diff }
-
 admin_process:
-  path:     /admin/process
-  defaults: { _controller: AppBundle:Admin:process }
+  path:     /admin/process.json
+  defaults: { _controller: AppBundle:Admin:process, format: json }
 
 # Overview
 overview:
@@ -52,8 +48,8 @@ security_list:
   defaults: { _controller: AppBundle:Securities:list }
 
 security_show:
-  path:     /securities/{isin}
-  defaults: { _controller: AppBundle:Securities:show }
+  path:     /securities/{isin}.{format}
+  defaults: { _controller: AppBundle:Securities:show, format: null }
   requirements:
     isin:  "[A-Za-z0-9]{12}" # catching lowercase here, so we can redirect it to uppercase
 

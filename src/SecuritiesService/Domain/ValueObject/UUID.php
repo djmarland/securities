@@ -6,7 +6,7 @@ use Ramsey\Uuid\Uuid as UuidProvider;
 use Ramsey\Uuid\UuidInterface as UuidProviderInterface;
 use SecuritiesService\Domain\Exception\ValidationException;
 
-class UUID
+class UUID implements \JsonSerializable
 {
     private $uuid;
 
@@ -38,5 +38,10 @@ class UUID
     public function __toString(): string
     {
         return (string) $this->getValue();
+    }
+
+
+    public function jsonSerialize() {
+        return $this->__toString();
     }
 }

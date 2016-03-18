@@ -8,26 +8,18 @@ use DateTime;
 class Country extends Entity
 {
     private $name;
-    private $parentGroup;
 
     public function __construct(
         UUID $id,
-        string $name,
-        ParentGroup $parentGroup = null
+        string $name
     ) {
         parent::__construct($id);
 
         $this->name = $name;
-        $this->parentGroup = $parentGroup;
     }
 
     public function getName(): string
     {
         return $this->name;
-    }
-
-    public function getParentGroup()
-    {
-        return $this->parentGroup;
     }
 }

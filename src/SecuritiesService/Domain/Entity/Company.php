@@ -2,11 +2,12 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use JsonSerializable;
 use SecuritiesService\Domain\Entity\Null\NullParentGroup;
 use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
-class Company extends Entity
+class Company extends Entity implements JsonSerializable
 {
     private $name;
     private $parentGroup;
@@ -52,5 +53,14 @@ class Company extends Entity
             throw new DataNotSetException('Tried to get parent group data without requesting it up front');
         }
         return $this->country;
+    }
+
+    public function jsonSerialize() {
+        return (object) [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'parentGroup' => $this->getParentGroup(),
+            'country' => $this->getCountry() ? $this->getCountry()->getName() : null,
+        ];
     }
 }

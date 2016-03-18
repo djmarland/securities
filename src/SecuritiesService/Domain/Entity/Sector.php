@@ -6,7 +6,7 @@ use SecuritiesService\Domain\Entity\Null\NullIndustry;
 use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
-class Sector extends Entity
+class Sector extends Entity implements \JsonSerializable
 {
     private $name;
     private $industry;
@@ -34,5 +34,13 @@ class Sector extends Entity
             throw new DataNotSetException('Tried to get industry data without requesting it up front');
         }
         return $this->industry;
+    }
+
+    public function jsonSerialize() {
+        return (object) [
+            'id' => $this->getId(),
+            'name' => $this->getName(),
+            'industry' => $this->getIndustry(),
+        ];
     }
 }

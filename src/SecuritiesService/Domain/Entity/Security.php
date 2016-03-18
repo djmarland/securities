@@ -2,13 +2,14 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use JsonSerializable;
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\UUID;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use DateTime;
 
-class Security extends Entity
+class Security extends Entity implements JsonSerializable
 {
     private $name;
     private $isin;
@@ -123,5 +124,22 @@ class Security extends Entity
             }
         }
         return $this->residualBucket;
+    }
+
+    public function jsonSerialize() {
+        $dateFormat = 'd/m/Y';
+
+        return (object) [
+            'isin' => $this->getIsin(),
+            'name' => $this->getName(),
+            'exchange' => $this->getExchange(),
+            'startDate' => $this->getStartDate()->format($dateFormat),
+            'maturityDate' => $this->getMaturityDate() ? $this->getMaturityDate()->format($dateFormat) : null,
+            'coupon' => $this->getCoupon(),
+            'amountRaised' => $this->getMoneyRaised(),
+            'currency' => $this->getCurrency()->getCode(),
+            'product' => $this->getProduct(),
+            'issuer' => $this->getCompany(),
+        ];
     }
 }
