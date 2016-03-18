@@ -29,7 +29,10 @@
         </tr>
         <tr>
             <th>Country:</th>
-            <td>{{ security.company.country.name }}</td>
+            <td>{% if security.hasIssuer %}
+                {{ security.company.country.name }}
+                {% endif %}
+            </td>
         </tr>
         {#
         <tr>
@@ -40,7 +43,7 @@
         <tr>
             <th>Parent group:</th>
             <td>
-                {% if security.company.parentGroup %}
+                {% if security.hasIssuer and security.company.parentGroup %}
                 <a href="{{ path('group_show', { group_id : security.company.parentGroup.id }) }}">{{ security.company.parentGroup.name }}</a>
                 {% endif %}
             </td>
@@ -48,7 +51,7 @@
         <tr>
             <th>Sector:</th>
             <td>
-                {% if security.company.parentGroup and security.company.parentGroup.sector %}
+                {% if security.hasIssuer and security.company.parentGroup and security.company.parentGroup.sector %}
                     <a href="{{
                     path('sector_show', { sector_id : security.company.parentGroup.sector.id })
                     }}">{{ security.company.parentGroup.sector.name }}</a>
@@ -58,7 +61,8 @@
         <tr>
             <th>Industry:</th>
             <td>
-                {% if security.company.parentGroup and
+                {% if security.hasIssuer and
+                    security.company.parentGroup and
                     security.company.parentGroup.sector and
                     security.company.parentGroup.sector.industry %}
                     <a href="{{
