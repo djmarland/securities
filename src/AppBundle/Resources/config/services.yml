@@ -12,13 +12,6 @@ services:
         tags:
             - { name: twig.extension }
 
-  app.guzzle_client:
-      class: GuzzleHttp\Client
-
-  app.data_services.drive:
-      class: DataService\Service\DriveService
-      arguments: ["@app.guzzle_client","%google_api_key%","%google_source_email%"]
-
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService
       arguments: ["@doctrine.orm.default_entity_manager"]
