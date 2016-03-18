@@ -8,6 +8,8 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AdminController extends Controller
 {
+    protected $cacheTime = null;
+
     public function indexAction(Request $request)
     {
         $this->toView('formSuccess', null);
