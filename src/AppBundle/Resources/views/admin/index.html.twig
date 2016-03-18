@@ -29,22 +29,23 @@
             <div class="card card--padded g-unit">
                 <div id="spin-container" style="width:48px;float:right"></div>
                 <h2 class="g-unit">Add or update ISIN(s)</h2>
+                <form id="overall-form">
                 <div class="grid">
                     <div class="g 1/2@m">
-                        <p id="js-status"></p>
+                        <p id="js-status"><em>Italitcs are optional fields</em></p>
                     </div>
                     <div class="g 1/2@m">
                         <p class="text--right g-unit"><button id="save-isin" class="link--button">Save</button></p>
                     </div>
                 </div>
                 <hr class="g-unit" />
-                <div id="isin-forms" class="isin-forms">
-                </div>
+                <div id="isin-forms" class="isin-forms"></div>
                 <div class="grid">
                     <div class="g 1/2">
                         <p><button id="add-isin" class="link--button">+</button></p>
                     </div>
                 </div>
+                </form>
             </div>
         </div>
         <div class="g 5/12@m">
@@ -78,54 +79,54 @@
 
     <template id="form-template">
         <div class="g-unit" data-js="isin-form">
-            <form class="form g-unit" id="isin-form-{X}" data-num="{X}">
+            <div class="form g-unit" id="isin-form-{X}" data-num="{X}">
                 <div class="form__group">
                     <label class="form__label" for="field-{X}-ISIN">ISIN</label>
-                    <input data-js="field-isin" class="form__field" id="field-{X}-ISIN" name="field-{X}-ISIN" />
+                    <input data-js="field-isin" class="form__field" id="field-{X}-ISIN" name="field-{X}-ISIN" required />
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-{X}-SECURITY_NAME">SECURITY_NAME</label>
-                    <input class="form__field" id="field-{X}-SECURITY_NAME" name="field-{X}-SECURITY_NAME" />
+                    <input class="form__field" id="field-{X}-SECURITY_NAME" name="field-{X}-SECURITY_NAME" required />
                 </div>
                 <div class="grid">
                     <div class="g 1/2@m">
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-SOURCE">SOURCE</label>
-                            <input class="form__field" id="field-{X}-SOURCE" name="field-{X}-SOURCE" />
+                            <input class="form__field" id="field-{X}-SOURCE" name="field-{X}-SOURCE" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-SECURITY_START_DATE">SECURITY_START_DATE (dd/mm/yyyy)</label>
-                            <input class="form__field" id="field-{X}-SECURITY_START_DATE" name="field-{X}-SECURITY_START_DATE" />
-                        </div>
-                        <div class="form__group">
-                            <label class="form__label" for="field-{X}-MATURITY_DATE">MATURITY_DATE (dd/mm/yyyy)</label>
-                            <input class="form__field" id="field-{X}-MATURITY_DATE" name="field-{X}-MATURITY_DATE" />
+                            <input class="form__field" id="field-{X}-SECURITY_START_DATE" name="field-{X}-SECURITY_START_DATE" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-MONEY_RAISED_GBP">MONEY_RAISED_GBP (£m)</label>
-                            <input class="form__field" id="field-{X}-MONEY_RAISED_GBP" name="field-{X}-MONEY_RAISED_GBP" />
+                            <input class="form__field" id="field-{X}-MONEY_RAISED_GBP" name="field-{X}-MONEY_RAISED_GBP" required />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label" for="field-{X}-PRA_ITEM_4748">PRA_ITEM_4748 (line number)</label>
+                            <input class="form__field" id="field-{X}-PRA_ITEM_4748" name="field-{X}-PRA_ITEM_4748" required />
                         </div>
                     </div>
                     <div class="g 1/2@m">
                         <div class="form__group">
-                            <label class="form__label" for="field-{X}-COUPON_RATE">COUPON_RATE (decimal, or with %)</label>
+                            <label class="form__label" for="field-{X}-TRADING_CURRENCY">TRADING_CURRENCY (3 letter code)</label>
+                            <input class="form__field" id="field-{X}-TRADING_CURRENCY" name="field-{X}-TRADING_CURRENCY" required />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label" for="field-{X}-MATURITY_DATE"><em>MATURITY_DATE (dd/mm/yyyy)</em></label>
+                            <input class="form__field" id="field-{X}-MATURITY_DATE" name="field-{X}-MATURITY_DATE" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label" for="field-{X}-COUPON_RATE"><em>COUPON_RATE (decimal, or with %)</em></label>
                             <input class="form__field" id="field-{X}-COUPON_RATE" name="field-{X}-COUPON_RATE" />
                         </div>
                         <div class="form__group">
-                            <label class="form__label" for="field-{X}-PRA_ITEM_4748">PRA_ITEM_4748 (line number)</label>
-                            <input class="form__field" id="field-{X}-PRA_ITEM_4748" name="field-{X}-PRA_ITEM_4748" />
-                        </div>
-                        <div class="form__group">
-                            <label class="form__label" for="field-{X}-TRADING_CURRENCY">TRADING_CURRENCY (3 letter code)</label>
-                            <input class="form__field" id="field-{X}-TRADING_CURRENCY" name="field-{X}-TRADING_CURRENCY" />
-                        </div>
-                        <div class="form__group">
-                            <label class="form__label" for="field-{X}-COMPANY_NAME">COMPANY_NAME (exact match)</label>
+                            <label class="form__label" for="field-{X}-COMPANY_NAME"><em>COMPANY_NAME (exact match)</em></label>
                             <input class="form__field" id="field-{X}-COMPANY_NAME" name="field-{X}-COMPANY_NAME" />
                         </div>
                     </div>
                 </div>
-            </form>
+            </div>
             <hr />
         </div>
     </template>
@@ -333,7 +334,12 @@
                     }
                 });
 
-                ID('save-isin').addEventListener('click', beginProcessing, false);
+                ID('save-isin').addEventListener('click', function(e) {
+                    if (ID('overall-form').checkValidity()) {
+                        e.preventDefault();
+                        beginProcessing();
+                    }
+                }, false);
             };
 
             window.onload = init;

@@ -97,7 +97,7 @@ class Security extends Entity implements JsonSerializable
         return $this->currency;
     }
 
-    public function getCompany(): Company
+    public function getCompany()
     {
         return $this->company;
     }
