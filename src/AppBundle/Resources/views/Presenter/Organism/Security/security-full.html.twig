@@ -21,7 +21,11 @@
         </tr>
         <tr>
             <th>Issuer:</th>
-            <td><a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a></td>
+            <td>
+                {% if security.hasIssuer %}
+                <a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a>
+                {% endif %}
+            </td>
         </tr>
         <tr>
             <th>Country:</th>
