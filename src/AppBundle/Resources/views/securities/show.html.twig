@@ -4,8 +4,9 @@
     <div class="grid">
         <div class="g 3/4@xl">
             <h1 class="b g-unit">{{ security.isin }}
-                {% if security.issuer %}
-                    <span class="invisible"> - {{ security.issuer }}</span>{% endif %}
+                {% if security.hasIssuer %}
+                    <span class="invisible"> - {{ security.issuer }}</span>
+                {% endif %}
             </h1>
             {% include security.templatePath with security.vars only %}
         </div>
@@ -23,7 +24,7 @@
                         </a>
                     </li>
                     {% endif %}
-                    {% if security.company and security.company.parentGroup %}
+                    {% if security.hasIssuer and security.company.parentGroup %}
                     <li>
                         <a class="link--button link--block text--center" href="{{ path(
                             'group_securities',
@@ -33,7 +34,7 @@
                         </a>
                     </li>
                     {% endif %}
-                    {% if security.company
+                    {% if security.hasIssuer
                         and security.company.parentGroup
                         and security.company.parentGroup.sector
                         and security.company.parentGroup.sector.industry %}
