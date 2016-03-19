@@ -39,10 +39,15 @@ class ParentGroup extends Entity implements \JsonSerializable
     }
 
     public function jsonSerialize() {
-        return (object) [
+        $data = [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'sector' => $this->getSector(),
         ];
+
+        if (!is_null($this->sector)) {
+            $data['sector'] = $this->getSector();
+        }
+
+        return (object) $data;
     }
 }

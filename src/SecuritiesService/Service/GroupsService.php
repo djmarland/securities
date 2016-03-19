@@ -57,4 +57,18 @@ class GroupsService extends Service
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
+
+    public function search(
+        string $query,
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {$qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.name LIKE :query')
+            ->addOrderBy(self::TBL . '.name', 'ASC')
+            ->setParameter('query', '%' . $query . '%');
+
+        $qb = $this->paginate($qb, $limit, $page);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
 }

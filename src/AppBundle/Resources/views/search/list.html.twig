@@ -9,7 +9,7 @@
             <h2>Issuers</h2>
             {% if hasIssuers %}
                 <ul>
-                    {%  for issuer in issuers %}
+                    {%  for issuer in issuerPresenters %}
                         <li>{% include issuer.templatePath with issuer.vars only %}</li>
                     {% endfor %}
                 </ul>

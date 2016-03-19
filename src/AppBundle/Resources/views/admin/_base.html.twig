@@ -1,0 +1,18 @@
+{% block body %}
+<p class="h-a">Admin</p>
+<div class="grid">
+    <div class="g">
+        <nav><ul class="tabs"
+            ><li class="tabs__tab {% if activeTab == 'dashboard' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('admin') }}">Dashboard</a></li
+            ><li class="tabs__tab {% if activeTab == 'securities' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('admin_securities') }}">Securities</a></li
+            ><li class="tabs__tab {% if activeTab == 'issuers' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('admin_issuers') }}">Issuers</a></li
+        ></ul></nav>
+    </div>
+    <div class="g">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}

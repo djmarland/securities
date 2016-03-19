@@ -289,6 +289,15 @@ class SecuritiesService extends Service
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
+    public function findAllWithoutIssuer(): array
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.company IS NULL')
+            ->orderBy(self::TBL . '.isin', 'ASC');
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
 
 
     protected function selectWithJoins()

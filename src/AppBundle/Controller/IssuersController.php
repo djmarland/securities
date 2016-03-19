@@ -303,7 +303,7 @@ class IssuersController extends Controller
         // and it's parent group, sector + industry
         $this->setFinder($request->get('_route'), $industry, $sector, $group, $issuer);
 
-        $this->toView('issuer', $issuer);
+        $this->toView('issuer', $issuer, true);
         return $issuer;
     }
 }

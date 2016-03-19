@@ -1,0 +1,255 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+<h1 class="g-unit b">Issuers</h1>
+{% if formSuccess %}
+    <div class="shadow message g-unit"><strong>{{ formSuccess }}</strong></div>
+{% endif %}
+
+<div class="grid">
+
+    <div class="g 1/2@m">
+        <div class="card card--padded">
+            <div id="spin-container" style="width:48px;float:right"></div>
+            <h2 class="c g-unit">Add / Edit Issuer</h2>
+            <form method="post">
+                <div class="grid">
+                    <div class="g 1/2@m">
+                        <p id="js-status"><em>Italics are optional fields</em></p>
+                    </div>
+                    <div class="g 1/2@m">
+                        <p class="text--right g-unit"><button id="save-isin" class="link--button">Save</button></p>
+                    </div>
+                </div>
+                <div class="form__group">
+                    <label class="form__label" for="field-name">Name</label>
+                    <input data-js="field-name" class="form__field" id="field-name" name="field-name" required />
+                </div>
+                <div class="form__group">
+                    <label class="form__label" for="field-group"><em>Parent Group</em></label>
+                    <input data-js="field-group" class="form__field" id="field-group" name="field-group" autocomplete="off" />
+                    <div id="js-group-status"></div>
+                </div>
+                <div class="form__group">
+                    <label class="form__label" for="field-country"><em>Country</em></label>
+                    <input data-js="field-country" class="form__field" id="field-country" name="field-country" />
+                </div>
+                <div class="form__group">
+                    <label class="form__label" for="field-id">ID</label>
+                    <input data-js="field-id" class="form__field" id="field-id" name="field-id" readonly />
+                </div>
+            </form>
+        </div>
+    </div>
+    <div class="g 1/2@m">
+        <div class="card card--padded g-unit">
+            <h2 class="c g-unit">Issuers with no securities ({{ noSecuritiesCount }})</h2>
+            {% if noSecuritiesCount %}
+
+                <ul class="list--lined">
+                    {% for issuer in noSecurities %}
+                        <li>
+                            <form method="post">
+                            <div class="grid g--align-center">
+                                <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuer.id }) }}">{{ issuer.name }}</a>
+                                <input type="hidden" name="delete-id" value="{{ issuer.id }}" />
+                                <button class="g 1/5 link--button" type="submit">Delete</button>
+                            </div>
+                            </form>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>All good</p>
+            {% endif %}
+        </div>
+        <div class="card card--padded">
+            <h2 class="c g-unit">Issuers with no parent ({{ noParentCount }})</h2>
+            {% if noParentCount %}
+                <ul class="list--lined">
+                    {% for issuer in noParent %}
+                        <li>
+                            <div class="grid g--align-center">
+                                <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuer.id }) }}">{{ issuer.name }}</a>
+                                <button class="g 1/5 link--button" data-js="fetch-issuer" data-id="{{ issuer.id }}">Fetch</button>
+                            </div>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% else %}
+                <p>All good</p>
+            {% endif %}
+        </div>
+    </div>
+</div>
+<script>
+    (function() {
+        var ID = function( id ) { return document.getElementById( id ); },
+            spinContainer,
+            prevNameValue,
+            prevGroupValue,
+            keyupTimer,
+
+            setSpinner = function() {
+                var spinner = ID('loading-spinner'),
+                    spin = document.importNode(spinner.content, true);
+                spinContainer = ID('spin-container');
+                spinContainer.appendChild(spin);
+                hideSpinner();
+            },
+
+            hideSpinner = function() {
+                spinContainer.classList.add('hidden');
+            },
+
+            showSpinner = function() {
+                spinContainer.classList.remove('hidden');
+            },
+            fillForm = function(data) {
+                prevNameValue = data.name;
+                ID('field-name').value = data.name;
+                ID('field-group').value = data.group;
+                ID('field-country').value = data.country;
+                ID('field-id').value = data.id;
+            },
+            fetchIssuerFromId = function(id) {
+                var request = new XMLHttpRequest();
+                showSpinner();
+                request.open('GET', '/issuers/' + id + '.json', true);
+                request.onload = function() {
+                    var data = [], resData;
+                    hideSpinner();
+                    if (this.status == 200) {
+                        resData = JSON.parse(this.response);
+                        data['id'] = resData.issuer.id;
+                        data['name'] = resData.issuer.name;
+                        data['group'] = resData.issuer.parentGroup ? resData.issuer.parentGroup.name : '';
+                        data['country'] = resData.issuer.country ? resData.issuer.country.name : '';
+                        return fillForm(data);
+                    }
+                };
+
+                request.onerror = function() {
+                    hideSpinner();
+                };
+
+                request.send();
+            },
+            autoCompleteIssuer = function(name) {
+                // search api
+                var request = new XMLHttpRequest();
+                showSpinner();
+                request.open('GET', '/search.json?q=' + name, true);
+                request.onload = function() {
+                    var data = [], resData;
+                    hideSpinner();
+                    if (this.status == 200) {
+                        resData = JSON.parse(this.response);
+                        if (resData.issuers &&
+                                resData.issuers.length > 0 &&
+                                resData.issuers[0].name == name
+                        ) {
+                            data['id'] = resData.issuers[0].id;
+                            data['name'] = resData.issuers[0].name;
+                            data['group'] = resData.issuers[0].parentGroup ? resData.issuers[0].parentGroup.name : '';
+                            data['country'] = resData.issuers[0].country ? resData.issuers[0].country.name : '';
+                            return fillForm(data);
+                        }
+                    }
+                };
+
+                request.onerror = function() {
+                    hideSpinner();
+                };
+
+                request.send();
+            },
+            autoCompleteGroup = function(name) {
+                // search api
+                var request = new XMLHttpRequest();
+                showSpinner();
+                request.open('GET', '/search.json?q=' + name, true);
+                request.onload = function() {
+                    var resData,
+                        field = ID('field-group'),
+                        len, i,
+                        status = ID('js-group-status'),
+                        matched = false;
+                    hideSpinner();
+                    if (this.status == 200) {
+                        resData = JSON.parse(this.response);
+                        if (resData.groups) {
+                            len = resData.groups.length;
+                            for (i = 0; i < len; i++) {
+                                if (resData.groups[i].name == name) {
+                                    matched = true;
+                                }
+                            }
+                        }
+                    }
+                    if (matched) {
+                        field.classList.remove('form__field--highlight');
+                        status.innerHTML = '';
+                    } else {
+                        field.classList.add('form__field--highlight');
+                        status.innerHTML = 'Does not match pre-existing group. Group will be created with this name';
+                    }
+                };
+
+                request.onerror = function() {
+                    hideSpinner();
+                };
+
+                request.send();
+            },
+            addListeners = function() {
+                var noGroups = document.querySelectorAll('[data-js="fetch-issuer"]'),
+                    l = noGroups.length,
+                    i;
+                for (i = 0; i < l; i++) {
+                    noGroups[i].addEventListener('click', function(e) {
+                        window.scrollTo(0, 0);
+                        fetchIssuerFromId(e.target.dataset.id);
+                    });
+                }
+
+                ID('field-name').addEventListener('keyup', function (e) {
+                    var val = e.target.value.trim();
+                    if (keyupTimer !== null) {
+                        clearTimeout(keyupTimer);
+                    }
+                    if (val.length > 0 && val != prevNameValue) {
+                        prevNameValue = val;
+                        keyupTimer = setTimeout(function() {
+                            autoCompleteIssuer(val);
+                        }, 300);
+                    }
+                });
+
+                ID('field-group').addEventListener('keyup', function (e) {
+                    var val = e.target.value.trim();
+                    if (keyupTimer !== null) {
+                        clearTimeout(keyupTimer);
+                    }
+                    if (val.length > 0 && val != prevGroupValue) {
+                        prevGroupValue = val;
+                        keyupTimer = setTimeout(function() {
+                            autoCompleteGroup(val);
+                        }, 300);
+                    }
+                });
+                ID('field-group').addEventListener('change', function (e) {
+                    var val = e.target.value.trim();
+                    autoCompleteGroup(val);
+                });
+            };
+
+        window.onload = function() {
+            setSpinner();
+            addListeners();
+        };
+    })();
+</script>
+{% endblock %}

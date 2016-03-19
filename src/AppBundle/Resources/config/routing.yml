@@ -23,17 +23,29 @@ privacy_policy:
   defaults: { _controller: AppBundle:Home:privacy }
 
 search:
-  path:     /search
-  defaults: { _controller: AppBundle:Search:list }
+  path:     /search.{format}
+  defaults: { _controller: AppBundle:Search:list, format: null }
 
 # Admin
 admin:
   path:     /admin
   defaults: { _controller: AppBundle:Admin:index }
 
-admin_process:
-  path:     /admin/process.json
-  defaults: { _controller: AppBundle:Admin:process, format: json }
+admin_securities:
+  path:     /admin/securities
+  defaults: { _controller: AppBundle:Admin:securities }
+
+admin_process_security:
+  path:     /admin/process-security.json
+  defaults: { _controller: AppBundle:Admin:processSecurity, format: json }
+
+admin_issuers:
+  path:     /admin/issuers
+  defaults: { _controller: AppBundle:Admin:issuers }
+
+admin_process_issuers:
+  path:     /admin/process-issuer.json
+  defaults: { _controller: AppBundle:Admin:processIssuer, format: json }
 
 # Overview
 overview:
@@ -59,8 +71,8 @@ issuer_list:
   defaults: { _controller: AppBundle:Issuers:list }
 
 issuer_show:
-  path:     /issuers/{issuer_id}
-  defaults: { _controller: AppBundle:Issuers:show }
+  path:     /issuers/{issuer_id}.{format}
+  defaults: { _controller: AppBundle:Issuers:show, format: null }
 
 issuer_securities:
   path:     /issuers/{issuer_id}/securities

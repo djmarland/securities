@@ -60,11 +60,19 @@ class Company extends Entity implements JsonSerializable
     }
 
     public function jsonSerialize() {
-        return (object) [
+        $data = [
             'id' => $this->getId(),
             'name' => $this->getName(),
-            'parentGroup' => $this->getParentGroup(),
-            'country' => $this->getCountry() ? $this->getCountry()->getName() : null,
         ];
+
+        if (!is_null($this->parentGroup)) {
+            $data['parentGroup'] = $this->getParentGroup();
+        }
+
+        if (!is_null($this->country)) {
+            $data['country'] = $this->getCountry();
+        }
+
+        return (object) $data;
     }
 }

@@ -36,7 +36,7 @@ class MasterPresenter extends Presenter
         bool $allowedInFeed = null
     ) {
         if (is_null($allowedInFeed)) {
-            $allowedInFeed = true;
+            $allowedInFeed = false;
             if (isset($this->data[$key])) {
                 $allowedInFeed = $this->data[$key]->inFeed;
             }

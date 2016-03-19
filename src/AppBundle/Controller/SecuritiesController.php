@@ -101,7 +101,7 @@ class SecuritiesController extends Controller
         }
 
         $this->setTitle($title);
-        $this->toView('security', $security);
+        $this->toView('security', $security, true);
         $this->toView('securityPresenter', new SecurityPresenter($security, ['template' => 'full']));
         return $this->renderTemplate('securities:show');
     }

@@ -15,3 +15,15 @@
     width: 100%;
     padding: $grid-unit-tiny;
 }
+
+input, textarea {
+    border: solid 1px $color-text;
+}
+
+input[readonly] {
+    background: $color-subtle;
+}
+
+.form__field--highlight {
+    background: $color-faint;
+}

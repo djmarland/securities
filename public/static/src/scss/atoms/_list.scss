@@ -18,3 +18,16 @@
         }
     }
 }
+
+.list--lined {
+    @extend .list--unstyled;
+    > li {
+        padding-top: $grid-unit-tiny;
+        padding-bottom: $grid-unit-tiny;
+        border-top: solid 1px $color-faint;
+        &:first-child {
+            padding-top: 0;
+            border-top: 0;
+        }
+    }
+}

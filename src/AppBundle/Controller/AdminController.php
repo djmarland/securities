@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
+use SecuritiesService\Domain\ValueObject\UUID;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -12,8 +13,15 @@ class AdminController extends Controller
 
     public function indexAction(Request $request)
     {
+        $this->toView('activeTab', 'dashboard');
+        return $this->renderTemplate('admin:index');
+    }
+
+    public function securitiesAction(Request $request)
+    {
         $this->toView('formSuccess', null);
         $this->toView('csv', '[]');
+        $this->toView('activeTab', 'securities');
 
         if ($request->isMethod('POST')) {
             $file = $request->request->get('submit-file');
@@ -46,11 +54,63 @@ class AdminController extends Controller
             }
         }
 
-        return $this->renderTemplate('admin:index');
+        $noIssuer = $this->get('app.services.securities')->findAllWithoutIssuer();
+        $this->toView('noIssuerCount', count($noIssuer));
+        $this->toView('noIssuer', $noIssuer);
+
+        return $this->renderTemplate('admin:securities');
     }
 
+    public function issuersAction(Request $request)
+    {
+        $this->toView('formSuccess', null);
+        $this->toView('activeTab', 'issuers');
 
-    public function processAction(Request $request)
+        // if post, process the delete
+        if ($request->isMethod('POST')) {
+            $delete = $request->request->get('delete-id');
+            $editName = $request->request->get('field-name');
+            if ($delete) {
+                $this->toView('formSuccess', 'There was an error when trying to delete');
+                $success = $this->get('app.services.issuers')->deleteWithId(UUID::createFromString($delete));
+                if ($success) {
+                    $this->toView('formSuccess', 'Deleted successfully');
+                }
+            } elseif ($editName) {
+                $editGroup = $request->request->get('field-group');
+                $editCountry = $request->request->get('field-country');
+                $editId = $request->request->get('field-id');
+
+                $success = $this->get('app.services.issuers')->createOrUpdate(
+                    $editId,
+                    $editName,
+                    $editGroup,
+                    $editCountry
+                );
+            }
+        }
+
+        // get a list of issuers with no securities
+        $noSecurities = $this->get('app.services.issuers')->findAllWithoutSecurities();
+        $this->toView('noSecuritiesCount', count($noSecurities));
+        $this->toView('noSecurities', $noSecurities);
+
+        // get a list of issuers with no parent
+        $noParent = $this->get('app.services.issuers')->findAllWithoutGroup();
+        $this->toView('noParentCount', count($noParent));
+        $this->toView('noParent', $noParent);
+
+
+        return $this->renderTemplate('admin:issuers');
+    }
+
+    public function processIssuerAction(Request $request)
+    {
+        $this->toView('message', 'ok');
+        return $this->renderTemplate('json');
+    }
+
+    public function processSecurityAction(Request $request)
     {
         if (!$request->isMethod('POST')) {
             throw new HttpException(405, 'Must be POST');

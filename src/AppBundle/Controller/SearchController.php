@@ -72,7 +72,12 @@ class SearchController extends Controller
                 }
             }
 
-            $this->toView('issuers', $issuerPresenters);
+            $groups = $this->get('app.services.groups')
+                ->search($query, 100, 1);
+
+            $this->toView('issuers', $issuers, true);
+            $this->toView('groups', $groups, true);
+            $this->toView('issuerPresenters', $issuerPresenters);
             $this->toView('hasIssuers', !empty($issuers));
 
             return $this->renderTemplate('search:list');
