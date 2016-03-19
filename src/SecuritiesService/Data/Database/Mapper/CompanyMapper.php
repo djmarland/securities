@@ -14,11 +14,11 @@ class CompanyMapper extends Mapper
         $parentGroup = null;
         $country = null;
 
-        if (array_key_exists('parentGroup', $item)) {
+        if (isset($item['parentGroup'])) {
             $parentGroup = $this->mapperFactory->createParentGroup()->getDomainModel($item['parentGroup']);
         }
 
-        if (array_key_exists('country', $item)) {
+        if (isset($item['country'])) {
             $country = $this->mapperFactory->createCountry()->getDomainModel($item['country']);
         }
 

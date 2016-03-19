@@ -3,6 +3,7 @@ namespace ConsoleBundle\Command;
 
 use DateInterval;
 use DateTimeImmutable;
+use Djmarland\ISIN\ISIN;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
@@ -137,6 +138,7 @@ class ImportCommand extends Command
         if ($this->isUnset($isin)) {
             throw new \Exception('An ISIN is required');
         }
+        ISIN::validate($isin);
 
         $repo = $this->em->getRepository('SecuritiesService:Security');
         $security = $repo->findOneBy(
@@ -168,6 +170,9 @@ class ImportCommand extends Command
         $startDate = $this->getRowValue($row, 'SECURITY_START_DATE');
         if ($startDate) {
             $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $startDate);
+            if (!$startDate) {
+                throw new \Exception('Start Date invalid');
+            }
             $security->setStartDate($startDate);
         }
         $maturityDate = $this->getRowValue($row, 'MATURITY_DATE');
@@ -182,6 +187,10 @@ class ImportCommand extends Command
 
         $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_GBP');
         if ($moneyRaised) {
+            $moneyRaised = str_replace(',','',$moneyRaised);
+            if (!is_numeric($moneyRaised)) {
+                throw new \Exception('Money Raised is not a number');
+            }
             $security->setMoneyRaised($moneyRaised);
         }
 

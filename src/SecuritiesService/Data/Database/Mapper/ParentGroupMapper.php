@@ -19,7 +19,7 @@ class ParentGroupMapper extends Mapper
         $id = new UUID($item['id']);
         $sector = null;
 
-        if (array_key_exists('sector', $item)) {
+        if (isset($item['sector'])) {
             $sector = $this->mapperFactory->createSector()->getDomainModel($item['sector']);
         }
 

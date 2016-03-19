@@ -19,7 +19,7 @@ class SectorMapper extends Mapper
         $id = new UUID($item['id']);
         $industry = null;
 
-        if (array_key_exists('industry', $item)) {
+        if (isset($item['industry'])) {
             $industry = $this->mapperFactory->createIndustry()->getDomainModel($item['industry']);
         }
 
