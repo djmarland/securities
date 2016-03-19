@@ -4,48 +4,25 @@
     <div class="grid">
         <div class="g 3/4@xl">
             <h1 class="b g-unit">{{ security.isin }}
-                {% if security.hasIssuer %}
-                    <span class="invisible"> - {{ security.issuer }}</span>
+                {% if issuer %}
+                    <span class="invisible"> - {{ issuer.name }}</span>
                 {% endif %}
             </h1>
-            {% include security.templatePath with security.vars only %}
+            {% include securityPresenter.templatePath with securityPresenter.vars only %}
         </div>
         <div class="g 1/4@xl">
             <div class="card card--padded g-unit ">
                 <h2 class="d g-unit">ISIN Analytics is the gateway to London’s debt capital markets.</h2>
                 <ul class="list--spaced list--unstyled">
-                    {% if security.product %}
+                    {% if product %}
                     <li>
                         <a class="link--button link--block text--center" href="{{ path(
                                 'security_list',
-                                { product: security.productNumber }
+                                { product: product.number }
                         ) }}">
-                            See more {{ security.product }}
+                            See more {{ product.name }}
                         </a>
                     </li>
-                    {% endif %}
-                    {% if security.hasIssuer and security.company.parentGroup %}
-                    <li>
-                        <a class="link--button link--block text--center" href="{{ path(
-                            'group_securities',
-                            { group_id: security.company.parentGroup.id }
-                        ) }}">
-                            See more from {{ security.company.parentGroup.name }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    {% if security.hasIssuer
-                        and security.company.parentGroup
-                        and security.company.parentGroup.sector
-                        and security.company.parentGroup.sector.industry %}
-                        <li>
-                            <a class="link--button link--block text--center" href="{{ path(
-                            'industry_securities',
-                            { industry_id: security.company.parentGroup.sector.industry.id }
-                            ) }}">
-                                See more from {{ security.company.parentGroup.sector.industry.name }}
-                            </a>
-                        </li>
                     {% endif %}
                     <li>
                         <a class="link--button link--block text--center" href="{{ path('security_list') }}">

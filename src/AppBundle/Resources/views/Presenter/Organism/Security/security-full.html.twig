@@ -1,13 +1,5 @@
 <div class="security">
-    {% if security.includeLink %}
-    <div class="card">
-        <h2 class="island-squashed h-c">
-            <a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
-                {{ security.title }}
-            </a>
-        </h2>
-    {% endif %}
-        <table class="table g-unit table--lined">
+    <table class="table g-unit table--lined">
         <tbody>
         <tr>
             <th>ISIN:</th><td>{{ security.isin }}</td>
@@ -15,7 +7,6 @@
         <tr>
             <th>Description:</th><td>{{ security.name }}</td>
         </tr>
-
         <tr>
             <th>Product:</th><td>{{ security.product }}</td>
         </tr>
@@ -23,56 +14,44 @@
             <th>Issuer:</th>
             <td>
                 {% if security.hasIssuer %}
-                <a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a>
+                    <a href="{{ path('issuer_show', { issuer_id : security.issuerID }) }}">{{ security.issuer }}</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
             <th>Country:</th>
-            <td>{% if security.hasIssuer %}
-                {{ security.company.country.name }}
+            <td>
+                {% if security.hasCountry %}
+                    {{ security.getCountry }}
                 {% endif %}
             </td>
         </tr>
-        {#
-        <tr>
-            <th>Region:</th>
-            <td>{{ security.company.country.region.name }}</td>
-        </tr>
-        #}
         <tr>
             <th>Parent group:</th>
             <td>
-                {% if security.hasIssuer and security.company.parentGroup %}
-                <a href="{{ path('group_show', { group_id : security.company.parentGroup.id }) }}">{{ security.company.parentGroup.name }}</a>
+                {% if security.hasParentGroup %}
+                    <a href="{{ path('group_show', { group_id : security.parentGroupID }) }}">{{ security.parentGroup }}</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
             <th>Sector:</th>
             <td>
-                {% if security.hasIssuer and security.company.parentGroup and security.company.parentGroup.sector %}
-                    <a href="{{
-                    path('sector_show', { sector_id : security.company.parentGroup.sector.id })
-                    }}">{{ security.company.parentGroup.sector.name }}</a>
+                {% if security.hasSector %}
+                    <a href="{{ path('sector_show', { sector_id : security.sectorID }) }}">{{ security.sector }}</a>
                 {% endif %}
             </td>
         </tr>
         <tr>
             <th>Industry:</th>
             <td>
-                {% if security.hasIssuer and
-                    security.company.parentGroup and
-                    security.company.parentGroup.sector and
-                    security.company.parentGroup.sector.industry %}
-                    <a href="{{
-                    path('industry_show', { industry_id : security.company.parentGroup.sector.industry.id })
-                    }}">{{ security.company.parentGroup.sector.industry.name }}</a>
+                {% if security.hasIndustry %}
+                    <a href="{{ path('industry_show', { industry_id : security.industryID }) }}">{{ security.industry }}</a>
                 {% endif %}
             </td>
             </tr>
         <tr>
-            <th>Amount raised (£m):</th><td>{{ security.amount }}</td>
+            <th>Amount raised:</th><td>{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
         </tr>
         <tr>
             <th>Currency:</th><td>{{ security.currency }}</td>
@@ -87,16 +66,11 @@
             <th>Coupon:</th><td>{{ security.coupon }}</td>
         </tr>
         <tr>
-            <th>Initial term:</th>
-            <td>{{ security.initialTerm }}</td>
+            <th>Initial term:</th><td>{{ security.initialTerm }}</td>
         </tr>
         <tr>
-            <th>Remaining:</th>
-            <td>{{ security.remainingTerm }}</td>
+            <th>Remaining:</th><td>{{ security.remainingTerm }}</td>
         </tr>
         </tbody>
     </table>
-{% if security.includeLink %}
-    </div>
-{% endif %}
 </div>

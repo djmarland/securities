@@ -3,6 +3,7 @@
 namespace SecuritiesService\Domain\Entity;
 
 use JsonSerializable;
+use SecuritiesService\Domain\Entity\Null\NullCountry;
 use SecuritiesService\Domain\Entity\Null\NullParentGroup;
 use SecuritiesService\Domain\Exception\DataNotSetException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -47,10 +48,13 @@ class Company extends Entity implements JsonSerializable
         return $this->parentGroup;
     }
 
-    public function getCountry(): Country
+    public function getCountry()
     {
+        if ($this->country instanceof NullCountry) {
+            return null;
+        }
         if (is_null($this->country)) {
-            throw new DataNotSetException('Tried to get parent group data without requesting it up front');
+            throw new DataNotSetException('Tried to get country data without requesting it up front');
         }
         return $this->country;
     }

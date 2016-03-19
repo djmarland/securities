@@ -27,7 +27,7 @@
                     </div>
                     <div class="card card--padded g-unit text--center">
                         <h2 class="d">Amount raised</h2>
-                        <p class="a">£{{ totalRaised }}m</p>
+                        <p class="a">{% include totalRaised.templatePath with totalRaised.vars only %}</p>
                     </div>
                 </div>
             </div>

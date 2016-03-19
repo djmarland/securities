@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\SecurityFilterTrait;
+use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
@@ -83,7 +84,7 @@ class IndustriesController extends Controller
         }
 
         $this->setTitle($industry->getName());
-        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
         $this->toView('count', number_format($count));
         $this->toView('securities', $securityPresenters);
         $this->toView('hasSecurities', $count > 0);
@@ -123,7 +124,7 @@ class IndustriesController extends Controller
         }
 
         $this->setTitle('Securities - ' . $industry->getName());
-        $this->toView('totalRaised', number_format($totalRaised));
+        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
         $this->toView('securities', $securityPresenters);
         $this->toView('total', $total);
 

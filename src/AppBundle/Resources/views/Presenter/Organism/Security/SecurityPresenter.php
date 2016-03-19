@@ -2,8 +2,8 @@
 
 namespace AppBundle\Presenter\Organism\Security;
 
-use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\Entity\Country;
+use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Presenter\Molecule\Money\MoneyPresenterInterface;
 use SecuritiesService\Domain\Entity\Security;
 use AppBundle\Presenter\Presenter;
 
@@ -12,8 +12,6 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
     const DATE_FORMAT = 'd/m/Y';
 
     protected $options = [
-        'includeLink' => true,
-        'showTitle' => true,
         'template' => null,
     ];
 
@@ -27,25 +25,9 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         }
     }
 
-    public function includeLink()
-    {
-        return $this->getOptions()->includeLink;
-    }
-
     public function getTitle()
     {
-        if ($this->options['showTitle']) {
-            return $this->getISIN();
-        }
-        return null;
-    }
-
-    public function getSubH():string
-    {
-        if ($this->getTitle()) {
-            return 'h3';
-        }
-        return 'h2';
+        return $this->getISIN();
     }
 
     public function getISIN(): string
@@ -63,33 +45,10 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->domainModel->getExchange();
     }
 
-    public function hasIssuer():bool
+    public function getAmountRaised():MoneyPresenterInterface
     {
-        return !!$this->domainModel->getCompany();
-    }
-
-    public function getIssuer():string
-    {
-        $company = $this->domainModel->getCompany();
-        if ($company) {
-            return $company->getName();
-        }
-        return  '';
-    }
-
-    public function getIssuerID():string
-    {
-        $company = $this->domainModel->getCompany();
-        if ($company) {
-            return (string) $company->getId();
-        }
-        return  '';
-    }
-
-    public function getAmount():string
-    {
-        $val = number_format($this->domainModel->getMoneyRaised(), 2);
-        return '£' . $val . 'm';
+        $amount = $this->domainModel->getMoneyRaised();
+        return new MoneyPresenter($amount);
     }
 
     public function getCurrency():string
@@ -111,12 +70,158 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return 'Undated';
     }
 
-    /**
-     * @todo - this should be more robust
-     */
-    public function getCompany(): Company
+    public function getCoupon(): string
     {
-        return $this->domainModel->getCompany();
+        // coupon values are in decimal, so to display as %
+        // we have to multiple by 100
+        $coupon = $this->domainModel->getCoupon();
+        if ($coupon) {
+            return (round($this->domainModel->getCoupon()*100, 2)) . '%';
+        }
+        return '-';
+    }
+
+    public function hasIssuer():bool
+    {
+        return !!$this->domainModel->getCompany();
+    }
+
+    public function getIssuer():string
+    {
+        if ($this->hasIssuer()) {
+            return $this->domainModel->getCompany()->getName();
+        }
+        return '';
+    }
+
+    public function getIssuerID():string
+    {
+        if ($this->hasIssuer()) {
+            return (string) $this->domainModel->getCompany()->getID();
+        }
+        return '';
+    }
+
+    public function hasCountry():bool
+    {
+        $company = $this->domainModel->getCompany();
+        if ($company) {
+            return !!$company->getCountry();
+        }
+        return false;
+    }
+
+    public function getCountry():string
+    {
+        if ($this->hasCountry()) {
+            return $this->domainModel->getCompany()->getCountry()->getName();
+        }
+        return '';
+    }
+
+    public function hasParentGroup():bool
+    {
+        $company = $this->domainModel->getCompany();
+        if ($company) {
+            return !!$company->getParentGroup();
+        }
+        return false;
+    }
+
+    public function getParentGroup():string
+    {
+        if ($this->hasParentGroup()) {
+            return $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getName();
+        }
+        return '';
+    }
+
+    public function getParentGroupID():string
+    {
+        if ($this->hasParentGroup()) {
+            return (string) $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getId();
+        }
+        return '';
+    }
+
+    public function hasSector():bool
+    {
+        $company = $this->domainModel->getCompany();
+        if (!$company) {
+            return false;
+        }
+        $group = $company->getParentGroup();
+        if (!$group) {
+            return false;
+        }
+        return !!$group->getSector();
+    }
+
+    public function getSector():string
+    {
+        if ($this->hasSector()) {
+            return $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getSector()
+                ->getName();
+        }
+        return '';
+    }
+
+    public function getSectorID():string
+    {
+        if ($this->hasParentGroup()) {
+            return (string) $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getSector()
+                ->getId();
+        }
+        return '';
+    }
+
+    public function hasIndustry():bool
+    {
+        $company = $this->domainModel->getCompany();
+        if (!$company) {
+            return false;
+        }
+        $group = $company->getParentGroup();
+        if (!$group) {
+            return false;
+        }
+        $sector = $group->getSector();
+        if (!$sector) {
+            return false;
+        }
+        return !!$sector->getIndustry();
+    }
+
+    public function getIndustry():string
+    {
+        if ($this->hasIndustry()) {
+            return $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getSector()
+                ->getIndustry()
+                ->getName();
+        }
+        return '';
+    }
+
+    public function getIndustryID():string
+    {
+        if ($this->hasParentGroup()) {
+            return (string) $this->domainModel->getCompany()
+                ->getParentGroup()
+                ->getSector()
+                ->getIndustry()
+                ->getId();
+        }
+        return '';
     }
 
     public function getInitialTerm(): string
@@ -140,42 +245,9 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->dateDiff($start, $end);
     }
 
-    public function getDuration(): string
-    {
-        return '';
-    }
-
-    public function getCoupon(): string
-    {
-        // coupon values are in decimal, so to display as %
-        // we have to multiple by 100
-        $coupon = $this->domainModel->getCoupon();
-        if ($coupon) {
-            return (round($this->domainModel->getCoupon()*100, 2)) . '%';
-        }
-        return '-';
-    }
-
     public function getProduct():string
     {
         return (string) $this->domainModel->getProduct()->getName();
-    }
-
-    public function getProductNumber():string
-    {
-        return (string) $this->domainModel->getProduct()->getNumber();
-    }
-
-    public function getResidualMaturity(): string
-    {
-        $bucket = $this->domainModel->getResidualMaturityBucketForDate(new \DateTime()); // @todo - inject app time
-        return (string) $bucket;
-    }
-
-    public function getContractualMaturity(): string
-    {
-        $bucket = $this->domainModel->getContractualMaturityBucket();
-        return (string) $bucket;
     }
 
     // @todo - be more robust

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller

@@ -19,7 +19,8 @@ class ParentGroupMapper extends Mapper
         $id = new UUID($item['id']);
         $sector = null;
 
-        if (isset($item['sector'])) {
+        // uses array_key_exists so we can associate a NullObject with it if needed
+        if (array_key_exists('sector', $item)) {
             $sector = $this->mapperFactory->createSector()->getDomainModel($item['sector']);
         }
 

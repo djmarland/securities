@@ -18,7 +18,7 @@
                     </tr>
                     <tr>
                         <th>Amount raised:</th>
-                        <td>{{ security.amount }}</td>
+                        <td>{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
                     </tr>
                 </tbody>
             </table>

@@ -8,7 +8,7 @@
         {% include '@partials/securities-filter.html.twig' %}
         <div class="grid grid--flush">
             <div class="g 1/2@xl">
-                <p class="d">Total: £{{ totalRaised }}m</p>
+                <p class="d">Total: {% include totalRaised.templatePath with totalRaised.vars only %}</p>
             </div>
             <div class="g 1/2@xl text--right">
                 <p class="d">{{ pagination.total }} results</p>

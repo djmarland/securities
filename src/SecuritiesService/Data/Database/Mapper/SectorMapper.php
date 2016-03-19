@@ -18,8 +18,9 @@ class SectorMapper extends Mapper
 
         $id = new UUID($item['id']);
         $industry = null;
-
-        if (isset($item['industry'])) {
+        
+        // uses array_key_exists so we can associate a NullObject with it if needed
+        if (array_key_exists('industry', $item)) {
             $industry = $this->mapperFactory->createIndustry()->getDomainModel($item['industry']);
         }
 

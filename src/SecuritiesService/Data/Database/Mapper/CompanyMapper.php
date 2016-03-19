@@ -14,11 +14,12 @@ class CompanyMapper extends Mapper
         $parentGroup = null;
         $country = null;
 
-        if (isset($item['parentGroup'])) {
+        // uses array_key_exists so we can associate a NullObject with it if needed
+        if (array_key_exists('parentGroup', $item)) {
             $parentGroup = $this->mapperFactory->createParentGroup()->getDomainModel($item['parentGroup']);
         }
 
-        if (isset($item['country'])) {
+        if (array_key_exists('country', $item)) {
             $country = $this->mapperFactory->createCountry()->getDomainModel($item['country']);
         }
 
