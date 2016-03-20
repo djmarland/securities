@@ -230,7 +230,9 @@
                 processForm(forms[i], function() {
                     toProcess--;
                     updateStatus(toProcess);
-                    goProcess(forms, i+1, count);
+                    if (toProcess > 0 && forms[i+1]) {
+                        goProcess(forms, i + 1, count);
+                    }
                 })
             },
 

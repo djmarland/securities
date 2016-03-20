@@ -189,7 +189,7 @@
                             }
                         }
                     }
-                    if (matched) {
+                    if (name.length == 0 || matched) {
                         field.classList.remove('form__field--highlight');
                         status.innerHTML = '';
                     } else {
@@ -221,8 +221,8 @@
                         clearTimeout(keyupTimer);
                     }
                     if (val.length > 0 && val != prevNameValue) {
-                        prevNameValue = val;
                         keyupTimer = setTimeout(function() {
+                            prevNameValue = val;
                             autoCompleteIssuer(val);
                         }, 300);
                     }
@@ -234,8 +234,8 @@
                         clearTimeout(keyupTimer);
                     }
                     if (val.length > 0 && val != prevGroupValue) {
-                        prevGroupValue = val;
                         keyupTimer = setTimeout(function() {
+                            prevGroupValue = val;
                             autoCompleteGroup(val);
                         }, 300);
                     }

@@ -78,6 +78,23 @@ class SecuritiesService extends Service
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
+    public function countComplete(): int
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function countMatured(): int
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        $qb
+            ->where(self::TBL . '.maturityDate < :now')
+            ->setParameter('now', new \DateTime()); // @todo - inject application time
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function sumAll(): float
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);

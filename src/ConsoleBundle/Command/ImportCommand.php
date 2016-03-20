@@ -4,6 +4,7 @@ namespace ConsoleBundle\Command;
 use DateInterval;
 use DateTimeImmutable;
 use Djmarland\ISIN\ISIN;
+use Ramsey\Uuid\Uuid;
 use SecuritiesService\Data\Database\Entity\Company;
 use SecuritiesService\Data\Database\Entity\Country;
 use SecuritiesService\Data\Database\Entity\Currency;
@@ -94,6 +95,15 @@ class ImportCommand extends Command
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
         $this->processRow($row);
+    }
+
+    public function singleIssuer($row)
+    {
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $company = $this->getRowValue($row, 'COMPANY_NAME');
+        if ($company) {
+            $this->getCompany($row);
+        }
     }
 
     private function setProducts()
@@ -236,6 +246,7 @@ class ImportCommand extends Command
     private function isUnset($value)
     {
         return (empty($value) || in_array(strtolower($value), [
+            '-',
             '#n/a',
             'n/a',
             'other',
@@ -259,10 +270,19 @@ class ImportCommand extends Command
     private function getCompany($row)
     {
         $name = $this->getRowValue($row, 'COMPANY_NAME');
+        $id = $this->getRowValue($row, 'COMPANY_ID');
         $repo = $this->em->getRepository('SecuritiesService:Company');
-        $company = $repo->findOneBy(
-            ['name' => $name]
-        );
+
+        if ($id) {
+            $uuid = Uuid::fromString($id);
+            $company = $repo->findOneBy(
+                ['id' => $uuid]
+            );
+        } else {
+            $company = $repo->findOneBy(
+                ['name' => $name]
+            );
+        }
         if (!$company) {
             $company = new Company();
         }

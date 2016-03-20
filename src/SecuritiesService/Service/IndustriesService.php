@@ -23,4 +23,11 @@ class IndustriesService extends Service
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
+
+    public function countAll(): int
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
 }

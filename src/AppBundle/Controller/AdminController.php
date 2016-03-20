@@ -14,6 +14,25 @@ class AdminController extends Controller
     public function indexAction(Request $request)
     {
         $this->toView('activeTab', 'dashboard');
+
+        $securitiesService = $this->get('app.services.securities');
+
+        $statsAll = $securitiesService->countComplete();
+        $statsActive = $securitiesService->countAll();
+        $statsMatured = $securitiesService->countMatured();
+        $statsIssuers = $this->get('app.services.issuers')->countAll();
+        $statsGroups = $this->get('app.services.groups')->countAll();
+        $statsSectors = $this->get('app.services.sectors')->countAll();
+        $statsIndustries = $this->get('app.services.industries')->countAll();
+
+        $this->toView('statsAll', number_format($statsAll));
+        $this->toView('statsActive', number_format($statsActive));
+        $this->toView('statsMatured', number_format($statsMatured));
+        $this->toView('statsIssuers', number_format($statsIssuers));
+        $this->toView('statsGroups', number_format($statsGroups));
+        $this->toView('statsSectors', number_format($statsSectors));
+        $this->toView('statsIndustries', number_format($statsIndustries));
+
         return $this->renderTemplate('admin:index');
     }
 
@@ -81,12 +100,20 @@ class AdminController extends Controller
                 $editCountry = $request->request->get('field-country');
                 $editId = $request->request->get('field-id');
 
-                $success = $this->get('app.services.issuers')->createOrUpdate(
-                    $editId,
-                    $editName,
-                    $editGroup,
-                    $editCountry
-                );
+                $data = [
+                    'COMPANY_ID' => $editId,
+                    'COMPANY_NAME' => $editName,
+                    'COUNTRY_OF_INCORPORATION' => $editCountry,
+                    'COMPANY_PARENT' => !empty($editGroup) ? $editGroup : '-',
+                ];
+                try {
+                    $command = new ImportCommand();
+                    $command->setContainer($this->container);
+                    $command->singleIssuer($data);
+                    $this->toView('formSuccess', 'Issuer was updated successfully');
+                } catch (\Exception $e) {
+                    $this->toView('formSuccess', 'There was an error when trying to update the issuer');
+                }
             }
         }
 
@@ -102,12 +129,6 @@ class AdminController extends Controller
 
 
         return $this->renderTemplate('admin:issuers');
-    }
-
-    public function processIssuerAction(Request $request)
-    {
-        $this->toView('message', 'ok');
-        return $this->renderTemplate('json');
     }
 
     public function processSecurityAction(Request $request)

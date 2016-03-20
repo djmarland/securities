@@ -43,10 +43,6 @@ admin_issuers:
   path:     /admin/issuers
   defaults: { _controller: AppBundle:Admin:issuers }
 
-admin_process_issuers:
-  path:     /admin/process-issuer.json
-  defaults: { _controller: AppBundle:Admin:processIssuer, format: json }
-
 # Overview
 overview:
   path:     /overview
