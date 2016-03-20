@@ -141,9 +141,9 @@ class AdminController extends Controller
             $command = new ImportCommand();
             $command->setContainer($this->container);
             $command->single($request->request->all());
-            $this->toView('message', 'ok');
+            $this->toView('message', 'ok', true);
         } catch (\Exception $e) {
-            $this->toView('error', $e->getMessage());
+            $this->toView('error', $e->getMessage(), true);
         }
         return $this->renderTemplate('json');
     }
