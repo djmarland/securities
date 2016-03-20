@@ -14,11 +14,6 @@ abstract class Entity
      */
     protected $id;
 
-    /**
-     * @ORM\Column(type="string")
-     */
-    protected $uuid;
-
     /** @ORM\Column(type="datetime", nullable=false) */
     protected $createdAt;
 
@@ -28,18 +23,13 @@ abstract class Entity
     public function __construct()
     {
         $this->id = Uuid::uuid4();
-        $this->uuid = (string) $this->id;
     }
+
 
     /** Getters/Setters */
     public function getId()
     {
         return $this->id;
-    }
-
-    public function getUuid()
-    {
-        return $this->uuid;
     }
 
     public function getCreatedAt()
