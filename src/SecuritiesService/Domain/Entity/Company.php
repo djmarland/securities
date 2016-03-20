@@ -27,6 +27,11 @@ class Company extends Entity implements JsonSerializable
         $this->country = $country;
     }
 
+    public function getRoutePrefix()
+    {
+        return 'issuer';
+    }
+
     public function getName(): string
     {
         return $this->name;

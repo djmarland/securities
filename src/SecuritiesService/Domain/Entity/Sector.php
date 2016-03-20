@@ -25,6 +25,11 @@ class Sector extends Entity implements \JsonSerializable
         return $this->name;
     }
 
+    public function getRoutePrefix()
+    {
+        return 'sector';
+    }
+
     public function getIndustry()
     {
         if ($this->industry instanceof NullIndustry) {

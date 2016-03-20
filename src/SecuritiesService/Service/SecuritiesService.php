@@ -316,6 +316,44 @@ class SecuritiesService extends Service
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
+    public function sumByMonthForYear(
+        int $year
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->where($qb);
+        return $this->buildSumByMonthForYear($qb, $year);
+    }
+
+    protected function buildSumByMonthForYear(
+        QueryBuilder $qb,
+        int $year
+    ): array {
+        $qb->select([
+            self::TBL,
+            'DATE_FORMAT(' . self::TBL . '.startDate, \'%m\') as m',
+            'sum(' . self::TBL . '.moneyRaised) as totalSum',
+        ])
+            ->andWhere('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year');
+        $qb->groupBy('m');
+        $qb->setParameter('year', (string) $year);
+        /*
+         * List of:
+         * 0 => Security
+         * totalSum => sum
+         * m => month
+        */
+        $results = $qb->getQuery()->getArrayResult();
+        $months = [];
+        foreach ($results as $result) {
+            $sum = $result['totalSum'];
+            $month = (int) $result['m'];
+            if (!isset($months[$month])) {
+                $months[$month] = 0;
+            }
+            $months[$month] = $sum;
+        }
+        return $months;
+    }
 
     protected function selectWithJoins()
     {

@@ -44,17 +44,21 @@ admin_issuers:
   defaults: { _controller: AppBundle:Admin:issuers }
 
 # Overview
-overview:
+overview_show:
   path:     /overview
   defaults: { _controller: AppBundle:Overview:show }
+
+overview_issuance:
+  path:     /issuance
+  defaults: { _controller: AppBundle:Overview:issuance }
+
+overview_securities:
+  path:     /securities
+  defaults: { _controller: AppBundle:Securities:list }
 
 # @todo - Overview - issuance, maturity-profile, yield curves, etc
 
 # Securities
-security_list:
-  path:     /securities
-  defaults: { _controller: AppBundle:Securities:list }
-
 security_show:
   path:     /securities/{isin}.{format}
   defaults: { _controller: AppBundle:Securities:show, format: null }
@@ -80,8 +84,8 @@ issuer_maturity_profile:
   defaults: { _controller: AppBundle:Issuers:maturityProfile }
 
 issuer_issuance:
-  path:     /issuers/{issuer_id}/issuance/{year}
-  defaults: { _controller: AppBundle:Issuers:issuance, year: null }
+  path:     /issuers/{issuer_id}/issuance
+  defaults: { _controller: AppBundle:Issuers:issuance }
 
 # Groups
 group_list:

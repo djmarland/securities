@@ -7,19 +7,15 @@ use SecuritiesService\Domain\Entity\Entity;
 
 abstract class Issuance extends Presenter
 {
-    private $productCounts;
-
-    protected $year;
+    protected $results;
 
     public function __construct(
-        Entity $entity,
-        array $productCounts,
-        int $year,
+        Entity $entity = null,
+        array $results = [],
         array $options = []
     ) {
         parent::__construct($entity, $options);
-        $this->productCounts = $productCounts;
-        $this->year = $year;
+        $this->results = $results;
     }
 
     protected function getMonths()
@@ -38,28 +34,5 @@ abstract class Issuance extends Presenter
             11 => 'Nov',
             12 => 'Dec',
         ];
-    }
-
-    protected function resultsByProduct()
-    {
-        $productResults = [];
-        // extract the products from the results
-        foreach ($this->productCounts as $monthNum => $products) {
-            foreach ($products as $productID => $data) {
-                if (!isset($productResults[$productID])) {
-                    $productResults[$productID] = [
-                        'product' => $data->product,
-                        'months' => [],
-                    ];
-                }
-                $productResults[$productID]['months'][$monthNum] = $data->total;
-            }
-        }
-
-        $values = array_values($productResults);
-        usort($values, function ($a, $b) {
-            return strcmp($a['product']->getName(), $b['product']->getName());
-        });
-        return $values;
     }
 }

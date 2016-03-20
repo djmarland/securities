@@ -36,7 +36,7 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
         $this->currentPage = $currentPage;
     }
 
-    public function getItems()
+    public function getItems(): array
     {
         $items = [];
         foreach ($this->tabs as $tab => $data) {
@@ -50,30 +50,24 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
         return $items;
     }
 
-    private function getRouteName($suffix)
+    private function getRoutePrefix(): string
     {
-        return $this->getTypeNameFromEntity() . '_' . $suffix;
+        if ($this->domainModel) {
+            return $this->domainModel->getRoutePrefix() . '_';
+        }
+        return 'overview_';
     }
 
-    private function getRouteParams()
+    private function getRouteName($suffix): string
     {
-        return [$this->getTypeNameFromEntity() . '_id' => $this->domainModel->getId()];
+        return $this->getRoutePrefix() . $suffix;
     }
 
-    private function getTypeNameFromEntity()
+    private function getRouteParams(): array
     {
-        // @todo - abstract this - somewhere
-        if ($this->domainModel instanceof Company) {
-            return 'issuer';
+        if ($this->domainModel) {
+            return [$this->getRoutePrefix() . 'id' => $this->domainModel->getId()];
         }
-        if ($this->domainModel instanceof ParentGroup) {
-            return 'group';
-        }
-        if ($this->domainModel instanceof Sector) {
-            return 'sector';
-        }
-        if ($this->domainModel instanceof Industry) {
-            return 'industry';
-        }
+        return [];
     }
 }

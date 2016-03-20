@@ -2,78 +2,62 @@
 
 namespace AppBundle\Presenter\Organism\Issuance;
 
-use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\Entity\Industry;
-use SecuritiesService\Domain\Entity\ParentGroup;
-use SecuritiesService\Domain\Entity\Sector;
+use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
 
 class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterInterface
 {
     public function getHeadings()
     {
-        return array_values($this->getMonths());
+        return array_merge(
+            ['Month'],
+            array_keys($this->results)
+        );
     }
 
     public function getRows()
     {
-        $products = $this->resultsByProduct();
-        if (empty($products)) {
-            return [];
-        }
-
         $rows = [];
-        foreach ($products as $productResult) {
-            // create the row, with the first columns
+        foreach ($this->getMonths() as $monthNum => $monthName) {
             $row = [
                 [
                     'element' => 'th',
                     'link' => null,
-                    'text' => $productResult['product']->getName(),
+                    'text' => $monthName,
+                    'presenter' => null,
                 ],
             ];
-            // create the remaining columns, for the months
-            foreach (array_keys($this->getMonths()) as $monthNum) {
-                $link = null;
-                $text = '-';
 
-                if (isset($productResult['months'][$monthNum])) {
+            foreach ($this->results as $year => $months) {
+                $col = [
+                    'element' => 'td',
+                    'link' => null,
+                    'text' => '-',
+                    'presenter' => null,
+                ];
+
+                if (isset($months[$monthNum])) {
                     $link = [
-                        'path' => $this->routeType() . '_securities',
                         'params' => [
-                            $this->routeType() . '_id' => (string) $this->domainModel->getId(),
-                            'issueDate' => $this->year . '-' . str_pad($monthNum, 2, '0', STR_PAD_LEFT),
-                            'product' => (string) $productResult['product']->getNumber(),
+                            'issueDate' => $year . '-' . str_pad($monthNum, 2, '0', STR_PAD_LEFT),
                         ],
                     ];
-                    $text = $productResult['months'][$monthNum];
+
+                    if ($this->domainModel) {
+                        $link['path'] = $this->domainModel->getRoutePrefix() . '_securities';
+                        $link['params'][$this->domainModel->getRoutePrefix() . '_id'] = (string) $this->domainModel->getId();
+                    } else {
+                        $link['path'] = 'overview_securities';
+                    }
+
+                    $col['link'] = $link;
+                    $col['presenter'] = new MoneyPresenter($months[$monthNum]);
                 }
 
-                $row[] = [
-                    'element' => 'td',
-                    'link' => $link,
-                    'text' => $text,
-                ];
+                $row[] = $col;
             }
+
             $rows[] = $row;
         }
         return $rows;
-    }
-
-    private function routeType()
-    {
-        // @todo - abstract this - somewhere
-        if ($this->domainModel instanceof Company) {
-            return 'issuer';
-        }
-        if ($this->domainModel instanceof ParentGroup) {
-            return 'group';
-        }
-        if ($this->domainModel instanceof Sector) {
-            return 'sector';
-        }
-        if ($this->domainModel instanceof Industry) {
-            return 'industry';
-        }
-        return 'x';
     }
 }

@@ -15,13 +15,13 @@
             function selectHandler() {
                 var selectedItem = chart.getSelection()[0],
                         month,
-                        productCol,
+                        yearCol,
                         index,
                         link;
                 if (selectedItem) {
-                    month = selectedItem.row + 1;
-                    productCol = selectedItem.column - 1;
-                    index = productCol + '-' + month;
+                    month = selectedItem.row;
+                    yearCol = selectedItem.column;
+                    index = month + '-' + yearCol;
                     link = document.querySelector('a[data-index="' + index + '"]');
                     if (link) {
                         window.location.href = link.href;

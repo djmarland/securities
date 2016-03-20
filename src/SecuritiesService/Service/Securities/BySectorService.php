@@ -47,8 +47,7 @@ class BySectorService extends SecuritiesService
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
-
-
+    
     public function findNextMaturing(
         Sector $sector,
         int $limit = self::DEFAULT_LIMIT
@@ -63,67 +62,14 @@ class BySectorService extends SecuritiesService
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function issuanceYears(
-        Sector $sector
+    public function sumByMonthForYear(
+        int $year,
+        Sector $sector = null
     ): array {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb = $this->joinTree($qb);
         $qb = $this->where($qb, $sector);
-        $qb->select([
-            'DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') as y',
-        ])
-            ->distinct()
-            ->orderBy('y', 'DESC');
-        $results = $qb->getQuery()->getArrayResult();
-        return array_map(function ($result) {
-            return $result['y'];
-        }, $results);
-    }
-
-    public function productCountsByMonthForYear(
-        Sector $sector,
-        int $year
-    ): array {
-        $productTbl = 'product';
-
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb = $this->where($qb, $sector);
-        $qb->select([
-            self::TBL,
-            'DATE_FORMAT(' . self::TBL . '.startDate, \'%m\') as m',
-            'count(' . self::TBL . '.id) as c',
-            $productTbl,
-        ])
-            ->andWhere('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year');
-
         $qb = $this->joinTree($qb);
-        $qb->leftJoin(self::TBL . '.product', $productTbl);
-        $qb->groupBy($productTbl . '.id', 'm');
-
-        $qb->setParameter('year', (string) $year);
-
-        /*
-         * List of:
-         * 0 => Security
-         * c => count
-         * m => month
-        */
-        $results = $qb->getQuery()->getArrayResult();
-        $months = [];
-        $mapper = $this->mapperFactory->createMapper('Product');
-        foreach ($results as $result) {
-            $product = $mapper->getDomainModel($result[0]['product']);
-            $total = (int) $result['c'];
-            $month = (int) $result['m'];
-            if (!isset($months[$month])) {
-                $months[$month] = [];
-            }
-            $months[$month][(string) $product->getId()] = (object) [
-                'product' => $product,
-                'total' => $total,
-            ];
-        }
-        return $months;
+        return $this->buildSumByMonthForYear($qb, $year);
     }
 
     private function joinTree(QueryBuilder $qb): QueryBuilder

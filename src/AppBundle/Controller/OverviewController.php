@@ -3,16 +3,20 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\IssuanceTrait;
+use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use Symfony\Component\HttpFoundation\Request;
 
 class OverviewController extends Controller
 {
+    use IssuanceTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
     {
         parent::initialize($request);
         $this->toView('currentSection', 'overview');
+        $this->toView('entityContextPresenter', new EntityContextPresenter(null));
         $this->setFinder();
     }
 
@@ -26,5 +30,10 @@ class OverviewController extends Controller
         $this->toView('activeTab', 'overview');
 
         return $this->renderTemplate('overview:show');
+    }
+
+    public function issuanceAction(Request $request)
+    {
+        return $this->renderIssuance($request);
     }
 }

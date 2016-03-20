@@ -3,8 +3,10 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
+use AppBundle\Controller\Traits\IssuanceTrait;
 use AppBundle\Controller\Traits\SecurityFilterTrait;
 use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
@@ -20,6 +22,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class IndustriesController extends Controller
 {
     use SecurityFilterTrait;
+    use IssuanceTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
@@ -149,58 +152,7 @@ class IndustriesController extends Controller
     public function issuanceAction(Request $request)
     {
         $industry = $this->getIndustry($request);
-        $years = $this->get('app.services.securities_by_industry')->issuanceYears($industry);
-
-        // only show years after 3 years ago (@todo - abstract)
-        $currentYear = (int) $this->getApplicationTime()->format('Y');
-        $years = array_filter($years, function ($year) use ($currentYear) {
-            return $year >= $currentYear-3;
-        });
-        $year = $this->getYear($request, $this->getApplicationTime());
-        if (is_null($year)) {
-            if (!empty($years)) {
-                $year = reset($years);
-            } else {
-                $year = $currentYear;
-            }
-            return $this->redirect(
-                $this->generateUrl(
-                    'industry_issuance',
-                    [
-                        'industry_id' => $industry->getId(),
-                        'year' => $year,
-                    ]
-                )
-            );
-        }
-
-        $this->toView('activeYear', $year);
-        $this->toView('years', $years);
-        $this->toView('entityNav', new EntityNavPresenter($industry, 'issuance'));
-
-        $results = [];
-        if ($year) {
-            $results = $this->get('app.services.securities_by_industry')->productCountsByMonthForYear(
-                $industry,
-                $year
-            );
-        }
-
-        $hasData = false;
-        $issuanceTable = null;
-        $issuanceGraph = null;
-        if (!empty($results)) {
-            $hasData = true;
-            $issuanceTable = new IssuanceTablePresenter($industry, $results, $year);
-            $issuanceGraph = new IssuanceGraphPresenter($industry, $results, $year);
-        }
-
-        $this->setTitle('Issuance ' . $year . ' - ' . $industry->getName());
-        $this->toView('hasData', $hasData);
-        $this->toView('issuanceTable', $issuanceTable);
-        $this->toView('issuanceGraph', $issuanceGraph);
-
-        return $this->renderTemplate('industries:issuance');
+        return $this->renderIssuance($request, $industry);
     }
 
     private function getIndustry(Request $request)
@@ -217,7 +169,7 @@ class IndustriesController extends Controller
         }
 
         $this->toView('industry', $industry);
-
+        $this->toView('entityContextPresenter', new EntityContextPresenter($industry));
 
         // I'm looking at an industry, so I need to pass in that industry
         $this->setFinder($request->get('_route'), $industry);

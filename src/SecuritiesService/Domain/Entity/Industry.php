@@ -17,6 +17,11 @@ class Industry extends Entity implements \JsonSerializable
         $this->name = $name;
     }
 
+    public function getRoutePrefix()
+    {
+        return 'industry';
+    }
+
     public function getName(): string
     {
         return $this->name;

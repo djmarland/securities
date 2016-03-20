@@ -22,6 +22,11 @@ class ParentGroup extends Entity implements \JsonSerializable
         $this->sector = $sector;
     }
 
+    public function getRoutePrefix()
+    {
+        return 'group';
+    }
+
     public function getName(): string
     {
         return $this->name;

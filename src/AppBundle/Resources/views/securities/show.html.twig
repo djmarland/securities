@@ -17,7 +17,7 @@
                     {% if product %}
                     <li>
                         <a class="link--button link--block text--center" href="{{ path(
-                                'security_list',
+                                'overview_securities',
                                 { product: product.number }
                         ) }}">
                             See more {{ product.name }}
@@ -25,7 +25,7 @@
                     </li>
                     {% endif %}
                     <li>
-                        <a class="link--button link--block text--center" href="{{ path('security_list') }}">
+                        <a class="link--button link--block text--center" href="{{ path('overview_securities') }}">
                             Browse all securities
                         </a>
                     </li>

@@ -1,0 +1,14 @@
+{% if entitycontext.isVisible %}
+    {% if entitycontext.parents %}
+        <span class="h-context h-f">
+            {% for parent in entitycontext.parents %}
+                <span class="h-context__item">
+                    <a href="{{ path(parent.route, parent.params) }}">
+                        {{ parent.name }}
+                    </a>
+                </span>
+            {% endfor %}
+        </span>
+    {% endif %}
+    {{ entitycontext.entityName }}
+{% endif %}

@@ -61,6 +61,10 @@ a {
     max-width: 1440px;
 }
 
+.entity-context {
+    min-height: 70px;
+}
+
 @include mq($from: m) {
     .page-limit {
         padding-left: $grid-unit-large;

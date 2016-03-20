@@ -6,13 +6,13 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
 {
     public function getData()
     {
-        $products = $this->resultsByProduct();
+        $years = array_keys($this->results);
 
         // create the heading types
         $graphData = [
-            array_map(function ($productResult) {
-                return $productResult['product']->getName();
-            }, $products),
+            array_map(function ($year) {
+                return (string) $year;
+            }, $years),
         ];
         // lead with Month heading
         array_unshift($graphData[0], 'Month');
@@ -21,8 +21,9 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         foreach ($months as $monthNum => $monthName) {
             // for each month, set the count for each product
             $row = [$monthName];
-            foreach ($products as $product) {
-                $row[] = $product['months'][$monthNum] ?? 0;
+            foreach ($years as $year) {
+                $val = $this->results[$year][$monthNum] ?? 0;
+                $row[] = (float) $val;
             }
             $graphData[] = $row;
         }
@@ -37,20 +38,25 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
                 'position' => 'right',
             ],
             'backgroundColor' => 'transparent',
-            'isStacked' => true,
             'animation' => (object) [
                 'duration' => 400,
                 'startup' => true,
             ],
+            'vAxis' => (object) [
+                'format' => '£#m'
+            ],
+            'bar' => (object) [
+                'groupWidth' => '82%',
+            ],
             'chartArea' => (object) [
-                'left' => 32,
+                'left' => 72,
                 'top' => 24,
                 'height' => 352,
                 'width' => '75%',
             ],
             'axisTitlesPosition' => 'in',
             'colors' => [
-                '#3A0676', '#E6E0EE', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD',
+                '#3A0676', '#E6E0EE'
             ],
         ];
 
