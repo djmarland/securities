@@ -334,7 +334,11 @@ class ImportCommand extends Command
             $parentGroup = new ParentGroup();
         }
         $parentGroup->setName($name);
-        $parentGroup->setSector($this->getSector($row));
+
+        $sector = $this->getRowValue($row, 'ICB_SECTOR');
+        if ($sector) {
+            $parentGroup->setSector($this->getSector($row));
+        }
         $this->em->persist($parentGroup);
         $this->em->flush();
         return $parentGroup;
