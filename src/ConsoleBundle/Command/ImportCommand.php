@@ -36,6 +36,21 @@ class ImportCommand extends Command
     protected $products = [];
     protected $output;
 
+    public function single($row)
+    {
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $this->processRow($row);
+    }
+
+    public function singleIssuer($row)
+    {
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $company = $this->getRowValue($row, 'COMPANY_NAME');
+        if ($company) {
+            $this->getCompany($row);
+        }
+    }
+
     protected function configure()
     {
         $this
@@ -89,21 +104,6 @@ class ImportCommand extends Command
         $progress->finish();
         $this->output->writeln('');
         $this->output->writeln('Done');
-    }
-
-    public function single($row)
-    {
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->processRow($row);
-    }
-
-    public function singleIssuer($row)
-    {
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $company = $this->getRowValue($row, 'COMPANY_NAME');
-        if ($company) {
-            $this->getCompany($row);
-        }
     }
 
     private function setProducts()
@@ -197,7 +197,7 @@ class ImportCommand extends Command
 
         $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_GBP');
         if ($moneyRaised) {
-            $moneyRaised = str_replace(',','',$moneyRaised);
+            $moneyRaised = str_replace(',', '', $moneyRaised);
             if (!is_numeric($moneyRaised)) {
                 throw new \Exception('Money Raised is not a number');
             }
@@ -297,7 +297,7 @@ class ImportCommand extends Command
         if ($parent) {
             $company->setParentGroup($this->getParentGroup($row));
         }
-        
+
         $this->em->persist($company);
         $this->em->flush();
         return $company;

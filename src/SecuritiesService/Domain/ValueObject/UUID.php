@@ -41,7 +41,8 @@ class UUID implements \JsonSerializable
     }
 
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return $this->__toString();
     }
 }

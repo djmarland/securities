@@ -126,7 +126,8 @@ class Security extends Entity implements JsonSerializable
         return $this->residualBucket;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $dateFormat = 'd/m/Y';
 
         return (object) [

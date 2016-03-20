@@ -117,7 +117,7 @@ class IssuersService extends Service
                 $securitiesTbl . '.company = ' . self::TBL . '.id'
             )
             ->groupBy(self::TBL . '.id')
-            ->having('COUNT(' . $securitiesTbl .'.id) = 0');
+            ->having('COUNT(' . $securitiesTbl . '.id) = 0');
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }

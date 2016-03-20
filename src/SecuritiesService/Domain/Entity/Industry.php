@@ -27,10 +27,11 @@ class Industry extends Entity implements \JsonSerializable
         return $this->name;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return (object) [
             'id' => $this->getId(),
-            'name' => $this->getName()
+            'name' => $this->getName(),
         ];
     }
 }

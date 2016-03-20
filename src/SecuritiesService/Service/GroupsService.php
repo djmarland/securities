@@ -62,7 +62,8 @@ class GroupsService extends Service
         string $query,
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE
-    ): array {$qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL)
             ->where(self::TBL . '.name LIKE :query')
             ->addOrderBy(self::TBL . '.name', 'ASC')

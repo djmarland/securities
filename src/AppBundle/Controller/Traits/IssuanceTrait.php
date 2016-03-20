@@ -2,7 +2,6 @@
 
 namespace AppBundle\Controller\Traits;
 
-
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
 use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;

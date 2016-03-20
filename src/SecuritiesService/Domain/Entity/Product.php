@@ -31,7 +31,8 @@ class Product extends Entity implements JsonSerializable
         return $this->number;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return (object) [
             'name' => $this->getName(),
             'number' => $this->getNumber(),

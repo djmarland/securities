@@ -152,7 +152,7 @@ class AdminController extends Controller
 
     private function setCsvData($data)
     {
-        foreach($data as $i => $row) {
+        foreach ($data as $i => $row) {
             foreach ($row as $key => $value) {
                 $data[$i][$key] = utf8_encode($value);
             }
@@ -164,7 +164,7 @@ class AdminController extends Controller
     {
         $header = null;
         $data = [];
-        $fp = fopen('php://temp','r+');
+        $fp = fopen('php://temp', 'r+');
         fwrite($fp, $csv);
         rewind($fp); //rewind to process CSV
         while (($row = fgetcsv($fp, 0)) !== false) {

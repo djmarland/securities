@@ -64,7 +64,8 @@ class Company extends Entity implements JsonSerializable
         return $this->country;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         $data = [
             'id' => $this->getId(),
             'name' => $this->getName(),

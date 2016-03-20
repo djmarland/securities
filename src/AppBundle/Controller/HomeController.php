@@ -42,9 +42,7 @@ class HomeController extends Controller
         foreach ($securities as $security) {
             $urls[] = $prefix . $this->generateUrl(
                 'security_show',
-                [
-                    'isin' => (string) $security->getISIN()
-                ]
+                ['isin' => (string) $security->getISIN()]
             );
         }
 
@@ -54,11 +52,9 @@ class HomeController extends Controller
 
         foreach ($issuers as $issuer) {
             $urls[] = $prefix . $this->generateUrl(
-                    'issuer_show',
-                    [
-                        'issuer_id' => $issuer->getUrlKey()
-                    ]
-                );
+                'issuer_show',
+                ['issuer_id' => $issuer->getUrlKey()]
+            );
         }
 
         $response = new Response();

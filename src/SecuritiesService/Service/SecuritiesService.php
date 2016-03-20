@@ -382,7 +382,7 @@ class SecuritiesService extends Service
             'IFNULL(' . self::TBL . '.maturityDate, ' . self::TBL . '.isin), ' . self::TBL . '.isin'
         );
     }
-    
+
     private function where(
         QueryBuilder $qb
     ): QueryBuilder {

@@ -47,7 +47,7 @@ class BySectorService extends SecuritiesService
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
-    
+
     public function findNextMaturing(
         Sector $sector,
         int $limit = self::DEFAULT_LIMIT

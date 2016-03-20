@@ -41,7 +41,8 @@ class Sector extends Entity implements \JsonSerializable
         return $this->industry;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return (object) [
             'id' => $this->getId(),
             'name' => $this->getName(),

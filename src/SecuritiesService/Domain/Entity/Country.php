@@ -23,7 +23,8 @@ class Country extends Entity implements \JsonSerializable
         return $this->name;
     }
 
-    public function jsonSerialize() {
+    public function jsonSerialize()
+    {
         return (object) [
             'name' => $this->getName(),
         ];
