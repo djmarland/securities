@@ -3,12 +3,14 @@
 {% block body %}
     <div class="grid">
         <div class="g 3/4@xl">
+            <div>
             <h1 class="b g-unit">{{ security.isin }}
                 {% if issuer %}
                     <span class="invisible"> - {{ issuer.name }}</span>
                 {% endif %}
             </h1>
             {% include securityPresenter.templatePath with securityPresenter.vars only %}
+            </div>
         </div>
         <div class="g 1/4@xl">
             <div class="card card--padded g-unit ">
