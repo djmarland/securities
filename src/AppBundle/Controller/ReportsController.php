@@ -2,13 +2,11 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\SecurityFilterTrait;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class ReportsController extends Controller
 {
-    use SecurityFilterTrait;
 
     public function listAction()
     {

@@ -6,6 +6,7 @@ use DateTimeImmutable;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
 use SecuritiesService\Domain\Entity\Currency;
+use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -18,8 +19,15 @@ class SecuritiesService extends Service
 {
     const SERVICE_ENTITY = 'Security';
 
+    protected $domainEntity;
+
+    public function setDomainEntity(Entity $domainEntity)
+    {
+        $this->domainEntity = $domainEntity;
+    }
+
     /* Individual */
-    public function findByIsin(ISIN $isin): Security
+    public function fetchByIsin(ISIN $isin): Security
     {
         $currency = 'c';
         $company = 'co';
@@ -49,20 +57,7 @@ class SecuritiesService extends Service
 
         return reset($results);
     }
-
-
-    /* All */
-    public function findAll(
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): array {
-        $qb = $this->selectWithJoins();
-        $qb = $this->where($qb);
-        $qb = $this->order($qb);
-        $qb = $this->paginate($qb, $limit, $page);
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
-    }
-
+    
     public function findAllSimple(): array
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -70,15 +65,59 @@ class SecuritiesService extends Service
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
-    public function countAll(): int
+    public function find(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE,
+        SecuritiesFilter $filter = null
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb = $this->where($qb);
+        return $this->buildFind($qb, $limit, $page, $filter);
+    }
+
+    public function findUpcomingMaturities(
+        DateTimeImmutable $dateFrom,
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb->where(self::TBL . '.maturityDate > :end_from')
+            ->orderBy(self::TBL . '.maturityDate', 'ASC')
+            ->setMaxResults($limit)
+            ->setParameter('end_from', $dateFrom);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findAllWithoutIssuer(): array
     {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.company IS NULL')
+            ->orderBy(self::TBL . '.isin', 'ASC');
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findNextMaturing(
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb = $this->where($qb);
+        return $this->buildNextMaturing($qb, $limit);
+    }
+    
+    public function count(
+        SecuritiesFilter $filter = null
+    ): int {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
         $qb = $this->where($qb);
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
-    public function countComplete(): int
+    public function countAll(): int
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select('count(' . self::TBL . '.id)');
@@ -94,165 +133,6 @@ class SecuritiesService extends Service
             ->setParameter('now', new \DateTime()); // @todo - inject application time
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
-
-    public function sumAll(): float
-    {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('sum(' . self::TBL . '.moneyRaised)');
-        $qb = $this->where($qb);
-        return (float) $qb->getQuery()->getSingleScalarResult();
-    }
-
-    /* Filtered */
-    public function findAllFiltered(
-        SecuritiesFilter $filter,
-        int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
-    ): array {
-        $qb = $this->selectWithJoins();
-        $qb = $this->where($qb);
-        $qb = $filter->apply($qb, self::TBL);
-        $qb = $this->order($qb);
-        $qb = $this->paginate($qb, $limit, $page);
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
-    }
-
-
-    public function countAllFiltered(
-        SecuritiesFilter $filter
-    ): int {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('count(' . self::TBL . '.id)');
-        $qb = $this->where($qb);
-        $qb = $filter->apply($qb, self::TBL);
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-
-    public function sumAllFiltered(
-        SecuritiesFilter $filter
-    ): int {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select('sum(' . self::TBL . '.moneyRaised)');
-        $qb = $this->where($qb);
-        $qb = $filter->apply($qb, self::TBL);
-        return (int) $qb->getQuery()->getSingleScalarResult();
-    }
-
-
-//
-//    public function sumForProductGroupedByCurrencyForYearToDate(
-//        DateTimeImmutable $endDate,
-//        Product $product = null
-//    ) {
-//        /*
-//         * select DATE_FORMAT(startDate, '%m') as m, p.name, count(*)
-//         * from securities left join products as p on product_id = p.id
-//         * where company_id = 29 and DATE_FORMAT(startDate, '%Y') = "2012" group by p.name,m;
-//         */
-//        $currencyTbl = 'product';
-//
-//        $year = $endDate->format('Y');
-//
-//        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-//        $qb->select([
-//            self::TBL,
-//            'sum(' . self::TBL . '.moneyRaised) as s',
-//            $currencyTbl
-//        ])
-//            ->where('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year')
-//            ->andWhere(self::TBL . '.startDate <= :end_date')
-//            ->leftJoin(self::TBL . '.currency', $currencyTbl);
-//
-//        $params =[
-//            'year' => $year,
-//            'end_date' => $endDate
-//        ];
-//
-//        if ($product) {
-//            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
-//            $params['product_id'] = (string) $product->getId();
-//        }
-//
-//        $qb->groupBy($currencyTbl . '.id')
-//            ->setParameters($params);
-//
-//
-//        /*
-//         * List of:
-//         * 0 => Security
-//         * c => count
-//         * m => month
-//        */
-//        $results = $qb->getQuery()->getArrayResult();
-//
-//        $currencies = [];
-//        foreach ($results as $result) {
-//            $currency = $this->getDomainModel($result[0]['currency'], 'Currency');
-//            $code = $currency->getCode();
-//            $total = (int) $result['s'];
-//            $currencies[$code] = $total;
-//        }
-//
-//        return $currencies;
-//    }
-
-//    public function sumForProductGroupedByCountryForYearToDate(
-//        DateTimeImmutable $endDate,
-//        Product $product = null
-//    ) {
-//        /*
-//         * select c.name, sum(*)
-//         * from securities left join products as p on product_id = p.id
-//         * where company_id = 29 and DATE_FORMAT(startDate, '%Y') = "2012" group by p.name,m;
-//         */
-//        $companyTbl = 'company';
-//        $countryTbl = 'country';
-//
-//        $year = $endDate->format('Y');
-//
-//        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-//        $qb->select([
-//            self::TBL,
-//            'sum(' . self::TBL . '.moneyRaised) as s',
-//            $companyTbl,
-//            $countryTbl
-//        ])
-//            ->where('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year')
-//            ->andWhere(self::TBL . '.startDate <= :end_date')
-//            ->leftJoin(self::TBL . '.company', $companyTbl)
-//            ->leftJoin($companyTbl . '.country', $countryTbl);
-//
-//        $params =[
-//            'year' => $year,
-//            'end_date' => $endDate
-//        ];
-//
-//        if ($product) {
-//            $qb->andWhere('IDENTITY(' . self::TBL . '.product) = :product_id');
-//            $params['product_id'] = (string) $product->getId();
-//        }
-//
-//        $qb->groupBy($countryTbl . '.id')
-//            ->setParameters($params);
-//
-//
-//        /*
-//         * List of:
-//         * 0 => Security
-//         * s => sum
-//        */
-//        $results = $qb->getQuery()->getArrayResult();
-//
-//        $countries = [];
-//        foreach ($results as $result) {
-//            $country = $this->getDomainModel($result[0]['company']['country'], 'Country');
-//            $code = $country->getName();
-//            $total = (int) $result['s'];
-//            $countries[$code] = $total;
-//        }
-//
-//        return $countries;
-//    }
 
     public function countsByProduct()
     {
@@ -294,26 +174,16 @@ class SecuritiesService extends Service
         return $products;
     }
 
-    public function findUpcomingMaturities(
-        DateTimeImmutable $dateFrom,
-        int $limit = self::DEFAULT_LIMIT
-    ): array {
-        $qb = $this->selectWithJoins();
-        $qb->where(self::TBL . '.maturityDate > :end_from')
-            ->orderBy(self::TBL . '.maturityDate', 'ASC')
-            ->setMaxResults($limit)
-            ->setParameter('end_from', $dateFrom);
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
-    }
-
-    public function findAllWithoutIssuer(): array
-    {
+    public function sum(
+        SecuritiesFilter $filter = null
+    ): float {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL)
-            ->where(self::TBL . '.company IS NULL')
-            ->orderBy(self::TBL . '.isin', 'ASC');
-
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        $qb->select('sum(' . self::TBL . '.moneyRaised)');
+        $qb = $this->where($qb);
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function sumByMonthForYear(
@@ -322,6 +192,30 @@ class SecuritiesService extends Service
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb = $this->where($qb);
         return $this->buildSumByMonthForYear($qb, $year);
+    }
+
+    protected function buildFind(
+        QueryBuilder $qb,
+        $limit,
+        $page,
+        $filter = null
+    ) {
+        if ($filter) {
+            $qb = $filter->apply($qb, self::TBL);
+        }
+        $qb = $this->order($qb);
+        $qb = $this->paginate($qb, $limit, $page);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    protected function buildNextMaturing(
+        QueryBuilder $qb,
+        int $limit
+    ) {
+        $qb = $this->orderByMaturing($qb);
+        $qb->setMaxResults($limit);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
     protected function buildSumByMonthForYear(
@@ -381,6 +275,14 @@ class SecuritiesService extends Service
         return $qb->orderBy(
             'IFNULL(' . self::TBL . '.maturityDate, ' . self::TBL . '.isin), ' . self::TBL . '.isin'
         );
+    }
+
+    protected function getDomainEntity(): Entity
+    {
+        if ($this->domainEntity) {
+            return $this->domainEntity;
+        }
+        throw new \InvalidArgumentException('Entity was not set, so cannot filter correctly');
     }
 
     private function where(

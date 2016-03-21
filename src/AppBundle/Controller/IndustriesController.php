@@ -4,25 +4,21 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\SecurityFilterTrait;
-use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Controller\Traits\OverviewTrait;
+use AppBundle\Controller\Traits\SecuritiesTrait;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
-use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
-use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
-use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IndustriesController extends Controller
 {
-    use SecurityFilterTrait;
+    use SecuritiesTrait;
     use IssuanceTrait;
+    use OverviewTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
@@ -65,80 +61,14 @@ class IndustriesController extends Controller
     public function showAction(Request $request)
     {
         $industry = $this->getIndustry($request);
-
-        $securitiesService = $this->get('app.services.securities_by_industry');
-
-        $count = $securitiesService
-            ->count($industry);
-
-        $totalRaised = $securitiesService
-            ->sum($industry);
-
-        $securities = $securitiesService
-            ->findNextMaturing($industry, 2);
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security, [
-                    'template' => 'simple',
-                ]);
-            }
-        }
-
-        $this->setTitle($industry->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('count', number_format($count));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('hasSecurities', $count > 0);
-        $this->toView('entityNav', new EntityNavPresenter($industry, 'show'));
-        return $this->renderTemplate('industries:show');
+        return $this->renderOverview($request, $industry);
     }
 
     public function securitiesAction(Request $request)
     {
         $industry = $this->getIndustry($request);
+        return $this->renderSecurities($request, $industry);
 
-        $filter = $this->setFilter($request);
-
-        $perPage = 50;
-        $currentPage = $this->getCurrentPage();
-
-        $securitiesService = $this->get('app.services.securities_by_industry');
-        $total = $securitiesService->count($industry, $filter);
-        $totalRaised = 0;
-        $securities = [];
-        if ($total) {
-            $securities = $securitiesService
-                ->find(
-                    $industry,
-                    $filter,
-                    $perPage,
-                    $currentPage
-                );
-            $totalRaised = $securitiesService->sum($industry, $filter);
-        }
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
-            }
-        }
-
-        $this->setTitle('Securities - ' . $industry->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('total', $total);
-
-        $this->setPagination(
-            $total,
-            $currentPage,
-            $perPage
-        );
-
-        $this->toView('entityNav', new EntityNavPresenter($industry, 'securities'));
-        return $this->renderTemplate('industries:securities');
     }
 
     public function maturityProfileAction(Request $request)

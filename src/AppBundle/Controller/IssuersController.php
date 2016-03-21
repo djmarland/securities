@@ -4,12 +4,11 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\SecurityFilterTrait;
+use AppBundle\Controller\Traits\OverviewTrait;
+use AppBundle\Controller\Traits\SecuritiesTrait;
 use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -21,8 +20,9 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IssuersController extends Controller
 {
-    use SecurityFilterTrait;
+    use SecuritiesTrait;
     use IssuanceTrait;
+    use OverviewTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
@@ -89,81 +89,13 @@ class IssuersController extends Controller
     public function showAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
-
-        $securitiesService = $this->get('app.services.securities_by_issuer');
-
-        $count = $securitiesService
-            ->count($issuer);
-
-        $totalRaised = $securitiesService
-            ->sum($issuer);
-
-        $securities = $securitiesService
-            ->findNextMaturing($issuer, 2);
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security, [
-                    'template' => 'simple',
-                ]);
-            }
-        }
-
-        $this->setTitle($issuer->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('count', number_format($count));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('hasSecurities', $count > 0);
-        $this->toView('entityNav', new EntityNavPresenter($issuer, 'show'));
-
-        return $this->renderTemplate('issuers:show');
+        return $this->renderOverview($request, $issuer);
     }
 
     public function securitiesAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
-
-        $filter = $this->setFilter($request);
-
-        $perPage = 50;
-        $currentPage = $this->getCurrentPage();
-
-        $securitiesService = $this->get('app.services.securities_by_issuer');
-        $total = $securitiesService->count($issuer, $filter);
-        $totalRaised = 0;
-        $securities = [];
-        if ($total) {
-            $securities = $securitiesService
-                ->find(
-                    $issuer,
-                    $filter,
-                    $perPage,
-                    $currentPage
-                );
-            $totalRaised = $securitiesService->sum($issuer, $filter);
-        }
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
-            }
-        }
-
-        $this->setTitle('Securities - ' . $issuer->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('total', $total);
-        $this->toView('entityNav', new EntityNavPresenter($issuer, 'securities'));
-
-        $this->setPagination(
-            $total,
-            $currentPage,
-            $perPage
-        );
-
-        return $this->renderTemplate('issuers:securities');
+        return $this->renderSecurities($request, $issuer);
     }
 
     public function maturityProfileAction(Request $request)

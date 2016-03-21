@@ -10,7 +10,7 @@ class HomeController extends Controller
     {
         $this->toView('searchAutofocus', 'autofocus');
 
-        $securitiesCount = $this->get('app.services.securities')->countAll();
+        $securitiesCount = $this->get('app.services.securities')->count();
         $issuersCount = $this->get('app.services.issuers')->countAll();
         $productCounts = $this->get('app.services.securities')->countsByProduct();
 

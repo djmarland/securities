@@ -2,18 +2,74 @@
 
 namespace AppBundle\Controller\Traits;
 
+use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
+use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use DateTime;
-use SecuritiesService\Domain\Exception\ValidationException;
-use SecuritiesService\Domain\ValueObject\UUID;
+use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
-trait SecurityFilterTrait
+trait SecuritiesTrait
 {
     private $filter = [];
 
-    public function setFilter(Request $request)
+    public function renderSecurities(
+        Request $request,
+        Entity $entity = null
+    ) {
+        if ($entity) {
+            $entityType = $entity->getRoutePrefix();
+            $securitiesService = $this->get('app.services.securities_by_' . $entityType);
+            $securitiesService->setDomainEntity($entity);
+            $this->setTitle('Securities - ' . $entity->getName());
+        } else {
+            $securitiesService = $this->get('app.services.securities');
+            $this->setTitle('Securities');
+        }
+
+
+        $filter = $this->setFilter($request);
+
+        $perPage = 50;
+        $currentPage = $this->getCurrentPage();
+
+        $total = $securitiesService->count($filter);
+        $totalRaised = 0;
+        $securities = [];
+        if ($total) {
+            $securities = $securitiesService
+                ->find(
+                    $perPage,
+                    $currentPage,
+                    $filter
+                );
+            $totalRaised = $securitiesService->sum($filter);
+        }
+
+        $securityPresenters = [];
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security);
+            }
+        }
+
+        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
+        $this->toView('securities', $securityPresenters);
+        $this->toView('total', $total);
+
+        $this->setPagination(
+            $total,
+            $currentPage,
+            $perPage
+        );
+
+        $this->toView('entityNav', new EntityNavPresenter($entity, 'securities'));
+        return $this->renderTemplate('entities:securities');
+    }
+
+    private function setFilter(Request $request)
     {
         return new SecuritiesFilter(
             $this->setProductFilter($request),
@@ -23,7 +79,7 @@ trait SecurityFilterTrait
         );
     }
 
-    public function setProductFilter(Request $request)
+    private function setProductFilter(Request $request)
     {
         $this->filter['activeProduct'] = null;
         $number = $request->get('product', null);
@@ -48,7 +104,7 @@ trait SecurityFilterTrait
         return $product;
     }
 
-    public function setCurrencyFilter(Request $request)
+    private function setCurrencyFilter(Request $request)
     {
         $this->filter['activeCurrency'] = null;
 
@@ -75,7 +131,7 @@ trait SecurityFilterTrait
         return $currency;
     }
 
-    public function setBucketFilter(Request $request)
+    private function setBucketFilter(Request $request)
     {
         $this->filter['activeBucket'] = null;
 
@@ -99,7 +155,7 @@ trait SecurityFilterTrait
         return $bucket;
     }
 
-    public function setIssueDateFilter(Request $request)
+    private function setIssueDateFilter(Request $request)
     {
         $this->filter['activeIssueDate'] = null;
 

@@ -4,25 +4,24 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\SecurityFilterTrait;
+use AppBundle\Controller\Traits\OverviewTrait;
+use AppBundle\Controller\Traits\SecuritiesTrait;
 use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceGraphPresenter;
-use AppBundle\Presenter\Organism\Issuance\IssuanceTablePresenter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
-use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SectorsController extends Controller
 {
-    use SecurityFilterTrait;
+    use SecuritiesTrait;
     use IssuanceTrait;
+    use OverviewTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
@@ -65,35 +64,7 @@ class SectorsController extends Controller
     public function showAction(Request $request)
     {
         $sector = $this->getSector($request);
-
-        $securitiesService = $this->get('app.services.securities_by_sector');
-
-        $count = $securitiesService
-            ->count($sector);
-
-        $totalRaised = $securitiesService
-            ->sum($sector);
-
-        $securities = $securitiesService
-            ->findNextMaturing($sector, 2);
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security, [
-                    'template' => 'simple',
-                ]);
-            }
-        }
-
-        $this->setTitle($sector->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('count', number_format($count));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('hasSecurities', $count > 0);
-        $this->toView('entityNav', new EntityNavPresenter($sector, 'show'));
-
-        return $this->renderTemplate('sectors:show');
+        return $this->renderOverview($request, $sector);
     }
 
     public function maturityProfileAction(Request $request)
@@ -113,47 +84,7 @@ class SectorsController extends Controller
     public function securitiesAction(Request $request)
     {
         $sector = $this->getSector($request);
-
-        $filter = $this->setFilter($request);
-
-        $perPage = 50;
-        $currentPage = $this->getCurrentPage();
-
-        $securitiesService = $this->get('app.services.securities_by_sector');
-        $total = $securitiesService->count($sector, $filter);
-        $totalRaised = 0;
-        $securities = [];
-        if ($total) {
-            $securities = $securitiesService
-                ->find(
-                    $sector,
-                    $filter,
-                    $perPage,
-                    $currentPage
-                );
-            $totalRaised = $securitiesService->sum($sector, $filter);
-        }
-
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
-            }
-        }
-
-        $this->setTitle('Securities - ' . $sector->getName());
-        $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('securities', $securityPresenters);
-        $this->toView('total', $total);
-
-        $this->setPagination(
-            $total,
-            $currentPage,
-            $perPage
-        );
-
-        $this->toView('entityNav', new EntityNavPresenter($sector, 'securities'));
-        return $this->renderTemplate('sectors:securities');
+        return $this->renderSecurities($request, $sector);
     }
 
     private function getSector(Request $request)

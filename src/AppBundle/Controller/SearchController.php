@@ -30,7 +30,7 @@ class SearchController extends Controller
                 $isin = new ISIN($query);
 
                 $single = $this->get('app.services.securities')
-                    ->findByIsin($isin);
+                    ->fetchByIsin($isin);
 
                 if ($single) {
                     // if there was an exact match, just send you straight there

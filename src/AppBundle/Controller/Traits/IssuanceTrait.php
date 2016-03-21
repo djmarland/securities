@@ -17,6 +17,7 @@ trait IssuanceTrait
         if ($entity) {
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
+            $securitiesService->setDomainEntity($entity);
             $this->setTitle('Issuance  - ' . $entity->getName());
         } else {
             $securitiesService = $this->get('app.services.securities');

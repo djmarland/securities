@@ -1,0 +1,36 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::entities/_base.html.twig" %}
+
+{% block content %}
+<div class="grid">
+    <div class="g">
+        <h1 class="c"><span class="invisible">{{ block('context') }} - </span>Overview</h1>
+    </div>
+    <div class="g 2/3@xl">
+        <div>
+            <h2 class="g-unit d">Bonds maturing</h2>
+            {% if hasSecurities %}
+                {% include '@partials/securities-simple-list.html.twig' %}
+                <p><a class="link--button" href="{{ allSecuritiesPath }}">Show all</a></p>
+            {% else %}
+                <p>No securities have been issued{% if entity %} by {{ entity.name }}{% endif %}</p>
+            {% endif %}
+        </div>
+    </div>
+    <div class="g 1/3@xl">
+        <div>
+            <div class="card card--padded g-unit text--center">
+                <a class="link--hidden" href="{{ allSecuritiesPath }}">
+                    <h2 class="d">Total securities</h2>
+                    <p class="a">{{ count }}</p>
+                </a>
+            </div>
+            <div class="card card--padded g-unit text--center">
+                <h2 class="d">Amount raised</h2>
+                <p class="a">{% include totalRaised.templatePath with totalRaised.vars only %}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

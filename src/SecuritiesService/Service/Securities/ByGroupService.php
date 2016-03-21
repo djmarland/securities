@@ -10,10 +10,9 @@ use SecuritiesService\Service\SecuritiesService;
 class ByGroupService extends SecuritiesService
 {
     public function find(
-        ParentGroup $group,
-        SecuritiesFilter $filter = null,
         int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        SecuritiesFilter $filter = null
     ): array {
         $qb = $this->selectWithJoins();
 
@@ -21,7 +20,7 @@ class ByGroupService extends SecuritiesService
         if ($filter) {
             $qb = $filter->apply($qb, self::TBL);
         }
-        $qb = $this->where($qb, $group);
+        $qb = $this->where($qb, $this->getDomainEntity());
 
         $qb = $this->order($qb);
         $qb->setMaxResults($limit)
@@ -30,42 +29,35 @@ class ByGroupService extends SecuritiesService
     }
 
     public function count(
-        ParentGroup $group,
         SecuritiesFilter $filter = null
     ): int {
-        $qb = $this->queryForScalar($group, $filter);
+        $qb = $this->queryForScalar($this->getDomainEntity(), $filter);
         $qb->select('count(' . self::TBL . '.id)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function sum(
-        ParentGroup $group,
         SecuritiesFilter $filter = null
     ): float {
-        $qb = $this->queryForScalar($group, $filter);
+        $qb = $this->queryForScalar($this->getDomainEntity(), $filter);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findNextMaturing(
-        ParentGroup $group,
         int $limit = self::DEFAULT_LIMIT
     ): array {
         $qb = $this->selectWithJoins();
         $qb->leftJoin('co.parentGroup', 'p');
-        $qb = $this->where($qb, $group);
-        $qb = $this->orderByMaturing($qb);
-        $qb->setMaxResults($limit);
-
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        $qb = $this->where($qb, $this->getDomainEntity());
+        return $this->buildNextMaturing($qb, $limit);
     }
 
     public function sumByMonthForYear(
-        int $year,
-        ParentGroup $group = null
+        int $year
     ): array {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb = $this->where($qb, $group);
+        $qb = $this->where($qb, $this->getDomainEntity());
         $qb = $this->joinTree($qb);
         return $this->buildSumByMonthForYear($qb, $year);
     }

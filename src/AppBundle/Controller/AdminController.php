@@ -17,8 +17,8 @@ class AdminController extends Controller
 
         $securitiesService = $this->get('app.services.securities');
 
-        $statsAll = $securitiesService->countComplete();
-        $statsActive = $securitiesService->countAll();
+        $statsAll = $securitiesService->countAll();
+        $statsActive = $securitiesService->count();
         $statsMatured = $securitiesService->countMatured();
         $statsIssuers = $this->get('app.services.issuers')->countAll();
         $statsGroups = $this->get('app.services.groups')->countAll();

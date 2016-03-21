@@ -9,6 +9,12 @@
 
 .security-simple__link {
     display: block;
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: none;
+        background: $color-faint;
+    }
 }
 .security-simple__table {
     color: $color-text;

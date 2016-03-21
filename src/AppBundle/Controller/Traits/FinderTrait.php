@@ -34,7 +34,7 @@ trait FinderTrait
         // is the finder in an initial state (nothing selected)?
         $initial = (!$industry && !$sector && !$group && !$issuer);
 
-        $finder = new FinderPresenter($items, $initial);
+        $finder = new FinderPresenter($items, $initial, $this->routeSuffix);
 
         $this->toView('finder', $finder);
     }

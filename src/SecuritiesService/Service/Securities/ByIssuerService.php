@@ -10,16 +10,15 @@ use SecuritiesService\Service\SecuritiesService;
 class ByIssuerService extends SecuritiesService
 {
     public function find(
-        Company $issuer,
-        SecuritiesFilter $filter = null,
         int $limit = self::DEFAULT_LIMIT,
-        int $page = self::DEFAULT_PAGE
+        int $page = self::DEFAULT_PAGE,
+        SecuritiesFilter $filter = null
     ): array {
         $qb = $this->selectWithJoins();
         if ($filter) {
             $qb = $filter->apply($qb, self::TBL);
         }
-        $qb = $this->where($qb, $issuer);
+        $qb = $this->where($qb, $this->getDomainEntity());
         $qb = $this->order($qb);
         $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
@@ -28,29 +27,26 @@ class ByIssuerService extends SecuritiesService
     }
 
     public function count(
-        Company $issuer,
         SecuritiesFilter $filter = null
     ): int {
-        $qb = $this->queryForScalar($issuer, $filter);
+        $qb = $this->queryForScalar($this->getDomainEntity(), $filter);
         $qb->select('count(' . self::TBL . '.id)');
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function sum(
-        Company $issuer,
         SecuritiesFilter $filter = null
     ): float {
-        $qb = $this->queryForScalar($issuer, $filter);
+        $qb = $this->queryForScalar($this->getDomainEntity(), $filter);
         $qb->select('sum(' . self::TBL . '.moneyRaised)');
         return (float) $qb->getQuery()->getSingleScalarResult();
     }
 
     public function findLatest(
-        Company $issuer,
         int $limit = self::DEFAULT_LIMIT
     ): array {
         $qb = $this->selectWithJoins();
-        $qb = $this->where($qb, $issuer);
+        $qb = $this->where($qb, $this->getDomainEntity());
         $qb->orderBy(self::TBL . '.maturityDate', 'ASC');
         $qb->setMaxResults($limit);
 
@@ -58,11 +54,10 @@ class ByIssuerService extends SecuritiesService
     }
 
     public function findNextMaturing(
-        Company $issuer,
         int $limit = self::DEFAULT_LIMIT
     ): array {
         $qb = $this->selectWithJoins();
-        $qb = $this->where($qb, $issuer);
+        $qb = $this->where($qb, $this->getDomainEntity());
         $qb = $this->orderByMaturing($qb);
         $qb->setMaxResults($limit);
 

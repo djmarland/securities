@@ -4,6 +4,10 @@
     "path" : "/"
   },
   {
+    "title" : "Sitemap",
+    "path" : "/sitemap.xml"
+  },
+  {
     "title" : "Search",
     "path" : "/search"
   },
@@ -76,11 +80,11 @@
   },
   {
     "title" : "Industry Issuance",
-    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance/2016"
+    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance"
   },
   {
     "title" : "Industry Issuance (empty)",
-    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance/1950"
+    "path" : "/industries/6cf978ea-774f-49ff-9bee-6f19ba171ec0/issuance"
   },
 
 
@@ -107,11 +111,11 @@
   },
   {
     "title" : "Sector Issuance",
-    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance/2016"
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance"
   },
   {
     "title" : "Sector Issuance (empty)",
-    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance/1950"
+    "path" : "/sectors/cd91cc6e-ecab-477d-abdf-8351cc1ab106/issuance"
   },
 
 
@@ -135,11 +139,11 @@
   },
   {
     "title" : "Group Issuance",
-    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance/2016"
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance"
   },
   {
     "title" : "Group Issuance (empty)",
-    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance/1950"
+    "path" : "/groups/1e2a291d-4523-4d46-95bb-9a79a0a69fe3/issuance"
   },
 
 
@@ -163,11 +167,11 @@
   },
   {
     "title" : "Issuer Issuance",
-    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance/2016"
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance"
   },
   {
     "title" : "Issuer Issuance (empty)",
-    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance/1950"
+    "path" : "/issuers/e31688de-4dd4-471d-a46a-9336238fdcae/issuance"
   },
 
 
