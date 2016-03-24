@@ -47,10 +47,10 @@ class MoneyPresenter extends Presenter implements MoneyPresenterInterface
         if ($this->options['scale']) {
             if ($amount > 1000000) { // trillions
                 $amount = $amount / 1000000;
-                $this->suffix = 't';
+                $this->suffix = 'tr';
             } elseif ($amount > 1000) { // billions
                 $amount = $amount / 1000;
-                $this->suffix = 'b';
+                $this->suffix = 'bn';
             }
         }
         return $amount;
