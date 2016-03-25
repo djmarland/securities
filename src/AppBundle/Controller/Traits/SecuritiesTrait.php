@@ -15,6 +15,17 @@ trait SecuritiesTrait
 {
     private $filter = [];
 
+    public function securitiesToPresenters($securities)
+    {
+        $securityPresenters = [];
+        if (!empty($securities)) {
+            foreach ($securities as $security) {
+                $securityPresenters[] = new SecurityPresenter($security);
+            }
+        }
+        return $securityPresenters;
+    }
+
     public function renderSecurities(
         Request $request,
         Entity $entity = null
@@ -48,15 +59,8 @@ trait SecuritiesTrait
             $totalRaised = $securitiesService->sum($filter);
         }
 
-        $securityPresenters = [];
-        if (!empty($securities)) {
-            foreach ($securities as $security) {
-                $securityPresenters[] = new SecurityPresenter($security);
-            }
-        }
-
         $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
-        $this->toView('securities', $securityPresenters);
+        $this->toView('securities', $this->securitiesToPresenters($securities));
         $this->toView('total', $total);
 
         $this->setPagination(

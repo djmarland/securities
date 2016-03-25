@@ -23,9 +23,7 @@ trait OverviewTrait
                 'allSecuritiesPath',
                 $this->generateUrl(
                     $entityType . '_securities',
-                    [
-                        $entityType . '_id' => $entity->getId()
-                    ]
+                    [$entityType . '_id' => $entity->getId()]
                 )
             );
         } else {

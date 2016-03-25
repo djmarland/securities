@@ -4,14 +4,9 @@ namespace SecuritiesService\Service;
 
 use DateTimeImmutable;
 use Doctrine\ORM\QueryBuilder;
-use SecuritiesService\Domain\Entity\Company;
-use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\Entity;
-use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
-use SecuritiesService\Domain\ValueObject\Bucket;
-use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 
@@ -57,7 +52,7 @@ class SecuritiesService extends Service
 
         return reset($results);
     }
-    
+
     public function findAllSimple(): array
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
@@ -104,7 +99,17 @@ class SecuritiesService extends Service
         $qb = $this->where($qb);
         return $this->buildNextMaturing($qb, $limit);
     }
-    
+
+    public function findLatestIssuance(
+        int $limit = self::DEFAULT_LIMIT
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb = $this->where($qb);
+        $qb = $this->order($qb);
+        $qb->setMaxResults($limit);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
     public function count(
         SecuritiesFilter $filter = null
     ): int {

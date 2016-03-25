@@ -2,17 +2,23 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Controller\Traits\SecuritiesTrait;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
 {
+    use SecuritiesTrait;
+
     public function indexAction()
     {
         $this->toView('searchAutofocus', 'autofocus');
+        $this->masterViewPresenter->setFullTitle('ISIN Analytics - The Gateway to London\'s Debt Capital Markets');
 
-        $securitiesCount = $this->get('app.services.securities')->count();
+        $securitiesService = $this->get('app.services.securities');
+
+        $securitiesCount = $securitiesService->count();
         $issuersCount = $this->get('app.services.issuers')->countAll();
-        $productCounts = $this->get('app.services.securities')->countsByProduct();
+        $productCounts = $securitiesService->countsByProduct();
 
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
@@ -24,8 +30,11 @@ class HomeController extends Controller
                 $pc->count,
             ];
         }
-        $this->masterViewPresenter->setFullTitle('ISIN Analytics - The Gateway to London\'s Debt Capital Markets');
         $this->toView('byProduct', $byProduct);
+
+        $latestIssuance = $securitiesService->findLatestIssuance(5);
+        $this->toView('securities', $this->securitiesToPresenters($latestIssuance));
+
         return $this->renderTemplate('home:index');
     }
 

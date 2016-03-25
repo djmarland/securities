@@ -4,8 +4,8 @@
 {% block body %}
     <div class="grid">
         <div class="g 3/5@xl">
-            <div class="card g-unit">
-                <div class="card--padded">
+            <div class=" g-unit">
+                <div class="">
                     <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
                     <p class="d g-unit">
                         Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
@@ -51,11 +51,16 @@
                     </p>
                 </div>
             </div>
-            <div>
+            <div class="g-unit">
                 {% include adverts.templatePath with adverts.variantVars('overview') only %}
+            </div>
+            <div class="">
+                <h2 class="g-unit">Recent Issuance</h2>
+                {% include '@partials/securities-list.html.twig' %}
             </div>
         </div>
         <div class="g 2/5@xl">
+            <div>
             <div class="card g-unit">
                 <div class="card--padded">
                     <div class="grid">
@@ -79,6 +84,7 @@
                 </div>
             </div>
             <div class="card">
+                <h2 class="island-squashed card__heading">Products</h2>
                 <div id="chart-grouped" style="height: 300px">
                     <p class="island text--center">Loading chart</p>
                 </div>
@@ -115,6 +121,7 @@
                         }
                     })();
                 </script>
+            </div>
             </div>
         </div>
     </div>
