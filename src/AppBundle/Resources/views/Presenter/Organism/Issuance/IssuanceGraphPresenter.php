@@ -93,7 +93,7 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
             ],
             'axisTitlesPosition' => 'in',
             'colors' => [
-                '#3A0676', '#B5A2CC'
+                '#E6E0EE', '#B5A2CC', '#3A0676'
             ],
         ];
 

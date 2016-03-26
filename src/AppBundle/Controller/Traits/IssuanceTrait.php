@@ -56,10 +56,12 @@ trait IssuanceTrait
 
         $currentYear = (int) $this->getApplicationTime()->format('Y');
         $lastYear = $currentYear - 1;
+        $oldYear = $lastYear - 1;
         $results = [];
 
-        $results[$currentYear] = $securitiesService->sumByMonthForYear($currentYear, $entity);
+        $results[$oldYear] = $securitiesService->sumByMonthForYear($oldYear, $entity);
         $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
+        $results[$currentYear] = $securitiesService->sumByMonthForYear($currentYear, $entity);
 
         $hasData = false;
         $options = ['cumulative' => $isYearToDate];
