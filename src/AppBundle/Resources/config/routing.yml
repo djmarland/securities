@@ -49,8 +49,10 @@ overview_show:
   defaults: { _controller: AppBundle:Overview:show }
 
 overview_issuance:
-  path:     /issuance
-  defaults: { _controller: AppBundle:Overview:issuance }
+  path:     /issuance/{view}
+  defaults: { _controller: AppBundle:Overview:issuance, view: null }
+  requirements:
+    view: "ytd"
 
 overview_securities:
   path:     /securities
@@ -84,8 +86,10 @@ issuer_maturity_profile:
   defaults: { _controller: AppBundle:Issuers:maturityProfile }
 
 issuer_issuance:
-  path:     /issuers/{issuer_id}/issuance
-  defaults: { _controller: AppBundle:Issuers:issuance }
+  path:     /issuers/{issuer_id}/issuance/{view}
+  defaults: { _controller: AppBundle:Issuers:issuance, view: null }
+  requirements:
+    view: "ytd"
 
 # Groups
 group_list:
@@ -97,8 +101,10 @@ group_show:
   defaults: { _controller: AppBundle:Groups:show }
 
 group_issuance:
-  path:     /groups/{group_id}/issuance/{year}
-  defaults: { _controller: AppBundle:Groups:issuance, year: null }
+  path:     /groups/{group_id}/issuance/{view}
+  defaults: { _controller: AppBundle:Groups:issuance, view: null }
+  requirements:
+    view: "ytd"
 
 group_securities:
   path:     /groups/{group_id}/securities
@@ -131,8 +137,10 @@ industry_maturity_profile:
   defaults: { _controller: AppBundle:Industries:maturityProfile }
 
 industry_issuance:
-  path:     /industries/{industry_id}/issuance/{year}
-  defaults: { _controller: AppBundle:Industries:issuance, year: null }
+  path:     /industries/{industry_id}/issuance/{view}
+  defaults: { _controller: AppBundle:Industries:issuance, view: null }
+  requirements:
+    view: "ytd"
 
 # Sectors
 sector_list:
@@ -152,8 +160,10 @@ sector_maturity_profile:
   defaults: { _controller: AppBundle:Sectors:maturityProfile }
 
 sector_issuance:
-  path:     /sectors/{sector_id}/issuance/{year}
-  defaults: { _controller: AppBundle:Sectors:issuance, year: null }
+  path:     /sectors/{sector_id}/issuance/{view}
+  defaults: { _controller: AppBundle:Sectors:issuance, view: null }
+  requirements:
+    view: "ytd"
 
 # Reports
 report_list:

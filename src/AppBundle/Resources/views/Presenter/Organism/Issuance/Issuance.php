@@ -9,6 +9,12 @@ abstract class Issuance extends Presenter
 {
     protected $results;
 
+    protected $currentTime;
+
+    protected $options = [
+        'cumulative' => false
+    ];
+
     public function __construct(
         Entity $entity = null,
         array $results = [],
@@ -16,6 +22,7 @@ abstract class Issuance extends Presenter
     ) {
         parent::__construct($entity, $options);
         $this->results = $results;
+        $this->currentTime = new \DateTimeImmutable(); // todo - use app time
     }
 
     protected function getMonths()
@@ -34,5 +41,11 @@ abstract class Issuance extends Presenter
             11 => 'Nov',
             12 => 'Dec',
         ];
+    }
+    
+    protected function monthIsNotFuture($year, $month)
+    {
+        $date = new \DateTimeImmutable($year . '-' . $month . '-01');
+        return ($date < $this->currentTime);
     }
 }

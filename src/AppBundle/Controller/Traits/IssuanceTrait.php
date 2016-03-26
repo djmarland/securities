@@ -14,15 +14,45 @@ trait IssuanceTrait
         Request $request,
         Entity $entity = null
     ) {
+        $isYearToDate = ($request->get('view') == 'ytd');
+        $titleSuffix = $isYearToDate ? 'Year to Date' : 'Monthly';
+        $this->toView('issuanceView', $isYearToDate ? 'ytd' : 'monthly');
+
         if ($entity) {
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
             $securitiesService->setDomainEntity($entity);
-            $this->setTitle('Issuance  - ' . $entity->getName());
+            $this->setTitle('Issuance  - ' . $titleSuffix . ' - ' . $entity->getName());
+            $this->toView(
+                'monthlyPath',
+                $this->generateUrl(
+                    $entityType . '_issuance',
+                    [$entityType . '_id' => $entity->getId()]
+                )
+            );
+            $this->toView(
+                'ytdPath',
+                $this->generateUrl(
+                    $entityType . '_issuance',
+                    [
+                        'view' => 'ytd',
+                        $entityType . '_id' => $entity->getId(),
+                    ]
+                )
+            );
         } else {
             $securitiesService = $this->get('app.services.securities');
-            $this->setTitle('Issuance');
+            $this->setTitle('Issuance  - ' . $titleSuffix);
+            $this->toView(
+                'monthlyPath',
+                $this->generateUrl('overview_issuance')
+            );
+            $this->toView(
+                'ytdPath',
+                $this->generateUrl('overview_issuance', ['view' => 'ytd'])
+            );
         }
+        $this->toView('pageTitle', 'Issuance  - ' . $titleSuffix);
 
         $currentYear = (int) $this->getApplicationTime()->format('Y');
         $lastYear = $currentYear - 1;
@@ -32,12 +62,13 @@ trait IssuanceTrait
         $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
 
         $hasData = false;
+        $options = ['cumulative' => $isYearToDate];
         $issuanceTable = null;
         $issuanceGraph = null;
         if (!empty($results[$currentYear]) || !empty($results[$lastYear])) {
             $hasData = true;
-            $issuanceTable = new IssuanceTablePresenter($entity, $results);
-            $issuanceGraph = new IssuanceGraphPresenter($entity, $results);
+            $issuanceTable = new IssuanceTablePresenter($entity, $results, $options);
+            $issuanceGraph = new IssuanceGraphPresenter($entity, $results, $options);
         }
 
         $this->toView('hasData', $hasData);

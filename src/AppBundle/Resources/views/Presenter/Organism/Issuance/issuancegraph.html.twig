@@ -7,7 +7,7 @@
         function drawChart() {
             var data = google.visualization.arrayToDataTable({{ issuancegraph.data|json_encode|raw }}),
                     options = {{ issuancegraph.chartOptions|json_encode|raw }},
-                    chart = new google.visualization.ColumnChart(document.getElementById('chart-area'));
+                    chart = new google.visualization.{{ issuancegraph.chartType }}(document.getElementById('chart-area'));
 
             google.visualization.events.addListener(chart, 'select', selectHandler);
             chart.draw(data, options);

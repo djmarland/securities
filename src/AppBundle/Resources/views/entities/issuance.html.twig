@@ -4,16 +4,30 @@
 
 {% block content %}
     <div class="grid g-unit">
-        <div class="g">
-            <h1 class="c"><span class="invisible">{{ block('context') }} - </span>Issuance</h1>
+        <div class="g 1/2@m">
+            <h1 class="c"><span class="invisible">{{ block('context') }} - </span>{{ pageTitle }}</h1>
         </div>
         {% if hasData %}
+            <div class="g 1/2@m">
+                <ul class="list--inline text--right">
+                    <li><a class="link--button
+                        {% if issuanceView == 'monthly' %}
+                            link--button-active
+                        {% endif %}" href="{{ monthlyPath }}">Monthly</a></li>
+                    <li><a class="link--button
+                        {% if issuanceView == 'ytd' %}
+                            link--button-active
+                        {% endif %}" href="{{ ytdPath }}">Year to date</a></li>
+                </ul>
+            </div>
             <div class="g">
                 <div class="text--prose">
                     <p>
-                        This issuance shows the number of recent securities issued
-                            {% if entity %} by <strong>{{ entity.name }}</strong> {% endif %}.
-                        They are grouped by product. Click any data set to see the full list of securities for that month.
+                        This issuance shows the amount raised
+                            {% if entity %} for <strong>{{ entity.name }}</strong> {% endif %}.
+                        {% if issuanceView == 'monthly' %}
+                            Click any data set to see the full list of securities for that month.
+                        {% endif %}
                     </p>
                 </div>
             </div>

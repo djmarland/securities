@@ -17,6 +17,7 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
     public function getRows()
     {
         $rows = [];
+        $cumulative = [];
         foreach ($this->getMonths() as $monthNum => $monthName) {
             $row = [
                 [
@@ -35,7 +36,13 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
                     'presenter' => null,
                 ];
 
-                if (isset($months[$monthNum])) {
+                if (!isset($cumulative[$year])) {
+                    $cumulative[$year] = 0;
+                }
+
+                $value = null;
+
+                if (isset($months[$monthNum]) && !$this->options['cumulative']) {
                     $link = [
                         'params' => [
                             'issueDate' => $year . '-' . str_pad($monthNum, 2, '0', STR_PAD_LEFT),
@@ -50,7 +57,20 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
                     }
 
                     $col['link'] = $link;
-                    $col['presenter'] = new MoneyPresenter($months[$monthNum]);
+                }
+
+                if (isset($months[$monthNum])) {
+                    $cumulative[$year] = $cumulative[$year] + $months[$monthNum];
+                    $value = $months[$monthNum];
+                }
+                
+                if ($this->options['cumulative'] &&
+                    $this->monthIsNotFuture($year, $monthNum)) {
+                    $value = $cumulative[$year];
+                }
+
+                if ($value) {
+                    $col['presenter'] = new MoneyPresenter($value);
                 }
 
                 $row[] = $col;
