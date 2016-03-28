@@ -15,7 +15,8 @@ class MasterPresenter extends Presenter
         'title' => '',
         'fullTitle' => '',
         'siteTitle' => '',
-        'environment' => 'prod'
+        'environment' => 'prod',
+        'canonicalUrl' => '',
     ];
 
     public function __construct($appConfig, $env = null)
@@ -28,6 +29,9 @@ class MasterPresenter extends Presenter
         if ($env) {
             $this->meta['environment'] = $env;
         }
+
+        $requestPath = $_SERVER['REQUEST_URI'] ?? '/';
+        $this->meta['canonicalUrl'] = $this->appConfig['hostname'] . $requestPath;
     }
 
     public function set(

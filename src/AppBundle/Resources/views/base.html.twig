@@ -20,11 +20,33 @@
     <link rel="icon" type="image/png" href="/favicon-16x16.png" sizes="16x16">
     <link rel="manifest" href="/manifest.json">
     <link rel="mask-icon" href="/safari-pinned-tab.svg" color="#342638">
-    <meta name="apple-mobile-web-app-title" content="ISIN Analytics">
-    <meta name="application-name" content="ISIN Analytics">
+    <meta name="apple-mobile-web-app-title" content="{{ meta.siteTitle }}">
+    <meta name="application-name" content="{{ meta.siteTitle }}">
     <meta name="msapplication-TileColor" content="#342638">
     <meta name="msapplication-TileImage" content="/mstile-144x144.png">
     <meta name="theme-color" content="#342638">
+
+    <meta property="og:site_name" content="{{ meta.siteTitle }}" />
+    <meta property="og:title" content="{{ meta.fullTitle }}" />
+    <meta property="og:url" content="{{ meta.canonicalUrl }}" />
+    <meta property="og:type" content="website" />
+    <meta property="og:description" content="The Gateway to London's Debt Capital Markets" />
+    <meta property="og:image" content="https://www.isinanalytics.com{{ 'fb-cover.png'|asset_path }}"/>
+
+    <meta name="twitter:card" content="summary" />
+    <link rel="image_src" href="https://www.isinanalytics.com{{ 'fb-cover.png'|asset_path }}" />
+
+    <link rel="canonical" href="{{ meta.canonicalUrl }}" />
+
+    {% if pagination %}
+        {% if pagination.prevUrl %}
+            <link rel="prev" href="{{ pagination.prevUrl }}" />
+        {% endif %}
+        {% if pagination.nextUrl %}
+            <link rel="next" href="{{ pagination.nextUrl }}" />
+        {% endif %}
+    {% endif %}
+
     <link rel="stylesheet" href="{{ 'global.css'|asset_path }}" />
     <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
     <script>

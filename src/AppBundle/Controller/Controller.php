@@ -41,6 +41,7 @@ class Controller extends BaseController implements ControllerInterface
         $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]), false);
         $this->toView('currentYear', date("Y"), false);
         $this->toView('currentSection', null, false);
+        $this->toView('pagination', null, false);
         $this->setSearchContext();
     }
 
