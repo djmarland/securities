@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Domain\Entity;
 
+use SecuritiesService\Domain\Entity\Enum\Features;
 use SecuritiesService\Domain\ValueObject\UUID;
 use DateTime;
 
@@ -37,6 +38,16 @@ class Config extends Entity
     public function getFeatures(): array
     {
         return $this->features;
+    }
+
+    public function getFeatureList(): array
+    {
+        $allFeatures = Features::keys();
+        $features = [];
+        foreach ($allFeatures as $feature) {
+            $features[$feature] = $this->featureIsActive($feature);
+        }
+        return $features;
     }
 
     public function featureIsActive(

@@ -20,6 +20,10 @@ services:
       class: SecuritiesService\Service\CurrenciesService
       arguments: ["@doctrine.orm.default_entity_manager"]
 
+  app.services.config:
+      class: SecuritiesService\Service\ConfigService
+      arguments: ["@doctrine.orm.default_entity_manager"]
+
   app.services.groups:
       class: SecuritiesService\Service\GroupsService
       arguments: ["@doctrine.orm.default_entity_manager"]

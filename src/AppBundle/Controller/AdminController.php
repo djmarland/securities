@@ -148,6 +148,30 @@ class AdminController extends Controller
         return $this->renderTemplate('json');
     }
 
+    public function settingsAction(Request $request)
+    {
+        // settings were fetched globally
+        $this->toView('message', null);
+        $this->toView('activeTab', 'settings');
+
+        if ($request->isMethod('POST')) {
+            try {
+
+                // save
+
+                $this->toView('message', 'Saved');
+
+                // re-fetch global settings
+                $this->setAppSettings();
+            } catch (\Exception $e) {
+                $this->toView('message', $e->getMessage());
+            }
+        }
+
+        return $this->renderTemplate('admin:settings');
+
+    }
+
 
 
     private function setCsvData($data)

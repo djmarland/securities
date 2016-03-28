@@ -23,6 +23,7 @@ class Controller extends BaseController implements ControllerInterface
 
     protected $currentPage = 1;
     protected $appConfig;
+    protected $appSettings;
 
     private $applicationTime;
 
@@ -37,6 +38,7 @@ class Controller extends BaseController implements ControllerInterface
             $this->appConfig,
             $this->get('kernel')->getEnvironment()
         );
+        $this->setAppSettings();
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
         $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]), false);
         $this->toView('currentYear', date("Y"), false);
@@ -89,6 +91,12 @@ class Controller extends BaseController implements ControllerInterface
         $search = $this->request->get('q', null);
         $this->toView('searchContext', $search, false);
         $this->toView('searchAutofocus', null, false);
+    }
+
+    protected function setAppSettings()
+    {
+        $this->appSettings = $this->get('app.services.config')->get();
+        $this->toView('appSettings', $this->appSettings);
     }
 
     protected function setPagination(
