@@ -21,6 +21,11 @@ class MapperFactory
         return new CompanyMapper($this);
     }
 
+    public function createConfig(): ConfigMapper
+    {
+        return new ConfigMapper($this);
+    }
+
     public function createCountry(): CountryMapper
     {
         return new CountryMapper($this);
