@@ -76,16 +76,19 @@ class HomeController extends Controller
 
     public function aboutAction()
     {
+        $this->setTitle('About');
         return $this->renderTemplate('home:about');
     }
 
     public function termsAction()
     {
+        $this->setTitle('Terms of Use');
         return $this->renderTemplate('home:terms');
     }
 
     public function privacyAction()
     {
+        $this->setTitle('Privacy Policy');
         return $this->renderTemplate('home:privacy');
     }
 

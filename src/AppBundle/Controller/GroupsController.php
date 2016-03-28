@@ -55,7 +55,7 @@ class GroupsController extends Controller
             }
         }
 
-        $this->setTitle('Issuers');
+        $this->setTitle('Issuers by Parent Group');
         $this->toView('groups', $groupPresenters);
 
         return $this->renderTemplate('groups:list');

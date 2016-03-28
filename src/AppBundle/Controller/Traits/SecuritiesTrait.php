@@ -14,6 +14,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 trait SecuritiesTrait
 {
     private $filter = [];
+    private $titleParts = [];
 
     public function securitiesToPresenters($securities)
     {
@@ -30,14 +31,15 @@ trait SecuritiesTrait
         Request $request,
         Entity $entity = null
     ) {
+        $this->titleParts[] = 'Securities';
+
         if ($entity) {
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
             $securitiesService->setDomainEntity($entity);
-            $this->setTitle('Securities - ' . $entity->getName());
+            $this->titleParts[] = $entity->getName();
         } else {
             $securitiesService = $this->get('app.services.securities');
-            $this->setTitle('Securities');
         }
 
 
@@ -62,6 +64,7 @@ trait SecuritiesTrait
         $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
         $this->toView('securities', $this->securitiesToPresenters($securities));
         $this->toView('total', $total);
+        $this->setTitle(implode(' - ', $this->titleParts));
 
         $this->setPagination(
             $total,
@@ -103,6 +106,7 @@ trait SecuritiesTrait
                 throw new HttpException(404, 'No such product');
             }
             $this->filter['activeProduct'] = (string) $product->getId();
+            $this->titleParts[] = $product->getName();
         }
         $this->toView('filter', $this->filter);
         return $product;
@@ -130,6 +134,7 @@ trait SecuritiesTrait
                 throw new HttpException(404, 'No such currency');
             }
             $this->filter['activeCurrency'] = (string) $currency->getCode();
+            $this->titleParts[] = $currency->getCode();
         }
         $this->toView('filter', $this->filter);
         return $currency;
@@ -154,6 +159,7 @@ trait SecuritiesTrait
                 throw new HttpException(404, 'No such bucket');
             }
             $this->filter['activeBucket'] = (string) $bucket->getKey();
+            $this->titleParts[] = 'BUCKET'; // todo - proper name
         }
         $this->toView('filter', $this->filter);
         return $bucket;
@@ -178,6 +184,7 @@ trait SecuritiesTrait
                 'end' => $endDate,
                 'displayEnd' => $displayEnd,
             ];
+            $this->titleParts[] = $startDate->format('F Y');
         }
         $this->toView('filter', $this->filter);
         return $this->filter['activeIssueDate'];
