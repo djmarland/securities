@@ -54,10 +54,12 @@
             <div class="g-unit">
                 {% include adverts.templatePath with adverts.variantVars('overview') only %}
             </div>
-            <div class="">
-                <h2 class="g-unit">Recent Issuance</h2>
-                {% include '@partials/securities-list.html.twig' %}
-            </div>
+            {% if securities %}
+                <div class="">
+                    <h2 class="g-unit">Recent Issuance</h2>
+                    {% include '@partials/securities-list.html.twig' %}
+                </div>
+            {% endif %}
         </div>
         <div class="g 2/5@xl">
             <div>

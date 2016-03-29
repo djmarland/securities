@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\SecuritiesTrait;
+use SecuritiesService\Domain\Entity\Enum\Features;
 use Symfony\Component\HttpFoundation\Response;
 
 class HomeController extends Controller
@@ -33,9 +34,12 @@ class HomeController extends Controller
             ];
         }
         $this->toView('byProduct', $byProduct);
+        $this->toView('securities', null);
 
-        $latestIssuance = $securitiesService->findLatestIssuance(5);
-        $this->toView('securities', $this->securitiesToPresenters($latestIssuance));
+        if ($this->appConfig->featureIsActive(Features::RECENT_ISSUANCE_ON_HOMEPAGE())) {
+            $latestIssuance = $securitiesService->findLatestIssuance(5);
+            $this->toView('securities', $this->securitiesToPresenters($latestIssuance));
+        }
 
         return $this->renderTemplate('home:index');
     }
