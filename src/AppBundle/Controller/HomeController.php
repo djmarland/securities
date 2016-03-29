@@ -12,7 +12,9 @@ class HomeController extends Controller
     public function indexAction()
     {
         $this->toView('searchAutofocus', 'autofocus');
-        $this->masterViewPresenter->setFullTitle('ISIN Analytics - The Gateway to London\'s Debt Capital Markets');
+        $this->masterViewPresenter->setFullTitle(
+            $this->appConfig->getSiteTitle() . ' - ' . $this->appConfig->getSiteTagLine()
+        );
 
         $securitiesService = $this->get('app.services.securities');
 

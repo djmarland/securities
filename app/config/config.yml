@@ -6,10 +6,6 @@ imports:
 # http://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
     locale: en
-    app.config:
-        hostname: "https://www.isinanalytics.com"
-        title: "ISIN Analytics"
-        allowAdverts: true
 
 framework:
     #esi:             ~

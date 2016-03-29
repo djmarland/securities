@@ -10,34 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Config extends Entity
 {
-    /** @ORM\Column(type="string", length=255) */
-    private $siteTitle = '';
-
-    /** @ORM\Column(type="string", length=255) */
-    private $siteTagline = '';
+    /** @ORM\Column(type="json_array") */
+    private $settings = [];
 
     /** @ORM\Column(type="json_array") */
     private $features = [];
 
     /** Getters/Setters */
-    public function getSiteTitle()
+    public function getSettings()
     {
-        return $this->siteTitle;
+        return $this->settings;
     }
 
-    public function setSiteTitle($siteTitle)
+    public function setSettings($settings)
     {
-        $this->siteTitle = $siteTitle;
-    }
-
-    public function getSiteTagline()
-    {
-        return $this->siteTagline;
-    }
-
-    public function setSiteTagline($siteTagline)
-    {
-        $this->siteTagline = $siteTagline;
+        $this->settings = $settings;
     }
 
     public function getFeatures()

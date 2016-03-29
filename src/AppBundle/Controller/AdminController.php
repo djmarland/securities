@@ -158,16 +158,30 @@ class AdminController extends Controller
             try {
 
                 // save
+                $service = $this->get('app.services.config');
+
+                $settings = [
+                    'siteTitle' => $request->get('field-siteTitle', ''),
+                    'siteHostName' => $request->get('field-siteHostName', ''),
+                    'siteTagLine' => $request->get('field-siteTagLine', ''),
+                    'adsInDevMode' => (bool) $request->get('field-adsInDevMode', false),
+                ];
+                $service->setSettings($settings);
+
+                $features = $request->get('feature-flag', []);
+                $service->setActiveFeatures($features);
 
                 $this->toView('message', 'Saved');
 
                 // re-fetch global settings
-                $this->setAppSettings();
+                $this->initAppConfig();
+                $this->masterViewPresenter->updateConfig($this->appConfig);
             } catch (\Exception $e) {
                 $this->toView('message', $e->getMessage());
             }
         }
 
+        $this->setTitle('Settings - Admin');
         return $this->renderTemplate('admin:settings');
 
     }

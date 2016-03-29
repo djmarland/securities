@@ -31,10 +31,10 @@
     <meta property="og:url" content="{{ meta.canonicalUrl }}" />
     <meta property="og:type" content="website" />
     <meta property="og:description" content="The Gateway to London's Debt Capital Markets" />
-    <meta property="og:image" content="https://www.isinanalytics.com{{ 'fb-cover.png'|asset_path }}"/>
+    <meta property="og:image" content="{{ appConfig.siteHostName }}{{ 'fb-cover.png'|asset_path }}"/>
 
     <meta name="twitter:card" content="summary" />
-    <link rel="image_src" href="https://www.isinanalytics.com{{ 'fb-cover.png'|asset_path }}" />
+    <link rel="image_src" href="{{ appConfig.siteHostName }}{{ 'fb-cover.png'|asset_path }}" />
 
     <link rel="canonical" href="{{ meta.canonicalUrl }}" />
 

@@ -9,19 +9,25 @@ use DateTime;
 class Config extends Entity
 {
     private $siteTitle;
-    private $siteTagline;
+    private $siteHostName;
+    private $siteTagLine;
+    private $adsInDevMode;
     private $features;
 
     public function __construct(
         UUID $id,
         string $siteTitle,
-        string $siteTagline,
+        string $siteHostName,
+        string $siteTagLine,
+        bool $adsInDevMode,
         array $features
     ) {
         parent::__construct($id);
 
         $this->siteTitle = $siteTitle;
-        $this->siteTagline = $siteTagline;
+        $this->siteHostName = $siteHostName;
+        $this->siteTagLine = $siteTagLine;
+        $this->adsInDevMode = $adsInDevMode;
         $this->features = $features;
     }
 
@@ -30,9 +36,19 @@ class Config extends Entity
         return $this->siteTitle;
     }
 
-    public function getSiteTagline(): string
+    public function getSiteHostName(): string
     {
-        return $this->siteTagline;
+        return $this->siteHostName;
+    }
+
+    public function getSiteTagLine(): string
+    {
+        return $this->siteTagLine;
+    }
+
+    public function adsInDevMode(): bool
+    {
+        return $this->adsInDevMode;
     }
 
     public function getFeatures(): array
@@ -45,14 +61,15 @@ class Config extends Entity
         $allFeatures = Features::keys();
         $features = [];
         foreach ($allFeatures as $feature) {
-            $features[$feature] = $this->featureIsActive($feature);
+            $features[$feature] = $this->featureIsActive(Features::$feature());
         }
         return $features;
     }
 
     public function featureIsActive(
-        string $featureName
+        Features $feature
     ): bool {
+        $featureName = $feature->getKey();
         return (
             isset($this->features[$featureName]) &&
             $this->features[$featureName]

@@ -5,6 +5,9 @@
 {% block content %}
 <h1 class="b g-unit">Settings</h1>
 <form method="post">
+{% if message %}
+    <div class="shadow message g-unit"><strong>{{ message }}</strong></div>
+{% endif %}
 <div class="grid">
     <div class="g">
         <p class="text--right"><button class="link--button" type="submit" >Save</button></p>
@@ -13,14 +16,24 @@
         <div class="card card--padded">
             <h3 class="g-unit">Config</h3>
             <div class="form__group">
-                <label class="form__label" for="field-site-title">Site Title</label>
-                <input class="form__field" id="field-site-title" name="field-site-title" required
-                    value="{{ appSettings.siteTitle }}" />
+                <label class="form__label" for="field-siteTitle">Site Title</label>
+                <input class="form__field" id="field-siteTitle" name="field-siteTitle" required
+                    value="{{ appConfig.siteTitle }}" />
             </div>
             <div class="form__group">
-                <label class="form__label" for="field-site-tagline">Site Tagline</label>
-                <input class="form__field" id="field-site-tagline" name="field-site-tagline" required
-                       value="{{ appSettings.siteTagline }}" />
+                <label class="form__label" for="field-siteHostName">Site HostName</label>
+                <input class="form__field" id="field-siteHostName" name="field-siteHostName" required
+                       value="{{ appConfig.siteHostName }}" />
+            </div>
+            <div class="form__group">
+                <label class="form__label" for="field-siteTagLine">Site TagLine</label>
+                <input class="form__field" id="field-siteTagLine" name="field-siteTagLine" required
+                       value="{{ appConfig.siteTagLine }}" />
+            </div>
+            <div class="form__group">
+                <label class="form__label" for="field-adsInDevMode">Ads In Dev Mode</label>
+                <input type="checkbox" id="field-adsInDevMode" name="field-adsInDevMode" value="1"
+                       {% if appConfig.adsInDevMode %}checked{% endif %} />
             </div>
         </div>
     </div>
@@ -35,10 +48,11 @@
                 </tr>
                 </thead>
                 <tbody>
-            {% for featureName, featureValue in appSettings.featureList %}
+            {% for featureName, featureValue in appConfig.featureList %}
                 <tr>
-                    <td>{{ featureName }}</td>
+                    <td><label for="feature-flag-{{ featureName }}">{{ featureName }}</label></td>
                     <td><input type="checkbox" name="feature-flag[]" value="{{ featureName }}"
+                           id="feature-flag-{{ featureName }}"
                            {% if featureValue %}checked{% endif %} /></td>
                 </tr>
             {% endfor %}

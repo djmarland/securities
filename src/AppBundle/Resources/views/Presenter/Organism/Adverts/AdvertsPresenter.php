@@ -14,7 +14,8 @@ class AdvertsPresenter extends Presenter implements AdvertsPresenterInterface
     ];
 
     protected $options = [
-        'active' => true
+        'active' => true,
+        'disabled' => false
     ];
 
     private $currentVariant = 'overview';
@@ -24,6 +25,9 @@ class AdvertsPresenter extends Presenter implements AdvertsPresenterInterface
         $options = []
     ) {
         parent::__construct(null, $options);
+        if ($this->options['disabled']) {
+            $this->setTemplateVariation('disabled');
+        }
     }
 
     public function areActive(): bool
