@@ -1,12 +1,6 @@
 imports:
     - { resource: config_dev.yml }
 
-parameters:
-    app.config:
-        hostname: "https://www.isinanalytics.com"
-        title: "ISIN Analytics [alpha]"
-        allowAdverts: false
-
 security:
     firewalls:
         default:

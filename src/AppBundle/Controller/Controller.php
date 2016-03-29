@@ -6,6 +6,7 @@ use AppBundle\Presenter\MasterPresenter;
 use AppBundle\Presenter\Organism\Adverts\AdvertsPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
 use DateTimeImmutable;
+use SecuritiesService\Domain\Entity\Enum\Features;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
 use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -32,13 +33,18 @@ class Controller extends BaseController implements ControllerInterface
     public function initialize(Request $request)
     {
         $this->request = $request;
-        $this->appConfig = $this->getParameter('app.config');
+        $this->initAppConfig();
         $this->masterViewPresenter = new MasterPresenter(
             $this->appConfig,
             $this->get('kernel')->getEnvironment()
         );
+        
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
-        $this->toView('adverts', new AdvertsPresenter(['active' => $this->appConfig['allowAdverts']]), false);
+        $adsOn = $this->appConfig->featureIsActive(Features::ADVERTS());
+        $this->toView('adverts', new AdvertsPresenter([
+            'active' => !$this->appConfig->adsInDevMode(),
+            'disabled' => !$adsOn,
+        ]), false);
         $this->toView('currentYear', date("Y"), false);
         $this->toView('currentSection', null, false);
         $this->toView('pagination', null, false);
@@ -89,6 +95,12 @@ class Controller extends BaseController implements ControllerInterface
         $search = $this->request->get('q', null);
         $this->toView('searchContext', $search, false);
         $this->toView('searchAutofocus', null, false);
+    }
+
+    protected function initAppConfig()
+    {
+        $this->appConfig = $this->get('app.services.config')->get();
+        return $this->appConfig;
     }
 
     protected function setPagination(

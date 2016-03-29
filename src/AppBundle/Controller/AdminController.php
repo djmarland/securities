@@ -148,6 +148,44 @@ class AdminController extends Controller
         return $this->renderTemplate('json');
     }
 
+    public function settingsAction(Request $request)
+    {
+        // settings were fetched globally
+        $this->toView('message', null);
+        $this->toView('activeTab', 'settings');
+
+        if ($request->isMethod('POST')) {
+            try {
+
+                // save
+                $service = $this->get('app.services.config');
+
+                $settings = [
+                    'siteTitle' => $request->get('field-siteTitle', ''),
+                    'siteHostName' => $request->get('field-siteHostName', ''),
+                    'siteTagLine' => $request->get('field-siteTagLine', ''),
+                    'adsInDevMode' => (bool) $request->get('field-adsInDevMode', false),
+                ];
+                $service->setSettings($settings);
+
+                $features = $request->get('feature-flag', []);
+                $service->setActiveFeatures($features);
+
+                $this->toView('message', 'Saved');
+
+                // re-fetch global settings
+                $this->initAppConfig();
+                $this->masterViewPresenter->updateConfig($this->appConfig);
+            } catch (\Exception $e) {
+                $this->toView('message', $e->getMessage());
+            }
+        }
+
+        $this->setTitle('Settings - Admin');
+        return $this->renderTemplate('admin:settings');
+
+    }
+
 
 
     private function setCsvData($data)

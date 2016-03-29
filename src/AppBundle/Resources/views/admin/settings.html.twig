@@ -1,0 +1,65 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+<h1 class="b g-unit">Settings</h1>
+<form method="post">
+{% if message %}
+    <div class="shadow message g-unit"><strong>{{ message }}</strong></div>
+{% endif %}
+<div class="grid">
+    <div class="g">
+        <p class="text--right"><button class="link--button" type="submit" >Save</button></p>
+    </div>
+    <div class="g 2/3">
+        <div class="card card--padded">
+            <h3 class="g-unit">Config</h3>
+            <div class="form__group">
+                <label class="form__label" for="field-siteTitle">Site Title</label>
+                <input class="form__field" id="field-siteTitle" name="field-siteTitle" required
+                    value="{{ appConfig.siteTitle }}" />
+            </div>
+            <div class="form__group">
+                <label class="form__label" for="field-siteHostName">Site HostName</label>
+                <input class="form__field" id="field-siteHostName" name="field-siteHostName" required
+                       value="{{ appConfig.siteHostName }}" />
+            </div>
+            <div class="form__group">
+                <label class="form__label" for="field-siteTagLine">Site TagLine</label>
+                <input class="form__field" id="field-siteTagLine" name="field-siteTagLine" required
+                       value="{{ appConfig.siteTagLine }}" />
+            </div>
+            <div class="form__group">
+                <label class="form__label" for="field-adsInDevMode">Ads In Dev Mode</label>
+                <input type="checkbox" id="field-adsInDevMode" name="field-adsInDevMode" value="1"
+                       {% if appConfig.adsInDevMode %}checked{% endif %} />
+            </div>
+        </div>
+    </div>
+    <div class="g 1/3">
+        <div class="card card--padded">
+            <h3 class="g-unit">Features</h3>
+            <table class="table table--lined">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Active?</th>
+                </tr>
+                </thead>
+                <tbody>
+            {% for featureName, featureValue in appConfig.featureList %}
+                <tr>
+                    <td><label for="feature-flag-{{ featureName }}">{{ featureName }}</label></td>
+                    <td><input type="checkbox" name="feature-flag[]" value="{{ featureName }}"
+                           id="feature-flag-{{ featureName }}"
+                           {% if featureValue %}checked{% endif %} /></td>
+                </tr>
+            {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+</form>
+{% endblock %}

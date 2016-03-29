@@ -13,8 +13,10 @@ class ConfigMapper extends Mapper
         $id = new UUID($item['id']);
         $domainEntity = new Config(
             $id,
-            $item['siteTitle'],
-            $item['siteTagline'],
+            $item['settings']['siteTitle'] ?? '',
+            $item['settings']['siteHostName'] ?? '',
+            $item['settings']['siteTagLine'] ?? '',
+            $item['settings']['adsInDevMode'] ?? false,
             $item['features']
         );
         return $domainEntity;

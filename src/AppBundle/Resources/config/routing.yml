@@ -43,6 +43,10 @@ admin_issuers:
   path:     /admin/issuers
   defaults: { _controller: AppBundle:Admin:issuers }
 
+admin_settings:
+  path:     /admin/settings
+  defaults: { _controller: AppBundle:Admin:settings }
+
 # Overview
 overview_show:
   path:     /overview

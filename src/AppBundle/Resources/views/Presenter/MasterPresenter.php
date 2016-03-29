@@ -22,16 +22,20 @@ class MasterPresenter extends Presenter
     public function __construct($appConfig, $env = null)
     {
         parent::__construct();
-        $this->appConfig = $appConfig;
-        $this->meta['title'] = $this->appConfig['title'];
-        $this->meta['fullTitle'] = $this->appConfig['title'];
-        $this->meta['siteTitle'] = $this->appConfig['title'];
         if ($env) {
             $this->meta['environment'] = $env;
         }
+        $this->updateConfig($appConfig);
+    }
 
+    public function updateConfig($config)
+    {
+        $this->appConfig = $config;
+        $this->meta['title'] = $this->appConfig->getSiteTitle();
+        $this->meta['fullTitle'] = $this->appConfig->getSiteTitle();
+        $this->meta['siteTitle'] = $this->appConfig->getSiteTitle();
         $requestPath = $_SERVER['REQUEST_URI'] ?? '/';
-        $this->meta['canonicalUrl'] = $this->appConfig['hostname'] . $requestPath;
+        $this->meta['canonicalUrl'] = $this->appConfig->getSiteHostName() . $requestPath;
     }
 
     public function set(
@@ -62,8 +66,11 @@ class MasterPresenter extends Presenter
 
     public function getData()
     {
-        // meta always present
-        $data = ['meta' => $this->meta];
+        // meta and config always present
+        $data = [
+            'meta' => $this->meta,
+            'appConfig' => $this->appConfig,
+        ];
         ksort($this->data);
         foreach ($this->data as $key => $value) {
             $data[$key] = $value->data;
@@ -87,7 +94,7 @@ class MasterPresenter extends Presenter
     public function setTitle(string $title)
     {
         $this->meta['title'] = $title;
-        $this->meta['fullTitle'] = $title . ' - ' . $this->appConfig['title'];
+        $this->meta['fullTitle'] = $title . ' - ' . $this->appConfig->getSiteTitle();
     }
 
     // use this when you don't want the auto appended suffix
