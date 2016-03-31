@@ -64,6 +64,20 @@ a {
 .entity-context {
     min-height: 70px;
 }
+.home-intro-button {
+    text-align: center;
+    padding: 12px;
+    justify-content: center;
+    flex-direction: column;
+    display: flex;
+    background: $color-link;
+    color: $color-body;
+    &:hover,
+    &:active,
+    &:focus {
+        background: $color-link-hover;
+    }
+}
 
 @include mq($from: m) {
     .page-limit {
