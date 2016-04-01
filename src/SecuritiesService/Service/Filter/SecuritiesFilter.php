@@ -29,28 +29,65 @@ class SecuritiesFilter
 
         foreach ($this->entities as $entity) {
             if ($entity instanceof Product) {
-                $qb->andWhere('IDENTITY(' . $tbl . '.product) = :product_id')
-                    ->setParameter('product_id', $entity->getId()->getBinary());
+                $qb = $this->applyProduct($qb, $tbl, $entity);
             } elseif ($entity instanceof Currency) {
-                $qb->andWhere('IDENTITY(' . $tbl . '.currency) = :currency_id')
-                    ->setParameter('currency_id', $entity->getId()->getBinary());
+                $qb = $this->applyCurrency($qb, $tbl, $entity);
             } elseif ($entity instanceof Bucket) {
-                if ($entity instanceof BucketUndated) {
-                    $qb->andWhere($tbl . '.maturityDate is NULL');
-                } else {
-                    $qb->andWhere($tbl . '.maturityDate > :maturityDateLower')
-                        ->andWhere($tbl . '.maturityDate <= :maturityDateUpper')
-                        ->setParameter('maturityDateLower', $entity->getStartDate())
-                        ->setParameter('maturityDateUpper', $entity->getEndDate());
-                }
+                $qb = $this->applyBucket($qb, $tbl, $entity);
             } elseif (isset($entity['start'])) {
-                $qb->andWhere($tbl . '.startDate >= :startDateLower')
-                    ->andWhere($tbl . '.startDate < :startDateUpper')
-                    ->setParameter('startDateLower', $entity['start'])
-                    ->setParameter('startDateUpper', $entity['end']);
+                $qb = $this->applyDateRange($qb, $tbl, $entity);
             }
         }
-
+        
         return $qb;
+    }
+
+    private function applyProduct(
+        QueryBuilder $qb,
+        string $tbl,
+        Product $product
+    ) {
+        return $qb->andWhere('IDENTITY(' . $tbl . '.product) = :product_id')
+            ->setParameter('product_id', $product->getId()->getBinary());
+    }
+
+    private function applyCurrency(
+        QueryBuilder $qb,
+        string $tbl,
+        Currency $currency
+    ) {
+        return $qb->andWhere('IDENTITY(' . $tbl . '.currency) = :currency_id')
+            ->setParameter('currency_id', $currency->getId()->getBinary());
+    }
+
+    private function applyBucket(
+        QueryBuilder $qb,
+        string $tbl,
+        Bucket $bucket
+    ) {
+        if ($bucket instanceof BucketUndated) {
+            return $qb->andWhere($tbl . '.maturityDate is NULL');
+        }
+
+        // todo - convert to DateTimeNotImmutable?!
+        $qb->andWhere($tbl . '.maturityDate >= :maturityDateLower')
+            ->setParameter('maturityDateLower', $bucket->getStartDate());
+
+        if ($bucket->getEndDate()) {
+            $qb->andWhere($tbl . '.maturityDate < :maturityDateUpper')
+                ->setParameter('maturityDateUpper', $bucket->getEndDate());
+        }
+        return $qb;
+    }
+
+    private function applyDateRange(
+        QueryBuilder $qb,
+        string $tbl,
+        array $range
+    ) {
+        return $qb->andWhere($tbl . '.startDate >= :startDateLower')
+            ->andWhere($tbl . '.startDate < :startDateUpper')
+            ->setParameter('startDateLower', $range['start'])
+            ->setParameter('startDateUpper', $range['end']);
     }
 }

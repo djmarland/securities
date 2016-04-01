@@ -21,8 +21,6 @@ class Security extends Entity implements JsonSerializable
     private $currency;
     private $company;
     private $exchange;
-    private $contractualBucket;
-    private $residualBucket;
 
     public function __construct(
         UUID $id,
@@ -100,30 +98,6 @@ class Security extends Entity implements JsonSerializable
     public function getCompany()
     {
         return $this->company;
-    }
-
-    public function getContractualMaturityBucket()
-    {
-        if (!$this->contractualBucket) {
-            if ($this->maturityDate) {
-                $this->contractualBucket = new Bucket($this->startDate, $this->maturityDate);
-            } else {
-                $this->contractualBucket = new BucketUndated($this->startDate);
-            }
-        }
-        return $this->contractualBucket;
-    }
-
-    public function getResidualMaturityBucketForDate(DateTime $startDate) //@todo - use DateTime immutable everywhere
-    {
-        if (!$this->residualBucket) {
-            if ($this->maturityDate) {
-                $this->residualBucket = new Bucket($startDate, $this->maturityDate);
-            } else {
-                $this->residualBucket = new BucketUndated($startDate);
-            }
-        }
-        return $this->residualBucket;
     }
 
     public function jsonSerialize()

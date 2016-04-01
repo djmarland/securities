@@ -12,6 +12,10 @@ services:
         tags:
             - { name: twig.extension }
 
+  app.bucket_provider:
+      class: SecuritiesService\Data\BucketProvider
+      arguments: ["%kernel.application_time%"]
+
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService
       arguments: ["@doctrine.orm.default_entity_manager"]
