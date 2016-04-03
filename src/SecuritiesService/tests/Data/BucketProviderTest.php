@@ -4,7 +4,6 @@ namespace Tests\SecuritiesService\Data;
 use DateTimeImmutable;
 use PHPUnit_Framework_TestCase;
 use SecuritiesService\Data\BucketProvider;
-use SecuritiesService\Domain\Exception\EntityNotFoundException;
 
 class BucketProviderTest extends PHPUnit_Framework_TestCase
 {
@@ -20,21 +19,21 @@ class BucketProviderTest extends PHPUnit_Framework_TestCase
             [
                 BucketProvider::FORTNIGHT,
                 new DateTimeImmutable('2016-02-02T12:00:00Z'), // 1454414400
-                new DateTimeImmutable('2016-16-02T12:00:00Z'), // 1455624000
+                new DateTimeImmutable('2016-02-16T12:00:00Z'), // 1455624000
             ],
             [
                 BucketProvider::MONTH,
-                new DateTimeImmutable('2016-16-02T12:00:00Z'), // 1455624000
+                new DateTimeImmutable('2016-02-16T12:00:00Z'), // 1455624000
                 new DateTimeImmutable('2016-03-03T12:00:00Z'), // 1457006400
             ],
             [
                 BucketProvider::THREE_MONTH,
                 new DateTimeImmutable('2016-03-03T12:00:00Z'), // 1457006400
-                new DateTimeImmutable('2016-06-02T12:00:00Z'), // 1462190400
+                new DateTimeImmutable('2016-05-02T12:00:00Z'), // 1462190400
             ],
             [
                 BucketProvider::SIX_MONTH,
-                new DateTimeImmutable('2016-06-02T12:00:00Z'), // 1462190400
+                new DateTimeImmutable('2016-05-02T12:00:00Z'), // 1462190400
                 new DateTimeImmutable('2016-07-31T12:00:00Z'), // 1469966400
             ],
             [
@@ -70,13 +69,27 @@ class BucketProviderTest extends PHPUnit_Framework_TestCase
         ];
 
         foreach ($assertions as $key => $assertion) {
-            $this->assertInstanceOf('Bucket', $buckets[$key]);
+            $this->assertInstanceOf(
+                'SecuritiesService\Domain\ValueObject\Bucket',
+                $buckets[$key]
+            );
             $this->assertSame($assertion[0], $buckets[$key]->getName());
-            $this->assertEquals($assertion[1], $buckets[$key]->getStartDate());
-            $this->assertEquals($assertion[2], $buckets[$key]->getEndDate());
+            $this->assertEquals(
+                $assertion[1],
+                $buckets[$key]->getStartDate(),
+                'Fail ' . $buckets[$key]->getName()
+            );
+            $this->assertEquals(
+                $assertion[2],
+                $buckets[$key]->getEndDate(),
+                'Fail ' . $buckets[$key]->getName()
+            );
         }
 
-        $this->assertInstanceOf('BucketUndated', $buckets[10]);
+        $this->assertInstanceOf(
+            'SecuritiesService\Domain\ValueObject\BucketUndated',
+            $buckets[10]
+        );
         $this->assertSame(BucketProvider::UNDATED, $buckets[10]->getName());
     }
 
@@ -84,7 +97,6 @@ class BucketProviderTest extends PHPUnit_Framework_TestCase
     {
         $date = new DateTimeImmutable('2016-02-02T12:00:00Z');
         $provider = new BucketProvider($date);
-        
         $bucket = $provider->findByKey('10y');
 
         $this->assertSame(BucketProvider::TEN_YEARS, $bucket->getName());
@@ -99,7 +111,7 @@ class BucketProviderTest extends PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException EntityNotFoundException
+     * @expectedException SecuritiesService\Domain\Exception\EntityNotFoundException
      */
     public function testInvalidKey()
     {

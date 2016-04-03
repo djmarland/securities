@@ -1,11 +1,11 @@
 {% extends 'AppBundle::base.html.twig' %}
 
-{% use "AppBundle::issuers/_base.html.twig" %}
+{% use "AppBundle::entities/_base.html.twig" %}
 
 {% block content %}
 <div class="grid g-unit">
     <div class="g">
-        <h1 class="c"><span class="invisible">{{ block('context') }} - </span>{{ pageTitle }}</h1>
+        <h1 class="c"><span class="invisible">{{ block('context') }} - </span>Maturity Profile</h1>
     </div>
     <div class="g">
         {% include maturityProfilePresenter.templatePath with maturityProfilePresenter.vars only %}

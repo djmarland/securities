@@ -8,13 +8,13 @@ use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\BucketUndated;
 
-class BucketProvider
+class BucketProvider implements BucketProviderInterface
 {
     const VALUE_DAY = 60*60*24;
     const VALUE_WEEK = self::VALUE_DAY * 7;
     const VALUE_MONTH = self::VALUE_DAY * 30;
     const VALUE_YEAR = self::VALUE_DAY * 365;
-    
+
     const FORTNIGHT = '< 2 weeks';
     const MONTH = '2 weeks - 1 month';
     const THREE_MONTH = '1-3 months';
@@ -29,7 +29,7 @@ class BucketProvider
 
     const UNDATED_BOUNDARY = [
         'key' => 'undated',
-        'name' => self::UNDATED
+        'name' => self::UNDATED,
     ];
 
     const BUCKET_BOUNDARIES = [
@@ -108,7 +108,7 @@ class BucketProvider
     {
         return array_values($this->getBuckets());
     }
-    
+
     public function findByKey($key): Bucket
     {
         $buckets = $this->getBuckets();

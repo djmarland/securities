@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Service;
 
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
@@ -19,15 +20,18 @@ abstract class Service
 
     protected $entityManager;
     protected $bucketProvider;
+    protected $appTimeProvider;
     protected $mapperFactory;
 
     public function __construct(
         EntityManager $entityManager,
-        BucketProviderInterface $bucketProvider
+        BucketProviderInterface $bucketProvider,
+        DateTimeImmutable $appTimeProvider
     ) {
         $this->entityManager = $entityManager;
         $this->mapperFactory = new MapperFactory();
         $this->bucketProvider = $bucketProvider;
+        $this->appTimeProvider = $appTimeProvider;
     }
 
     protected function getEntity(string $name): EntityRepository

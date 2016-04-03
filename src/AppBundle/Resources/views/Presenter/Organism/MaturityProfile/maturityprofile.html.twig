@@ -3,13 +3,13 @@
 <table class="table table--striped">
     <thead>
         <tr>
-            {% for maturityprofile.headings as heading %}
+            {% for heading in maturityprofile.headings %}
                 <td>{{ heading }}</td>
             {% endfor %}
         </tr>
     </thead>
     <tbody>
-        {% for maturityprofile.rows as row %}
+        {% for row in maturityprofile.rows %}
             <tr>
             {% for j, col in row %}
                 <{{ col.element }}>

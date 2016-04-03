@@ -7,11 +7,6 @@ use DateTimeImmutable;
 class AppKernel extends Kernel
 {
     const CONFIG_FILE = 'config';
-
-    public function setApplicationTime()
-    {
-        $this->applicationTime = new DateTimeImmutable();
-    }
     
     public function registerBundles()
     {

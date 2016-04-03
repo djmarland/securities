@@ -1,11 +1,12 @@
 <?php
 
-namespace AppBundle\Presenter\Organism\Issuance;
+namespace AppBundle\Presenter\Organism\MaturityProfile;
 
 use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Presenter\Presenter;
 use SecuritiesService\Domain\Entity\Entity;
 
-class MaturityProfilePresenter implements MaturityProfilePresenterInterface
+class MaturityProfilePresenter extends Presenter implements MaturityProfilePresenterInterface
 {
     protected $results;
 
@@ -34,5 +35,10 @@ class MaturityProfilePresenter implements MaturityProfilePresenterInterface
     {
         $headings = $this->getBucketTitles();
         $headings[] = 'Total';
+    }
+
+    public function getRows()
+    {
+        return [];
     }
 }

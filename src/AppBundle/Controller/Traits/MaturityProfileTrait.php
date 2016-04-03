@@ -3,7 +3,7 @@
 namespace AppBundle\Controller\Traits;
 
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
-use AppBundle\Presenter\Organism\Issuance\MaturityProfilePresenter;
+use AppBundle\Presenter\Organism\MaturityProfile\MaturityProfilePresenter;
 use SecuritiesService\Domain\Entity\Entity;
 use Symfony\Component\HttpFoundation\Request;
 
@@ -13,13 +13,12 @@ trait MaturityProfileTrait
         Request $request,
         Entity $entity = null
     ) {
-        $title = 'Maturity Profile';
+        
         if ($entity) {
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
             $securitiesService->setDomainEntity($entity);
             $this->titleParts[] = $entity->getName();
-            $title .= ' - ' . $entity->getName();
         } else {
             $securitiesService = $this->get('app.services.securities');
         }
@@ -38,6 +37,8 @@ trait MaturityProfileTrait
             new MaturityProfilePresenter($entity, $results)
         );
 
+        $this->toView('entity', $entity);
+        $this->toView('entityNav', new EntityNavPresenter($entity, 'issuance'));
         return $this->renderTemplate('entities:maturity-profile');
     }
 }

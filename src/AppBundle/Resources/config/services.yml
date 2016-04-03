@@ -6,72 +6,120 @@ services:
           - { name: kernel.event_listener, event: kernel.controller, method: onKernelController }
 
   app.twig_extension:
-        class: AppBundle\Extension\AssetPathExtension
-        public: false
-        arguments: ["%kernel.root_dir%/config"]
-        tags:
-            - { name: twig.extension }
+      class: AppBundle\Extension\AssetPathExtension
+      public: false
+      arguments: ["%kernel.root_dir%/config"]
+      tags:
+          - { name: twig.extension }
+
+  app.time_provider:
+      class: DateTimeImmutable
 
   app.bucket_provider:
       class: SecuritiesService\Data\BucketProvider
-      arguments: ["%kernel.application_time%"]
+      arguments: ["@app.time_provider"]
 
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.currencies:
       class: SecuritiesService\Service\CurrenciesService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.config:
       class: SecuritiesService\Service\ConfigService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.groups:
       class: SecuritiesService\Service\GroupsService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.industries:
       class: SecuritiesService\Service\IndustriesService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.issuers:
       class: SecuritiesService\Service\IssuersService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.products:
       class: SecuritiesService\Service\ProductsService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities:
       class: SecuritiesService\Service\SecuritiesService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities_by_group:
       class: SecuritiesService\Service\Securities\ByGroupService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities_by_industry:
       class: SecuritiesService\Service\Securities\ByIndustryService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities_by_issuer:
       class: SecuritiesService\Service\Securities\ByIssuerService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities_by_sector:
       class: SecuritiesService\Service\Securities\BySectorService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.securities_search:
       class: SecuritiesService\Service\Securities\SearchService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.sectors:
       class: SecuritiesService\Service\SectorsService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
 
   app.services.yields:
       class: SecuritiesService\Service\YieldCurvesService
-      arguments: ["@doctrine.orm.default_entity_manager"]
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"

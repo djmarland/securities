@@ -8,7 +8,6 @@ use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\Bucket;
-use SecuritiesService\Domain\ValueObject\BucketUndated;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 
@@ -137,7 +136,7 @@ class SecuritiesService extends Service
         $qb->select('count(' . self::TBL . '.id)');
         $qb
             ->where(self::TBL . '.maturityDate < :now')
-            ->setParameter('now', new \DateTime()); // @todo - inject application time
+            ->setParameter('now', $this->appTimeProvider);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -246,8 +245,8 @@ class SecuritiesService extends Service
 
         $qb->select([
             self::TBL,
-            'sum(' . self::TBL . '.id) as sum',
-            $productTable,
+            'sum(' . self::TBL . '.moneyRaised) as total',
+             $productTable,
         ])
             ->leftJoin(self::TBL . '.product', $productTable);
 
@@ -258,7 +257,7 @@ class SecuritiesService extends Service
         /*
          * List of:
          * 0 => Security
-         * s => sum
+         * total => sum
         */
         $results = $qb->getQuery()->getArrayResult();
 
@@ -266,10 +265,10 @@ class SecuritiesService extends Service
         $mapper = $this->mapperFactory->createMapper('Product');
         foreach ($results as $result) {
             $product = $mapper->getDomainModel($result[0]['product']);
-            $total = (int) $result['s'];
+            $total = (int) $result['total'];
             $products[] = (object) [
                 'product' => $product,
-                'sum' => $total,
+                'total' => $total,
             ];
         }
 
@@ -348,7 +347,7 @@ class SecuritiesService extends Service
     ): QueryBuilder {
         return $qb
             ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
-            ->setParameter('now', new \DateTime()); // @todo - inject application time
+            ->setParameter('now', $this->appTimeProvider);
     }
 
     private function where(

@@ -38,7 +38,6 @@ class SecuritiesFilter
                 $qb = $this->applyDateRange($qb, $tbl, $entity);
             }
         }
-        
         return $qb;
     }
 

@@ -10,7 +10,8 @@ use SecuritiesService\Domain\ValueObject\BucketUndated;
 
 class BucketsService extends Service
 {
-    public function getAll(): array {
+    public function getAll(): array
+    {
         return $this->bucketProvider->findAll();
     }
 

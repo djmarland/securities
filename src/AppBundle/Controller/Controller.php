@@ -38,7 +38,7 @@ class Controller extends BaseController implements ControllerInterface
             $this->appConfig,
             $this->get('kernel')->getEnvironment()
         );
-        
+
         $this->applicationTime = new DateTimeImmutable(); // @todo - allow this to be set/overridden
         $adsOn = $this->appConfig->featureIsActive(Features::ADVERTS());
         $this->toView('adverts', new AdvertsPresenter([

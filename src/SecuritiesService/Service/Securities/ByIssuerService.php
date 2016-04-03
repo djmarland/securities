@@ -77,7 +77,6 @@ class ByIssuerService extends SecuritiesService
     public function sumByProductForBucket(
         Bucket $bucket
     ) {
-
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb = $this->whereAll($qb, $this->getDomainEntity());
         return $this->buildSumByProductForBucket($qb, $bucket);

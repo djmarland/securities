@@ -1,6 +1,6 @@
 <?php
 
-namespace AppBundle\Presenter\Organism\Issuance;
+namespace AppBundle\Presenter\Organism\MaturityProfile;
 
 interface MaturityProfilePresenterInterface
 {

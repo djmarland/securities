@@ -4,6 +4,7 @@ namespace SecuritiesService\Service\Securities;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\ParentGroup;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use SecuritiesService\Service\SecuritiesService;
 
@@ -65,7 +66,6 @@ class ByGroupService extends SecuritiesService
     public function sumByProductForBucket(
         Bucket $bucket
     ) {
-
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb = $this->whereAll($qb, $this->getDomainEntity());
         $qb = $this->joinTree($qb);
