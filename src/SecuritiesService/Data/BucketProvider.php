@@ -14,9 +14,7 @@ class BucketProvider
     const VALUE_WEEK = self::VALUE_DAY * 7;
     const VALUE_MONTH = self::VALUE_DAY * 30;
     const VALUE_YEAR = self::VALUE_DAY * 365;
-
-
-
+    
     const FORTNIGHT = '< 2 weeks';
     const MONTH = '2 weeks - 1 month';
     const THREE_MONTH = '1-3 months';

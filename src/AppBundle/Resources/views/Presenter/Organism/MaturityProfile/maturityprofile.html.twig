@@ -1,0 +1,36 @@
+<div class="table-container">
+<div class="table-wrap">
+<table class="table table--striped">
+    <thead>
+        <tr>
+            {% for maturityprofile.headings as heading %}
+                <td>{{ heading }}</td>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for maturityprofile.rows as row %}
+            <tr>
+            {% for j, col in row %}
+                <{{ col.element }}>
+                {% if col.link %}
+                    <a data-index="{{ i }}-{{ j }}" href="{{ path(col.link.path, col.link.params) }}">
+                {% endif %}
+
+                {% if col.presenter %}
+                    {% include col.presenter.templatePath with col.presenter.vars only %}
+                {% else %}
+                    {{ col.text }}
+                {% endif %}
+
+                {% if col.link %}
+                    </a>
+                {% endif %}
+                </{{ col.element }}>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>

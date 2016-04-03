@@ -12,7 +12,6 @@ class BucketsService extends Service
 {
     public function getAll(): array {
         return $this->bucketProvider->findAll();
-        return $this->generateBuckets($startDate);
     }
 
     public function findByKey(

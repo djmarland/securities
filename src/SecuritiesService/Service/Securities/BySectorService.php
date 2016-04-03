@@ -4,6 +4,7 @@ namespace SecuritiesService\Service\Securities;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Sector;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use SecuritiesService\Service\SecuritiesService;
 
@@ -64,6 +65,16 @@ class BySectorService extends SecuritiesService
         return $this->buildSumByMonthForYear($qb, $year);
     }
 
+    public function sumByProductForBucket(
+        Bucket $bucket
+    ) {
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->whereAll($qb, $this->getDomainEntity());
+        $qb = $this->joinTree($qb);
+        return $this->buildSumByProductForBucket($qb, $bucket);
+    }
+
     private function joinTree(QueryBuilder $qb): QueryBuilder
     {
         $qb->leftJoin(self::TBL . '.company', 'co');
@@ -76,9 +87,15 @@ class BySectorService extends SecuritiesService
         QueryBuilder $qb,
         Sector $sector
     ): QueryBuilder {
+        $qb = $this->whereAll($qb, $sector);
+        return $this->filterExpired($qb);
+    }
+
+    private function whereAll(
+        QueryBuilder $qb,
+        Sector $sector
+    ): QueryBuilder {
         return $qb->andWhere('s.id = :sId')
-            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
-            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('sId', (string) $sector->getId()->getBinary());
     }
 

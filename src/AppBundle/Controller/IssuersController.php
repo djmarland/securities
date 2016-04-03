@@ -2,15 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\FinderTrait;
-use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\OverviewTrait;
-use AppBundle\Controller\Traits\SecuritiesTrait;
-use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Controller\Traits;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
-use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -20,10 +15,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IssuersController extends Controller
 {
-    use SecuritiesTrait;
-    use IssuanceTrait;
-    use OverviewTrait;
-    use FinderTrait;
+    use Traits\MaturityProfileTrait;
+    use Traits\SecuritiesTrait;
+    use Traits\IssuanceTrait;
+    use Traits\OverviewTrait;
+    use Traits\FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -101,6 +97,8 @@ class IssuersController extends Controller
     public function maturityProfileAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
+        return $this->renderMaturityProfile($request, $issuer);
+
 
         $products = $this->get('app.services.products')->findAll();
         $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
