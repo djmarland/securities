@@ -36,6 +36,7 @@ h1,
 .h-a {
     @extend .a;
     font-weight: 200;
+    font-family: $font-heading;
     margin: 0;
 }
 
@@ -43,6 +44,7 @@ h2,
 .h-b {
     @extend .b;
     font-weight: 200;
+    font-family: $font-heading;
     margin: 0;
 }
 
@@ -50,12 +52,14 @@ h3,
 .h-c {
     @extend .c;
     font-weight: 200;
+    font-family: $font-heading;
     margin: 0;
 }
 
 h4,
 .h-d {
     @extend .d;
+    font-family: $font-heading;
     margin: 0;
 }
 
@@ -63,6 +67,7 @@ h5,
 .h-e {
     @extend .e;
     font-weight: bold;
+    font-family: $font-heading;
     margin: 0;
 }
 
@@ -70,6 +75,7 @@ h6,
 .h-f {
     @extend .f;
     text-transform: uppercase;
+    font-family: $font-heading;
     margin: 0;
 }
 
@@ -81,8 +87,4 @@ p,
 
 .h-lined {
     border-bottom: solid 1px $color-subtle;
-}
-tbody {
-    font-family: monospace; // todo - better!
-    font-size: 1.2rem;
 }
