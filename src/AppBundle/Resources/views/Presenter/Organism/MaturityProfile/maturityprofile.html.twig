@@ -4,7 +4,7 @@
     <thead>
         <tr>
             {% for heading in maturityprofile.headings %}
-                <td>{{ heading }}</td>
+                <th>{{ heading }}</th>
             {% endfor %}
         </tr>
     </thead>
@@ -14,7 +14,7 @@
             {% for j, col in row %}
                 <{{ col.element }}>
                 {% if col.link %}
-                    <a data-index="{{ i }}-{{ j }}" href="{{ path(col.link.path, col.link.params) }}">
+                    <a href="{{ path(col.link.path, col.link.params) }}">
                 {% endif %}
 
                 {% if col.presenter %}

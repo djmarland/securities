@@ -98,57 +98,6 @@ class IssuersController extends Controller
     {
         $issuer = $this->getIssuer($request);
         return $this->renderMaturityProfile($request, $issuer);
-
-
-        $products = $this->get('app.services.products')->findAll();
-        $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
-
-        $tableData = [];
-        $bucketTotals = [];
-        $absoluteTotal = 0;
-
-        $filter = new SecuritiesFilter(
-            $this->setProductFilter($request),
-            $this->setBucketFilter($request)
-        );
-
-        foreach ($products as $product) {
-            $rowData = (object) [
-                'product' => $product,
-                'columns' => [],
-                'total' => 0,
-            ];
-            foreach ($buckets as $key => $bucket) {
-                $amount = $this->get('app.services.securities_by_issuer')->sum(
-                    $issuer,
-                    $filter
-                );
-                $rowData->total += $amount;
-                $empty = (object) [
-                    'bucket' => $bucket,
-                    'amount' => 0,
-                ];
-                if (!isset($rowData->columns[$key])) {
-                    $rowData->columns[$key] = $empty;
-                }
-                if (!isset($bucketTotals[$key])) {
-                    $bucketTotals[$key] = $empty;
-                }
-                $rowData->columns[$key]->amount = $amount;
-                $bucketTotals[$key]->amount += $amount;
-                $absoluteTotal += $amount;
-            }
-            $tableData[] = $rowData;
-        }
-
-        // @todo - create a twig helper for displaying numbers
-        $this->setTitle('Maturity Profile - ' . $issuer->getName());
-        $this->toView('buckets', $buckets);
-        $this->toView('tableData', $tableData);
-        $this->toView('absoluteTotal', $absoluteTotal);
-        $this->toView('bucketTotals', $bucketTotals);
-        $this->toView('entityNav', new EntityNavPresenter($issuer, 'maturity_profile'));
-        return $this->renderTemplate('issuers:maturity-profile');
     }
 
     public function issuanceAction(Request $request)

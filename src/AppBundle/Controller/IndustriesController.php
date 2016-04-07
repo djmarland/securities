@@ -2,10 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\FinderTrait;
-use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\OverviewTrait;
-use AppBundle\Controller\Traits\SecuritiesTrait;
+use AppBundle\Controller\Traits;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\Industry\IndustryPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -16,10 +13,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IndustriesController extends Controller
 {
-    use SecuritiesTrait;
-    use IssuanceTrait;
-    use OverviewTrait;
-    use FinderTrait;
+    use Traits\MaturityProfileTrait;
+    use Traits\SecuritiesTrait;
+    use Traits\IssuanceTrait;
+    use Traits\OverviewTrait;
+    use Traits\FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -73,10 +71,8 @@ class IndustriesController extends Controller
 
     public function maturityProfileAction(Request $request)
     {
-        throw new HttpException(404, 'Not yet');
-//        $this->setTitle('Maturity Profile - ' . $industry->getName());
-//        $this->toView('entityNav', new EntityNavPresenter($industry, 'maturity_profile'));
-//        return $this->renderTemplate('groups:maturity-profile');
+        $industry = $this->getIndustry($request);
+        return $this->renderMaturityProfile($request, $industry);
     }
 
     public function issuanceAction(Request $request)

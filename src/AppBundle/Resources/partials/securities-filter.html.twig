@@ -1,14 +1,22 @@
 <form method="get">
     <div class="grid">
         {% if filter.activeIssueDate %}
-        <div class="g">
-            <div class="message text--center">
-                Showing only securities issued between
-                {{ filter.activeIssueDate.start.format('d M Y') }} and
-                {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
-                <button type="submit" class="btn">X Remove date filter</button>
+            <div class="g">
+                <div class="message text--center">
+                    Showing only securities issued between
+                    {{ filter.activeIssueDate.start.format('d M Y') }} and
+                    {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
+                    <button type="submit" class="btn">X Remove date filter</button>
+                </div>
             </div>
-        </div>
+        {% endif %}
+        {% if filter.activeBucket %}
+            <div class="g">
+                <div class="message text--center">
+                    Showing only securities due to mature {{ filter.activeBucket }}
+                    <button type="submit" class="btn">X Remove filter</button>
+                </div>
+            </div>
         {% endif %}
         <div class="g 3/7@xl">
             <p>

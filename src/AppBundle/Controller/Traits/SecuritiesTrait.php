@@ -158,7 +158,7 @@ trait SecuritiesTrait
             if (!$bucket) {
                 throw new HttpException(404, 'No such bucket');
             }
-            $this->filter['activeBucket'] = (string) $bucket->getKey();
+            $this->filter['activeBucket'] = (string) $bucket->getName();
             $this->titleParts[] = 'BUCKET'; // todo - proper name
         }
         $this->toView('filter', $this->filter);

@@ -19,9 +19,9 @@ class EntityNavPresenter extends Presenter implements EntityNavPresenterInterfac
         'securities' => [
             'text' => 'Securities',
         ],
-//        'maturity_profile' => [
-//            'text' => 'Maturity profile',
-//        ],
+        'maturity_profile' => [
+            'text' => 'Maturity Profile',
+        ],
         'issuance' => [
             'text' => 'Issuance',
         ],

@@ -13,7 +13,7 @@ trait MaturityProfileTrait
         Request $request,
         Entity $entity = null
     ) {
-        
+
         if ($entity) {
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
@@ -34,11 +34,11 @@ trait MaturityProfileTrait
 
         $this->toView(
             'maturityProfilePresenter',
-            new MaturityProfilePresenter($entity, $results)
+            new MaturityProfilePresenter($entity, $results, $buckets)
         );
 
         $this->toView('entity', $entity);
-        $this->toView('entityNav', new EntityNavPresenter($entity, 'issuance'));
+        $this->toView('entityNav', new EntityNavPresenter($entity, 'maturity_profile'));
         return $this->renderTemplate('entities:maturity-profile');
     }
 }
