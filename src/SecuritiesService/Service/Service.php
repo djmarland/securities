@@ -2,9 +2,11 @@
 
 namespace SecuritiesService\Service;
 
+use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
 use Doctrine\ORM\QueryBuilder;
+use SecuritiesService\Data\BucketProviderInterface;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -17,13 +19,19 @@ abstract class Service
     const DEFAULT_PAGE = 1;
 
     protected $entityManager;
+    protected $bucketProvider;
+    protected $appTimeProvider;
     protected $mapperFactory;
 
     public function __construct(
-        EntityManager $entityManager
+        EntityManager $entityManager,
+        BucketProviderInterface $bucketProvider,
+        DateTimeImmutable $appTimeProvider
     ) {
         $this->entityManager = $entityManager;
         $this->mapperFactory = new MapperFactory();
+        $this->bucketProvider = $bucketProvider;
+        $this->appTimeProvider = $appTimeProvider;
     }
 
     protected function getEntity(string $name): EntityRepository

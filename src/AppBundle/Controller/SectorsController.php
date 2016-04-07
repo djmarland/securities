@@ -2,15 +2,9 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\FinderTrait;
-use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\OverviewTrait;
-use AppBundle\Controller\Traits\SecuritiesTrait;
-use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Controller\Traits;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
-use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Sector\SectorPresenter;
-use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -19,10 +13,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class SectorsController extends Controller
 {
-    use SecuritiesTrait;
-    use IssuanceTrait;
-    use OverviewTrait;
-    use FinderTrait;
+    use Traits\MaturityProfileTrait;
+    use Traits\SecuritiesTrait;
+    use Traits\IssuanceTrait;
+    use Traits\OverviewTrait;
+    use Traits\FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -69,10 +64,8 @@ class SectorsController extends Controller
 
     public function maturityProfileAction(Request $request)
     {
-        throw new HttpException(404, 'Not yet');
-//        $this->setTitle('Issuance ' . $year . ' - ' . $sector->getName());
-//        $this->toView('entityNav', new EntityNavPresenter($sector, 'maturity_profile'));
-//        return $this->renderTemplate('sectors:maturity-profile');
+        $sector = $this->getSector($request);
+        return $this->renderMaturityProfile($request, $sector);
     }
 
     public function issuanceAction(Request $request)

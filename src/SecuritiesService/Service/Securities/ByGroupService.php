@@ -4,6 +4,7 @@ namespace SecuritiesService\Service\Securities;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\ParentGroup;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use SecuritiesService\Service\SecuritiesService;
 
@@ -62,6 +63,15 @@ class ByGroupService extends SecuritiesService
         return $this->buildSumByMonthForYear($qb, $year);
     }
 
+    public function sumByProductForBucket(
+        Bucket $bucket
+    ) {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->whereAll($qb, $this->getDomainEntity());
+        $qb = $this->joinTree($qb);
+        return $this->buildSumByProductForBucket($qb, $bucket);
+    }
+
     private function joinTree(QueryBuilder $qb): QueryBuilder
     {
         $qb->leftJoin(self::TBL . '.company', 'co');
@@ -73,9 +83,15 @@ class ByGroupService extends SecuritiesService
         QueryBuilder $qb,
         ParentGroup $group
     ) {
+        $qb = $this->whereAll($qb, $group);
+        return $this->filterExpired($qb);
+    }
+
+    private function whereAll(
+        QueryBuilder $qb,
+        ParentGroup $group
+    ) {
         return $qb->andWhere('p.id = :groupId')
-            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
-            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('groupId', (string) $group->getId()->getBinary());
     }
 

@@ -62,6 +62,10 @@ overview_securities:
   path:     /securities
   defaults: { _controller: AppBundle:Overview:securities }
 
+overview_maturity_profile:
+  path:     /maturity-profile
+  defaults: { _controller: AppBundle:Overview:maturityProfile }
+
 # @todo - Overview - issuance, maturity-profile, yield curves, etc
 
 # Securities

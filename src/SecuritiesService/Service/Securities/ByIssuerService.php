@@ -4,6 +4,7 @@ namespace SecuritiesService\Service\Securities;
 
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Company;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use SecuritiesService\Service\SecuritiesService;
 
@@ -73,13 +74,27 @@ class ByIssuerService extends SecuritiesService
         return $this->buildSumByMonthForYear($qb, $year);
     }
 
+    public function sumByProductForBucket(
+        Bucket $bucket
+    ) {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->whereAll($qb, $this->getDomainEntity());
+        return $this->buildSumByProductForBucket($qb, $bucket);
+    }
+
     private function where(
         QueryBuilder $qb,
         Company $issuer
     ) {
+        $qb = $this->whereAll($qb, $issuer);
+        return $this->filterExpired($qb);
+    }
+
+    private function whereAll(
+        QueryBuilder $qb,
+        Company $issuer
+    ) {
         return $qb->andWhere('IDENTITY(' . self::TBL . '.company) = :company_id')
-            ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
-            ->setParameter('now', new \DateTime()) // @todo - inject application time
             ->setParameter('company_id', (string) $issuer->getId()->getBinary());
     }
 

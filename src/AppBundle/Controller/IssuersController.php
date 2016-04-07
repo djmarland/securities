@@ -2,15 +2,10 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Controller\Traits\FinderTrait;
-use AppBundle\Controller\Traits\IssuanceTrait;
-use AppBundle\Controller\Traits\OverviewTrait;
-use AppBundle\Controller\Traits\SecuritiesTrait;
-use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
+use AppBundle\Controller\Traits;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
 use AppBundle\Presenter\Organism\EntityNav\EntityNavPresenter;
 use AppBundle\Presenter\Organism\Issuer\IssuerPresenter;
-use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\UUID;
@@ -20,10 +15,11 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class IssuersController extends Controller
 {
-    use SecuritiesTrait;
-    use IssuanceTrait;
-    use OverviewTrait;
-    use FinderTrait;
+    use Traits\MaturityProfileTrait;
+    use Traits\SecuritiesTrait;
+    use Traits\IssuanceTrait;
+    use Traits\OverviewTrait;
+    use Traits\FinderTrait;
 
     public function initialize(Request $request)
     {
@@ -101,56 +97,7 @@ class IssuersController extends Controller
     public function maturityProfileAction(Request $request)
     {
         $issuer = $this->getIssuer($request);
-
-        $products = $this->get('app.services.products')->findAll();
-        $buckets = $this->get('app.services.buckets')->getAll(new \DateTime()); // @todo - use global app time
-
-        $tableData = [];
-        $bucketTotals = [];
-        $absoluteTotal = 0;
-
-        $filter = new SecuritiesFilter(
-            $this->setProductFilter($request),
-            $this->setBucketFilter($request)
-        );
-
-        foreach ($products as $product) {
-            $rowData = (object) [
-                'product' => $product,
-                'columns' => [],
-                'total' => 0,
-            ];
-            foreach ($buckets as $key => $bucket) {
-                $amount = $this->get('app.services.securities_by_issuer')->sum(
-                    $issuer,
-                    $filter
-                );
-                $rowData->total += $amount;
-                $empty = (object) [
-                    'bucket' => $bucket,
-                    'amount' => 0,
-                ];
-                if (!isset($rowData->columns[$key])) {
-                    $rowData->columns[$key] = $empty;
-                }
-                if (!isset($bucketTotals[$key])) {
-                    $bucketTotals[$key] = $empty;
-                }
-                $rowData->columns[$key]->amount = $amount;
-                $bucketTotals[$key]->amount += $amount;
-                $absoluteTotal += $amount;
-            }
-            $tableData[] = $rowData;
-        }
-
-        // @todo - create a twig helper for displaying numbers
-        $this->setTitle('Maturity Profile - ' . $issuer->getName());
-        $this->toView('buckets', $buckets);
-        $this->toView('tableData', $tableData);
-        $this->toView('absoluteTotal', $absoluteTotal);
-        $this->toView('bucketTotals', $bucketTotals);
-        $this->toView('entityNav', new EntityNavPresenter($issuer, 'maturity_profile'));
-        return $this->renderTemplate('issuers:maturity-profile');
+        return $this->renderMaturityProfile($request, $issuer);
     }
 
     public function issuanceAction(Request $request)

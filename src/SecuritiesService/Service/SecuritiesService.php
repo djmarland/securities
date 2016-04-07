@@ -7,6 +7,7 @@ use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\ValueObject\Bucket;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 
@@ -135,7 +136,7 @@ class SecuritiesService extends Service
         $qb->select('count(' . self::TBL . '.id)');
         $qb
             ->where(self::TBL . '.maturityDate < :now')
-            ->setParameter('now', new \DateTime()); // @todo - inject application time
+            ->setParameter('now', $this->appTimeProvider);
         return (int) $qb->getQuery()->getSingleScalarResult();
     }
 
@@ -199,6 +200,13 @@ class SecuritiesService extends Service
         return $this->buildSumByMonthForYear($qb, $year);
     }
 
+    public function sumByProductForBucket(
+        Bucket $bucket
+    ) {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        return $this->buildSumByProductForBucket($qb, $bucket);
+    }
+
     protected function buildFind(
         QueryBuilder $qb,
         $limit,
@@ -221,6 +229,50 @@ class SecuritiesService extends Service
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    protected function buildSumByProductForBucket(
+        QueryBuilder $qb,
+        Bucket $bucket
+    ) {
+
+        /*
+         * select p.name, count(s.id)
+         * from securities as s left join products as p on s.product_id = p.id
+         * group by p.id;
+         */
+        $productTable = 'product';
+
+        $qb->select([
+            self::TBL,
+            'sum(' . self::TBL . '.moneyRaised) as total',
+             $productTable,
+        ])
+            ->leftJoin(self::TBL . '.product', $productTable);
+
+        $filter = new SecuritiesFilter($bucket);
+        $qb = $filter->apply($qb, self::TBL);
+        $qb->groupBy($productTable . '.id');
+
+        /*
+         * List of:
+         * 0 => Security
+         * total => sum
+        */
+        $results = $qb->getQuery()->getArrayResult();
+
+        $products = [];
+        $mapper = $this->mapperFactory->createMapper('Product');
+        foreach ($results as $result) {
+            $product = $mapper->getDomainModel($result[0]['product']);
+            $total = (int) $result['total'];
+            $products[] = (object) [
+                'product' => $product,
+                'total' => $total,
+            ];
+        }
+
+        return $products;
     }
 
     protected function buildSumByMonthForYear(
@@ -290,11 +342,17 @@ class SecuritiesService extends Service
         throw new \InvalidArgumentException('Entity was not set, so cannot filter correctly');
     }
 
-    private function where(
+    protected function filterExpired(
         QueryBuilder $qb
     ): QueryBuilder {
         return $qb
             ->andWhere('(' . self::TBL . '.maturityDate > :now OR ' . self::TBL . '.maturityDate IS NULL)')
-            ->setParameter('now', new \DateTime()); // @todo - inject application time
+            ->setParameter('now', $this->appTimeProvider);
+    }
+
+    private function where(
+        QueryBuilder $qb
+    ): QueryBuilder {
+        return $this->filterExpired($qb);
     }
 }

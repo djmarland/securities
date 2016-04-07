@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\IssuanceTrait;
+use AppBundle\Controller\Traits\MaturityProfileTrait;
 use AppBundle\Controller\Traits\OverviewTrait;
 use AppBundle\Controller\Traits\SecuritiesTrait;
 use AppBundle\Presenter\Organism\EntityContext\EntityContextPresenter;
@@ -14,6 +15,7 @@ class OverviewController extends Controller
     use IssuanceTrait;
     use OverviewTrait;
     use SecuritiesTrait;
+    use MaturityProfileTrait;
     use FinderTrait;
 
     public function initialize(Request $request)
@@ -37,5 +39,10 @@ class OverviewController extends Controller
     public function securitiesAction(Request $request)
     {
         return $this->renderSecurities($request);
+    }
+
+    public function maturityProfileAction(Request $request)
+    {
+        return $this->renderMaturityProfile($request);
     }
 }

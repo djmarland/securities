@@ -1,0 +1,36 @@
+<div class="table-container">
+<div class="table-wrap">
+<table class="table table--striped" style="font-size: 90%">
+    <thead>
+        <tr>
+            {% for heading in maturityprofile.headings %}
+                <th>{{ heading }}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for row in maturityprofile.rows %}
+            <tr>
+            {% for j, col in row %}
+                <{{ col.element }}>
+                {% if col.link %}
+                    <a href="{{ path(col.link.path, col.link.params) }}">
+                {% endif %}
+
+                {% if col.presenter %}
+                    {% include col.presenter.templatePath with col.presenter.vars only %}
+                {% else %}
+                    {{ col.text }}
+                {% endif %}
+
+                {% if col.link %}
+                    </a>
+                {% endif %}
+                </{{ col.element }}>
+            {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+</div>
