@@ -39,7 +39,7 @@ class MaturityProfilePresenter extends Presenter implements MaturityProfilePrese
     {;
         $headings = ['Product'];
         $headings = array_merge($headings, $this->getBucketTitles());
-        $headings[] = 'Total';
+//        $headings[] = 'Total';
         return $headings;
     }
 
@@ -91,12 +91,13 @@ class MaturityProfilePresenter extends Presenter implements MaturityProfilePrese
                     ];
                 }
             }
-            $row[] = [
-                'element' => 'td',
-                'link' => null,
-                'text' => null,
-                'presenter' => new MoneyPresenter($result->productTotal, ['scale' => true]),
-            ];
+//            Disabled Total column
+//            $row[] = [
+//                'element' => 'td',
+//                'link' => null,
+//                'text' => null,
+//                'presenter' => new MoneyPresenter($result->productTotal, ['scale' => true]),
+//            ];
             $rows[] = $row;
         }
 
