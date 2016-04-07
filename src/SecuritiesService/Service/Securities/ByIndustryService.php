@@ -84,7 +84,7 @@ class ByIndustryService extends SecuritiesService
         QueryBuilder $qb,
         Industry $industry
     ) {
-        $qb = $this->whereAll($qb);
+        $qb = $this->whereAll($qb, $industry);
         return $this->filterExpired($qb);
     }
 
