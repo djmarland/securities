@@ -1,0 +1,81 @@
+h1, h2, h3, h4, h5, h6,
+.h1, .h2, .h3, .h4, .h5, .h6 {
+    font-family: $font-heading;
+}
+
+.a, .b, .c, .d, .e, .f {
+    letter-spacing: 0;
+}
+
+.a {  @include font-sizes(28px, 32px);  }
+.b {  @include font-sizes(20px, 24px);  }
+.c {  @include font-sizes(20px, 24px);  }
+.d {  @include font-sizes(18px, 22px);  }
+.e {  @include font-sizes(15px, 20px);  }
+.f {  @include font-sizes(14px, 18px);  }
+
+@include mq($from: m) {
+    .a {  @include font-sizes(36px, 40px);  }
+    .b {  @include font-sizes(24px, 28px);  }
+    .c {  @include font-sizes(20px, 24px);  }
+    .d {  @include font-sizes(18px, 22px);  }
+    .e {  @include font-sizes(16px, 22px);  }
+    .f {  @include font-sizes(14px, 18px);  }
+}
+
+@include mq($from: xxl) {
+    .a {  @include font-sizes(48px, 52px);  }
+    .b {  @include font-sizes(32px, 36px);  }
+    .c {  @include font-sizes(24px, 28px);  }
+    .d {  @include font-sizes(20px, 24px);  }
+    .e {  @include font-sizes(16px, 22px);  }
+    .f {  @include font-sizes(14px, 18px);  }
+}
+
+h1, .h1 {
+    @extend .a;
+    letter-spacing: -1px;
+    font-weight: 200;
+    @include mq($from: xxl) {
+        letter-spacing: -2px;
+    }
+}
+
+h2, .h2 {
+    @extend .b;
+    letter-spacing: -1px;
+    font-weight: 200;
+}
+
+h3, .h3 {
+    @extend .c;
+    letter-spacing: -1px;
+    font-weight: 200;
+}
+
+h4, .h4 {
+    @extend .d;
+    letter-spacing: -1px;
+    font-weight: bold;
+}
+
+h5, .h5 {
+    @extend .e;
+    font-weight: bold;
+}
+
+h6, .h6 {
+    @extend .f;
+    font-weight: normal;
+    text-transform: uppercase;
+}
+
+p {
+    @extend .e;
+}
+
+.font-reset {
+    font-family: $font-body;
+    font-weight: normal;
+    letter-spacing: 0;
+}

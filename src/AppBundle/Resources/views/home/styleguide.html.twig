@@ -1,13 +1,126 @@
-{% extends 'AppBundle::base.html.twig' %}
+{% extends 'AppBundle::newbase.html.twig' %}
 
 {% block body %}
-    <h1>Styleguide</h1>
+
+<div class="text--prose">
+    <h1>Style Guide</h1>
     <p>
-        This page shows all of the component types. It's based on <a href="http://www.getmdl.io/">Material Design Lite</a> but slimmed
-        down, and more progressive enhancement friendly.
+        This page shows all of the design components that make up this site.
     </p>
-    <h2>Title rules</h2>
-    <p>Titles use uppercase first letters, except for stop words.</p>
+
+    <h2>Core</h2>
+    <p>
+        The core styles are generically applied across the whole application
+    </p>
+
+    <h3>Colours</h3>
+
+    <h3>Typography</h3>
+    <p>
+        Typography is the display of text at appropriate sizes and in appropriate fonts. All automatic margins
+        and paddings have been removed, as the vast majority of usage does not require them.
+    </p>
+
+    <p>
+        Typography sizes are defined on a scale. They are mapping using classes. Headings automatically receive
+        the styles for the appropriate size.
+    </p>
+
+    <table class="table">
+        <thead>
+        <tr>
+            <th>Semantic element</th>
+            <th>Class for body style</th>
+            <th>Class for heading style</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td><code>{{ '<h1>'|escape }}</code></td>
+            <td><code>.a</code></td>
+            <td><code>.h1</code></td>
+        </tr>
+        <tr>
+            <td><code>{{ '<h2>'|escape }}</code></td>
+            <td><code>.b</code></td>
+            <td><code>.h2</code></td>
+        </tr>
+        <tr>
+            <td><code>{{ '<h3>'|escape }}</code></td>
+            <td><code>.c</code></td>
+            <td><code>.h3</code></td>
+        </tr>
+        <tr>
+            <td><code>{{ '<h4>'|escape }}</code></td>
+            <td><code>.d</code></td>
+            <td><code>.h4</code></td>
+        </tr>
+        <tr>
+            <td><code>{{ '<h5>'|escape }}</code> <code>{{ '<p>'|escape }}</code></td>
+            <td><code>.e</code></td>
+            <td><code>.h5</code></td>
+        </tr>
+        <tr>
+            <td><code>{{ '<h6>'|escape }}</code></td>
+            <td><code>.f</code></td>
+            <td><code>.h6</code></td>
+        </tr>
+        </tbody>
+    </table>
+
+    <div class="sg__example">
+        {% set example = '<p class="h1">Size a</p>
+<p class="a">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nunc mattis, ipsum non lacinia eleifend, nulla erat fringilla dolor, a elementum eros diam ac sapien.</p>
+
+<p class="a">Fusce aliquam lectus ante, vel rutrum orci placerat vel. Donec
+viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
+        <div class="grid">
+            <div class="g 1/2@xl">
+                <div>
+                {{ example|raw }}
+                </div>
+            </div>
+            <div class="g 1/2@xl">
+                <pre><code>{{ example }}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <div class="sg__example">
+        {% set example = '<p class="h2">Size b</p>
+<p class="b">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+Nunc mattis, ipsum non lacinia eleifend, nulla erat fringilla dolor, a elementum eros diam ac sapien.</p>
+
+<p class="b">Fusce aliquam lectus ante, vel rutrum orci placerat vel. Donec
+viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
+        <div class="grid">
+            <div class="g 1/2@xl">
+                <div>
+                    {{ example|raw }}
+                </div>
+            </div>
+            <div class="g 1/2@xl">
+                <pre><code>{{ example }}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <p class="c">This is size c - <code>.c</code></p>
+    <p class="h3">This is size c as a heading - <code>.h3</code> <code>{{ '<h3>'|escape }}</code></p>
+
+    <p class="d">This is size d - <code>.a</code></p>
+    <p class="h4">This is size d as a heading - <code>.h4</code> <code>{{ '<h4>'|escape }}</code></p>
+
+    <p class="e">This is size e - <code>.e</code> <code>{{ '<p>'|escape }}</code></p>
+    <p class="h5">This is size e as a heading - <code>.h5</code> <code>{{ '<h5>'|escape }}</code></p>
+
+    <p class="f">This is size f - <code>.f</code></p>
+    <p class="h6">This is size f as a heading - <code>.h6</code> <code>{{ '<h6>'|escape }}</code></p>
+
+    <h3>Breakpoints</h3>
+
+    <h2>Grids</h2>
 
     <div class="grid">
         <div class="g 1/2@xl">
@@ -30,4 +143,61 @@
         </div>
     </div>
 
+    <h2>Atoms</h2>
+    <p>
+        These are single responsibility classes for tiny concepts.
+    </p>
+
+    <h3>Text</h3>
+    <h4><code>.text--prose</code></h4>
+    <p>
+        As all margins and paddings have been removed, large pages of text (such as this one) would become unreadable.
+        To restore a readable flow wrap the content with the class <code>.text--prose</code>
+    </p>
+    <div class="sg__example">
+    {% set example = '<div class="text--prose">
+    <h2>Properly formatted heading</h2>
+    <p>
+        Properly spaced text
+    </p>
+    <ul>
+        <li>Properly</li>
+        <li>Spaced</li>
+        <li>List</li>
+    </ul>
+</div>' %}
+        <div class="grid">
+            <div class="g 1/2@xl">
+                {{ example|raw }}
+            </div>
+            <div class="g 1/2@xl">
+                <pre><code>{{ example }}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <h3>Lists</h3>
+
+
+    <h3>Buttons</h3>
+
+    <h2>Molecules</h2>
+    <p>
+        These are shared combinations of classes to create a common layout,
+        but are not a complex entity. They are not expected particular content within them.
+        They may make use of several atoms.
+    </p>
+
+    <h3>Forms</h3>
+
+    <h3>Tables</h3>
+
+    <h2>Organisms</h2>
+    <p>
+        These are complete, complex objects, containing many sub-objects.
+        They are usually closely linked with the data contained within them.
+        They may make use of several atoms / molecules.
+    </p>
+
+</div>
 {% endblock %}

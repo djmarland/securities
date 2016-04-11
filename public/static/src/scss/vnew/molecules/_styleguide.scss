@@ -1,0 +1,20 @@
+.sg__example {
+    margin: $size-grid-unit 0;
+    padding: $size-grid-unit 0;
+    border-bottom: solid 1px $color-body-keyline;
+    border-top: solid 1px $color-body-keyline;
+    position: relative;
+
+    &:before {
+        @extend .f;
+        content: "EXAMPLE";
+        padding: 0 $size-grid-unit-tiny;
+        line-height: $size-grid-unit;
+        display: inline-block;
+        background: $color-body-keyline;
+        color: $color-body-bg;
+        position: absolute;
+        font-family: monospace;
+        top: -($size-grid-unit/2);
+    }
+}
