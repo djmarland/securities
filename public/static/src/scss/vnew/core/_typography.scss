@@ -74,6 +74,10 @@ p {
     @extend .e;
 }
 
+small {
+    @extend .f;
+}
+
 .font-reset {
     font-family: $font-body;
     font-weight: normal;

@@ -17,4 +17,7 @@
         font-family: monospace;
         top: -($size-grid-unit/2);
     }
+    +.sg__example {
+        margin-top: -($size-grid-unit + 1)
+    }
 }
