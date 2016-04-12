@@ -1,15 +1,65 @@
-.colour-grey-darkest {
+.color-brand {
+    background-color: $color-brand;
+}
+
+.color-black {
+    background-color: $color-black;
+}
+.color-grey-darkest {
     background-color: $color-grey-darkest;
 }
-.colour-grey-dark {
+.color-grey-dark {
     background-color: $color-grey-dark;
 }
-.colour-grey-mid {
+.color-grey-mid {
     background-color: $color-grey-mid;
 }
-.colour-grey-light {
+.color-grey-light {
     background-color: $color-grey-light;
 }
-.colour-grey-lightest {
+.color-grey-lightest {
     background-color: $color-grey-lightest;
+}
+.color-white {
+    background-color: $color-white;
+}
+
+.color-primary-dark {
+    background-color: $color-primary-dark;
+}
+.color-primary-mid {
+    background-color: $color-primary-mid;
+}
+.color-primary-light {
+    background-color: $color-primary-light;
+}
+
+.color-secondary-dark {
+    background-color: $color-secondary-dark;
+}
+.color-secondary-mid {
+    background-color: $color-secondary-mid;
+}
+.color-secondary-light {
+    background-color: $color-secondary-light;
+}
+
+.color-tertiary-dark {
+    background-color: $color-tertiary-dark;
+}
+.color-tertiary-mid {
+    background-color: $color-tertiary-mid;
+}
+.color-tertiary-light {
+    background-color: $color-tertiary-light;
+}
+
+.color-complimentary-dark {
+    background-color: $color-complimentary-dark;
+}
+.color-complimentary-mid {
+    background-color: $color-complimentary-mid;
+}
+.color-complimentary-light {
+    background-color: $color-complimentary-light;
 }

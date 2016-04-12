@@ -21,3 +21,12 @@
         margin-top: -($size-grid-unit + 1)
     }
 }
+
+.sg__color-box {
+    display: block;
+    margin-bottom: $size-grid-unit-small;
+    height: 80px;
+}
+.sg__color-title {
+    text-align: center;
+}

@@ -2,7 +2,7 @@
     @include flexbox(block);
     @include flex-wrap();
     @include flex-direction(row);
-    margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
+    margin: 0 0 0 (-$size-grid-unit); // need brackets or Scss combines with the zero
     list-style-type: none;
     padding: 0;
     &:after {
@@ -12,6 +12,9 @@
     }
 }
 
+.grid--flat {
+    margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
+}
 
 .g {
     float: left;

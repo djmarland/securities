@@ -14,6 +14,58 @@
     </p>
 
     <h3>Colours</h3>
+    <p>
+        There are several colours in use. They are accessible via Sass variables
+    </p>
+    {% set colorExamples = [
+        {
+            'brand'         : 'Brand colour',
+
+            'black'         : 'Black',
+            'grey-darkest'  : 'Darkest Grey',
+            'grey-dark'     : 'Dark Grey',
+            'grey-mid'      : 'Mid Grey',
+            'grey-light'    : 'Light Grey',
+            'grey-lightest' : 'Lightest Grey',
+            'white'         : 'White',
+        },
+        {
+            'primary-dark'  : 'Primary Dark',
+            'primary-mid'   : 'Primary Mid',
+            'primary-light' : 'Primary Light',
+        },
+        {
+            'secondary-dark'  : 'Secondary Dark',
+            'secondary-mid'   : 'Secondary Mid',
+            'secondary-light' : 'Secondary Light',
+        },
+        {
+            'tertiary-dark'  : 'Tertiary Dark',
+            'tertiary-mid'   : 'Tertiary Mid',
+            'tertiary-light' : 'Tertiary Light',
+        },
+        {
+            'complimentary-dark'  : 'Complimentary Dark',
+            'complimentary-mid'   : 'Complimentary Mid',
+            'complimentary-light' : 'Complimentary Light'
+        }
+    ]%}
+    {% for row in colorExamples %}
+        <div class="grid">
+            {% for key, title in row %}
+                <div class="g 1/2 1/3@m 1/4@xl 1/6@xxl">
+                    <div class="sg__color">
+                        <div class="sg__color-box color-{{ key }}"></div>
+                        <div class="sg__color-title">
+                            {{ title }}<br />
+                            <code>$color-{{ key }}</code><br />
+                            <code>.color-{{ key }}</code>
+                        </div>
+                    </div>
+                </div>
+            {% endfor %}
+        </div>
+    {% endfor %}
 
     <h3>Typography</h3>
     <p>
