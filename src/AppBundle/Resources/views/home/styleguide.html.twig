@@ -8,26 +8,65 @@
         This page shows all of the design components that make up this site.
     </p>
 
-    <h2>Core</h2>
+    <ul>
+        <li>
+            <a href="#core">Core</a>
+            <ul>
+                <li><a href="#core-colours">Colours</a></li>
+                <li><a href="#core-colour-boxes">Colour boxes</a></li>
+                <li><a href="#core-typography">Typography</a></li>
+                <li><a href="#core-breakpoints">Breakpoints</a></li>
+                <li><a href="#core-grid">Grid</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#atoms">Atoms</a>
+            <ul>
+                <li><a href="#atoms-text">Text</a></li>
+                <li><a href="#atoms-messages">Messages</a></li>
+                <li><a href="#atoms-lists">Lists</a></li>
+                <li><a href="#atoms-island">Island</a></li>
+                <li><a href="#atoms-buttons">Buttons</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#molecules">Molecules</a>
+            <ul>
+                <li><a href="#molecules-tables">Tables</a></li>
+                <li><a href="#molecules-forms">Forms</a></li>
+            </ul>
+        </li>
+        <li>
+            <a href="#organisms">Organisms</a>
+            <ul>
+                <li><a href="#organisms-charts">Charts</a></li>
+            </ul>
+        </li>
+    </ul>
+
+    <h2 id="core">Core</h2>
     <p>
         The core styles are generically applied across the whole application
     </p>
 
-    <h3>Colours</h3>
+    <h3 id="core-colours">Colours</h3>
     <p>
-        There are several colours in use. They are accessible via Sass variables
+        There are several colours in use. They are accessible via Sass variables and classes.
     </p>
     {% set colorExamples = [
         {
             'brand'         : 'Brand colour',
-
             'black'         : 'Black',
+            'white'         : 'White',
+        },
+        {
+
             'grey-darkest'  : 'Darkest Grey',
             'grey-dark'     : 'Dark Grey',
             'grey-mid'      : 'Mid Grey',
             'grey-light'    : 'Light Grey',
             'grey-lightest' : 'Lightest Grey',
-            'white'         : 'White',
+
         },
         {
             'primary-dark'  : 'Primary Dark',
@@ -67,18 +106,58 @@
         </div>
     {% endfor %}
 
-    <h3>Typography</h3>
+    <h3 id="core-colour-boxes">Colour boxes</h3>
+    <p>
+        There are boxes of colour that generally sit together. These consist of a background, a text colour, a link
+        colour, and a link hover color. The <code>.color-box--body</code> styles are applied to the whole body by
+        default. A box also has a keyline colour. That will be applied to the border of any element within that has
+        the <code>.keyline</code> class.
+    </p>
+
+    <div class="grid">
+        {% set colourBoxExamples = [
+            'body',
+            'brand',
+            'subtle'
+        ] %}
+        {% for box in colourBoxExamples %}
+        <div class="g 1/2@s 1/4@xl">
+            <div class="color-box--{{ box }} island">
+                <p class="sg__color-box-line keyline">
+                    This is the {{ box }} box. <a href="#">Here is a link</a><br />
+                    This is a keyline:
+                </p>
+                <code>.color-box--{{ box }}</code>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <h3 id="core-typography">Typography</h3>
     <p>
         Typography is the display of text at appropriate sizes and in appropriate fonts. All automatic margins
         and paddings have been removed, as the vast majority of usage does not require them.
     </p>
 
     <p>
+        There are two font choices for this site:
+    </p>
+        <ul>
+            <li>
+                <span class="font-heading">Georgia</span> (with serif fallback).<br />
+                Used on headings and the logo. Usually with a weight of 200, except for small text where it is 600.
+            </li>
+            <li>
+                Source Sans Pro (with sans-serif fallback).<br />
+                Used for main text with a weight of 500. Can be made bold to weight 600.
+            </li>
+        </ul>
+    <p>
         Typography sizes are defined on a scale. They are mapping using classes. Headings automatically receive
         the styles for the appropriate size.
     </p>
 
-    <table class="table">
+    <table class="table table--striped">
         <thead>
         <tr>
             <th>Semantic element(s)</th>
@@ -120,12 +199,23 @@
         </tbody>
     </table>
 
+    {% set typoExamples = {
+        'a' : 'h1',
+        'b' : 'h2',
+        'c' : 'h3',
+        'd' : 'h4',
+        'e' : 'h5',
+        'f' : 'h6'
+    } %}
+
+    {% for size, h in typoExamples %}
+
     <div class="sg__example">
-        {% set example = '<p class="h1">Size a</p>
-<p class="a">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+        {% set example = '<p class="' ~ h ~ '">Size ' ~ size ~ '</p>
+<p class="' ~ size ~ '">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
 Nunc mattis, ipsum non lacinia eleifend, nulla erat fringilla dolor, a elementum eros diam ac sapien.</p>
 
-<p class="a">Fusce aliquam lectus ante, vel rutrum orci placerat vel. Donec
+<p class="' ~ size ~ '">Fusce aliquam lectus ante, vel rutrum orci placerat vel. Donec
 viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
         <div class="grid">
             <div class="g 1/2@xl">
@@ -139,40 +229,11 @@ viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
         </div>
     </div>
 
-    <div class="sg__example">
-        {% set example = '<p class="h2">Size b</p>
-<p class="b">Lorem ipsum dolor sit amet, consectetur adipiscing elit.
-Nunc mattis, ipsum non lacinia eleifend, nulla erat fringilla dolor, a elementum eros diam ac sapien.</p>
+    {% endfor %}
 
-<p class="b">Fusce aliquam lectus ante, vel rutrum orci placerat vel. Donec
-viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
-        <div class="grid">
-            <div class="g 1/2@xl">
-                <div>
-                    {{ example|raw }}
-                </div>
-            </div>
-            <div class="g 1/2@xl">
-                <pre><code>{{ example }}</code></pre>
-            </div>
-        </div>
-    </div>
+    <h3 id="core-breakpoints">Breakpoints</h3>
 
-    <p class="c">This is size c - <code>.c</code></p>
-    <p class="h3">This is size c as a heading - <code>.h3</code> <code>{{ '<h3>'|escape }}</code></p>
-
-    <p class="d">This is size d - <code>.a</code></p>
-    <p class="h4">This is size d as a heading - <code>.h4</code> <code>{{ '<h4>'|escape }}</code></p>
-
-    <p class="e">This is size e - <code>.e</code> <code>{{ '<p>'|escape }}</code></p>
-    <p class="h5">This is size e as a heading - <code>.h5</code> <code>{{ '<h5>'|escape }}</code></p>
-
-    <p class="f">This is size f - <code>.f</code></p>
-    <p class="h6">This is size f as a heading - <code>.h6</code> <code>{{ '<h6>'|escape }}</code></p>
-
-    <h3>Breakpoints</h3>
-
-    <h2>Grids</h2>
+    <h3 id="core-grid">Grid</h3>
 
     <div class="grid">
         <div class="g 1/2@xl">
@@ -195,12 +256,12 @@ viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
         </div>
     </div>
 
-    <h2>Atoms</h2>
+    <h2 id="atoms">Atoms</h2>
     <p>
         These are single responsibility classes for tiny concepts.
     </p>
 
-    <h3>Text</h3>
+    <h3 id="atoms-text">Text</h3>
     <h4><code>.text--prose</code></h4>
     <p>
         As all margins and paddings have been removed, large pages of text (such as this one) would become unreadable.
@@ -228,28 +289,73 @@ viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
         </div>
     </div>
 
-    <h3>Lists</h3>
+    <h3 id="atoms-messages">Messages</h3>
+    <p>
+        A message is a notice that can be shown to the user. There are four types: info, ok, warning, &amp; error.
+    </p>
+    <div class="sg__example">
+        {% set example =
+'<div class="message message--info">This is the info message</div>
+<div class="message message--ok">This is the ok message</div>
+<div class="message message--warning">This is the warning message</div>
+<div class="message message--error">This is the error message</div>' %}
+        <div class="grid">
+            <div class="g 1/2@xl">
+                <div>
+                    {{ example|raw }}
+                </div>
+            </div>
+            <div class="g 1/2@xl">
+                <pre><code>{{ example }}</code></pre>
+            </div>
+        </div>
+    </div>
 
+    <h3 id="atoms-lists">Lists</h3>
 
-    <h3>Buttons</h3>
+    <h3 id="atoms-island">Island</h3>
 
-    <h2>Molecules</h2>
+    <h3 id="atoms-buttons">Buttons</h3>
+
+    <h2 id="molecules">Molecules</h2>
     <p>
         These are shared combinations of classes to create a common layout,
         but are not a complex entity. They are not expected particular content within them.
         They may make use of several atoms.
     </p>
 
-    <h3>Forms</h3>
+    <h3 id="molecules-tables">Tables</h3>
+    <p>
+        There are many tables.
+    </p>
+    <table class="table table--striped">
+        <thead>
+        <tr>
+            <th>Col1</th>
+            <th>Col2</th>
+            <th>Col3</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr onclick="alert('Clicked row 1')"><td>A</td><td>B</td><td>C</td></tr>
+        <tr onclick="alert('Clicked row 2')"><td>D</td><td>E</td><td>F</td></tr>
+        <tr onclick="alert('Clicked row 3')"><td>G</td><td>H</td><td>I</td></tr>
+        <tr onclick="alert('Clicked row 4')"><td>J</td><td>K</td><td>L</td></tr>
+        </tbody>
+    </table>
 
-    <h3>Tables</h3>
 
-    <h2>Organisms</h2>
+    <h3 id="molecules-forms">Forms</h3>
+
+
+    <h2 id="organisms">Organisms</h2>
     <p>
         These are complete, complex objects, containing many sub-objects.
         They are usually closely linked with the data contained within them.
         They may make use of several atoms / molecules.
     </p>
+
+    <h3 id="organisms-charts">Charts</h3>
 
 </div>
 {% endblock %}

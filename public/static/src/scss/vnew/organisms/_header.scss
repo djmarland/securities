@@ -1,0 +1,26 @@
+.header {
+    @extend .color-box--brand;
+    marign-bottom: $size-grid-unit;
+}
+.header__inner {
+    @extend .layout--full;
+    padding-top: $size-grid-unit-small;
+    padding-bottom: $size-grid-unit-small;
+}
+.header__nav-button {
+    @extend .island;
+    cursor: pointer;
+    display: block;
+    border-width: 1px;
+    border-style: solid;
+    border-radius: 2px;
+    &:hover,
+    &:active,
+    &:focus {
+        background: $color-brand-text;
+        color: $color-brand;
+    }
+    @include mq($from: m) {
+        display: none;
+    }
+}

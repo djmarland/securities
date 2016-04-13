@@ -50,6 +50,30 @@
     <link rel="stylesheet" href="{{ 'styles.css'|asset_path }}" />
 <body class="{% block bodyClass %}{% endblock %}" data-env="{{ meta.environment }}">
 {% block header %}
+<header><div class="header">
+    <div class="header__inner">
+        <div class="grid grid--flat">
+            <div class="g 4/5 2/3@xs 1/2@s"
+                ><a href="{{ path('home') }}"
+                    ><img src="{{ 'logo.svg'|asset_path }}" alt="{{ meta.siteTitle }}" /></a
+            ></div>
+            <div class="g 1/5 1/3@xs 1/2@s">
+                <label class="header__nav-button" for="main-nav-display" aria-label="Dispay Site Navigation">Menu</label>
+            </div>
+        </div>
+    </div>
+
+    <nav>
+        <input type="checkbox" id="main-nav-display" />
+        <div class="main-nav">
+        <ul class="main-nav__list"
+            ><li><a class="main-nav__link" href="{{ path('home') }}">Home</a></li
+            ><li><a class="main-nav__link" href="{{ path('overview_securities') }}">Securities</a></li
+        ></ul>
+        </div>
+    </nav>
+</div></header>
+
 <!--<div class="app">
     <header><div class="header">
             <div class="page-limit">

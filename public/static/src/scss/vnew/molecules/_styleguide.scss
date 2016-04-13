@@ -30,3 +30,9 @@
 .sg__color-title {
     text-align: center;
 }
+
+.sg__color-box-line {
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+    padding-bottom: $size-grid-unit-small;
+}

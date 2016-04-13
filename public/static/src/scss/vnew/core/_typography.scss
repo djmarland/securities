@@ -56,17 +56,17 @@ h3, .h3 {
 h4, .h4 {
     @extend .d;
     letter-spacing: -1px;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 h5, .h5 {
     @extend .e;
-    font-weight: bold;
+    font-weight: 600;
 }
 
 h6, .h6 {
     @extend .f;
-    font-weight: normal;
+    font-weight: 600;
     text-transform: uppercase;
 }
 
@@ -78,8 +78,12 @@ small {
     @extend .f;
 }
 
+.font-heading {
+    font-family: $font-heading;
+}
+
 .font-reset {
     font-family: $font-body;
-    font-weight: normal;
+    font-weight: 500;
     letter-spacing: 0;
 }

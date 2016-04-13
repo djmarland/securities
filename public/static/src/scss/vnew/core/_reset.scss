@@ -20,8 +20,6 @@ html {
 
 body {
     padding: 0;
-    background: $color-body-bg;
-    color: $color-body-text;
     font-family: $font-body;
 }
 
@@ -38,13 +36,12 @@ ul {
 }
 
 a {
-    font-weight: inherit;
-    color: $color-body-link;
+    font-weight: 600;
+    letter-spacing: -0.5px;
     text-decoration: none;
     &:hover,
     &:active,
     &:focus {
-        color: $color-body-link-hover;
         text-decoration: underline;
     }
 }
@@ -52,6 +49,7 @@ a {
 code {
     font-family: monospace;
     background: $color-grey-lightest;
+    color: $color-black;
     padding: $size-grid-unit-tiny;
 }
 pre code {
@@ -79,6 +77,7 @@ pre code {
 body[data-env="dev"],
 body[data-env="alpha"],
 body[data-env="beta"] {
+    padding-bottom: 160px;
     &:after {
         position: fixed;
         bottom: -20px;

@@ -63,3 +63,52 @@
 .color-complimentary-light {
     background-color: $color-complimentary-light;
 }
+
+.color-box--body,
+body {
+    background-color: $color-body-bg;
+    color: $color-body-text;
+    a {
+        color: $color-body-link;
+        &:hover,
+        &:active,
+        &:focus {
+            color: $color-body-link-hover;
+        }
+    }
+    .keyline {
+        border-color: $color-body-keyline;
+    }
+}
+
+.color-box--brand {
+    background-color: $color-brand;
+    color: $color-white;
+    a {
+        color: $color-complimentary-mid;
+        &:hover,
+        &:active,
+        &:focus {
+            color: $color-tertiary-light;
+        }
+    }
+    .keyline {
+        border-color: $color-grey-light;
+    }
+}
+
+.color-box--subtle {
+    background-color: $color-primary-light;
+    color: $color-black;
+    a {
+        color: $color-primary-dark;
+        &:hover,
+        &:active,
+        &:focus {
+            color: $color-secondary-dark;
+        }
+    }
+    .keyline {
+        border-color: $color-grey-dark;
+    }
+}

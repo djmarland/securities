@@ -12,10 +12,6 @@
     }
 }
 
-.grid--flat {
-    margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
-}
-
 .g {
     float: left;
     @include flexbox(inline-block);
@@ -59,6 +55,13 @@
     }
 }
 
+
+.grid--flat {
+    margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
+    > .g {
+        margin-bottom: 0;
+    }
+}
 
 // include fractions unprefixed
 @include fractions();

@@ -1,0 +1,31 @@
+.table-container {
+    width: 100%;
+    overflow-x: auto;
+}
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    td,th {
+        padding: $size-grid-unit-small;
+        text-align: left;
+    }
+}
+
+.table--striped {
+    thead > tr,
+    tfoot > tr{
+        background: $color-brand;
+        color: $color-brand-text;
+    }
+    tbody > tr:nth-child(even) {
+        background: $color-primary-light;
+    }
+    tbody > tr[onclick]:hover {
+        cursor: pointer;
+        background: $color-primary-dark;
+        color: $color-white;
+    }
+    tbody {
+        border-bottom: solid 1px $color-primary-light;
+    }
+}
