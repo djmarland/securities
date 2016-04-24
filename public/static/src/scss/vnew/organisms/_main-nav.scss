@@ -2,7 +2,7 @@
     @extend .layout--full;
     background: $color-black;
     display: none;
-    @include mq($from: m) {
+    @include mq($from: xl) {
         display: block;
     }
 }
@@ -34,11 +34,14 @@
             text-decoration: none;
         }
     }
-    @include mq($from: m) {
+    @include mq($from: xl) {
         > li {
             display: inline-block;
             border-bottom: 0;
             border-right: solid 1px $color-brand;
+        }
+        a.main-nav__link {
+            padding: $size-grid-unit*0.75 $size-grid-unit;
         }
     }
 }

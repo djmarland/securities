@@ -3,7 +3,8 @@
 // this is the custom reset,
 // for setting default styles on semantic elements (not classes)
 
-*, *:before, *:after {
+*, *:before, *:after,
+h1, h2, h3, h4, h5, h6, p {
     box-sizing: border-box;
     margin: 0;
     padding: 0;
