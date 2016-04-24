@@ -72,6 +72,13 @@ class ByGroupService extends SecuritiesService
         return $this->buildSumByProductForBucket($qb, $bucket);
     }
 
+    public function countsByProduct(): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb = $this->where($qb, $this->getDomainEntity());
+        $qb = $this->joinTree($qb);
+        return $this->buildCountsByProduct($qb);
+    }
+
     private function joinTree(QueryBuilder $qb): QueryBuilder
     {
         $qb->leftJoin(self::TBL . '.company', 'co');

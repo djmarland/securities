@@ -1,29 +1,15 @@
 .island {
-    padding: $grid-unit-small;
+    padding: $size-grid-unit;
 }
 
 .island-squashed {
-    padding: $grid-unit-small/2 $grid-unit-small;
+    padding: $size-grid-unit/2 $size-grid-unit;
 }
 
 .island-squeezed {
-    padding: $grid-unit-small/3 $grid-unit-small;
+    padding: $size-grid-unit/3 $size-grid-unit;
 }
 
 .islet {
-    padding: $grid-unit-small;
-}
-
-
-@include mq($from: m) {
-    .island {
-        padding: $grid-unit-large;
-    }
-    .island-squashed {
-        padding: $grid-unit-large/2 $grid-unit-large;
-    }
-
-    .island-squeezed {
-        padding: $grid-unit-large/3 $grid-unit-large;
-    }
+    padding: $size-grid-unit;
 }

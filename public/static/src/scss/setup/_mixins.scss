@@ -123,3 +123,9 @@
     -o-transition: $value;
     transition: $value
 }
+
+@mixin font-sizes($size-pixel-value, $line-height-pixel-value) {
+    font-size: $size-pixel-value;
+    font-size: ($size-pixel-value / 16px) * 1rem; // HTML base size is fixed at 16px
+    line-height: $line-height-pixel-value / $size-pixel-value;
+}

@@ -1,78 +1,37 @@
 .table-container {
-    position: relative;
-    &:after {
-        content: "";
-        display: block;
-        position: absolute;
-        top: 0;
-        right: 0;
-        bottom: 0;
-        width: $grid-unit-large * 2;
-        background: -webkit-linear-gradient(
-                        left,
-                        rgba(250,250,250,0) 0%,
-                        rgba(250,250,250,1) 100%
-    );
-        background: linear-gradient(
-                        to right,
-                        rgba(250,250,250,0) 0%,
-                        rgba(250,250,250,1) 100%
-        );
-        @include mq($from: xl) {
-            display: none;
-        }
-    }
-}
-.table-wrap {
     width: 100%;
     overflow-x: auto;
-    padding-right: $grid-unit-large * 2;
-    @include mq($from: xl) {
-        padding-right: 0;
-    }
 }
-
 .table {
     width: 100%;
     border-collapse: collapse;
     td,th {
-        padding: $grid-unit-small;
+        padding: $size-grid-unit-small;
         text-align: left;
-    }
-}
-
-.table--lined {
-    tr {
-        border-bottom: solid 1px $color-faint;
     }
 }
 
 .table--striped {
     thead > tr,
     tfoot > tr{
-        background: $color-header-bg;
-        color: $color-header-text;
+        background: $color-brand;
+        color: $color-brand-text;
     }
     tbody > tr:nth-child(even) {
-        background: $color-faint;
+        background: $color-primary-light;
     }
     tbody > tr[onclick]:hover {
         cursor: pointer;
-        background: $color-header-bg;
-        color: $color-header-text;
+        background: $color-primary-dark;
+        color: $color-white;
     }
     tbody {
-        border-bottom: solid 1px $color-faint;
+        border-bottom: solid 1px $color-primary-light;
     }
 }
 
-.table--tight {
-    td, th {
-        padding-top: 0;
+.table--lined {
+    tr {
+        border-bottom: solid 1px $color-body-keyline;
     }
-}
-
-// @todo - make it so this isn't needed
-.table--small {
-    font-size: 80%;
 }

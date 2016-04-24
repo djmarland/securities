@@ -5,7 +5,7 @@
 {% block content %}
 <div class="grid">
     <div class="g">
-        <h1 class="c"><span class="invisible">{{ block('context') }} - </span>Securities</h1>
+        <h1 class="h3"><span class="invisible">{{ block('context') }} - </span>Securities</h1>
     </div>
     <div class="g">
         {% include '@partials/securities-filter.html.twig' %}
@@ -24,4 +24,5 @@
         <p>There are no results for your chosen filters</p>
     {% endif %}
     </div>
+</div>
 {% endblock %}

@@ -1,0 +1,11 @@
+.h-context {
+    display: block;
+}
+.h-context__item {
+    &:after {
+        content: " / ";
+    }
+    &:last-child:after {
+        content: "";
+    }
+}

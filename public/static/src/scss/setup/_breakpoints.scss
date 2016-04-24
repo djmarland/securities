@@ -8,17 +8,9 @@ $mq-breakpoints: (
         l: 768px,
         xl: 1008px,
         xxl: 1280px,
-        xxxl: 1600px
+        xxxl: 1600px,
+        max: 1920px
 ) !default;
-
-@function grid-unit($breakpoint) {
-    $unit: $grid-unit-small;
-    // ensure wider breakpoint than gel3 is large unit
-    @if map-get($mq-breakpoints, $breakpoint) >= map-get($mq-breakpoints, gel3) {
-        $unit: $grid-unit-large;
-    }
-    @return $unit;
-}
 
 // convert the list of breakpoints into suffixes
 $breakpoint-suffixes: ();
@@ -27,4 +19,4 @@ $breakpoint-suffixes: ();
     $breakpoint-suffixes: map-merge($breakpoint-suffixes, ($key: $suffix));
 }
 
-@import '../vendor/mq';
+@import "../vendor/mq";

@@ -142,42 +142,8 @@ class SecuritiesService extends Service
 
     public function countsByProduct()
     {
-        /*
-         * select p.name, count(s.id)
-         * from securities as s left join products as p on s.product_id = p.id
-         * group by p.id;
-         */
-        $productTable = 'product';
-
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select([
-            self::TBL,
-            'count(' . self::TBL . '.id) as c',
-            $productTable,
-        ])
-            ->leftJoin(self::TBL . '.product', $productTable);
-
-        $qb->groupBy($productTable . '.id');
-
-        /*
-         * List of:
-         * 0 => Security
-         * c => count
-        */
-        $results = $qb->getQuery()->getArrayResult();
-
-        $products = [];
-        $mapper = $this->mapperFactory->createMapper('Product');
-        foreach ($results as $result) {
-            $product = $mapper->getDomainModel($result[0]['product']);
-            $total = (int) $result['c'];
-            $products[] = (object) [
-                'product' => $product,
-                'count' => $total,
-            ];
-        }
-
-        return $products;
+        return $this->buildCountsByProduct($qb);
     }
 
     public function sum(
@@ -229,6 +195,50 @@ class SecuritiesService extends Service
         $qb->setMaxResults($limit);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+
+    public function buildCountsByProduct(QueryBuilder $qb): array
+    {
+        /*
+         * select p.name, count(s.id)
+         * from securities as s left join products as p on s.product_id = p.id
+         * group by p.id;
+         */
+        $productTable = 'product';
+
+        $qb->select([
+            self::TBL,
+            'count(' . self::TBL . '.id) as c',
+            $productTable,
+        ])
+            ->leftJoin(self::TBL . '.product', $productTable);
+
+        $qb->groupBy($productTable . '.id');
+
+        /*
+         * List of:
+         * 0 => Security
+         * c => count
+        */
+        $results = $qb->getQuery()->getArrayResult();
+
+        $products = [];
+        $mapper = $this->mapperFactory->createMapper('Product');
+        foreach ($results as $result) {
+            $product = $mapper->getDomainModel($result[0]['product']);
+            $total = (int) $result['c'];
+            $products[] = (object) [
+                'product' => $product,
+                'count' => $total,
+            ];
+        }
+
+        // sort by largest count first
+        usort($products, function($a, $b) {
+            return $b->count <=> $a->count;
+        });
+        return $products;
     }
 
     protected function buildSumByProductForBucket(

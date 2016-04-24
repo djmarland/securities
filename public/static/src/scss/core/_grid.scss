@@ -2,7 +2,7 @@
     @include flexbox(block);
     @include flex-wrap();
     @include flex-direction(row);
-    margin: 0 0 (-$grid-unit-small) (-$grid-unit-small); // need brackets or Scss combines with the zero
+    margin: 0 0 0 (-$size-grid-unit); // need brackets or Scss combines with the zero
     list-style-type: none;
     padding: 0;
     &:after {
@@ -12,7 +12,6 @@
     }
 }
 
-
 .g {
     float: left;
     @include flexbox(inline-block);
@@ -20,7 +19,7 @@
     @include flex-align(stretch);
     width: 100%; // will be overridden with fractions
     vertical-align: top;
-    padding-left: $grid-unit-small;
+    padding-left: $size-grid-unit;
 
     > * {
         @include flex(0 0 100%);
@@ -44,24 +43,7 @@
 
 .g,
 .g-unit {
-    margin-bottom: $grid-unit-small;
-}
-
-
-@include mq($from: m) {
-      .grid {
-          margin-left: -$grid-unit-large;
-          margin-bottom: -$grid-unit-large;
-      }
-
-      .g {
-          padding-left: $grid-unit-large;
-      }
-
-      .g,
-      .g-unit {
-          margin-bottom: $grid-unit-large;
-      }
+    margin-bottom: $size-grid-unit;
 }
 
 .grid--flush {
@@ -73,6 +55,13 @@
     }
 }
 
+
+.grid--flat {
+    margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
+    > .g {
+        margin-bottom: 0;
+    }
+}
 
 // include fractions unprefixed
 @include fractions();

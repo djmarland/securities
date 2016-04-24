@@ -1,47 +1,106 @@
+$header-action-size: 40px;
+
 .header {
-    background: $color-header-bg;
-    color: $color-header-text;
-    padding-top: $grid-unit-small;
-    padding-bottom: $grid-unit-small;
-    a,
-    a:link,
-    a:visited {
-        text-decoration: none;
-        color: $color-header-text;
-    }
-    a:focus,
-    a:hover,
-    a:active {
-        color: $color-header-active;
-    }
+    @extend .color-box--brand;
+    margin-bottom: $size-grid-unit;
 }
-.header__content {
-    @include flex-fill();
+.header__inner {
+    @extend .layout--full;
+    padding: $size-grid-unit-small $size-grid-unit $size-grid-unit-small $size-grid-unit-small;
+    @include flexbox(inline-block);
     @include flex-align(center);
-    @include flex-wrap();
 }
+
 .header__logo {
-    margin: 0;
-    font-size: 1.4rem;
-    font-weight: bolder;
-    text-transform: uppercase;
+    margin-right: $size-grid-unit;
+}
+
+.header__logo-link {
+    display: block;
+    line-height: 0;
+}
+
+.header__search {
+    height: $header-action-size;
+}
+.header__search-form {
+    @include flexbox(inline-block);
+    margin-left: $size-grid-unit;
+}
+
+.header__search-input {
+    background: transparent;
+    border: 0;
+    padding: $size-grid-unit $size-grid-unit 0 0;
+    outline: none;
+    font-weight: normal;
+}
+.header__search-button {
+    width: $header-action-size;
+    border: 0;
+    background: none;
+    padding: $size-grid-unit-tiny;
+}
+
+
+.header__nav-button {
+    margin-left: $size-grid-unit;
+    width: $header-action-size;
+    height: $header-action-size;
+    display: block;
+}
+
+.header__nav-button-icon,
+.header__search-button {
+    fill: $color-brand-text;
+    cursor: pointer;
+    &:hover,
+    &:active,
+    &:focus {
+        fill: $color-primary-light;
+    }
+}
+
+// handle sizing
+.header__logo {
+    @include flex(1);
+}
+.header__logo-link {
+    max-width: 188px;
 }
 .header__search {
-    @include flex-fill();
+}
+.header__search-input {
+    display: none;
 }
 
-@include mq($from: m) {
-    .header {
-        padding-bottom: 0;
+
+@include mq($from: l) {
+    .header__logo {
+        @include flex(inherit);
+    }
+    .header__logo-link {
+        max-width: 240px;
+    }
+    .header__search-form {
+        margin-bottom: -1px;
+        border-bottom: solid 1px $color-grey-dark;
     }
     .header__search {
-        margin-left: $grid-unit-large * 2;
-        height: 36px;
+        @include flex(1);
     }
-    .header__logo {
-        margin-right: $grid-unit-large * 2;
-        font-size: 2rem;
-        max-width: 320px;
+    .header__search-input {
+        @include flex(1);
+        display: block;
+        border-bottom: solid 1px transparent;
+        &:focus {
+            border-bottom-color: $color-white;
+        }
     }
 }
 
+@include mq($from: xl) {
+    .header__nav-button {
+        display: none;
+    }
+}

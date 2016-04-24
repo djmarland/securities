@@ -1,27 +1,47 @@
 // Colours
-$color-subtle: #b5b3b8;
-$color-faint: #d3ced6;
-$color-text: #444148;
-$color-link: #ADA000;
-$color-link-hover: #3a0676;
-$color-body: #fafafa;
-$color-card: #fff;
-$color-card-hover: #f6f6f6;
-$color-darker: #342638;
-$color-darkest: #131217;
+$color-brand: #342638;
+$color-brand-text: #FFF;
 
-$color-header-bg: $color-darker;
-$color-header-text: #fff;
-$color-header-active: $color-subtle;
+$color-black: #131217;
+$color-grey-darkest: #444148;
+$color-grey-dark: #777;
+$color-grey-mid: #999;
+$color-grey-light: #bbb;
+$color-grey-lightest: #ddd;
+$color-white: #fafafa;
 
-$color-nav-bg: $color-darkest;
-$color-nav-text: #fff;
+$color-primary-dark: #634D7B;
+$color-primary-mid: #8B7C9B;
+$color-primary-light: #B8B0C0;
+
+$color-secondary-dark: #B66D6D;
+$color-secondary-mid: #E5B3B3;
+$color-secondary-light: #FFE8E8;
+
+$color-tertiary-dark: #579157;
+$color-tertiary-mid: #8FB78F;
+$color-tertiary-light: #C5D8C5;
+
+$color-complimentary-dark: #B6B16D;
+$color-complimentary-mid: #E5E2B3;
+$color-complimentary-light: #FFFDE8;
+
+
+
+
+$color-body-text: $color-grey-darkest;
+$color-body-bg: $color-white;
+$color-body-link: $color-secondary-dark;
+$color-body-link-hover: $color-brand;
+$color-body-keyline: $color-grey-light;
+
+
 
 // Sizes
-$grid-unit-large: 24px;
-$grid-unit-small: 12px;
-$grid-unit-tiny: 6px;
+$size-grid-unit: 16px;
+$size-grid-unit-small: 8px;
+$size-grid-unit-tiny: 4px;
 
 // Fonts
-$font-heading: Georgia, serif;
 $font-body: "Source Sans Pro", sans-serif;
+$font-heading: Georgia, serif;

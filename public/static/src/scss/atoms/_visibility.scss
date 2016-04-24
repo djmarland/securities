@@ -1,5 +1,5 @@
 // Don't need this yet. Let's save on bytes
-@include hidden();
+//@include hidden();
 //@include unhidden();
 //@include unhidden-inline();
 //@include unhidden-inlineblock();
@@ -17,6 +17,6 @@
 //    }
 //}
 
-.transparent {
-    visibility: hidden;
-}
+//.transparent {
+//    visibility: hidden;
+//}

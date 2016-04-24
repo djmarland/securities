@@ -2,37 +2,120 @@
 
 {% block body %}
     <div class="grid">
-        <div class="g 3/4@xl">
-            <div>
-            <h1 class="b g-unit">{{ security.isin }}
-                {% if issuer %}
-                    <span class="invisible"> - {{ issuer.name }}</span>
-                {% endif %}
-            </h1>
-            {% include securityPresenter.templatePath with securityPresenter.vars only %}
+        <div class="g 7/10@xl 3/4@xxl 4/5@xxxl 5/6@max">
+            <div class="grid">
+                <div class="g 3/5@xxl 2/3@xxxl">
+                    <div>
+                        <h1 class="b g-unit">{{ security.isin }}
+                            {% if issuer %}
+                                <span class="invisible"> - {{ issuer.name }}</span>
+                            {% endif %}
+                        </h1>
+                        {% include securityPresenter.templatePath with securityPresenter.vars only %}
+                        {% include adverts.templatePath with adverts.variantVars('isin') only %}
+                    </div>
+                </div>
+                <div class="g 2/5@xxl 1/3@xxxl">
+                    <div class="color-grey-lightest island">
+                        {% if group %}
+                            <h2 class="d g-unit">{{ group.name }}</h2>
+                            <div class="grid g--align-center">
+                                <div class="g 1/2">
+                                    <div class="text--center island">
+                                        <h3 class="h5">Securities</h3>
+                                        <p class="b">{{ groupCount }}</p>
+                                    </div>
+                                </div>
+                                <div class="g 1/2">
+                                    <div class="text--center island">
+                                        <h3 class="h5">Amount raised</h3>
+                                        <p class="b">{% include groupAmount.templatePath with groupAmount.vars only %}</p>
+                                    </div>
+                                </div>
+                                <div class="g 3/5@s 1/2@m 2/5@l 1/1@xxl">
+                                    <div class="g-central" style="max-width: 320px">
+                                        <canvas id="group-products" height="280"></canvas>
+                                    </div>
+                                </div>
+                                <div class="g 2/5@s 1/2@m 3/5@l 1/1@xxl">
+                                    <div id="chart-legend"></div>
+                                </div>
+                                <script>
+                                    var ctx = document.getElementById('group-products').getContext('2d');
+                                    var myDoughnutChart = new Chart(ctx, {
+                                        type: 'doughnut',
+                                        data: {
+                                            labels: {{ byProduct.headings|json_encode|raw }},
+                                            datasets: [{
+                                                data: {{ byProduct.counts|json_encode|raw }},
+                                                backgroundColor: [
+                                                    "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+                                                ],
+                                                hoverBorderColor: "#999",
+                                                hoverBackgroundColor: [
+                                                    "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+                                                ]
+                                            }]
+                                        },
+                                        options: {
+                                            legend : {
+                                                display: false
+                                            },
+                                            legendCallback : function(data) {
+                                                var items = [];
+                                                data.legend.legendItems.forEach(function (item) {
+                                                    if (!item.hidden) {
+                                                        items.push(
+                                                            '<li class="legend__item">' +
+                                                                '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
+                                                                '<span class="legend__text">' + item.text + '</span>' +
+                                                            '</li>'
+                                                        );
+                                                    }
+                                                });
+                                                return '<ul class="legend">' + items.join('') + '</ul>';
+                                            },
+                                            responsive: true,
+                                            elements : {
+                                                arc: {
+                                                    borderColor: '#ddd'
+                                                }
+                                            }
+                                        }
+                                    });
+                                    var leg = document.getElementById('chart-legend').innerHTML = myDoughnutChart.generateLegend();
+                                </script>
+                            </div>
+                            <p>
+                                <a class="link--button" href="{{ path('group_show', { group_id : group.id }) }}">
+                                    Full profile
+                                </a>
+                            </p>
+                        {% else %}
+                        <h2 class="d g-unit">ISIN Analytics is the gateway to London’s debt capital markets.</h2>
+                        <ul class="list--spaced list--unstyled">
+                            {% if product %}
+                                <li>
+                                    <a class="link--button link--block text--center" href="{{ path(
+                                    'overview_securities',
+                                    { product: product.number }
+                                    ) }}">
+                                        See more {{ product.name }}
+                                    </a>
+                                </li>
+                            {% endif %}
+                            <li>
+                                <a class="link--button link--block text--center" href="{{ path('overview_securities') }}">
+                                    Browse all securities
+                                </a>
+                            </li>
+                        </ul>
+                        {% endif %}
+                    </div>
+                </div>
             </div>
         </div>
-        <div class="g 1/4@xl">
-            <div class="card card--padded g-unit ">
-                <h2 class="d g-unit">ISIN Analytics is the gateway to London’s debt capital markets.</h2>
-                <ul class="list--spaced list--unstyled">
-                    {% if product %}
-                    <li>
-                        <a class="link--button link--block text--center" href="{{ path(
-                                'overview_securities',
-                                { product: product.number }
-                        ) }}">
-                            See more {{ product.name }}
-                        </a>
-                    </li>
-                    {% endif %}
-                    <li>
-                        <a class="link--button link--block text--center" href="{{ path('overview_securities') }}">
-                            Browse all securities
-                        </a>
-                    </li>
-                </ul>
-            </div>
+        <div class="g 3/10@xl 1/4@xxl 1/5@xxxl 1/6@max">
             {% include adverts.templatePath with adverts.variantVars('isin') only %}
         </div>
     </div>
