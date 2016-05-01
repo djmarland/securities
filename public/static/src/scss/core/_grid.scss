@@ -5,15 +5,9 @@
     margin: 0 0 0 (-$size-grid-unit); // need brackets or Scss combines with the zero
     list-style-type: none;
     padding: 0;
-    &:after {
-        content: "";
-        display: table;
-        clear: both;
-    }
 }
 
 .g {
-    float: left;
     @include flexbox(inline-block);
     @include flex-wrap();
     @include flex-align(stretch);

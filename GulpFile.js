@@ -4,6 +4,7 @@ var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
     hash = require('gulp-hash'),
+    concat = require('gulp-concat'),
     staticPathSrc = 'public/static/src/',
     staticPathDist = 'public/static/dist/',
     manifestFile = 'assets.json',
@@ -19,7 +20,8 @@ gulp.task('sass', function() {
 });
 
 gulp.task('js', function() {
-    gulp.src(staticPathSrc + 'js/**/*.js')
+    gulp.src([staticPathSrc + 'js/vendor/**/*.js', staticPathSrc + 'js/lib/**/*.js', staticPathSrc + 'js/bootstrap.js'])
+        .pipe(concat('app.js'))
         .pipe(uglify())
         .pipe(hash())
         .pipe(gulp.dest(staticPathDist))

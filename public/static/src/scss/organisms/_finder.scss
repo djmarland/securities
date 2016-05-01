@@ -1,0 +1,37 @@
+.finder-wrapper {
+    position: -webkit-sticky;
+    position: sticky;
+    top: 0;
+}
+.finder {
+    background: $color-grey-lightest;
+    padding: $size-grid-unit 0;
+}
+.finder__list {
+    list-style: none;
+}
+.finder__item {
+    margin-bottom: 1px;
+}
+.finder__arrow {
+    display: inline-block;
+    fill: $color-white;
+    width: 32px;
+    height: 32px;
+    background: $color-primary-dark;
+    vertical-align: top;
+}
+.finder__active > .finder__arrow {
+    transform: rotate(90deg);
+}
+.finder__text {
+    display: inline-block;
+    vertical-align: top;
+}
+
+@include mq($from: xl) {
+    .finder {
+        max-height: 100vh;
+        overflow-y: auto;
+    }
+}

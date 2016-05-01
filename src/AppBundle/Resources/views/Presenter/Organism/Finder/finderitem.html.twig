@@ -1,7 +1,12 @@
-<li class="finder__item">
-    <a href="{{ finderitem.url }}" class="finder__link {{ finderitem.class }}">{{ finderitem.title }}</a>
+<li class="finder__item {{ finderitem.class }}">
+    <a href="{{ finderitem.url }}" class="finder__arrow"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+        <path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/><path fill="none" d="M0-.25h24v24H0z"/>
+    </svg></a>
+    <a href="{{ finderitem.url }}" class="finder__link">
+        {{ finderitem.title }}
+    </a>
     {% if finderitem.items %}
-        <h2 class="h-f finder__heading">{{ finderitem.heading }}</h2>
+        <h2 class="h6 finder__heading">{{ finderitem.heading }}</h2>
         <ol class="finder__list finder__sub">
         {% for item in finderitem.items %}
             {% include item.templatePath with item.vars only %}

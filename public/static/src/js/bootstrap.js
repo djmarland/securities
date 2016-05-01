@@ -69,12 +69,22 @@
             startSearch(value);
         });
     }
+    */
+
+    function init() {
+        var stickyElements = document.getElementsByClassName('finder-wrapper');
+console.log(stickyElements);
+        for (var i = stickyElements.length - 1; i >= 0; i--) {
+            Stickyfill.add(stickyElements[i]);
+        }
+    }
 
     // Cut the mustard
-    if (document.addEventListener &&
+    if (
+        document.getElementsByClassName &&
+        document.addEventListener &&
         window.history
     ) {
         init();
     }
-    */
 })();
