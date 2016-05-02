@@ -1,7 +1,58 @@
-<div id="chart-area" style="height: 400px">
-    <p class="text--center">Drawing graph...</p>
+<div id="chart-area">
+    <canvas id="group-products"><p class="text--center">Drawing graph...</p></canvas>
 </div>
+<div id="chart-legend"></div>
 <script>
+    var ctx = document.getElementById('group-products').getContext('2d');
+    var myDoughnutChart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: [
+                'January', 'February', 'March', 'April', 'May', 'June',
+                'July', 'August', 'September', 'October', 'November', 'December'
+            ],
+            datasets: {{ issuancegraph.datasets|json_encode|raw }}
+        },
+        options: {
+            scales : {
+                yAxes : [{
+                    ticks: {
+                        beginAtZero: true
+                    }
+                }]
+            },
+            legend : {
+                display: false
+            },
+            legendCallback : function(data) {
+                var items = [];
+                data.legend.legendItems.forEach(function (item) {
+                    if (!item.hidden) {
+                        items.push(
+                                '<li class="legend__item">' +
+                                '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
+                                '<span class="legend__text">' + item.text + '</span>' +
+                                '</li>'
+                        );
+                    }
+                });
+                return '<ul class="legend">' + items.join('') + '</ul>';
+            },
+            responsive: true,
+            maintainAspectRatio: true,
+            elements : {
+                arc: {
+                    borderColor: '#ddd'
+                }
+            }
+        }
+    });
+    var leg = document.getElementById('chart-legend').innerHTML = myDoughnutChart.generateLegend();
+</script>
+
+
+<script>
+    /*
     (function() {
         google.charts.setOnLoadCallback(drawChart);
         function drawChart() {
@@ -30,4 +81,5 @@
             }
         }
     })();
+    */
 </script>

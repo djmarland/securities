@@ -18,6 +18,31 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         $this->calculateScale();
     }
 
+    public function getDatasets()
+    {
+        $datasets = [];
+        $colors = ['#634D7B', '#B66D6D', '#B6B16D'];
+        $i = 0;
+        foreach ($this->results as $year => $data) {
+            $dataset = [
+                'label' => $year,
+                'backgroundColor' => $colors[$i]
+            ];
+            $data = [];
+
+            $months = $this->getMonths();
+            foreach ($months as $monthNum => $monthName) {
+                $data[] = round($this->results[$year][$monthNum] ?? 0, 2);
+            }
+
+
+            $dataset['data'] = $data;
+            $datasets[] = (object) $dataset;
+            $i++;
+        }
+        return array_reverse($datasets);
+    }
+
     public function getData()
     {
         $years = array_keys($this->results);
@@ -121,7 +146,7 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         // half the largest, so that it only kicks in
         // for greater than 2bn or 2tr
 //        $largest = $largest / 2;
-        
+
         // todo - share this logic with MoneyPresenter
         if ($largest > 1000000) { // trillions
             $this->scale = 1000000;

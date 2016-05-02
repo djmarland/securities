@@ -73,7 +73,6 @@
 
     function init() {
         var stickyElements = document.getElementsByClassName('finder-wrapper');
-console.log(stickyElements);
         for (var i = stickyElements.length - 1; i >= 0; i--) {
             Stickyfill.add(stickyElements[i]);
         }
