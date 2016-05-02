@@ -34,3 +34,32 @@
         border-bottom: solid 1px $color-body-keyline;
     }
 }
+
+@include mq($until: l) {
+    .table--collapse {
+        display: block;
+        thead {
+            display: none;
+        }
+        tbody {
+            tr,
+            td {
+                display: block;
+            }
+            tr {
+                margin-bottom: $size-grid-unit;
+                background: $color-grey-lightest;
+            }
+            td:not(:last-child) {
+                border-bottom: solid 1px $color-grey-mid;
+            }
+            td:before {
+                content: attr(data-heading) ":";
+                width: 40%;
+                display: inline-block;
+            }
+        }
+    }
+}
+
+// Specific table types

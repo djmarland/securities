@@ -2,7 +2,16 @@
     <div class="finder">
         <h2 class="h6 finder__heading">Industries</h2>
         <ol class="finder__list">
-            <li class="finder__item"><a href="{{ path(finder.allPath) }}" class="finder__link {{ finder.allClass }}">All</a></li>
+            <li class="finder__item {{ finder.allClass }}">
+                <a href="{{ path(finder.allPath) }}" class="finder__link">
+                    <span class="finder__indicator finder__indicator--nodrop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                            <circle cx="12" cy="12" r="8" />
+                    </svg></span>
+                    <span class="finder__text">
+                        All
+                    </span>
+                </a>
+            </li>
             {% for item in finder.items %}
                 {% include item.templatePath with item.vars only %}
             {% endfor %}

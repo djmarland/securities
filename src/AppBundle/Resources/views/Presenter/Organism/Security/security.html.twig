@@ -1,11 +1,11 @@
 <tr onclick="window.location.href='{{ path('security_show',{'isin':security.isin}) }}'">
-    <td><a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">
-            {{ security.isin }}
-        </a></td>
-    <td>{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
-    <td>{{ security.issuer }}</td>
-    <td>{{ security.issueDate }}</td>
-    <td>{{ security.maturityDate }}</td>
-    <td>{{ security.coupon }}</td>
-    <td>{{ security.currency }}</td>
+    <td data-heading="ISIN">{#
+        #}<a class="security__link" href="{{ path('security_show',{'isin':security.isin}) }}">{{ security.isin }}</a>{#
+    #}</td>
+    <td data-heading="Amount raised">{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
+    <td data-heading="Issuer">{{ security.issuer }}</td>
+    <td data-heading="Issuer date">{{ security.issueDate }}</td>
+    <td data-heading="Maturity date">{{ security.maturityDate }}</td>
+    <td data-heading="Coupon">{{ security.coupon }}</td>
+    <td data-heading="Currency">{{ security.currency }}</td>
 </tr>

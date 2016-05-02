@@ -1,3 +1,5 @@
+$finder-icon-size: 32px;
+
 .finder-wrapper {
     position: -webkit-sticky;
     position: sticky;
@@ -5,7 +7,10 @@
 }
 .finder {
     background: $color-grey-lightest;
-    padding: $size-grid-unit 0;
+    padding: $size-grid-unit-small;
+}
+.finder__heading {
+    margin-bottom: $size-grid-unit-small;
 }
 .finder__list {
     list-style: none;
@@ -13,25 +18,79 @@
 .finder__item {
     margin-bottom: 1px;
 }
-.finder__arrow {
+
+.finder__link {
+    display: block;
+    background: $color-primary-light;
+    color: $color-grey-darkest;
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: none;
+        background: $color-secondary-dark;
+        color: $color-white;
+    }
+}
+
+.finder__indicator {
     display: inline-block;
     fill: $color-white;
-    width: 32px;
-    height: 32px;
+    width: $finder-icon-size;
+    height: $finder-icon-size;
     background: $color-primary-dark;
-    vertical-align: top;
+    vertical-align: middle;
+    &:not(.finder__indicator--nodrop) {
+        &:hover,
+        &:active,
+        &:focus {
+            background: $color-brand;
+        }
+    }
 }
-.finder__active > .finder__arrow {
-    transform: rotate(90deg);
+.finder__indicator--nodrop {
+    padding: 8px;
 }
+.finder__active > .finder__link {
+    background: $color-secondary-mid;
+    &:hover,
+    &:active,
+    &:focus {
+        text-decoration: none;
+        background: $color-secondary-dark;
+        color: $color-white;
+    }
+    .finder__indicator {
+        background: $color-secondary-dark;
+        &:not(.finder__indicator--nodrop) {
+            transform: rotate(90deg);
+            &:hover,
+            &:active,
+            &:focus {
+                background: $color-brand;
+            }
+        }
+    }
+}
+
 .finder__text {
     display: inline-block;
-    vertical-align: top;
+    vertical-align: middle;
+    margin-left: $size-grid-unit-tiny;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    max-width: calc(100% - 48px);
+}
+
+.finder__sub {
+    padding: 0 0 0 $size-grid-unit-tiny;
+    margin: $size-grid-unit-small 0;
+    border-left: solid $size-grid-unit-tiny $color-grey-mid;
 }
 
 @include mq($from: xl) {
     .finder {
-        max-height: 100vh;
+        height: 100vh;
         overflow-y: auto;
     }
 }
