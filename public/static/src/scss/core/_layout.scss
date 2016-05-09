@@ -11,3 +11,18 @@ $layout-max-width: 1920px;
     margin-left: auto;
     margin-right: auto;
 }
+
+
+
+@include mq($from: xl) {
+    .layout-entities__finder {
+        padding-right: $size-grid-unit;
+        border-right: solid 1px $color-grey-lightest;
+    }
+    .layout-entities__core {
+        @include order(2);
+    }
+    .layout-entities__sidebar {
+        @include order(1);
+    }
+}

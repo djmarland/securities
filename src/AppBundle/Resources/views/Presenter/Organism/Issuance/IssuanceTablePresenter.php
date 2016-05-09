@@ -63,14 +63,14 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
                     $cumulative[$year] = $cumulative[$year] + $months[$monthNum];
                     $value = $months[$monthNum];
                 }
-                
+
                 if ($this->options['cumulative'] &&
                     $this->monthIsNotFuture($year, $monthNum)) {
                     $value = $cumulative[$year];
                 }
 
                 if ($value) {
-                    $col['presenter'] = new MoneyPresenter($value);
+                    $col['presenter'] = new MoneyPresenter($value, ['scale' => true]);
                 }
 
                 $row[] = $col;

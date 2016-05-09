@@ -6,8 +6,7 @@ $finder-icon-size: 32px;
     top: 0;
 }
 .finder {
-    background: $color-grey-lightest;
-    padding: $size-grid-unit-small;
+    @extend .scrollpanel;
 }
 .finder__heading {
     margin-bottom: $size-grid-unit-small;
@@ -21,28 +20,31 @@ $finder-icon-size: 32px;
 
 .finder__link {
     display: block;
-    color: $color-grey-darkest;
+    color: $color-body-text;
     &:hover,
     &:active,
     &:focus {
         text-decoration: none;
-        background: $color-secondary-dark;
+        background: $color-primary-dark;
         color: $color-white;
+        > .finder__indicator {
+            fill: $color-white;
+        }
     }
 }
 
 .finder__indicator {
     display: inline-block;
-    fill: $color-white;
+    fill: $color-body-text;
     width: $finder-icon-size;
     height: $finder-icon-size;
-    background: $color-primary-dark;
     vertical-align: middle;
     &:not(.finder__indicator--nodrop) {
         &:hover,
         &:active,
         &:focus {
             background: $color-brand;
+            fill: $color-white;
         }
     }
 }
@@ -50,16 +52,16 @@ $finder-icon-size: 32px;
     padding: 8px;
 }
 .finder__active > .finder__link {
-    background: $color-secondary-mid;
+    background: $color-primary-light;
     &:hover,
     &:active,
     &:focus {
         text-decoration: none;
-        background: $color-secondary-dark;
-        color: $color-white;
+        background: $color-primary-dark;
     }
     .finder__indicator {
-        background: $color-secondary-dark;
+        background: $color-primary-dark;
+        fill: $color-white;
         &:not(.finder__indicator--nodrop) {
             transform: rotate(90deg);
             &:hover,
@@ -89,6 +91,7 @@ $finder-icon-size: 32px;
 
 @include mq($from: xl) {
     .finder {
+        padding-right: $size-grid-unit;
         height: 100vh;
         overflow-y: auto;
     }

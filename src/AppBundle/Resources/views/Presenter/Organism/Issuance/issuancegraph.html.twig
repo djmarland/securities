@@ -3,83 +3,39 @@
 </div>
 <div id="chart-legend"></div>
 <script>
-    var ctx = document.getElementById('group-products').getContext('2d');
-    var myDoughnutChart = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: [
-                'January', 'February', 'March', 'April', 'May', 'June',
-                'July', 'August', 'September', 'October', 'November', 'December'
-            ],
-            datasets: {{ issuancegraph.datasets|json_encode|raw }}
-        },
-        options: {
-            scales : {
-                yAxes : [{
-                    ticks: {
-                        beginAtZero: true
-                    }
-                }]
-            },
-            legend : {
-                display: false
-            },
-            legendCallback : function(data) {
-                var items = [];
-                data.legend.legendItems.forEach(function (item) {
-                    if (!item.hidden) {
-                        items.push(
-                                '<li class="legend__item">' +
-                                '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
-                                '<span class="legend__text">' + item.text + '</span>' +
-                                '</li>'
-                        );
-                    }
-                });
-                return '<ul class="legend">' + items.join('') + '</ul>';
-            },
-            responsive: true,
-            maintainAspectRatio: true,
-            elements : {
-                arc: {
-                    borderColor: '#ddd'
-                }
-            }
-        }
-    });
-    var leg = document.getElementById('chart-legend').innerHTML = myDoughnutChart.generateLegend();
-</script>
-
-
-<script>
-    /*
     (function() {
-        google.charts.setOnLoadCallback(drawChart);
-        function drawChart() {
-            var data = google.visualization.arrayToDataTable({{ issuancegraph.data|json_encode|raw }}),
-                    options = {{ issuancegraph.chartOptions|json_encode|raw }},
-                    chart = new google.visualization.{{ issuancegraph.chartType }}(document.getElementById('chart-area'));
+        var ctx = document.getElementById('group-products').getContext('2d'),
+            settings = {{ issuancegraph.settings|json_encode|raw }},
+            chart;
 
-            google.visualization.events.addListener(chart, 'select', selectHandler);
-            chart.draw(data, options);
-
-            function selectHandler() {
-                var selectedItem = chart.getSelection()[0],
-                        month,
-                        yearCol,
-                        index,
-                        link;
-                if (selectedItem) {
-                    month = selectedItem.row;
-                    yearCol = selectedItem.column;
-                    index = month + '-' + yearCol;
-                    link = document.querySelector('a[data-index="' + index + '"]');
-                    if (link) {
-                        window.location.href = link.href;
-                    }
+        // Create legend
+        settings.options.legendCallback = function (data) {
+            var items = [];
+            data.legend.legendItems.forEach(function (item) {
+                if (!item.hidden) {
+                    items.push(
+                            '<li class="g 1/3"><div class="legend__item">' +
+                            '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
+                            '<span class="legend__text">' + item.text + '</span>' +
+                            '</div></li>'
+                    );
                 }
-            }
-        }
+            });
+            return '<ul class="legend legend--inline grid">' + items.join('') + '</ul>';
+        };
+
+        settings.options.scales.yAxes[0].ticks.callback = function (value) {
+            return settings.options.axisFormat.replace('#', value);
+        };
+
+        settings.options.tooltips.callbacks.label = function (tooltipItem, data) {
+            return data.datasets[tooltipItem.datasetIndex].label + ': ' +
+                    settings.options.axisFormat.replace('#', tooltipItem.yLabel);
+        };
+
+        chart = new Chart(ctx, settings);
+
+        document.getElementById('chart-legend').innerHTML = chart.generateLegend();
+
     })();
-    */
 </script>

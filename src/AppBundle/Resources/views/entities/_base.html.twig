@@ -6,7 +6,7 @@
 <div class="grid">
     <div class="g 4/5@xxxl 5/6@max">
         <div><div class="grid">
-            <div class="g 3/4@xl 3/4@xxxl">
+            <div class="g 3/4@xl 3/4@xxxl layout-entities__core">
                 <div>
                     <div class="g-unit entity-context">
                         <p class="g-unit h1">{{ block('context') }}</p>
@@ -16,8 +16,8 @@
                     {% include adverts.templatePath with adverts.variantVars('overview') only %}
                 </div>
             </div>
-            <div class="g 1/4@xl 1/4@xxxl">
-                <div>
+            <div class="g 1/4@xl 1/4@xxxl layout-entities__sidebar">
+                <div class="layout-entities__finder">
                     {% include finder.templatePath with finder.vars only %}
                 </div>
             </div>

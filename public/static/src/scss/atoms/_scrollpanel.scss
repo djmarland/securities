@@ -1,0 +1,16 @@
+.scrollpanel {
+    &::-webkit-scrollbar {
+        width: $size-grid-unit-small;
+        height: $size-grid-unit-small;
+        background: $color-grey-lightest;
+        margin-left: $size-grid-unit;
+    }
+
+    &::-webkit-scrollbar-track {
+        background: transparent;
+    }
+
+    &::-webkit-scrollbar-thumb {
+        background: $color-primary-dark;
+    }
+}

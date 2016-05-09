@@ -18,23 +18,95 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         $this->calculateScale();
     }
 
+    public function getSettings()
+    {
+        $settings = (object) [
+            'type' => $this->options['cumulative'] ? 'line' : 'bar',
+            'data' => (object) [
+                'labels' => [
+                    'January', 'February', 'March', 'April', 'May', 'June',
+                    'July', 'August', 'September', 'October', 'November', 'December'
+                ],
+                'datasets' => $this->getDatasets()
+            ],
+            'options' => json_decode('{
+                "axisFormat" : "' . $this->axisFormat . '",
+                "tooltips"  : {
+                    "callbacks" : {}
+                },
+                "scales" : {
+                    "yAxes" : [{
+                        "ticks": {
+                            "beginAtZero": true
+                        }
+                    }]
+                },
+               
+                "legend" : {
+                    "display": false
+                },
+                "responsive": true,
+                "hover" : {
+                    "mode" : "label"
+                },
+                "maintainAspectRatio": true,
+                "elements" : {
+                    "line": {
+                        "tension": 0.2
+                    }
+                }
+            }')
+        ];
+
+        if ($this->options['cumulative']) {
+            $settings->options->animation = false;
+        }
+
+        return $settings;
+    }
+
+
+
+
     public function getDatasets()
     {
         $datasets = [];
-        $colors = ['#634D7B', '#B66D6D', '#B6B16D'];
+        $colors = ['#B6B16D', '#B66D6D', '#634D7B'];
         $i = 0;
+        $cumulative = [];
         foreach ($this->results as $year => $data) {
             $dataset = [
+                'fill' => false,
                 'label' => $year,
+                'borderWidth' => $this->options['cumulative'] ? 6 : 0,
+                'borderColor' => $colors[$i],
                 'backgroundColor' => $colors[$i]
             ];
             $data = [];
 
             $months = $this->getMonths();
             foreach ($months as $monthNum => $monthName) {
-                $data[] = round($this->results[$year][$monthNum] ?? 0, 2);
-            }
+                if (!isset($cumulative[$year])) {
+                    $cumulative[$year] = 0;
+                }
 
+                $val = $this->results[$year][$monthNum] ?? 0;
+                $cumulative[$year] = $cumulative[$year] + $val;
+
+                if ($this->options['cumulative']) {
+                    if ($this->monthIsNotFuture($year, $monthNum)) {
+                        $val = $cumulative[$year];
+                    } else {
+                        $val = null;
+                    }
+                }
+
+                if (!is_null($val)) {
+                    $data[] = round((float)($val / $this->scale), 2);
+                } else {
+                    $data[] = null;
+                }
+            }
 
             $dataset['data'] = $data;
             $datasets[] = (object) $dataset;

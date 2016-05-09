@@ -1,0 +1,11 @@
+.link--invert {
+    background: $color-body-link;
+    color: $color-body-bg;
+    fill: $color-body-bg;
+    &:hover,
+    &:active,
+    &:focus {
+        background: $color-body-link-hover;
+        color: $color-body-bg;
+    }
+}

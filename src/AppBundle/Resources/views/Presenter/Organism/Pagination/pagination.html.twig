@@ -4,25 +4,41 @@
 {% endif %}
 {% if pagination.isActive %}
     <nav>
-        <ol class="pagination__list list--unstyled list--inline">
+        <ol class="pagination__list">
             <li>{%
                 if pagination.prevUrl %}
-                    <a class="link--button mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                    <a class="pagination__item pagination__item--link pagination__item--prev"
                        href="{{ pagination.prevUrl }}">
-                        Previous
+                        <svg viewBox="0 0 24 24" class="pagination__icon pagination__icon--prev">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>{#
+                        #}<span class="pagination__text">Previous</span>
                     </a>
                 {% else %}
-                    <span disabled class="mdl-button mdl-js-button mdl-button--raised">Previous</span>
+                    <span class="pagination__item pagination__item--disabled pagination__item--prev">
+                        <svg viewBox="0 0 24 24" class="pagination__icon pagination__icon--prev">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>{#
+                        #}<span class="pagination__text">Previous</span>
+                    </span>
                 {% endif
                 %}</li>
             <li>{%
                 if pagination.nextUrl %}
-                    <a class="link--button mdl-button mdl-js-button mdl-button--raised mdl-button--accent mdl-js-ripple-effect"
+                    <a class="pagination__item pagination__item--link pagination__item--next"
                        href="{{ pagination.nextUrl }}">
-                        Next
+                        <span class="pagination__text">Next</span>{#
+                        #}<svg viewBox="0 0 24 24" class="pagination__icon pagination__icon--next">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>
                     </a>
                 {% else %}
-                    <span disabled class="mdl-button mdl-js-button mdl-button--raised">Next</span>
+                    <span class="pagination__item pagination__item--disabled pagination__item--next">
+                        <span class="pagination__text">Next</span>{#
+                        #}<svg viewBox="0 0 24 24" class="pagination__icon pagination__icon--next">
+                            <use xlink:href="#icon-arrow"></use>
+                        </svg>
+                    </span>
                 {% endif
                 %}</li>
         </ol>

@@ -66,14 +66,14 @@
                                                 data.legend.legendItems.forEach(function (item) {
                                                     if (!item.hidden) {
                                                         items.push(
-                                                            '<li class="legend__item">' +
+                                                            '<li><div class="legend__item">' +
                                                                 '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
                                                                 '<span class="legend__text">' + item.text + '</span>' +
-                                                            '</li>'
+                                                            '</div></li>'
                                                         );
                                                     }
                                                 });
-                                                return '<ul class="legend">' + items.join('') + '</ul>';
+                                                return '<ul class="legend legend--stacked">' + items.join('') + '</ul>';
                                             },
                                             responsive: true,
                                             elements : {

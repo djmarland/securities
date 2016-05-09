@@ -1,4 +1,4 @@
-{% extends 'AppBundle::newbase.html.twig' %}
+{% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
 
@@ -24,6 +24,7 @@
             <ul>
                 <li><a href="#atoms-text">Text</a></li>
                 <li><a href="#atoms-messages">Messages</a></li>
+                <li><a href="#atoms-links">Links</a></li>
                 <li><a href="#atoms-lists">Lists</a></li>
                 <li><a href="#atoms-island">Island</a></li>
                 <li><a href="#atoms-buttons">Buttons</a></li>
@@ -299,6 +300,25 @@ viverra, neque eu pretium rhoncus, diam nisi maximus antabitant morbi.</p>' %}
 <div class="message message--ok">This is the ok message</div>
 <div class="message message--warning">This is the warning message</div>
 <div class="message message--error">This is the error message</div>' %}
+        <div class="grid">
+            <div class="g 1/2@xl">
+                <div>
+                    {{ example|raw }}
+                </div>
+            </div>
+            <div class="g 1/2@xl">
+                <pre><code>{{ example }}</code></pre>
+            </div>
+        </div>
+    </div>
+
+    <h3 id="atoms-links">Links</h3>
+    <p>
+        There are a few ways to style links. <code>.link--invert</code> creates a box where the background is
+        the main link colour. It does not handle padding.
+    </p>
+    <div class="sg__example">
+        {% set example = '<a href="#" class="link--invert">This is a link</a>' %}
         <div class="grid">
             <div class="g 1/2@xl">
                 <div>
