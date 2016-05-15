@@ -4,11 +4,28 @@
 
 {% block content %}
 <div class="grid">
-    <div class="g">
+    <div class="g 1/3@l">
         <h1 class="h3"><span class="invisible">{{ block('context') }} - </span>Securities</h1>
     </div>
-    <div class="g">
-        {% include '@partials/securities-filter.html.twig' %}
+    <div class="g 2/3@l">
+        <div class="text--right">
+            <a class="link--button" href="#filter">
+                {% if filter.activeIssueDate %}
+                    Issued {{ filter.activeIssueDate.start.format('d M Y') }} -
+                    { filter.activeIssueDate.displayEnd.format('d M Y') }}
+                    (Edit)
+                {% elseif filter.activeBucket %}
+                    <div class="g">
+                        <div class="message text--center">
+                            Showing only securities due to mature {{ filter.activeBucket }}
+                            <button type="submit" class="btn">X Remove filter</button>
+                        </div>
+                    </div>
+                {% else %}
+                    Filter
+                {% endif %}
+            </a>
+        </div>
     </div>
     <div class="g 1/2@xl">
         <p class="d">Total: {% include totalRaised.templatePath with totalRaised.vars only %}</p>
@@ -23,6 +40,9 @@
     {% else %}
         <p>There are no results for your chosen filters</p>
     {% endif %}
+    </div>
+    <div id=filter" class="g">
+    {% include '@partials/securities-filter.html.twig' %}
     </div>
 </div>
 {% endblock %}
