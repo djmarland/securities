@@ -14,8 +14,11 @@
 
 .form__input {
     border: solid 1px $color-primary-light;
-    padding: $size-grid-unit-tiny $size-grid-unit-small;
+    padding: $size-grid-unit-small;
+    transition: box-shadow 0.1s ease-out;
     &:focus {
         border-color: $color-primary-dark;
+        outline: none;
+        box-shadow: 0 0 $size-grid-unit-small $color-primary-dark;
     }
 }

@@ -23,7 +23,7 @@ class SearchController extends Controller
         $this->setTitle('Search');
 
         if ($query) {
-            $this->setTitle('Search - ' . $query);
+            $this->setTitle('Search results - ' . $query);
 
             try {
 
@@ -53,9 +53,7 @@ class SearchController extends Controller
             $securityPresenters = [];
             if (!empty($securities)) {
                 foreach ($securities as $security) {
-                    $securityPresenters[] = new SecurityPresenter($security, [
-                        'template' => 'simple',
-                    ]);
+                    $securityPresenters[] = new SecurityPresenter($security);
                 }
             }
 

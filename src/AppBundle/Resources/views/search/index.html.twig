@@ -1,6 +1,27 @@
 {% extends 'AppBundle::base.html.twig' %}
 
-{% block body %}
+{% use "AppBundle::search/_base.html.twig" %}
+
+{% block content %}
     <h1>{{ meta.title }}</h1>
-    <p>Enter a query in the search box to begin</p>
+    <p class="g-unit">
+        <label for="inpage-search">Enter a search query. You may search for ISINs or Issuers</label>
+    </p>
+
+    <form class="grid" action="{{ path('search') }}" method="get">
+        <div class="g">
+        <input id="inpage-search" class="form__input" name="q" type="search" autocomplete="off"
+               placeholder="Enter ISIN or Issuer name" />
+        </div>
+        <div class="g"><div>
+        <button class="button" type="submit">
+            <span class="button__icon">
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                <use xlink:href="#icon-search"></use>
+            </svg>
+            </span>
+            <span class="button__text">Search</span>
+        </button>
+        </div></div>
+    </form>
 {% endblock %}

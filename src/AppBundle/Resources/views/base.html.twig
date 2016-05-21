@@ -74,7 +74,7 @@
         ></div>
         <div class="header__search">
             <form id="search-form" class="header__search-form" action="{{ path('search') }}" method="get">
-                <label class="invisible" for="search">Search</label>
+                <label class="invisible" for="search-input">Search</label>
                 <input id="search-input" class="h4 header__search-input" name="q" type="search" autocomplete="off"
                        placeholder="Enter ISIN or Issuer name" value="{{ searchContext }}" {{ searchAutofocus }} />
                 <button class="header__search-button" type="submit">

@@ -1,5 +1,5 @@
 .footer {
-    margin-top: $size-grid-unit;
-    padding: $size-grid-unit 0;
+    margin-top: $size-grid-unit * 2;
+    padding: $size-grid-unit 0 $size-grid-unit * 4;
     text-align: center;
 }

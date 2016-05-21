@@ -1,6 +1,6 @@
-<ul>
+<ul class="list--unstyled">
     {% for security in securities %}
-        <li class="card g-unit">
+        <li class="g-unit">
             {% include security.templatePath with security.vars only %}
         </li>
     {% endfor %}

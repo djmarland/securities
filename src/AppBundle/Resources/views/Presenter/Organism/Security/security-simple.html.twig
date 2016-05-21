@@ -1,27 +1,25 @@
-<div class="security-simple">
-    <a class="security-simple__link" href="{{ path('security_show',{'isin':security.isin}) }}">
-        <h3 class="d security-simple__title card__heading island-squashed">{{ security.title }}</h3>
-        <div class="islet">
-            <table class="security-simple__table table table--tight">
-                <tbody>
-                    <tr>
-                        <th class="security-simple__th">Description:</th>
-                        <td>{{ security.name }}</td>
-                    </tr>
-                    <tr>
-                        <th>Issue date:</th>
-                        <td>{{ security.issueDate }}</td>
-                    </tr>
-                    <tr>
-                        <th>Maturity date:</th>
-                        <td>{{ security.maturityDate }}</td>
-                    </tr>
-                    <tr>
-                        <th>Amount raised:</th>
-                        <td>{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+<div class="security-simple color-grey-lightest island">
+    <a href="{{ path('security_show',{'isin':security.isin}) }}">
+        <h3 class="g-unit">{{ security.title }}</h3>
+        <table class="table table--lined">
+            <tbody>
+                <tr>
+                    <th class="security-simple__th">Description:</th>
+                    <td>{{ security.name }}</td>
+                </tr>
+                <tr>
+                    <th>Issue date:</th>
+                    <td>{{ security.issueDate }}</td>
+                </tr>
+                <tr>
+                    <th>Maturity date:</th>
+                    <td>{{ security.maturityDate }}</td>
+                </tr>
+                <tr>
+                    <th>Amount raised:</th>
+                    <td>{% include security.amountRaised.templatePath with security.amountRaised.vars only %}</td>
+                </tr>
+            </tbody>
+        </table>
     </a>
 </div>

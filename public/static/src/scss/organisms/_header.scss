@@ -2,11 +2,12 @@ $header-action-size: 40px;
 
 .header {
     @extend .color-box--brand;
-    margin-bottom: $size-grid-unit;
+    margin-bottom: $size-grid-unit * 2;
 }
 .header__inner {
     @extend .layout--full;
-    padding: $size-grid-unit-small $size-grid-unit $size-grid-unit-small $size-grid-unit-small;
+    padding-top: $size-grid-unit-small;
+    padding-bottom: $size-grid-unit-small;
     @include flexbox(inline-block);
     @include flex-align(center);
 }

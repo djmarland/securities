@@ -1,12 +1,16 @@
 {% extends 'AppBundle::base.html.twig' %}
 
-{% block body %}
+{% use "AppBundle::search/_base.html.twig" %}
+
+{% block content %}
     <h1 class="g-unit">{{ meta.title }}</h1>
 
+    <p class="g-unit"><a href="#issuers">Issuers</a> | <a href="#securities">Securities</a></p>
+
     <div class="grid">
-        <div class="g 1/2@l">
+        <div class="g">
             <div>
-            <h2>Issuers</h2>
+            <h2 id="issuers" class="g-unit">Issuers</h2>
             {% if hasIssuers %}
                 <ul>
                     {%  for issuer in issuerPresenters %}
@@ -18,11 +22,11 @@
             {% endif %}
             </div>
         </div>
-        <div class="g 1/2@l">
+        <div class="g">
             <div>
-            <h2>Securities</h2>
+            <h2 id="securities" class="g-unit">Securities</h2>
             {% if hasSecurities %}
-                {% include '@partials/securities-simple-list.html.twig' %}
+                {% include '@partials/securities-list.html.twig' %}
             {% else %}
                 <p>No securities match your query</p>
             {% endif %}
