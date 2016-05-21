@@ -64,6 +64,8 @@ trait SecuritiesTrait
         $this->toView('totalRaised', new MoneyPresenter($totalRaised, ['scale' => true]));
         $this->toView('securities', $this->securitiesToPresenters($securities));
         $this->toView('total', $total);
+        $this->toView('filterActive', $filter->isActive());
+        $this->toView('filterText', $filter->getStatus());
         $this->setTitle(implode(' - ', $this->titleParts));
 
         $this->setPagination(

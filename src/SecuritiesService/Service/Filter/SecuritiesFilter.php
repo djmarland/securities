@@ -22,6 +22,29 @@ class SecuritiesFilter
         $this->entities = array_filter($entities);
     }
 
+    public function isActive()
+    {
+        return !empty($this->entities);
+    }
+
+    public function getStatus()
+    {
+        $statuses = [];
+        foreach ($this->entities as $entity) {
+            if ($entity instanceof Product) {
+                $statuses[] = $entity->getName();
+            } elseif ($entity instanceof Currency) {
+                $statuses[] = $entity->getCode();
+            } elseif ($entity instanceof Bucket) {
+                $statuses[] = 'Due to mature ' . $entity->getName();
+            } elseif (isset($entity['start'])) {
+                $statuses[] = 'Issued ' . $entity['start']->format('d M Y') .
+                    ' - ' . $entity['displayEnd']->format('d M Y');
+            }
+        }
+        return implode(', ', $statuses);
+    }
+
     public function apply(
         QueryBuilder $qb,
         string $tbl

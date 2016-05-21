@@ -1,0 +1,21 @@
+.form {
+
+}
+
+.form__row {
+
+}
+
+.form__label {
+    &:after {
+        content: ":";
+    }
+}
+
+.form__input {
+    border: solid 1px $color-primary-light;
+    padding: $size-grid-unit-tiny $size-grid-unit-small;
+    &:focus {
+        border-color: $color-primary-dark;
+    }
+}

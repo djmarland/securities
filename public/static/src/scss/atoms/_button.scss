@@ -1,0 +1,31 @@
+.button {
+    @extend .link--invert;
+    display: inline-block;
+    padding: $size-grid-unit-tiny;
+    border: 0;
+}
+.button__icon,
+.button__text {
+    display: inline-block;
+    vertical-align: middle;
+}
+
+.button__icon {
+    width: 40px;
+    line-height: 0;
+    padding: 0 $size-grid-unit-tiny;
+}
+.button__text {
+    padding-right: $size-grid-unit-small;
+}
+
+.button--clear {
+    margin-left: $size-grid-unit-small;
+    > .button__icon {
+        padding: 0;
+        width: 24px;
+    }
+    > .button__text {
+        @extend .invisible;
+    }
+}

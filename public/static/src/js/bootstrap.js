@@ -1,6 +1,7 @@
 (function() {
     "use strict";
 
+    var ID;
     /*
     var spinner = document.getElementById('loading-spinner'),
         mainPage = document.getElementById('main-body');
@@ -70,12 +71,48 @@
         });
     }
     */
+    function setupShortcuts() {
+        ID = function(val) { return document.getElementById(val); };
+    }
 
-    function init() {
+    function setupStickys() {
         var stickyElements = document.getElementsByClassName('finder-wrapper');
         for (var i = stickyElements.length - 1; i >= 0; i--) {
             Stickyfill.add(stickyElements[i]);
         }
+    }
+
+    function setupFinderPosition() {
+        var activeItems = document.getElementsByClassName('finder__active'),
+            finder = document.getElementsByClassName('finder'),
+            len = activeItems.length,
+            last;
+        if (len < 2) {
+            return;
+        }
+        last = activeItems[len - 1];
+        finder[0].scrollTop = last.offsetTop - 64;
+    }
+
+    function setupFilterButton() {
+        var button = ID('js-securities-filter-button'),
+            filter = ID('filter-wrap');
+        if (button) {
+            button.addEventListener('click', function (e) {
+                e.preventDefault();
+                filter.classList.toggle('hidden');
+            });
+            if (window.location.hash.indexOf('filter') != -1) {
+                filter.classList.remove('hidden');
+            }
+        }
+    }
+
+    function init() {
+        setupShortcuts();
+        setupStickys();
+        setupFilterButton();
+        setupFinderPosition();
     }
 
     // Cut the mustard

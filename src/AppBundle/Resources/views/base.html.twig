@@ -52,7 +52,18 @@
 <body class="{% block bodyClass %}{% endblock %}" data-env="{{ meta.environment }}">
 <svg xmlns="http://www.w3.org/2000/svg" style="display: none">
     <defs>
-        <symbol id="icon-arrow"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"/></symbol>
+        <symbol id="icon-arrow"><path d="M8.59 16.34l4.58-4.59-4.58-4.59L10 5.75l6 6-6 6z"></path></symbol>
+        <symbol id="icon-filter"><path d="M10 18h4v-2h-4v2zM3 6v2h18V6H3zm3 7h12v-2H6v2z"></path></symbol>
+        <symbol id="icon-search">
+            <path class="search__path" fill-rule="evenodd" d="M16.477 14.356C17.437 12.98 18 11.306
+            18 9.5 18 4.806 14.194 1 9.5 1S1 4.806 1 9.5 4.806 18 9.5 18c1.805 0 3.48-.563
+            4.855-1.522l6.304 6.303c.113.12.3.12.42 0l1.7-1.695c.115-.116.11-.31 0-.423l-6.306-6.303zM9.5
+            16c3.59 0 6.5-2.91 6.5-6.5S13.09 3 9.5 3 3 5.91 3 9.5 5.91 16 9.5 16z"></path>
+        </symbol>
+        <symbol id="icon-clear">
+            <path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41
+             19 12 13.41 17.59 19 19 17.59 13.41 12z"></path>
+        </symbol>
     </defs>
 </svg>
 <header><div class="header">
@@ -69,7 +80,7 @@
                 <button class="header__search-button" type="submit">
                     <span class="invisible">Search</span>
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-                        <path class="search__path" fill-rule="evenodd" d="M16.477 14.356C17.437 12.98 18 11.306 18 9.5 18 4.806 14.194 1 9.5 1S1 4.806 1 9.5 4.806 18 9.5 18c1.805 0 3.48-.563 4.855-1.522l6.304 6.303c.113.12.3.12.42 0l1.7-1.695c.115-.116.11-.31 0-.423l-6.306-6.303zM9.5 16c3.59 0 6.5-2.91 6.5-6.5S13.09 3 9.5 3 3 5.91 3 9.5 5.91 16 9.5 16z"/>
+                        <use xlink:href="#icon-search"></use>
                     </svg>
                 </button>
             </form>

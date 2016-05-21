@@ -1,73 +1,82 @@
-<h2>Filter</h2>
+<div class="island color-grey-lightest">
+<h2 class="c">Filter</h2>
 <form method="get">
     <div class="grid">
         {% if filter.activeIssueDate %}
-            <div class="g">
-                <div class="message text--center">
-                    Showing only securities issued between
-                    {{ filter.activeIssueDate.start.format('d M Y') }} and
-                    {{ filter.activeIssueDate.displayEnd.format('d M Y') }}.
-                    <button type="submit" class="btn">X Remove date filter</button>
+            <div class="g 1/3@xl">
+                    <span class="form__label">Issued between</span>
+            </div>
+            <div class="g 2/3@xl">
+                <div>
+                    {{ filter.activeIssueDate.start.format('d M Y') }} -
+                    {{ filter.activeIssueDate.displayEnd.format('d M Y') }}
+                    <button type="submit" class="button button--clear">
+                    <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <use xlink:href="#icon-clear"></use>
+                    </svg></span>
+                        <span class="button__text">Clear</span>
+                    </button>
                 </div>
             </div>
         {% endif %}
         {% if filter.activeBucket %}
-            <div class="g">
-                <div class="message text--center">
-                    Showing only securities due to mature {{ filter.activeBucket }}
-                    <button type="submit" class="btn">X Remove filter</button>
+            <div class="g 1/3@xl">
+                <span class="form__label">Due to mature</span>
+            </div>
+            <div class="g 2/3@xl">
+                <div>
+                    {{ filter.activeBucket }}
+                    <button type="submit" class="button button--clear">
+                    <span class="button__icon"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <use xlink:href="#icon-clear"></use>
+                    </svg></span>
+                        <span class="button__text">Clear</span>
+                    </button>
                 </div>
             </div>
         {% endif %}
-        <div class="g 3/7@xl">
-            <p>
-                Use the filter to narrow the query
-            </p>
+        <div class="g 1/3@xl">
+            <label for="filter-input-product" class="form__label">Product</label>
         </div>
-        <div class="g 4/7@xl">
-            <div class="text--right">
-                <h3 class="c invisible">Filter:</h3>
-                <p>
-                    <label>
-                    <strong>Product: </strong><select name="product">
-                        <option value="">All</option>
-                        {% for product in filter.products %}
-                            <option value="{{ product.number }}"
-                                    {% if filter.activeProduct == product.id %}
-                                        selected
-                                    {% endif %}
-                            >{{ product.name }}</option>
-                        {% endfor %}
-                    </select>
-                    </label>
-                    <label>
-                        <strong>Currency: </strong><select name="currency">
-                            <option value="">All</option>
-                            {% for currency in filter.currencies %}
-                                <option value="{{ currency.code }}"
-                                        {% if filter.activeCurrency == currency.code %}
-                                            selected
-                                        {% endif %}
-                                >{{ currency.code }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                {#<p>
-                    <label>
-                        Maturity Date: <select name="bucket">
-                            <option value="">Any</option>
-                            {% for bucket in filter.buckets %}
-                                <option value="{{ bucket.key }}"
-                                        {% if filter.activeBucket == bucket.key %}
-                                            selected
-                                        {% endif %}
-                                >{{ bucket.name }}</option>
-                            {% endfor %}
-                        </select>
-                    </label>
-                </p>#}
-                <button type="submit" class="link--button">Update</button>
+        <div class="g 2/3@xl">
+            <select id="filter-input-product" name="product" class="form__input">
+                <option value="">All</option>
+                {% for product in filter.products %}
+                    <option value="{{ product.number }}"
+                            {% if filter.activeProduct == product.id %}
+                                selected
+                            {% endif %}
+                    >{{ product.name }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="g 1/3@xl">
+            <label for="filter-input-currency" class="form__label">Currency</label>
+        </div>
+        <div class="g 2/3@xl">
+            <select id="filter-input-currency" name="product" class="form__input">
+                <option value="">All</option>
+                {% for currency in filter.currencies %}
+                    <option value="{{ currency.code }}"
+                            {% if filter.activeCurrency == currency.code %}
+                                selected
+                            {% endif %}
+                    >{{ currency.code }}</option>
+                {% endfor %}
+            </select>
+        </div>
+        <div class="g">
+            <div>
+                <button type="submit" class="button">
+                    <span class="button__icon">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <use xlink:href="#icon-filter"></use>
+                    </svg>
+                    </span>
+                    <span class="button__text">Update filter</span>
+                </button>
             </div>
         </div>
     </div>
 </form>
+</div>
