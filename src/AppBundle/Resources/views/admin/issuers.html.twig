@@ -5,13 +5,13 @@
 {% block content %}
 <h1 class="g-unit b">Issuers</h1>
 {% if formSuccess %}
-    <div class="shadow message g-unit"><strong>{{ formSuccess }}</strong></div>
+    <div class="message message--ok g-unit"><strong>{{ formSuccess }}</strong></div>
 {% endif %}
 
 <div class="grid">
 
     <div class="g 1/2@m">
-        <div class="card card--padded">
+        <div class="">
             <div id="spin-container" style="width:48px;float:right"></div>
             <h2 class="c g-unit">Add / Edit Issuer</h2>
             <form method="post">
@@ -20,31 +20,31 @@
                         <p id="js-status"><em>Italics are optional fields</em></p>
                     </div>
                     <div class="g 1/2@m">
-                        <p class="text--right g-unit"><button id="save-isin" class="link--button">Save</button></p>
+                        <p class="text--right g-unit"><button id="save-isin" class="button button--fat">Save</button></p>
                     </div>
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-name">Name</label>
-                    <input data-js="field-name" class="form__field" id="field-name" name="field-name" required />
+                    <input data-js="field-name" class="form__input" id="field-name" name="field-name" required />
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-group"><em>Parent Group</em></label>
-                    <input data-js="field-group" class="form__field" id="field-group" name="field-group" autocomplete="off" />
+                    <input data-js="field-group" class="form__input" id="field-group" name="field-group" autocomplete="off" />
                     <div id="js-group-status"></div>
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-country"><em>Country</em></label>
-                    <input data-js="field-country" class="form__field" id="field-country" name="field-country" />
+                    <input data-js="field-country" class="form__input" id="field-country" name="field-country" />
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-id">ID</label>
-                    <input data-js="field-id" class="form__field" id="field-id" name="field-id" readonly />
+                    <input data-js="field-id" class="form__input" id="field-id" name="field-id" readonly />
                 </div>
             </form>
         </div>
     </div>
     <div class="g 1/2@m">
-        <div class="card card--padded g-unit">
+        <div class="g-unit">
             <h2 class="c g-unit">Issuers with no securities ({{ noSecuritiesCount }})</h2>
             {% if noSecuritiesCount %}
 
@@ -55,7 +55,7 @@
                             <div class="grid g--align-center">
                                 <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuer.id }) }}">{{ issuer.name }}</a>
                                 <input type="hidden" name="delete-id" value="{{ issuer.id }}" />
-                                <button class="g 1/5 link--button" type="submit">Delete</button>
+                                <button class="g 1/5 button button--fat" type="submit">Delete</button>
                             </div>
                             </form>
                         </li>
@@ -65,7 +65,7 @@
                 <p>All good</p>
             {% endif %}
         </div>
-        <div class="card card--padded">
+        <div class="">
             <h2 class="c g-unit">Issuers with no parent ({{ noParentCount }})</h2>
             {% if noParentCount %}
                 <ul class="list--lined">
@@ -73,7 +73,7 @@
                         <li>
                             <div class="grid g--align-center">
                                 <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuer.id }) }}">{{ issuer.name }}</a>
-                                <button class="g 1/5 link--button" data-js="fetch-issuer" data-id="{{ issuer.id }}">Fetch</button>
+                                <button class="g 1/5 button button--fat" data-js="fetch-issuer" data-id="{{ issuer.id }}">Fetch</button>
                             </div>
                         </li>
                     {% endfor %}
@@ -190,10 +190,10 @@
                         }
                     }
                     if (name.length == 0 || matched) {
-                        field.classList.remove('form__field--highlight');
+                        field.classList.remove('form__input--highlight');
                         status.innerHTML = '';
                     } else {
-                        field.classList.add('form__field--highlight');
+                        field.classList.add('form__input--highlight');
                         status.innerHTML = 'Does not match pre-existing group. Group will be created with this name';
                     }
                 };

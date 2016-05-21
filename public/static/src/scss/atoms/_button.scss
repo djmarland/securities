@@ -4,6 +4,9 @@
     padding: $size-grid-unit-tiny;
     border: 0;
 }
+.button--fat {
+    padding: $size-grid-unit-small;
+}
 .button__icon,
 .button__text {
     display: inline-block;

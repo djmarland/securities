@@ -17,6 +17,7 @@ class MasterPresenter extends Presenter
         'siteTitle' => '',
         'environment' => 'prod',
         'canonicalUrl' => '',
+        'isOk' => true
     ];
 
     public function __construct($appConfig, $env = null)

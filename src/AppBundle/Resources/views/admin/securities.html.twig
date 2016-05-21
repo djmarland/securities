@@ -27,7 +27,7 @@
     <div class="grid">
 
         <div class="g 7/12@m">
-            <div class="card card--padded g-unit">
+            <div class="g-unit">
                 <div id="spin-container" style="width:48px;float:right"></div>
                 <h2 class="c g-unit">Add or update securities</h2>
                 <form id="overall-form">
@@ -36,14 +36,14 @@
                         <p id="js-status"><em>Italics are optional fields</em></p>
                     </div>
                     <div class="g 1/2@m">
-                        <p class="text--right g-unit"><button id="save-isin" class="link--button">Save</button></p>
+                        <p class="text--right g-unit"><button id="save-isin" class="button button--fat">Save</button></p>
                     </div>
                 </div>
                 <hr class="g-unit" />
                 <div id="isin-forms" class="isin-forms"></div>
                 <div class="grid">
                     <div class="g 1/2">
-                        <p><button id="add-isin" class="link--button">+</button></p>
+                        <p><button id="add-isin" class="button button--fat">+</button></p>
                     </div>
                 </div>
                 </form>
@@ -51,7 +51,7 @@
         </div>
         <div class="g 5/12@m">
             <div>
-            <div class="card card--padded g-unit">
+            <div class="g-unit">
                 <h2 class="c g-unit">Securities with no issuer ({{ noIssuerCount }})</h2>
                 {% if noIssuerCount %}
                     <ul class="list--lined">
@@ -59,7 +59,7 @@
                             <li>
                                 <div class="grid g--align-center">
                                     <a class="g 4/5" href="{{ path('security_show', {isin : security.isin }) }}">{{ security.isin }}</a>
-                                    <button class="g 1/5 link--button" data-js="fetch-security" data-isin="{{ security.isin }}">Fetch</button>
+                                    <button class="g 1/5 button button--fat" data-js="fetch-security" data-isin="{{ security.isin }}">Fetch</button>
                                 </div>
                             </li>
                         {% endfor %}
@@ -68,25 +68,25 @@
                     <p>All good</p>
                 {% endif %}
             </div>
-            <div class="card card--padded g-unit">
+            <div class="g-unit">
                 <h2 class="c g-unit"><label for="csv-file">Upload CSV</label></h2>
                 <form enctype="multipart/form-data" method="post">
                     <div>
                         <input id="csv-file" type="file" name="csv-file" />
                     </div>
                     <div class="text--right">
-                        <button type="submit" class="link--button" name="submit-file">Upload</button>
+                        <button type="submit" class="button button--fat" name="submit-file">Upload</button>
                     </div>
                 </form>
             </div>
-            <div class="card card--padded g-unit">
+            <div class="g-unit">
                 <h2 class="c g-unit"><label for="csv-text">Paste CSV</label></h2>
                 <form method="post">
                     <div class="form__group">
-                        <textarea class="form__field" id="csv-text" name="csv-text" rows="20"></textarea>
+                        <textarea class="form__input" id="csv-text" name="csv-text" rows="20"></textarea>
                     </div>
                     <div class="text--right">
-                        <button type="submit" class="link--button" name="submit-text">Submit</button>
+                        <button type="submit" class="button button--fat" name="submit-text">Submit</button>
                     </div>
                 </form>
 
@@ -100,47 +100,47 @@
             <div class="form g-unit" id="isin-form-{X}" data-num="{X}">
                 <div class="form__group">
                     <label class="form__label" for="field-{X}-ISIN">ISIN</label>
-                    <input data-js="field-isin" class="form__field" id="field-{X}-ISIN" name="field-{X}-ISIN" required />
+                    <input data-js="field-isin" class="form__input" id="field-{X}-ISIN" name="field-{X}-ISIN" required />
                 </div>
                 <div class="form__group">
                     <label class="form__label" for="field-{X}-SECURITY_NAME">SECURITY_NAME</label>
-                    <input class="form__field" id="field-{X}-SECURITY_NAME" name="field-{X}-SECURITY_NAME" required />
+                    <input class="form__input" id="field-{X}-SECURITY_NAME" name="field-{X}-SECURITY_NAME" required />
                 </div>
                 <div class="grid">
                     <div class="g 1/2@m">
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-SOURCE">SOURCE</label>
-                            <input class="form__field" id="field-{X}-SOURCE" name="field-{X}-SOURCE" required />
+                            <input class="form__input" id="field-{X}-SOURCE" name="field-{X}-SOURCE" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-SECURITY_START_DATE">SECURITY_START_DATE (dd/mm/yyyy)</label>
-                            <input class="form__field" id="field-{X}-SECURITY_START_DATE" name="field-{X}-SECURITY_START_DATE" required />
+                            <input class="form__input" id="field-{X}-SECURITY_START_DATE" name="field-{X}-SECURITY_START_DATE" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-MONEY_RAISED_GBP">MONEY_RAISED_GBP (£m)</label>
-                            <input class="form__field" id="field-{X}-MONEY_RAISED_GBP" name="field-{X}-MONEY_RAISED_GBP" required />
+                            <input class="form__input" id="field-{X}-MONEY_RAISED_GBP" name="field-{X}-MONEY_RAISED_GBP" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-PRA_ITEM_4748">PRA_ITEM_4748 (line number)</label>
-                            <input class="form__field" id="field-{X}-PRA_ITEM_4748" name="field-{X}-PRA_ITEM_4748" required />
+                            <input class="form__input" id="field-{X}-PRA_ITEM_4748" name="field-{X}-PRA_ITEM_4748" required />
                         </div>
                     </div>
                     <div class="g 1/2@m">
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-TRADING_CURRENCY">TRADING_CURRENCY (3 letter code)</label>
-                            <input class="form__field" id="field-{X}-TRADING_CURRENCY" name="field-{X}-TRADING_CURRENCY" required />
+                            <input class="form__input" id="field-{X}-TRADING_CURRENCY" name="field-{X}-TRADING_CURRENCY" required />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-MATURITY_DATE"><em>MATURITY_DATE (dd/mm/yyyy)</em></label>
-                            <input class="form__field" id="field-{X}-MATURITY_DATE" name="field-{X}-MATURITY_DATE" />
+                            <input class="form__input" id="field-{X}-MATURITY_DATE" name="field-{X}-MATURITY_DATE" />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-COUPON_RATE"><em>COUPON_RATE (decimal, or with %)</em></label>
-                            <input class="form__field" id="field-{X}-COUPON_RATE" name="field-{X}-COUPON_RATE" />
+                            <input class="form__input" id="field-{X}-COUPON_RATE" name="field-{X}-COUPON_RATE" />
                         </div>
                         <div class="form__group">
                             <label class="form__label" for="field-{X}-COMPANY_NAME"><em>COMPANY_NAME (exact match)</em></label>
-                            <input class="form__field" id="field-{X}-COMPANY_NAME" name="field-{X}-COMPANY_NAME" />
+                            <input class="form__input" id="field-{X}-COMPANY_NAME" name="field-{X}-COMPANY_NAME" />
                         </div>
                     </div>
                 </div>

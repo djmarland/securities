@@ -1,10 +1,5 @@
 $finder-icon-size: 32px;
 
-.finder-wrapper {
-    position: -webkit-sticky;
-    position: sticky;
-    top: 0;
-}
 .finder {
     @extend .scrollpanel;
 }
@@ -92,7 +87,7 @@ $finder-icon-size: 32px;
 @include mq($from: xl) {
     .finder {
         padding-right: $size-grid-unit;
-        height: 100vh;
+        height: calc(100vh - #{$size-grid-unit});
         overflow-y: auto;
     }
 }

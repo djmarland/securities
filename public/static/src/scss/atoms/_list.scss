@@ -10,3 +10,11 @@
         display: inline;
     }
 }
+
+.list--lined {
+    @extend .list--unstyled;
+    > li {
+        border-bottom: solid 1px $color-grey-lightest;
+        margin-bottom: $size-grid-unit;
+    }
+}

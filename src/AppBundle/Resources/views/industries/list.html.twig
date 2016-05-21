@@ -1,10 +1,19 @@
 {% extends 'AppBundle::base.html.twig' %}
 
 {% block body %}
-    <h1 class="g-unit">{{ meta.title }}</h1>
-    <ul class="list--unstyled">
-        {%  for industry in industries %}
-            <li class="g-unit">{% include industry.templatePath with industry.vars only %}</li>
-        {%  endfor %}
-    </ul>
+<div class="grid">
+    <div class="g 4/5@xxl 5/6@max">
+        <div>
+            <h1 class="g-unit">{{ meta.title }}</h1>
+            <ul class="list--unstyled">
+                {%  for industry in industries %}
+                    <li class="g-unit">{% include industry.templatePath with industry.vars only %}</li>
+                {%  endfor %}
+            </ul>
+        </div>
+    </div>
+    <div class="g 1/5@xxl 1/6@max">
+        {% include adverts.templatePath with adverts.variantVars('overview') only %}
+    </div>
+</div>
 {% endblock %}

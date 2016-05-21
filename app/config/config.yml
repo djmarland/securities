@@ -39,8 +39,14 @@ twig:
     form_themes:
         - 'AppBundle:forms:fields.html.twig'
     paths:
-            "%kernel.root_dir%/../src/AppBundle/Resources/partials": partials
-            "%kernel.root_dir%/../public/static/dist/": static
+        "%kernel.root_dir%/../src/AppBundle/Resources/partials": partials
+        "%kernel.root_dir%/../public/static/dist/": static
+    exception_controller:  controller.exception:showAction
+
+services:
+    controller.exception:
+        class: AppBundle\Controller\ErrorController
+        arguments: ["@twig", "%kernel.debug%"]
 
 # Doctrine Configuration
 doctrine:

@@ -2,10 +2,6 @@
 
 }
 
-.form__row {
-
-}
-
 .form__label {
     &:after {
         content: ":";
@@ -20,5 +16,18 @@
         border-color: $color-primary-dark;
         outline: none;
         box-shadow: 0 0 $size-grid-unit-small $color-primary-dark;
+    }
+}
+
+
+.form__group {
+    margin-bottom: $size-grid-unit;
+    > .form__label {
+        display: block;
+        margin-bottom: $size-grid-unit-tiny;
+    }
+    > .form__input {
+        display: block;
+        width: 100%;
     }
 }

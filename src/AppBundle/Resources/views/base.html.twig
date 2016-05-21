@@ -4,6 +4,7 @@
     <meta charset="utf-8">
     <title>{{ meta.fullTitle }}</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if meta.isOk %}
     <link rel="apple-touch-icon" sizes="57x57" href="/apple-touch-icon-57x57.png">
     <link rel="apple-touch-icon" sizes="60x60" href="/apple-touch-icon-60x60.png">
     <link rel="apple-touch-icon" sizes="72x72" href="/apple-touch-icon-72x72.png">
@@ -37,6 +38,7 @@
     <link rel="image_src" href="{{ appConfig.siteHostName }}{{ 'fb-cover.png'|asset_path }}" />
 
     <link rel="canonical" href="{{ meta.canonicalUrl }}" />
+    {% endif %}
 
     {% if pagination %}
         {% if pagination.prevUrl %}
@@ -115,13 +117,13 @@
         <a href="{{ path('terms') }}">Terms of use</a> | <a href="{{ path('privacy_policy') }}">Privacy policy</a>
     </div>
 </div></footer>
-<!--<template id="loading-spinner" class="hidden">
+<template id="loading-spinner" class="hidden">
     <div class="loading">
         <svg class="loading__spinner" viewBox="-2 -2 70 70" xmlns="http://www.w3.org/2000/svg">
             <circle class="loading__path" fill="none" stroke-width="8" cx="33" cy="33" r="30"></circle>
         </svg>
     </div>
-</template>-->
+</template>
 <script src="{{ 'app.js'|asset_path }}"></script>
 <!-- Begin Cookie Consent plugin by Silktide - http://silktide.com/cookieconsent -->
 <script type="text/javascript">
