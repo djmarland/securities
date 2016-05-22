@@ -54,7 +54,7 @@
             <label for="filter-input-currency" class="form__label">Currency</label>
         </div>
         <div class="g 2/3@xl">
-            <select id="filter-input-currency" name="product" class="form__input">
+            <select id="filter-input-currency" name="currency" class="form__input">
                 <option value="">All</option>
                 {% for currency in filter.currencies %}
                     <option value="{{ currency.code }}"
