@@ -3,8 +3,8 @@ $layout-max-width: 1920px;
     max-width: $layout-max-width;
     margin-left: auto;
     margin-right: auto;
-    padding-left: $size-grid-unit * 2;
-    padding-right: $size-grid-unit * 2;
+    padding-left: $size-grid-unit;
+    padding-right: $size-grid-unit;
 }
 .layout--full {
     max-width: $layout-max-width;
@@ -14,7 +14,12 @@ $layout-max-width: 1920px;
     padding-right: $size-grid-unit;
 }
 
-
+@include mq($from: m) {
+    .layout--max {
+        padding-left: $size-grid-unit * 2;
+        padding-right: $size-grid-unit * 2;
+    }
+}
 
 @include mq($from: xl) {
     .layout-entities__finder {
