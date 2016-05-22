@@ -26,20 +26,56 @@ class HomeController extends Controller
         $this->toView('securitiesCount', number_format($securitiesCount));
         $this->toView('issuersCount', number_format($issuersCount));
 
-        $byProduct = [['Funding Product', 'Number']];
-        foreach ($productCounts as $pc) {
-            $byProduct[] = [
-                $pc->product->getName(),
-                $pc->count,
+        $colours = [
+            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+        ];
+        $products = [];
+        $productDataset = [];
+        $headings = [];
+        foreach ($productCounts as $i => $pc) {
+            $products[] = [
+                'product' => $pc->product,
+                'colour' => $colours[$i],
             ];
+            $headings[] = $pc->product->getName();
+            $productDataset[] = $pc->count;
         }
-        $this->toView('byProduct', $byProduct);
+        $this->toView('chartColours', $colours);
+        $this->toView('chartHeadings', $headings);
+        $this->toView('productsDataset', $productDataset);
+        $this->toView('products', $products);
         $this->toView('securities', null);
 
         if ($this->appConfig->featureIsActive(Features::RECENT_ISSUANCE_ON_HOMEPAGE())) {
             $latestIssuance = $securitiesService->findLatestIssuance(5);
             $this->toView('securities', $this->securitiesToPresenters($latestIssuance));
         }
+
+        // top 10 currencies, year to date
+        $now = new \DateTimeImmutable();
+        $startOfYear = new \DateTimeImmutable($now->format('Y') . '-01-01T00:00:00Z');
+
+        $top10Currencies = $securitiesService->sumByCurrencyForDateRange($startOfYear, $now, 5);
+        $currencyChartHeadings = [];
+        $currencyChartData = [];
+        foreach ($top10Currencies as $c) {
+            $currencyChartHeadings[] = $c->currency->getCode();
+            $currencyChartData[] = $c->total;
+        }
+
+        $this->toView('currencyChartHeadings', $currencyChartHeadings);
+        $this->toView('currencyChartData', $currencyChartData);
+
+        $top10Industries = $securitiesService->sumByIndustryForDateRange($startOfYear, $now, 5);
+        $industryChartHeadings = [];
+        $industryChartData = [];
+        foreach ($top10Industries as $c) {
+            $industryChartHeadings[] = $c->industry->getName();
+            $industryChartData[] = $c->total;
+        }
+
+        $this->toView('industryChartHeadings', $industryChartHeadings);
+        $this->toView('industryChartData', $industryChartData);
 
         return $this->renderTemplate('home:index');
     }

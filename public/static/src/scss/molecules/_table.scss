@@ -7,7 +7,7 @@
     width: 100%;
     border-collapse: collapse;
     td,th {
-        padding: $size-grid-unit-small;
+        padding: $size-grid-unit $size-grid-unit-small;
         text-align: left;
     }
 }

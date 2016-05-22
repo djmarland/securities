@@ -173,6 +173,103 @@ class SecuritiesService extends Service
         return $this->buildSumByProductForBucket($qb, $bucket);
     }
 
+    public function sumByCurrencyForDateRange(
+        DateTimeImmutable $issuedFrom,
+        DateTimeImmutable $issuedUntil,
+        int $limit = 10
+    ) {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+
+        $currencyTable = 'currency';
+
+        $qb->select([
+            self::TBL,
+            'sum(' . self::TBL . '.moneyRaised) as total',
+            $currencyTable,
+        ])
+            ->leftJoin(self::TBL . '.currency', $currencyTable)
+            ->andWhere(self::TBL . '.startDate >= :startDate')
+            ->andWhere(self::TBL . '.startDate < :endDate')
+            ->groupBy($currencyTable . '.id')
+            ->orderBy('total', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('startDate', $issuedFrom)
+            ->setParameter('endDate', $issuedUntil);
+
+        /*
+         * List of:
+         * 0 => Security
+         * total => sum
+        */
+        $results = $qb->getQuery()->getArrayResult();
+
+        $currencies = [];
+        $mapper = $this->mapperFactory->createMapper('Currency');
+        foreach ($results as $result) {
+            $currency = $mapper->getDomainModel($result[0]['currency']);
+            $total = (int) $result['total'];
+            $currencies[] = (object) [
+                'currency' => $currency,
+                'total' => $total,
+            ];
+        }
+
+        return $currencies;
+    }
+
+    public function sumByIndustryForDateRange(
+        DateTimeImmutable $issuedFrom,
+        DateTimeImmutable $issuedUntil,
+        int $limit = 10
+    ) {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+
+        $issuerTable = 'issuer';
+        $groupTable = 'parentGroup';
+        $sectorTable = 'sector';
+        $industryTable = 'industry';
+
+        $qb->select([
+            self::TBL,
+            'sum(' . self::TBL . '.moneyRaised) as total',
+            $issuerTable,
+            $groupTable,
+            $sectorTable,
+            $industryTable,
+        ])
+            ->join(self::TBL . '.company', $issuerTable)
+            ->join($issuerTable . '.parentGroup', $groupTable)
+            ->join($groupTable . '.sector', $sectorTable)
+            ->join($sectorTable . '.industry', $industryTable)
+            ->andWhere(self::TBL . '.startDate >= :startDate')
+            ->andWhere(self::TBL . '.startDate < :endDate')
+            ->groupBy($industryTable . '.id')
+            ->orderBy('total', 'DESC')
+            ->setMaxResults($limit)
+            ->setParameter('startDate', $issuedFrom)
+            ->setParameter('endDate', $issuedUntil);
+
+        /*
+         * List of:
+         * 0 => Security
+         * total => sum
+        */
+        $results = $qb->getQuery()->getArrayResult();
+
+        $industries = [];
+        $mapper = $this->mapperFactory->createMapper('Industry');
+        foreach ($results as $result) {
+            $industry = $mapper->getDomainModel($result[0]['company']['parentGroup']['sector']['industry']);
+            $total = (int) $result['total'];
+            $industries[] = (object) [
+                'industry' => $industry,
+                'total' => $total,
+            ];
+        }
+
+        return $industries;
+    }
+
     protected function buildFind(
         QueryBuilder $qb,
         $limit,

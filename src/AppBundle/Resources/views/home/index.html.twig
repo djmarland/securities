@@ -7,52 +7,69 @@
         <div><div class="grid">
         <div class="g 3/5@xl">
             <div class=" g-unit">
-                <div class="">
+                <div class="grid g--align-center">
+                    <div class="g">
                     <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
                     <p class="d g-unit">
                         Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
                         Browse the site for ISIN, company, sector or industry information relating to:
                     </p>
-                    <div class="g-unit">
-                        <ul class="grid">
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 40 }) }}">
-                                    Unsecured senior securities
-                                </a>
-                            </li>
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 41 }) }}">
-                                    Dated capital notes
-                                </a>
-                            </li>
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 1 }) }}">
-                                    Undated capital notes
-                                </a>
-                            </li>
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 42 }) }}">
-                                    Structured products
-                                </a>
-                            </li>
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 43 }) }}">
-                                    Covered bonds
-                                </a>
-                            </li>
-                            <li class="g 1/2@s 1/3@l">
-                                <a class="home-intro-button" href="{{ path('overview_securities', { product : 51 }) }}">
-                                    Securitisations
-                                </a>
-                            </li>
+                    </div>
+                    <div class="g 1/2@m">
+                        <div class="g-central" style="max-width: 280px">
+                            <canvas id="group-products" height="280"></canvas>
+                        </div>
+                        <script>
+                            var ctx = document.getElementById('group-products').getContext('2d');
+                            var myDoughnutChart = new Chart(ctx, {
+                                type: 'doughnut',
+                                data: {
+                                    labels: {{ chartHeadings|json_encode|raw }},
+                                    datasets: [{
+                                        data: {{ productsDataset|json_encode|raw }},
+                                        backgroundColor: {{ chartColours|json_encode|raw }},
+                                        hoverBorderColor: "#999",
+                                        hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                                    }]
+                                },
+                                options: {
+                                    legend : {
+                                        display: false
+                                    },
+                                    responsive: true,
+                                    elements : {
+                                        arc: {
+                                            borderColor: '#ddd'
+                                        }
+                                    }
+                                }
+                            });
+                        </script>
+                    </div>
+                    <div class="g 1/2@m">
+                        <ul class="legend legend--stacked">
+                            {% for productItem in products %}
+                                <li>
+                                    <div class="legend__item">
+                                        <span class="legend__icon" style="background-color:{{ productItem.colour }}"></span>
+                                    <span class="legend__text">
+                                        <a class="home-intro-button" href="{{
+                                        path('overview_securities', { product : productItem.product.number })
+                                        }}">{{ productItem.product.name }}</a>
+                                    </span>
+                                    </div>
+                                </li>
+                            {% endfor %}
                         </ul>
                     </div>
+                    <div class="g">
                     <p class="g-unit">
                         Please read the
                         <a href="{{ path('terms') }}">Terms and Conditions of Access of the Website</a>.
                         All enquiries should be directed to
                         <a href="mailto:contact@isinanalytics.com">contact@isinanalytics.com</a>.
                     </p>
+                    </div>
                 </div>
             </div>
             <div class="g-unit">
@@ -67,65 +84,78 @@
         </div>
         <div class="g 2/5@xl">
             <div>
-            <div class="card g-unit">
-                <div class="card--padded">
-                    <div class="grid">
-                        <div class="g 1/2@xl">
-                            <p class="text--center">
-                                <a class="link--hidden" href="{{ path('overview_securities') }}">
-                                    Securities<br />
-                                    <span class="a">{{ securitiesCount }}</span>
-                                </a>
-                            </p>
-                        </div>
-                        <div class="g 1/2@xl">
-                            <p class="text--center">
-                                <a class="link--hidden" href="{{ path('group_list') }}">
-                                    Issuers<br />
-                                    <span class="a">{{ issuersCount }}</span>
-                                </a>
-                            </p>
-                        </div>
+            <div class="grid">
+                <div class="g 1/2@l">
+                    <div class="island color-box--subtle text--center">
+                        <a href="{{ path('overview_securities') }}">
+                            Total securities<br />
+                            <span class="a">{{ securitiesCount }}</span>
+                        </a>
+                    </div>
+                </div>
+                <div class="g 1/2@l">
+                    <div class="island color-box--subtle text--center">
+                        <a href="{{ path('group_list') }}">
+                            Total issuers<br />
+                            <span class="a">{{ issuersCount }}</span>
+                        </a>
                     </div>
                 </div>
             </div>
-            <div class="card">
-                <h2 class="island-squashed card__heading">Products</h2>
-                <div id="chart-grouped" style="height: 300px">
-                    <p class="island text--center">Loading chart</p>
+            <div class="color-grey-lightest island g-unit">
+                <h2 class="g-unit">Top 5 currencies (year to date)</h2>
+                <div>
+                    <canvas id="top10-currencies" height="200"></canvas>
                 </div>
                 <script>
-                    (function() {
-                        google.charts.setOnLoadCallback(drawChart);
-                        function drawChart() {
-                            var data = google.visualization.arrayToDataTable({{ byProduct|json_encode|raw }});
-
-                            var options = {
-                                height: 300,
-                                pieHole: 0.4,
-                                pieStartAngle: 20,
-                                backgroundColor: 'transparent',
-                                legend: {
-                                    position: 'left'
-                                },
-                                animation: {
-                                    duration: 800,
-                                    startup: true
-                                },
-                                chartArea: {
-                                    top: 24,
-                                    left: 24,
-                                    width: '90%',
-                                    height: 258
-                                },
-                                pieSliceText: 'none',
-                                colors: ['#3A0676', '#532587', '#6B4498', '#8463A9', '#9D83BB', '#B5A2CC', '#CEC1DD', '#E6E0EE']
-                            };
-
-                            var chart = new google.visualization.PieChart(document.getElementById('chart-grouped'));
-                            chart.draw(data, options);
+                    var ctx = document.getElementById('top10-currencies').getContext('2d');
+                    var myDoughnutChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: {{ currencyChartHeadings|json_encode|raw }},
+                            datasets: [{
+                                data: {{ currencyChartData|json_encode|raw }},
+                                backgroundColor: {{ chartColours|json_encode|raw }},
+                                hoverBorderColor: "#999",
+                                hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                            }]
+                        },
+                        options: {
+                            axisFormat : '£#m',
+                            legend : {
+                                display: false
+                            },
+                            responsive: true
                         }
-                    })();
+                    });
+                </script>
+            </div>
+            <div class="color-grey-lightest island">
+                <h2 class="g-unit">Top 5 industries (year to date)</h2>
+                <div>
+                    <canvas id="top10-industries" height="200"></canvas>
+                </div>
+                <script>
+                    var ctx = document.getElementById('top10-industries').getContext('2d');
+                    var myDoughnutChart = new Chart(ctx, {
+                        type: 'horizontalBar',
+                        data: {
+                            labels: {{ industryChartHeadings|json_encode|raw }},
+                            datasets: [{
+                                data: {{ industryChartData|json_encode|raw }},
+                                backgroundColor: {{ chartColours|json_encode|raw }},
+                                hoverBorderColor: "#999",
+                                hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                            }]
+                        },
+                        options: {
+                            axisFormat : '£#m',
+                            legend : {
+                                display: false
+                            },
+                            responsive: true
+                        }
+                    });
                 </script>
             </div>
             </div>
