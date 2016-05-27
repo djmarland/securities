@@ -89,7 +89,7 @@ abstract class Presenter implements JsonSerializable
      */
     public function getTemplatePath(): string
     {
-        return 'AppBundle:Presenter/' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
+        return '@Presenter/' . $this->getClassPath() . $this->templateVariantSuffix . self::TWIG_SUFFIX;
     }
 
     /**
