@@ -39,9 +39,10 @@ twig:
     form_themes:
         - 'AppBundle:forms:fields.html.twig'
     paths:
+        "%kernel.root_dir%/../src/AppBundle/Resources/views/Presenter": Presenter
         "%kernel.root_dir%/../src/AppBundle/Resources/partials": partials
         "%kernel.root_dir%/../public/static/dist/": static
-    exception_controller:  controller.exception:showAction
+    exception_controller:  "controller.exception:showAction"
 
 services:
     controller.exception:
