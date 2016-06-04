@@ -2,12 +2,11 @@
 
 use Symfony\Component\HttpKernel\Kernel;
 use Symfony\Component\Config\Loader\LoaderInterface;
-use DateTimeImmutable;
 
 class AppKernel extends Kernel
 {
     const CONFIG_FILE = 'config';
-    
+
     public function registerBundles()
     {
         $bundles = array(
