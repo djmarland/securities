@@ -17,6 +17,9 @@
         outline: none;
         box-shadow: 0 0 $size-grid-unit-small $color-primary-dark;
     }
+    &[readonly] {
+        background-color: $color-grey-lightest;
+    }
 }
 
 
