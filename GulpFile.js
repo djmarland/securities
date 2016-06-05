@@ -64,7 +64,7 @@ gulp.task('img', function() {
         .pipe(gulp.dest(manifestPath));
 });
 
-gulp.task('default', ['apply-prod-environment', 'sass', 'js-app', 'js-admin', 'img']);
+gulp.task('default', ['apply-prod-environment', 'sass', 'js-admin', 'js-app', 'img']);
 
 gulp.task('watch',function() {
     gulp.watch(staticPathSrc + 'scss/**/*.scss',['default']);
@@ -117,9 +117,9 @@ function bundleApp(bootstrapFile, isProduction) {
         .bundle()
         .on('error',gutil.log)
         .pipe(source(bootstrapFile + '.js'))
-        // .pipe(streamify(uglify()))
-        // .pipe(hash())
+        .pipe(streamify(uglify()))
+        .pipe(hash())
         .pipe(gulp.dest(staticPathDist))
-        // .pipe(hash.manifest(manifestFile))
-        // .pipe(gulp.dest(manifestPath));
+        .pipe(hash.manifest(manifestFile))
+        .pipe(gulp.dest(manifestPath));
 }
