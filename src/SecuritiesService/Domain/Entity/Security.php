@@ -100,6 +100,15 @@ class Security extends Entity implements JsonSerializable
         return $this->company;
     }
 
+    public function getTerm()
+    {
+        if ($this->maturityDate) {
+            $interval = $this->startDate->diff($this->maturityDate);
+            return $interval->y;
+        }
+        return null;
+    }
+
     public function jsonSerialize()
     {
         $dateFormat = 'd/m/Y';
