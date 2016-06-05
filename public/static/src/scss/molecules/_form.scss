@@ -25,11 +25,11 @@
 
 .form__group {
     margin-bottom: $size-grid-unit;
-    > .form__label {
+    .form__label {
         display: block;
         margin-bottom: $size-grid-unit-tiny;
     }
-    > .form__input {
+    .form__input {
         display: block;
         width: 100%;
     }

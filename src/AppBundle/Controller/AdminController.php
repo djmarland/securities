@@ -101,9 +101,9 @@ class AdminController extends Controller
                 $editId = $request->request->get('field-id');
 
                 $data = [
-                    'COMPANY_ID' => $editId,
+                    'COMPANY_ID' => !empty($editId) ? $editId : null,
                     'COMPANY_NAME' => $editName,
-                    'COUNTRY_OF_INCORPORATION' => $editCountry,
+                    'COUNTRY_OF_INCORPORATION' => !empty($editCountry) ? $editCountry : '-',
                     'COMPANY_PARENT' => !empty($editGroup) ? $editGroup : '-',
                 ];
                 try {

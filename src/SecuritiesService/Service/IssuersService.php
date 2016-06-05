@@ -92,12 +92,77 @@ class IssuersService extends Service
 
     public function findAllWithoutGroup(): array
     {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL)
-            ->where(self::TBL . '.parentGroup IS NULL')
-            ->orderBy(self::TBL . '.name', 'ASC');
+        $securitiesTbl = 's';
 
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select([self::TBL, 'sum(' . $securitiesTbl . '.moneyRaised) as total'])
+            ->leftJoin(
+                'SecuritiesService:Security',
+                $securitiesTbl,
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                $securitiesTbl . '.company = ' . self::TBL . '.id'
+            )
+            ->where(self::TBL . '.parentGroup IS NULL')
+            ->groupBy(self::TBL . '.id')
+            ->addOrderBy('total', 'DESC')
+            ->addOrderBy(self::TBL . '.name', 'ASC');
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        $issuers = [];
+        $mapper = $this->mapperFactory->createMapper(self::SERVICE_ENTITY);
+        foreach ($results as $result) {
+            $issuer = $mapper->getDomainModel($result[0]);
+            $total = $result['total'];
+            $issuers[] = (object) [
+                'issuer' => $issuer,
+                'total' => $total,
+            ];
+        }
+
+        return $issuers;
+
+
+        /*
+
+        ->leftJoin(self::TBL . '.product', $productTable);
+
+        $qb->groupBy($productTable . '.id');
+
+        // select from companies as c
+        // left join securities as s on c.id = s.company_id
+        // group by c.id
+        // having count(s.id) = 0;
+
+        $securitiesTbl = 's';
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, ['sum(' . $securitiesTbl . '.moneyRaised)', 'total'])
+            ->leftJoin(
+                'SecuritiesService:Security',
+                $securitiesTbl,
+                \Doctrine\ORM\Query\Expr\Join::WITH,
+                $securitiesTbl . '.company = ' . self::TBL . '.id'
+            )
+            ->groupBy(self::TBL . '.id')
+            ->having('COUNT(' . $securitiesTbl . '.id) = 0');
+
+        $results = $qb->getQuery()->getArrayResult();
+
+        $issuers = [];
+        $mapper = $this->mapperFactory->createMapper(self::SERVICE_ENTITY);
+        foreach ($results as $result) {
+            $issuer = $mapper->getDomainModel($result[0]);
+            $total = $result['total'];
+            $issuers[] = (object) [
+                'issuer' => $issuer,
+                'total' => $total,
+            ];
+        }
+
+        return $issuers;
+
+
+         */
     }
 
     public function findAllWithoutSecurities(): array

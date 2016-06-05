@@ -33,6 +33,13 @@ services:
           - "@app.bucket_provider"
           - "@app.time_provider"
 
+  app.services.countries:
+      class: SecuritiesService\Service\CountriesService
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
+
   app.services.config:
       class: SecuritiesService\Service\ConfigService
       arguments:

@@ -15,7 +15,7 @@
             <div id="issuer-editor"></div>
 
 
-
+{#
             <div id="spin-container" style="width:48px;float:right"></div>
             <h2 class="c g-unit">Add / Edit Issuer</h2>
             <form method="post">
@@ -45,6 +45,7 @@
                     <input data-js="field-id" class="form__input" id="field-id" name="field-id" readonly />
                 </div>
             </form>
+            #}
         </div>
     </div>
     <div class="g 1/2@m">
@@ -73,11 +74,12 @@
             <h2 class="c g-unit">Issuers with no parent ({{ noParentCount }})</h2>
             {% if noParentCount %}
                 <ul class="list--lined">
-                    {% for issuer in noParent %}
+                    {% for issuerItem in noParent %}
                         <li>
                             <div class="grid g--align-center">
-                                <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuer.id }) }}">{{ issuer.name }}</a>
-                                <button class="g 1/5 button button--fat" data-js="fetch-issuer" data-id="{{ issuer.id }}">Fetch</button>
+                                <a class="g 4/5" href="{{ path('issuer_show', {issuer_id : issuerItem.issuer.id }) }}">{{ issuerItem.issuer.name }} (£{{ issuerItem.total|round(2) }}m)</a>
+                                <button class="g 1/5 button button--fat" data-js="fetch-issuer"
+                                        data-id="{{ issuerItem.issuer.id }}">Fetch</button>
                             </div>
                         </li>
                     {% endfor %}

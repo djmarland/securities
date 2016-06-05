@@ -272,6 +272,7 @@ class ImportCommand extends Command
         $name = $this->getRowValue($row, 'COMPANY_NAME');
         $id = $this->getRowValue($row, 'COMPANY_ID');
         $repo = $this->em->getRepository('SecuritiesService:Company');
+        $company = null;
 
         if ($id) {
             $uuid = Uuid::fromString($id);
@@ -387,6 +388,9 @@ class ImportCommand extends Command
     private function getCountry($row)
     {
         $countryName = $this->getRowValue($row, 'COUNTRY_OF_INCORPORATION');
+        if ($this->isUnset($countryName)) {
+            return null;
+        }
 
         $repo = $this->em->getRepository('SecuritiesService:Country');
         $country = $repo->findOneBy(
@@ -407,6 +411,9 @@ class ImportCommand extends Command
     private function getRegion($row)
     {
         $name = $this->getRowValue($row, 'WORLD_REGION');
+        if ($this->isUnset($name)) {
+            return null;
+        }
         $repo = $this->em->getRepository('SecuritiesService:Region');
         $region = $repo->findOneBy(
             ['name' => $name]

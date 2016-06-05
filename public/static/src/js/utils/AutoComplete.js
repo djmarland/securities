@@ -3,7 +3,7 @@ export default class AutoComplete {
         this.path = path;
         this.callback = callback;
         this.timer = null;
-        this.timeoutValue = 300;
+        this.timeoutValue = 600;
     }
 
     newValue(value) {

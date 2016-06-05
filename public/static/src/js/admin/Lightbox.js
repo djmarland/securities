@@ -16,6 +16,9 @@ export default class Lightbox extends React.Component {
     }
     close() {
         this.setState({modalIsOpen: false});
+        if (this.props.closeCallback) {
+            this.props.closeCallback();
+        }
     }
     render() {
         return (

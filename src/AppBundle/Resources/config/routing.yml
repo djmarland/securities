@@ -26,6 +26,10 @@ search:
   path:     /search.{format}
   defaults: { _controller: AppBundle:Search:list, format: null }
 
+countries:
+  path:     /countries.json
+  defaults: { _controller: AppBundle:Countries:list, format: json }
+
 # Admin
 admin:
   path:     /admin
