@@ -120,3 +120,25 @@
         </div>
     </div>
 {% endblock %}
+
+{% block statsTracking %}
+    {% if group and group.sector and group.sector.industry %}
+        /* Industry */
+        ga('set', 'contentGroup1', '{{ group.sector.industry.name }}');
+    {% endif %}
+
+    {% if group and group.sector %}
+        /* Sector */
+        ga('set', 'contentGroup2', '{{ group.sector.name }}');
+    {% endif %}
+
+    {% if group %}
+        /* Group */
+        ga('set', 'contentGroup3', '{{ group.name }}');
+    {% endif %}
+
+    {% if issuer %}
+        /* Issuer */
+        ga('set', 'contentGroup4', '{{ issuer.name }}');
+    {% endif %}
+{% endblock %}

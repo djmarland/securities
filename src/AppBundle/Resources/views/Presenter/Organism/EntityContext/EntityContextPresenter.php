@@ -13,6 +13,8 @@ class EntityContextPresenter extends Presenter implements EntityContextPresenter
 {
     private $parents = [];
 
+    private $stack = [];
+
     public function __construct(
         Entity $entity = null,
         array $options = []
@@ -25,6 +27,9 @@ class EntityContextPresenter extends Presenter implements EntityContextPresenter
 
             // reverse the stack so the highest is top
             $stack = array_reverse($stack);
+
+            // save a copy of the stack
+            $this->stack = $stack;
 
             // trim the last thing off the stack (as it'll be shown below)
             array_pop($stack);
@@ -55,6 +60,16 @@ class EntityContextPresenter extends Presenter implements EntityContextPresenter
             return $this->domainModel->getName();
         }
         return '';
+    }
+
+    public function getStatsTracking(): array
+    {
+        $items = [];
+        // get the whole stack of parents
+        foreach ($this->stack as $i => $item) {
+            $items[$i+1] = $item->name;
+        }
+        return $items;
     }
 
     private function getStack($entity, $parents = []): array

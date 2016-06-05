@@ -28,3 +28,9 @@
     </div>
 </div>
 {% endblock %}
+
+{% block statsTracking %}
+    {% for i, name in entityContextPresenter.statsTracking %}
+        ga('set', 'contentGroup{{ i }}', '{{ name }}');
+    {% endfor %}
+{% endblock %}
