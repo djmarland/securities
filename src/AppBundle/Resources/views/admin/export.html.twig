@@ -1,0 +1,107 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+    <h1 class="b g-unit">Export to CSV</h1>
+    <div class="text--center">
+        <div class="progress g-unit">
+            <div class="progress__bar"
+                 id="js-progress"
+                 data-processed="{{ processed }}"
+                 data-total="{{ total }}"
+                 data-percent="{{ percentage }}"
+                 style="width:{{ percentage }}%"></div>
+        </div>
+        {% if download %}
+            <div class="g-unit">
+                <a href="{{ download }}" id="js-download" class="link--button">Download</a>
+            </div>
+        {% endif %}
+        {% if showExportButton %}
+        <button class="button button--fat" id="js-export">Create new export</button>
+        {% endif %}
+    </div>
+
+
+    <script>
+
+        (function() {
+            /*
+             On page load, if the button is present add a listener.
+             On clicking the button, remove the button and start the ajax
+
+             If the button is not present, start the ajax (/export/process)
+
+             Each time the ajax returns, update the status percent,
+             then start the ajax again.
+
+             If the ajax returns as complete, refresh the page.
+
+             */
+
+            function init() {
+                var button = document.getElementById('js-export'),
+                    download = document.getElementById('js-download');
+                if (button) {
+                    button.addEventListener('click', function (e) {
+                        button.parentNode.removeChild(button);
+                        if (download) {
+                            download.parentNode.removeChild(download);
+                        }
+                        process(true);
+                    })
+                } else {
+                    process(false);
+                }
+            }
+
+            function process(isNew) {
+                var request = new XMLHttpRequest(),
+                    bar = document.getElementById('js-progress');
+
+                if (isNew) {
+                    bar.dataset.percent = 0;
+                    bar.style.width = '0%';
+                }
+                request.open('GET', '/admin/export/process.json');
+                request.onload = function() {
+                    var resData, percent;
+                    try {
+                        resData = JSON.parse(this.response);
+                        if (resData.error) {
+                            alert('Error. Refresh page');
+                            return;
+                        }
+                    } catch(e) {
+                        alert('Error. Refresh page');
+                        return;
+                    }
+
+                    percent = (resData.export.processed / resData.export.total) * 100;
+                    if (percent == 100) {
+                        window.location.reload(true);
+                        return;
+                    }
+
+                    bar.dataset.percent = percent;
+                    bar.dataset.processed = resData.export.processed;
+                    bar.dataset.total = resData.export.total;
+                    bar.style.width = percent + '%';
+
+                    process();
+
+                };
+                request.onerror = function() {
+                    alert('Error. Refresh page');
+                };
+
+                request.send();
+            }
+
+            init();
+
+        }());
+
+    </script>
+{% endblock %}

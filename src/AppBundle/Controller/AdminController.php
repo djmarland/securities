@@ -185,6 +185,79 @@ class AdminController extends Controller
 
     }
 
+    public function exportAction(Request $request)
+    {
+        // settings were fetched globally
+        $this->toView('message', null);
+        $this->toView('activeTab', 'export');
+
+        $path = $this->getParameter('kernel.cache_dir') . '/export.json';
+        $latestExport = null;
+        if (file_exists($path)) {
+            $latestExport = json_decode(file_get_contents($path));
+        }
+
+        $percentage = 0;
+        $processed = 0;
+        $total = '?';
+        $download = null;
+        if ($latestExport) {
+            $processed = $latestExport->processed;
+            $total = $latestExport->total;
+            $percentage = round(($processed / $total) * 100, 1);
+            if ($percentage == 100) {
+                $download = $latestExport->fileName;
+            }
+
+        }
+
+        $this->toView('showExportButton', (
+            !$latestExport || $latestExport->processed === $latestExport->total
+        ));
+        $this->toView('download', $download);
+        $this->toView('processed', $processed);
+        $this->toView('total', $total);
+        $this->toView('percentage', $percentage);
+        $this->setTitle('Settings - Export');
+        return $this->renderTemplate('admin:export');
+    }
+
+    public function exportProcessAction(Request $request)
+    {
+        $path = $this->getParameter('kernel.cache_dir') . '/export.json';
+        $export = null;
+        if (file_exists($path)) {
+            $export = json_decode(file_get_contents($path));
+        }
+
+        if (!$export || $export->processed == $export->total) {
+            // need to make a new one
+            $export = (object) [
+                'fileName' => 'bob.csv',
+                'processed' => 0,
+                'total' => 120
+            ];
+
+            // create the data file with the headings
+        }
+
+        // get X number of rows
+        $offset = $export->processed;
+        $limit = 10;
+
+        // get the data
+
+        // add the rows to the file
+
+        // update the status file
+        $export->processed = $export->processed + $limit;
+        $this->toView('export', $export, true);
+
+        file_put_contents($path, json_encode($export));
+
+        return $this->renderJSON();
+    }
+
 
 
     private function setCsvData($data)

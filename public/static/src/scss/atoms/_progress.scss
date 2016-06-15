@@ -1,0 +1,43 @@
+@keyframes PROGRESS {
+    0% {
+        background-position: 0 0;
+    }
+    100% {
+        background-position: -1000px 0;
+    }
+}
+
+.progress {
+    background: $color-grey-lightest;
+    height: $size-grid-unit * 2;
+}
+
+.progress__bar {
+    background: $color-complimentary-dark;
+    background: linear-gradient(
+                    -80deg,
+                    $color-complimentary-dark,
+                    $color-complimentary-dark 33%,
+                    $color-complimentary-mid 33%,
+                    $color-complimentary-mid 66%,
+                    $color-complimentary-dark 66%
+    );
+    background-size: $size-grid-unit * 2 $size-grid-unit * 4;
+    background-position: 0;
+    animation: PROGRESS 20s linear infinite;
+    transition: width 0.5s linear;
+    position: relative;
+    height: 100%;
+    &[data-percent="100"] {
+        background: $color-complimentary-dark;
+    }
+
+    &:after {
+        content: attr(data-processed) ' / ' attr(data-total);
+        position: absolute;
+        bottom: -100%;
+        left: 0;
+        min-width: 120px;
+        text-align: left;
+    }
+}

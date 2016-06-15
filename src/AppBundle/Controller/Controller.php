@@ -136,6 +136,11 @@ class Controller extends BaseController implements ControllerInterface
         }
     }
 
+    protected function renderJSON()
+    {
+        return $this->renderTemplate('json');
+    }
+
     protected function renderTemplate($template)
     {
         $format = $this->request->get('format', null);

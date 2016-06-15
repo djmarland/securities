@@ -51,6 +51,15 @@ admin_settings:
   path:     /admin/settings
   defaults: { _controller: AppBundle:Admin:settings }
 
+admin_export:
+  path:     /admin/export
+  defaults: { _controller: AppBundle:Admin:export }
+
+
+admin_export_process:
+  path:     /admin/export/process.json
+  defaults: { _controller: AppBundle:Admin:exportProcess }
+
 # Overview
 overview_show:
   path:     /overview
