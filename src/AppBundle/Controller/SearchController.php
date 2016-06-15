@@ -26,7 +26,6 @@ class SearchController extends Controller
             $this->setTitle('Search results - ' . $query);
 
             try {
-
                 $isin = new ISIN($query);
 
                 $single = $this->get('app.services.securities')
@@ -39,7 +38,6 @@ class SearchController extends Controller
                         ['isin' => $single->getIsin()]
                     );
                 }
-
             } catch (ValidationException $e) {
                 // the given query was not an ISIN, move on
             } catch (EntityNotFoundException $e) {

@@ -156,7 +156,6 @@ class AdminController extends Controller
 
         if ($request->isMethod('POST')) {
             try {
-
                 // save
                 $service = $this->get('app.services.config');
 

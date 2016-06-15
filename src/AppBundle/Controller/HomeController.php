@@ -27,7 +27,7 @@ class HomeController extends Controller
         $this->toView('issuersCount', number_format($issuersCount));
 
         $colours = [
-            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638",
         ];
         $products = [];
         $productDataset = [];

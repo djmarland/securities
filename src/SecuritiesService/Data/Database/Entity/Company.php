@@ -12,6 +12,8 @@ class Company extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+    /** @ORM\Column(type="string", length=255, nullable=true) */
+    private $marketCode;
     /** @ORM\ManyToOne(targetEntity="Country") */
     private $country;
     /** @ORM\ManyToOne(targetEntity="ParentGroup") */
@@ -26,6 +28,16 @@ class Company extends Entity
     public function setName($name)
     {
         $this->name = $name;
+    }
+
+    public function getMarketCode()
+    {
+        return $this->marketCode;
+    }
+
+    public function setMarketCode($marketCode)
+    {
+        $this->marketCode = $marketCode;
     }
 
     public function getCountry()

@@ -3,8 +3,6 @@ namespace SecuritiesService\Data\Database\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 
-// @todo - don't use snake case everywhere
-
 /**
 * @ORM\Entity
 * @ORM\HasLifecycleCallbacks()
@@ -16,22 +14,22 @@ class Security extends Entity
     private $name;
     /** @ORM\Column(type="string", length=12, unique=true) */
     private $isin;
-//    /** @ORM\Column(type="string") */
-//    private $market;
-//    /** @ORM\Column(type="string") */
-//    private $tidm;
-//    /** @ORM\Column(type="string") */
-//    private $description;
+    /** @ORM\Column(type="string", nullable=true) */
+    private $market;
     /** @ORM\Column(type="string", length=255) */
     private $exchange;
-    /** @ORM\Column(type="float") */
+    /** @ORM\Column(type="float", nullable=true) */
     private $moneyRaised;
-    /** @ORM\Column(type="date") */
+    /** @ORM\Column(type="date", nullable=true) */
     private $startDate;
     /** @ORM\Column(type="date", nullable=true) */
     private $maturityDate;
+    /** @ORM\Column(type="string", length=255, nullable=true) */
+    private $couponType;
     /** @ORM\Column(type="float", nullable=true) */
     private $coupon;
+    /** @ORM\Column(type="float", nullable=true) */
+    private $margin;
     /** @ORM\ManyToOne(targetEntity="Product") */
     private $product;
     /** @ORM\ManyToOne(targetEntity="Company") */
@@ -58,26 +56,6 @@ class Security extends Entity
     public function setMarket($market)
     {
         $this->market = $market;
-    }
-
-    public function getTIDM()
-    {
-        return $this->tidm;
-    }
-
-    public function setTIDM($tidm)
-    {
-        $this->tidm = $tidm;
-    }
-
-    public function getDescription()
-    {
-        return $this->description;
-    }
-
-    public function setDescription($description)
-    {
-        $this->description = $description;
     }
 
     public function getIsin()
@@ -130,6 +108,16 @@ class Security extends Entity
         $this->maturityDate = $maturityDate;
     }
 
+    public function getCouponType()
+    {
+        return $this->couponType;
+    }
+
+    public function setCouponType($couponType)
+    {
+        $this->couponType = $couponType;
+    }
+
     public function getCoupon()
     {
         return $this->coupon;
@@ -138,6 +126,16 @@ class Security extends Entity
     public function setCoupon($coupon)
     {
         $this->coupon = $coupon;
+    }
+
+    public function getMargin()
+    {
+        return $this->margin;
+    }
+
+    public function setMargin($margin)
+    {
+        $this->margin = $margin;
     }
 
     public function getProduct()

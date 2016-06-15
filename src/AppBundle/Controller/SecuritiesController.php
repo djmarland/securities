@@ -66,7 +66,7 @@ class SecuritiesController extends Controller
 
             $byProduct = (object) [
                 'headings' => [],
-                'counts' => []
+                'counts' => [],
             ];
 
             foreach ($productCounts as $pc) {

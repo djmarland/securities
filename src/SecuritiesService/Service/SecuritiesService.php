@@ -295,7 +295,7 @@ class SecuritiesService extends Service
     }
 
 
-    public function buildCountsByProduct(QueryBuilder $qb): array
+    protected function buildCountsByProduct(QueryBuilder $qb): array
     {
         /*
          * select p.name, count(s.id)
@@ -332,7 +332,7 @@ class SecuritiesService extends Service
         }
 
         // sort by largest count first
-        usort($products, function($a, $b) {
+        usort($products, function ($a, $b) {
             return $b->count <=> $a->count;
         });
         return $products;

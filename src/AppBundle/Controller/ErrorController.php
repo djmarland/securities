@@ -16,7 +16,7 @@ class ErrorController extends ExceptionController
             'fullTitle' => 'Error - ISIN Analytics',
             'siteTitle' => 'ISIN Analytics',
             'isOk' => false,
-            'environment' => 'live'
+            'environment' => 'live',
         ];
 
         $code = $exception->getStatusCode();
@@ -36,8 +36,8 @@ class ErrorController extends ExceptionController
                 'searchAutofocus' => '',
                 'currentYear' => '',
                 'adverts' => [
-                    'areActive' => false
-                ]
+                    'areActive' => false,
+                ],
             ]
         ));
     }
