@@ -60,6 +60,10 @@ admin_export_process:
   path:     /admin/export/process.json
   defaults: { _controller: AppBundle:Admin:exportProcess }
 
+admin_export_download:
+  path:     /admin/export/download.csv
+  defaults: { _controller: AppBundle:Admin:exportDownload }
+
 # Overview
 overview_show:
   path:     /overview

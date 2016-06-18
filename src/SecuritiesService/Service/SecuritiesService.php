@@ -25,23 +25,7 @@ class SecuritiesService extends Service
     /* Individual */
     public function fetchByIsin(ISIN $isin): Security
     {
-        $currency = 'c';
-        $company = 'co';
-        $product = 'p';
-        $country = 'cou';
-        $group = 'g';
-        $sector = 's';
-        $industry = 'i';
-
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL, $currency, $company, $product, $country, $group, $sector, $industry);
-        $qb->leftJoin(self::TBL . '.currency', $currency);
-        $qb->leftJoin(self::TBL . '.company', $company);
-        $qb->leftJoin(self::TBL . '.product', $product);
-        $qb->leftJoin($company . '.country', $country);
-        $qb->leftJoin($company . '.parentGroup', $group);
-        $qb->leftJoin($group . '.sector', $sector);
-        $qb->leftJoin($sector . '.industry', $industry);
+        $qb = $this->selectFullSet();
 
         $qb->where(self::TBL . '.isin = :isin')
             ->setParameter('isin', (string) $isin);
@@ -69,6 +53,22 @@ class SecuritiesService extends Service
         $qb = $this->selectWithJoins();
         $qb = $this->where($qb);
         return $this->buildFind($qb, $limit, $page, $filter);
+    }
+
+    public function findAll(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $qb = $this->selectWithJoins();
+        return $this->buildFind($qb, $limit, $page);
+    }
+
+    public function findAllFull(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $qb = $this->selectFullSet();
+        return $this->buildFind($qb, $limit, $page);
     }
 
     public function findUpcomingMaturities(
@@ -424,6 +424,29 @@ class SecuritiesService extends Service
         $qb->leftJoin(self::TBL . '.currency', $currency);
         $qb->leftJoin(self::TBL . '.company', $company);
         $qb->leftJoin(self::TBL . '.product', $product);
+        return $qb;
+    }
+
+    protected function selectFullSet()
+    {
+        $currency = 'c';
+        $company = 'co';
+        $product = 'p';
+        $country = 'cou';
+        $group = 'g';
+        $sector = 's';
+        $industry = 'i';
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL, $currency, $company, $product, $country, $group, $sector, $industry);
+        $qb->leftJoin(self::TBL . '.currency', $currency);
+        $qb->leftJoin(self::TBL . '.company', $company);
+        $qb->leftJoin(self::TBL . '.product', $product);
+        $qb->leftJoin($company . '.country', $country);
+        $qb->leftJoin($company . '.parentGroup', $group);
+        $qb->leftJoin($group . '.sector', $sector);
+        $qb->leftJoin($sector . '.industry', $industry);
+
         return $qb;
     }
 

@@ -3,7 +3,9 @@
 namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
+use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\ValueObject\UUID;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -191,22 +193,18 @@ class AdminController extends Controller
         $this->toView('message', null);
         $this->toView('activeTab', 'export');
 
-        $path = $this->getParameter('kernel.cache_dir') . '/export.json';
-        $latestExport = null;
-        if (file_exists($path)) {
-            $latestExport = json_decode(file_get_contents($path));
-        }
+        $latestExport = $this->getExportFile();
 
         $percentage = 0;
         $processed = 0;
         $total = '?';
-        $download = null;
+        $download = false;
         if ($latestExport) {
             $processed = $latestExport->processed;
             $total = $latestExport->total;
             $percentage = round(($processed / $total) * 100, 1);
             if ($percentage == 100) {
-                $download = $latestExport->fileName;
+                $download = true;
             }
 
         }
@@ -224,38 +222,157 @@ class AdminController extends Controller
 
     public function exportProcessAction(Request $request)
     {
+        $export = $this->getExportFile();
+
+        $service = $this->get('app.services.securities');
+
+        if (!$export || $export->processed == $export->total) {
+            // count the number of ISINs
+
+            // need to make a new one
+            $export = (object) [
+                'fileName' => time() . '.csv',
+                'processed' => 0,
+                'total' => $service->countAll()
+            ];
+
+            // create the data file with the headings
+            $headings = [
+                'ISIN',
+                'SECURITY_NAME',
+                'PRA_ITEM_4748',
+                'COMPANY_NAME',
+                'COUNTRY_OF_INCORPORATION',
+                'COMPANY_PARENT',
+                'ICB_SECTOR',
+                'ICB_INDUSTRY',
+                'MONEY_RAISED_GBP',
+                'TRADING_CURRENCY',
+                'SECURITY_START_DATE',
+                'MATURITY_DATE',
+                'COUPON_RATE',
+            ];
+
+            $this->addRow($headings, $export->fileName);
+        }
+
+        // get X number of rows
+        $limit = 250;
+        $page = ($export->processed / $limit) + 1;
+
+        // get the data
+        $results = $service->findAllFull($limit, $page);
+
+        // add the rows to the file
+        foreach ($results as $result) {
+            /** @var $result Security */
+            $isin = (string) $result->getIsin();
+            $name = (string) $result->getName();
+            $product = $result->getProduct() ? (string) $result->getProduct()->getNumber() : null;
+            $companyName = null;
+            $companyCountry = null;
+            $parentCompanyName = null;
+            $sectorName = null;
+            $industryName = null;
+
+
+            if ($result->getCompany()) {
+                $company = $result->getCompany();
+                $companyName = (string) $company->getName();
+                if ($company->getCountry()) {
+                    $companyCountry = (string) $company->getCountry()->getName();
+                }
+
+                if ($company->getParentGroup()) {
+                    $parentCompany = $company->getParentGroup();
+                    $parentCompanyName = (string) $parentCompany->getName();
+
+                    if ($parentCompany->getSector()) {
+                        $sector = $parentCompany->getSector();
+                        $sectorName = (string) $sector->getName();
+
+                        if ($sector->getIndustry()) {
+                            $industryName = (string) $sector->getIndustry()->getName();
+                        }
+                    }
+
+                }
+            }
+
+            $moneyRaised = (string) $result->getMoneyRaised();
+            $currency = $result->getCurrency() ? (string) $result->getCurrency()->getCode() : null;
+
+            $dateFormat = 'Y-m-d';
+
+            $startDate = (string) $result->getStartDate()->format($dateFormat);
+            $endDate = $result->getMaturityDate() ? (string) $result->getMaturityDate()->format($dateFormat) : null;
+
+            $coupon = (string) $result->getCoupon();
+
+            $values = [
+                $isin,
+                $name,
+                $product,
+                $companyName,
+                $companyCountry,
+                $parentCompanyName,
+                $sectorName,
+                $industryName,
+                $moneyRaised,
+                $currency,
+                $startDate,
+                $endDate,
+                $coupon
+            ];
+            $this->addRow($values, $export->fileName);
+        }
+
+        // update the status file
+        $export->processed = $export->processed + $limit;
+        if ($export->processed > $export->total) {
+            $export->processed = $export->total;
+        }
+        $this->toView('export', $export, true);
+
+        file_put_contents($this->getParameter('kernel.cache_dir') . '/export.json', json_encode($export));
+
+        return $this->renderJSON();
+    }
+
+    public function exportDownloadAction(Request $request)
+    {
+        $latestExport = $this->getExportFile();
+        if (!$latestExport) {
+            throw new HttpException('No download file exists', 404);
+        }
+
+        $path = $this->getParameter('kernel.cache_dir') . '/' . $latestExport->fileName;
+        if (!file_exists($path)) {
+            throw new HttpException('No download file exists', 404);
+        }
+
+        $response = new BinaryFileResponse($path);
+        $response->headers->set('Content-Type', 'text/csv');
+        $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
+        return $response;
+    }
+
+    private function getExportFile()
+    {
         $path = $this->getParameter('kernel.cache_dir') . '/export.json';
         $export = null;
         if (file_exists($path)) {
             $export = json_decode(file_get_contents($path));
         }
+        return $export;
+    }
 
-        if (!$export || $export->processed == $export->total) {
-            // need to make a new one
-            $export = (object) [
-                'fileName' => 'bob.csv',
-                'processed' => 0,
-                'total' => 120
-            ];
-
-            // create the data file with the headings
-        }
-
-        // get X number of rows
-        $offset = $export->processed;
-        $limit = 10;
-
-        // get the data
-
-        // add the rows to the file
-
-        // update the status file
-        $export->processed = $export->processed + $limit;
-        $this->toView('export', $export, true);
-
-        file_put_contents($path, json_encode($export));
-
-        return $this->renderJSON();
+    private function addRow($values, $filename)
+    {
+        $path = $this->getParameter('kernel.cache_dir') . '/' . $filename;
+        $fp = fopen($path, 'a');
+        fputcsv($fp, $values);
+        fclose($fp);
     }
 
 
