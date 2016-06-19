@@ -55,6 +55,17 @@ class SecuritiesService extends Service
         return $this->buildFind($qb, $limit, $page, $filter);
     }
 
+    public function findAllIsins()
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL . '.isin');
+        $items = $qb->getQuery()->getArrayResult();
+
+        return array_map(function($i) {
+            return $i['isin'];
+        }, $items);
+    }
+
     public function findAll(
         int $limit = self::DEFAULT_LIMIT,
         int $page = self::DEFAULT_PAGE

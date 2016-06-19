@@ -187,6 +187,20 @@ class AdminController extends Controller
 
     }
 
+    public function compareAction(Request $request)
+    {
+        $this->toView('activeTab', 'compare');
+
+        $sourceIsins = $this->get('app.services.securities')
+            ->findAllIsins();
+
+        $this->toView('sourceIsins', $sourceIsins);
+
+        $this->setTitle('Settings - Compare');
+        return $this->renderTemplate('admin:compare');
+
+    }
+
     public function exportAction(Request $request)
     {
         // settings were fetched globally

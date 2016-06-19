@@ -11,6 +11,8 @@
                 ><a class="tabs__link" href="{{ path('admin_issuers') }}">Issuers</a></li
             ><li class="tabs__tab {% if activeTab == 'settings' %}tabs__tab--active{% endif %}"
                 ><a class="tabs__link" href="{{ path('admin_settings') }}">Settings</a></li
+            ><li class="tabs__tab {% if activeTab == 'compare' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('admin_compare') }}">Compare</a></li
             ><li class="tabs__tab {% if activeTab == 'export' %}tabs__tab--active{% endif %}"
                 ><a class="tabs__link" href="{{ path('admin_export') }}">Export</a></li
         ></ul></nav>

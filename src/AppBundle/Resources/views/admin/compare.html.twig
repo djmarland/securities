@@ -1,0 +1,16 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+    <h1 class="b g-unit">Compare</h1>
+    <p class="g-unit">
+        This page will compare two lists of ISINs and show which
+        are missing
+    </p>
+    <div id="compare-editor"></div>
+
+    <script>
+        var sourceIsins = {{ sourceIsins|json_encode|raw }};
+    </script>
+{% endblock %}

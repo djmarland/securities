@@ -51,6 +51,10 @@ admin_settings:
   path:     /admin/settings
   defaults: { _controller: AppBundle:Admin:settings }
 
+admin_compare:
+  path:     /admin/compare
+  defaults: { _controller: AppBundle:Admin:compare }
+
 admin_export:
   path:     /admin/export
   defaults: { _controller: AppBundle:Admin:export }
