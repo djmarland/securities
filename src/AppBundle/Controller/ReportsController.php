@@ -3,6 +3,7 @@
 namespace AppBundle\Controller;
 
 use DateTimeImmutable;
+use SecuritiesService\Domain\Entity\Enum\Features;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -18,6 +19,10 @@ class ReportsController extends Controller
 
     public function weeklyAction(Request $request)
     {
+        if (!$this->appConfig->featureIsActive(Features::WEEKLY_REPORT_ACTIVE())) {
+            throw new HttpException(404, 'Not yet');
+        }
+
         $year = $this->request->get('year');
         $month = $this->request->get('month');
         $day = $this->request->get('day');
