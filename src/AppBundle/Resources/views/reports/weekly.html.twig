@@ -1,0 +1,31 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">Weekly report - {{ weekDate }}</h1>
+
+    <div class="g-central" style="max-width: 720px">
+        <canvas id="bubble" height="300"></canvas>
+    </div>
+    <script>
+        var ctx = document.getElementById('bubble').getContext('2d');
+        var myDoughnutChart = new Chart(ctx, {
+            type: 'bubble',
+            data: {
+                labels: {{ chartHeadings|json_encode|raw }},
+                datasets: [{
+                    data: {{ chartData|json_encode|raw }},
+                    backgroundColor: {{ chartColours|json_encode|raw }},
+                    hoverBorderColor: "#999",
+                    hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                }]
+            },
+            options: {
+                axisFormat : '£#m',
+                legend : {
+                    display: false
+                },
+                responsive: true
+            }
+        });
+    </script>
+{% endblock %}

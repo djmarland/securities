@@ -2,6 +2,9 @@
 
 namespace AppBundle\Controller;
 
+use DateTimeImmutable;
+use SecuritiesService\Domain\Entity\Enum\Features;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -12,6 +15,62 @@ class ReportsController extends Controller
     {
         throw new HttpException(404, 'Not yet');
 //        return $this->renderTemplate('reports:list');
+    }
+
+    public function weeklyAction(Request $request)
+    {
+        if (!$this->appConfig->featureIsActive(Features::WEEKLY_REPORT_ACTIVE())) {
+            throw new HttpException(404, 'Not yet');
+        }
+
+        $year = $this->request->get('year');
+        $month = $this->request->get('month');
+        $day = $this->request->get('day');
+
+        $date = new DateTimeImmutable($year . '-' . $month . '-' . $day . 'T00:00Z');
+        $oneWeekAgo = $date->sub(new \DateInterval('P7D'));
+
+        $filter = new SecuritiesFilter([
+            'start' => $oneWeekAgo,
+            'end' => $date
+        ]);
+        $securities = $this->get('app.services.securities')
+            ->find(100, 1, $filter);
+
+        // to build a bubble chart
+        $colours = [
+            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+        ];
+        $headings = [];
+        $chartData = [];
+        $largest = 0;
+        foreach ($securities as $security) {
+            if ($security->getCoupon() && $security->getMaturityDate()) {
+                $amount = $security->getMoneyRaised();
+                if ($amount > $largest) {
+                    $largest = $amount;
+                }
+            }
+        }
+
+
+        foreach ($securities as $security) {
+            if ($security->getCoupon() && $security->getMaturityDate()) {
+                $headings[] = $security->getIsin() . ': ' . $security->getCompany()->getName();
+                $chartData[] = [
+                    'x' => $security->getTerm(),
+                    'y' => $security->getCoupon() * 100,
+                    'r' => ($security->getMoneyRaised() / $largest) * 100,
+                    'label' => $security->getIsin() . ': ' . $security->getCompany()->getName()
+                ];
+            }
+        }
+
+        $this->toView('chartColours', $colours);
+        $this->toView('chartHeadings', $headings);
+        $this->toView('weekDate', $date->format('D j F Y'));
+        $this->toView('chartData', $chartData);
+        return $this->renderTemplate('reports:weekly');
     }
 
     public function fsa50Action(Request $request)
