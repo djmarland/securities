@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Enum\Features;
+use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -28,14 +29,46 @@ class ReportsController extends Controller
         $day = $this->request->get('day');
 
         $date = new DateTimeImmutable($year . '-' . $month . '-' . $day . 'T00:00Z');
-        $oneWeekAgo = $date->sub(new \DateInterval('P7D'));
+
+        // weekly reports come out on a Monday. Any other day of the week should
+        // redirect to Monday
+        $dayOfWeek = $date->format('N') - 1;
+        if ($dayOfWeek) {
+            $monday = $date->sub(new \DateInterval('P' . $dayOfWeek . 'D'));
+            return $this->redirectToRoute('report_weekly', [
+                'day' => $monday->format('d'),
+                'month' => $monday->format('m'),
+                'year' => $monday->format('Y'),
+            ]);
+        }
+
+        $twoWeeks = new \DateInterval('P14D');
+        $oneWeek = new \DateInterval('P7D');
+
+        $oneWeekAgo = $date->sub($oneWeek);
+        $twoWeeksAgo = $date->sub($twoWeeks);
 
         $filter = new SecuritiesFilter([
-            'start' => $oneWeekAgo,
+            'start' => $twoWeeksAgo,
             'end' => $date
         ]);
         $securities = $this->get('app.services.securities')
-            ->find(100, 1, $filter);
+            ->find(1000, 1, $filter);
+
+        $lastWeek = [];
+        $thisWeek = [];
+
+        // start to build the charts
+        foreach ($securities as $security) {
+            /** @var Security $security */
+            if ($security->getStartDate() > $oneWeekAgo) {
+                $thisWeek[] = $security;
+            } else {
+                $lastWeek[] = $security;
+            }
+        }
+
+
 
         // to build a bubble chart
         $colours = [
