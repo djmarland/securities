@@ -19,6 +19,9 @@ services:
       class: SecuritiesService\Data\BucketProvider
       arguments: ["@app.time_provider"]
 
+  app.security.encoder:
+      class: AppBundle\Security\Encoder
+
   app.security.user_provider:
         class: AppBundle\Security\UserProvider
         arguments: ["@app.services.users"]

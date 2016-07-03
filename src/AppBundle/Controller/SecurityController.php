@@ -1,16 +1,73 @@
 <?php
 namespace AppBundle\Controller;
 
-use AppBundle\Domain\Exception\FormInvalidException;
-use AppBundle\Domain\Exception\ValidationException;
-use AppBundle\Domain\ValueObject\Email;
+use AppBundle\Exception\FormInvalidException;
 use AppBundle\Form\Security\ResetPassword;
+use AppBundle\Form\Security\Register;
 use Exception;
+use SecuritiesService\Domain\Exception\ValidationException;
+use SecuritiesService\Domain\ValueObject\Email;
+use SecuritiesService\Domain\ValueObject\Password;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 
 class SecurityController extends Controller
 {
+    public function registerAction(Request $request)
+    {
+        $form = $this->createForm(Register::class);
+
+        $form->handleRequest($request);
+        if ($form->isValid()) {
+            $data = $form->getData();
+            // begin to process form
+            try {
+
+                // attempt to create an e-mail address object
+                try {
+                    $email = new Email($data['email']);
+                } catch (ValidationException $e) {
+                    $form->get('email')->addError(new FormError($e->getMessage()));
+                    throw $e; // re-throw
+                }
+
+                // ensure the passwords are ok
+                $password = $data['password'];
+                $passwordConfirm = $data['password_confirm'];
+
+                if ($password != $passwordConfirm) {
+                    $msg = 'Password fields do not match';
+
+                    $form->get('password')->addError(new FormError($msg));
+                    $form->get('password_confirm')->addError(new FormError($msg));
+                    throw new FormInvalidException($msg);
+                }
+
+                $passwordDigest = new Password($password);
+
+                // create the new user and save
+                $this->get('app.services.users')
+                    ->createNewUser($email, $passwordDigest);
+
+
+                // log the user in, and redirect to homepage
+                $form->addError(new FormError('actually, it is good'));
+
+            } catch (ValidationException $e) {
+                $form->addError(new FormError($e->getMessage()));
+            } catch (FormInvalidException $e) {
+                $form->addError(new FormError($e->getMessage()));
+            } catch (Exception $e) {
+                $this->get('logger')->error($e->getMessage());
+                $form->addError(new FormError('There was an error saving the form. Please try again'));
+            }
+        }
+
+        $this->toView('form', $form->createView());
+
+        return $this->renderTemplate('security:register');
+    }
+
     public function loginAction(Request $request)
     {
         $authenticationUtils = $this->get('security.authentication_utils');

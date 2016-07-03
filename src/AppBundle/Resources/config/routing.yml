@@ -35,6 +35,10 @@ login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
 
+register:
+    path:     /register
+    defaults: { _controller: AppBundle:Security:register }
+
 reset_password:
     path:     /reset-password
     defaults: { _controller: AppBundle:Security:resetPassword }
@@ -42,9 +46,6 @@ reset_password:
 set_password:
     path:     /set-password
     defaults: { _controller: AppBundle:Security:setPassword }
-
-login_check:
-    path: /login-check
 
 logout:
     path: /logout
