@@ -9,15 +9,15 @@ use Doctrine\ORM\Mapping as ORM;
 class User extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
-    private $name;
+    private $name = '';
     /** @ORM\Column(type="string", length=255) */
     private $email;
     /** @ORM\Column(type="string", length=255) */
     private $password_digest;
     /** @ORM\Column(type="boolean") */
-    private $is_admin;
+    private $is_admin = false;
     /** @ORM\Column(type="boolean") */
-    private $is_active;
+    private $is_active = true;
     /** Getters/Setters */
     public function getName()
     {

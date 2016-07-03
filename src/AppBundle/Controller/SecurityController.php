@@ -31,6 +31,9 @@ class SecurityController extends Controller
                     throw $e; // re-throw
                 }
 
+                // todo - check the e-mail address doesn't already exist
+                // in the system
+
                 // ensure the passwords are ok
                 $password = $data['password'];
                 $passwordConfirm = $data['password_confirm'];
