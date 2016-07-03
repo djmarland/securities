@@ -1,5 +1,7 @@
 security:
     providers:
+        app_user_provider:
+            id: app.security.user_provider
         in_memory:
             memory:
                 users:
@@ -11,9 +13,25 @@ security:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
 
-        admin:
-            pattern: ^/admin
-            http_basic: ~
+
+        login_firewall:
+            pattern:   ^/(login|reset-password|first-user)$
+            anonymous: ~
+
+        secured_area:
+            pattern:    ^/admin
+            form_login:
+                login_path: login
+                check_path: login_check
+                provider: app_user_provider
+            logout:
+                path:   logout
+                target: home
+#            remember_me:
+#                key:      "%secret%"
+#                lifetime: 9.46708e8 # 30 years
+#                path:     /
+#                always_remember_me: true
 
         default:
             anonymous: ~
@@ -26,3 +44,5 @@ security:
         Symfony\Component\Security\Core\User\User:
             algorithm: bcrypt
             cost: 12
+        AppBundle\Security\Visitor:
+            id: app.security.encoder

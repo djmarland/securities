@@ -19,6 +19,10 @@ services:
       class: SecuritiesService\Data\BucketProvider
       arguments: ["@app.time_provider"]
 
+  app.security.user_provider:
+        class: AppBundle\Security\UserProvider
+        arguments: ["@app.services.users"]
+
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService
       arguments:
@@ -119,6 +123,13 @@ services:
 
   app.services.sectors:
       class: SecuritiesService\Service\SectorsService
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
+
+  app.services.users:
+      class: SecuritiesService\Service\UsersService
       arguments:
           - "@doctrine.orm.default_entity_manager"
           - "@app.bucket_provider"
