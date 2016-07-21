@@ -23,8 +23,25 @@ services:
       class: AppBundle\Security\Encoder
 
   app.security.user_provider:
-        class: AppBundle\Security\UserProvider
-        arguments: ["@app.services.users"]
+      class: AppBundle\Security\UserProvider
+      arguments: ["@app.services.users"]
+
+  app.config:
+      class: SecuritiesService\Domain\Entity\Config
+      factory: ["@app.services.config", get]
+
+  app.email.from_name:
+      class: SecuritiesService\Domain\Entity\Config
+      factory: ["@app.config", getSiteTitle]
+
+
+  app.email.sender:
+      class: AppBundle\Service\EmailService
+      arguments:
+          - "@swiftmailer.mailer"
+          - %mailer_user%
+          - "@app.email.from_name"
+
 
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService

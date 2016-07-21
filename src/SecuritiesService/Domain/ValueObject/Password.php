@@ -4,10 +4,6 @@ namespace SecuritiesService\Domain\ValueObject;
 
 use SecuritiesService\Domain\Exception\ValidationException;
 
-/**
- * Class Address
- * For handling addresses
- */
 class Password
 {
 

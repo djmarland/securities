@@ -17,9 +17,20 @@ security:
             form_login:
                 login_path: login
                 check_path: login
+                provider: app_user_provider
+            logout:
+                path:   logout
+                target: home
+            remember_me:
+                secret:      "%secret%"
+                lifetime: 9.46708e8 # 30 years
+                path:     /
+                always_remember_me: true
 
     access_control:
         - { path: ^/(login|register), roles: IS_AUTHENTICATED_ANONYMOUSLY }
+        - { path: ^/welcome, roles: ROLE_USER }
+        - { path: ^/account, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
 
 #    firewalls:

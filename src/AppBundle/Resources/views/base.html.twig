@@ -109,8 +109,19 @@
         <ul class="main-nav__list"
             ><li><a class="main-nav__link" href="{{ path('home') }}">Home</a></li
             ><li><a class="main-nav__link" href="{{ path('overview_securities') }}">Securities</a></li
-            ><li><a class="main-nav__link" href="{{ path('issuer_list') }}">Issuers</a></li
-        ></ul>
+            ><li><a class="main-nav__link" href="{{ path('issuer_list') }}">Issuers</a></li>{%
+            if visitor
+                %}<li>
+                    <a class="main-nav__link" href="{{ path('account_home') }}">{{ visitor.displayName }}</a>
+                </li><li>
+                    <a class="main-nav__link" href="{{ path('logout') }}">Logout</a>
+                </li>{%
+            else
+                %}<li>
+                    <a class="main-nav__link" href="{{ path('login') }}">Login</a>
+                </li>{%
+            endif
+        %}</ul>
         </div>
     </nav>
 </div></header>

@@ -5,6 +5,7 @@ namespace AppBundle\Controller;
 use AppBundle\Presenter\MasterPresenter;
 use AppBundle\Presenter\Organism\Adverts\AdvertsPresenter;
 use AppBundle\Presenter\Organism\Pagination\PaginationPresenter;
+use AppBundle\Security\Visitor;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Enum\Features;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller as BaseController;
@@ -27,7 +28,7 @@ class Controller extends BaseController implements ControllerInterface
 
     private $applicationTime;
 
-    protected $cacheTime = 600;
+    protected $cacheTime = null; // todo - disable cache for now
 
     /** Setup common tasks for a controller */
     public function initialize(Request $request)
@@ -48,6 +49,8 @@ class Controller extends BaseController implements ControllerInterface
         $this->toView('currentYear', date("Y"), false);
         $this->toView('currentSection', null, false);
         $this->toView('pagination', null, false);
+
+        $this->toView('visitor', $this->getUser(), false);
         $this->setSearchContext();
     }
 
@@ -178,5 +181,19 @@ class Controller extends BaseController implements ControllerInterface
             throw new HttpException(404, 'Invalid Year: ' . $year);
         }
         return $year;
+    }
+
+    protected function userIsLoggedIn()
+    {
+        $user = $this->getUser();
+        return ($user instanceof Visitor);
+    }
+
+    protected function renderEmail($viewPath, $mailData)
+    {
+        $viewPath = 'AppBundle:emails:' . $viewPath . '.html.twig';
+        $data = $this->masterViewPresenter->getData();
+        $data['email'] = $mailData;
+        return $this->renderView($viewPath, $data);
     }
 }

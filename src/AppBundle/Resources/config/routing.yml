@@ -35,6 +35,10 @@ login:
     path:     /login
     defaults: { _controller: AppBundle:Security:login }
 
+welcome:
+    path:     /welcome
+    defaults: { _controller: AppBundle:Security:welcome }
+
 register:
     path:     /register
     defaults: { _controller: AppBundle:Security:register }
@@ -50,6 +54,14 @@ set_password:
 logout:
     path: /logout
 
+# Personal pages
+account_home:
+    path:     /account
+    defaults: { _controller: AppBundle:Account:index }
+
+account_settings:
+    path:     /account/settings
+    defaults: { _controller: AppBundle:Account:settings }
 
 # Admin
 admin:

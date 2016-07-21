@@ -61,6 +61,11 @@ class MapperFactory
         return new SectorMapper($this);
     }
 
+    public function createUser(): UserMapper
+    {
+        return new UserMapper($this);
+    }
+
     public function createYieldCurve(): YieldCurveMapper
     {
         return new YieldCurveMapper($this);

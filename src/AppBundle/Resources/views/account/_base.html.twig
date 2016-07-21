@@ -1,0 +1,18 @@
+{% block body %}
+<p class="h1">My account</p>
+<div class="grid">
+    <div class="g">
+        <nav><ul class="tabs"
+            ><li class="tabs__tab {% if activeTab == 'dashboard' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('account_home') }}">Dashboard</a></li
+            ><li class="tabs__tab {% if activeTab == 'securities' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('account_home') }}">Saved Securities</a></li
+            ><li class="tabs__tab {% if activeTab == 'settings' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('account_settings') }}">Settings</a></li
+            ></ul></nav>
+    </div>
+    <div class="g">
+        {% block content %}{% endblock %}
+    </div>
+</div>
+{% endblock %}
