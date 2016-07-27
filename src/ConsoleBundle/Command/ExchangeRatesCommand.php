@@ -77,7 +77,7 @@ class ExchangeRatesCommand extends Command
         $output->writeln('Not yet fetched. Fetching...');
 
         $fixerioExchange = new Exchange();
-        $fixerioExchange->secure()
+        $fixerioExchange
             ->base(\Fadion\Fixerio\Currency::USD)
             ->historical($formattedDate);
 

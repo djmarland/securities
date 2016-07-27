@@ -1017,12 +1017,12 @@
             "source": {
                 "type": "git",
                 "url": "https://github.com/fadion/Fixerio.git",
-                "reference": "a8a47ed3177e58607e48b79d8a17ffa3b116ec41"
+                "reference": "790ced47aeb68ba3a277f8bfa2473f90313c3de7"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/fadion/Fixerio/zipball/a8a47ed3177e58607e48b79d8a17ffa3b116ec41",
-                "reference": "a8a47ed3177e58607e48b79d8a17ffa3b116ec41",
+                "url": "https://api.github.com/repos/fadion/Fixerio/zipball/790ced47aeb68ba3a277f8bfa2473f90313c3de7",
+                "reference": "790ced47aeb68ba3a277f8bfa2473f90313c3de7",
                 "shasum": ""
             },
             "require": {
@@ -1056,7 +1056,7 @@
                 "fixer",
                 "laravel"
             ],
-            "time": "2016-07-27 15:55:29"
+            "time": "2016-07-27 17:18:49"
         },
         {
             "name": "guzzlehttp/guzzle",
