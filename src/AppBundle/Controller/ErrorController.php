@@ -20,7 +20,15 @@ class ErrorController extends ExceptionController
         ];
 
         $code = $exception->getStatusCode();
-        $template = ($code == 404) ? 'error404' : 'error';
+        $template = 'error';
+        switch ($code) {
+            case 404:
+                $template = 'error404';
+                break;
+            case 403:
+                $template = 'error403';
+                break;
+        }
 
         return new Response($this->twig->render(
             'AppBundle:error:' . $template . '.html.twig',
