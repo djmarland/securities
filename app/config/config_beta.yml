@@ -1,8 +1,2 @@
 imports:
     - { resource: config.yml }
-
-security:
-    firewalls:
-        default:
-            anonymous: false
-            http_basic: ~

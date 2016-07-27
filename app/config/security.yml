@@ -2,11 +2,6 @@ security:
     providers:
         app_user_provider:
             id: app.security.user_provider
-#        in_memory:
-#            memory:
-#                users:
-#                    admin:
-#                        roles: 'ROLE_ADMIN'
 
     firewalls:
         dev:
@@ -32,38 +27,6 @@ security:
         - { path: ^/welcome, roles: ROLE_USER }
         - { path: ^/account, roles: ROLE_USER }
         - { path: ^/admin, roles: ROLE_ADMIN }
-
-#    firewalls:
-#        dev:
-#            pattern: ^/(_(profiler|wdt)|css|images|js)/
-#            security: false
-#
-#
-#        login_firewall:
-#            pattern:   ^/(login|reset-password|first-user)$
-#            anonymous: ~
-#
-#        secured_area:
-#            pattern:    ^/admin
-#            form_login:
-#                login_path: login
-#                check_path: login_check
-#                provider: app_user_provider
-#            logout:
-#                path:   logout
-#                target: home
-##            remember_me:
-##                key:      "%secret%"
-##                lifetime: 9.46708e8 # 30 years
-##                path:     /
-##                always_remember_me: true
-#
-#        default:
-#            anonymous: ~
-#
-#    access_control:
-#        - { path: ^/admin, roles: [ROLE_ADMIN] }
-#        - { path: ^/, roles: [ROLE_ADMIN, IS_AUTHENTICATED_ANONYMOUSLY] }
 
     encoders:
         Symfony\Component\Security\Core\User\User:
