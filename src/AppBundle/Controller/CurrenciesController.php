@@ -98,9 +98,15 @@ class CurrenciesController extends Controller
 
     public function updateAction()
     {
+        $fromDate = $this->request->get('fromDate');
+        $toDate = $this->request->get('toDate');
+
         $command = new ExchangeRatesCommand();
         $command->setContainer($this->container);
-        $input = new ArrayInput([]);
+        $input = new ArrayInput([
+            'dateFrom' => $fromDate,
+            'dateTo' => $toDate
+        ]);
         $output = new BufferedOutput();
 
         $command->run($input, $output);
