@@ -22,7 +22,7 @@ abstract class Entity
     /** @ORM\Column(type="datetime", nullable=false) */
     protected $createdAt;
 
-    /* @ORM\Column(type="datetime", nullable=false) */
+    /** @ORM\Column(type="datetime", nullable=false) */
     protected $updatedAt;
 
     public function __construct()

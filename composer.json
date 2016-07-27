@@ -24,7 +24,8 @@
     "ramsey/uuid": "^3.2",
     "ramsey/uuid-doctrine": "^1.1",
     "djmarland/isin": "^1.0",
-    "guzzlehttp/guzzle": "^6.1"
+    "guzzlehttp/guzzle": "^6.1",
+    "fadion/fixerio": "dev-master"
   },
   "require-dev": {
     "phpunit/phpunit": "~5",

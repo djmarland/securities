@@ -1,0 +1,45 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">{{ currency.code }}</h1>
+    {% if hasData %}
+        <div id="chart-area" class="g-unit">
+            <canvas id="ex-rates-chart"><p class="text--center">Drawing graph...</p></canvas>
+        </div>
+        <script>
+            (function() {
+                var ctx = document.getElementById('ex-rates-chart').getContext('2d'),
+                    settings = {{ graphSettings|json_encode|raw }};
+
+                settings.options.scales.yAxes[0].ticks.callback = function (value) {
+                    return settings.options.axisFormat.replace('#', value.toFixed(4));
+                };
+
+                settings.options.tooltips.callbacks.label = function (tooltipItem, data) {
+                    return data.datasets[tooltipItem.datasetIndex].label + ': ' +
+                            settings.options.axisFormat.replace('#', tooltipItem.yLabel);
+                };
+
+                new Chart(ctx, settings);
+            })();
+        </script>
+        <table class="table table--lined">
+            <thead>
+            <tr>
+                <th>Date</th>
+                <th>USD</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for rate in rates %}
+                <tr>
+                    <td>{{ rate.date.format('d/m/Y') }}</td>
+                    <td>{{ rate.valueUSD }}</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <p>No data has been collected for this currency</p>
+    {% endif %}
+{% endblock %}

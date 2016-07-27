@@ -86,7 +86,7 @@ class SecurityController extends Controller
 
         $this->toView('form', $form->createView());
 
-        return $this->renderTemplate('security:register');
+        return $this->renderTemplate('security:register', 'Register');
     }
 
     public function loginAction(Request $request)
@@ -117,7 +117,7 @@ class SecurityController extends Controller
         $this->toView('loginError', $error);
         $this->toView('loginErrorMessage', $message);
 
-        return $this->renderTemplate('security:login');
+        return $this->renderTemplate('security:login', 'Login');
     }
 
     public function resetPasswordAction(Request $request)
@@ -180,7 +180,7 @@ class SecurityController extends Controller
 
         $this->toView('form', $form->createView());
 
-        return $this->renderTemplate('security:reset-password');
+        return $this->renderTemplate('security:reset-password', 'Reset password');
     }
 
     public function setPasswordAction(Request $request)
@@ -238,11 +238,11 @@ class SecurityController extends Controller
 
         $this->toView('form', $form->createView());
 
-        return $this->renderTemplate('security:set-password');
+        return $this->renderTemplate('security:set-password', 'Set new password');
     }
 
     public function welcomeAction(Request $request)
     {
-        return $this->renderTemplate('security:welcome');
+        return $this->renderTemplate('security:welcome', 'Wecome');
     }
 }

@@ -3,6 +3,7 @@
 namespace SecuritiesService\Service;
 
 use SecuritiesService\Domain\Entity\Currency;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class CurrenciesService extends Service
@@ -16,9 +17,19 @@ class CurrenciesService extends Service
     }
 
     public function findByCode(
-        $code
+        string $code
     ) {
-        // @todo - currencies should use codes
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.code = :code')
+            ->setParameter('code', $code);
+
+        $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        if (empty($results)) {
+            throw new EntityNotFoundException('No such item with Code ' . $code);
+        }
+
+        return reset($results);
     }
 
     public function findAll(): array

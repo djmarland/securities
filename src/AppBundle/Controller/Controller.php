@@ -144,8 +144,12 @@ class Controller extends BaseController implements ControllerInterface
         return $this->renderTemplate('json');
     }
 
-    protected function renderTemplate($template)
+    protected function renderTemplate($template, $title = null)
     {
+        if ($title) {
+            $this->setTitle($title);
+        }
+
         $format = $this->request->get('format', null);
         if ($format == 'json' || $template == 'json') {
             $response = new JsonResponse($this->masterViewPresenter->getFeedData());

@@ -16,14 +16,14 @@ class AccountController extends Controller
 {
     protected $cacheTime = null;
 
-    public function indexAction(Request $request)
+    public function indexAction()
     {
         $this->toView('activeTab', 'dashboard');
 
         return $this->renderTemplate('account:index');
     }
 
-    public function settingsAction(Request $request)
+    public function settingsAction()
     {
         $this->toView('activeTab', 'settings');
         $visitor = $this->getUser();
@@ -35,8 +35,8 @@ class AccountController extends Controller
         ]);
         $passwordForm = $this->createForm(NewPassword::class);
 
-        $emailForm->handleRequest($request);
-        $passwordForm->handleRequest($request);
+        $emailForm->handleRequest($this->request);
+        $passwordForm->handleRequest($this->request);
 
         if ($emailForm->isValid()) {
             $data = $emailForm->getData();

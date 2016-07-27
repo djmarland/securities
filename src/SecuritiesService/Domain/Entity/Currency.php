@@ -3,7 +3,6 @@
 namespace SecuritiesService\Domain\Entity;
 
 use SecuritiesService\Domain\ValueObject\UUID;
-use DateTime;
 
 class Currency extends Entity
 {

@@ -101,6 +101,22 @@ admin_export_download:
   path:     /admin/export/download.csv
   defaults: { _controller: AppBundle:Admin:exportDownload }
 
+# Currencies
+currencies_index:
+  path:     /currencies
+  defaults: { _controller: AppBundle:Currencies:index }
+
+currencies_update:
+  path:     /currencies/update
+  defaults: { _controller: AppBundle:Currencies:update }
+
+currencies_show:
+  path:     /currencies/{code}
+  defaults: { _controller: AppBundle:Currencies:show }
+  requirements:
+    code:  "[A-Z]{3}"
+
+
 # Overview
 overview_show:
   path:     /overview

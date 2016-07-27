@@ -71,6 +71,13 @@ services:
           - "@app.bucket_provider"
           - "@app.time_provider"
 
+  app.services.exchange_rates:
+      class: SecuritiesService\Service\ExchangeRatesService
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
+
   app.services.groups:
       class: SecuritiesService\Service\GroupsService
       arguments:

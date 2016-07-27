@@ -1,0 +1,20 @@
+<table class="table table--striped">
+    <thead>
+    <tr>
+        <th>Currency</th>
+        <th>1 USD =</th>
+        <th>= USD</th>
+        <th>Date set</th>
+    </tr>
+    </thead>
+    <tbody>
+        {% for rate in rates %}
+            <tr onclick="window.location.href='{{ path(rate.pathName, rate.pathParams) }}'">
+                <td><a href="{{ path(rate.pathName, rate.pathParams) }}">{{ rate.code }}</a></td>
+                <td>{{ rate.value }}</td>
+                <td>{{ rate.valueUSD }}</td>
+                <td>{{ rate.valueSetDate }}</td>
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>

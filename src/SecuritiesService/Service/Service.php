@@ -66,9 +66,7 @@ abstract class Service
         $qb = $this->getQueryBuilder($type);
         $qb->select(self::TBL)
             ->where(self::TBL . '.id = :id')
-            ->setParameters([
-                'id' => $id->getBinary(),
-            ]);
+            ->setParameter('id', $id->getBinary());
 
         $results = $this->getDomainFromQuery($qb, $type);
         if (empty($results)) {

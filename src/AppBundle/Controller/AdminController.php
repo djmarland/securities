@@ -11,10 +11,14 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AdminController extends Controller
 {
+    use Traits\CurrenciesTableTrait;
+
     protected $cacheTime = null;
 
-    public function indexAction(Request $request)
+    public function indexAction()
     {
+        $this->buildCurrenciesTable();
+
         $this->toView('activeTab', 'dashboard');
 
         $securitiesService = $this->get('app.services.securities');
@@ -37,21 +41,21 @@ class AdminController extends Controller
         $this->toView('statsIndustries', number_format($statsIndustries));
         $this->toView('statsUsers', number_format($statsUsers));
 
-        return $this->renderTemplate('admin:index');
+        return $this->renderTemplate('admin:index', 'Admin');
     }
 
-    public function securitiesAction(Request $request)
+    public function securitiesAction()
     {
         $this->toView('formSuccess', null);
         $this->toView('csv', '[]');
         $this->toView('activeTab', 'securities');
 
-        if ($request->isMethod('POST')) {
-            $file = $request->request->get('submit-file');
-            $text = $request->request->get('submit-text');
+        if ($this->request->isMethod('POST')) {
+            $file = $this->request->request->get('submit-file');
+            $text = $this->request->request->get('submit-text');
 
             if (isset($file)) {
-                $file = $request->files->get('csv-file');
+                $file = $this->request->files->get('csv-file');
                 if ($file) {
                     $filename = 'csv-upload.csv';
                     $dir = $this->getParameter('kernel.cache_dir');
@@ -64,7 +68,7 @@ class AdminController extends Controller
                     $this->toView('formSuccess', 'No CSV data was found in file upload');
                 }
             } elseif (isset($text)) {
-                $csv = $request->request->get('csv-text', null);
+                $csv = $this->request->request->get('csv-text', null);
                 if ($csv) {
                     $csvData = $this->csvToArray($csv);
                     $this->setCsvData($csvData);
@@ -81,18 +85,18 @@ class AdminController extends Controller
         $this->toView('noIssuerCount', count($noIssuer));
         $this->toView('noIssuer', $noIssuer);
 
-        return $this->renderTemplate('admin:securities');
+        return $this->renderTemplate('admin:securities', 'Securities - Admin');
     }
 
-    public function issuersAction(Request $request)
+    public function issuersAction()
     {
         $this->toView('formSuccess', null);
         $this->toView('activeTab', 'issuers');
 
         // if post, process the delete
-        if ($request->isMethod('POST')) {
-            $delete = $request->request->get('delete-id');
-            $editName = $request->request->get('field-name');
+        if ($this->request->isMethod('POST')) {
+            $delete = $this->request->request->get('delete-id');
+            $editName = $this->request->request->get('field-name');
             if ($delete) {
                 $this->toView('formSuccess', 'There was an error when trying to delete');
                 $success = $this->get('app.services.issuers')->deleteWithId(UUID::createFromString($delete));
@@ -100,9 +104,9 @@ class AdminController extends Controller
                     $this->toView('formSuccess', 'Deleted successfully');
                 }
             } elseif ($editName) {
-                $editGroup = $request->request->get('field-group');
-                $editCountry = $request->request->get('field-country');
-                $editId = $request->request->get('field-id');
+                $editGroup = $this->request->request->get('field-group');
+                $editCountry = $this->request->request->get('field-country');
+                $editId = $this->request->request->get('field-id');
 
                 $data = [
                     'COMPANY_ID' => !empty($editId) ? $editId : null,
@@ -131,20 +135,19 @@ class AdminController extends Controller
         $this->toView('noParentCount', count($noParent));
         $this->toView('noParent', $noParent);
 
-
-        return $this->renderTemplate('admin:issuers');
+        return $this->renderTemplate('admin:issuers', 'Issuers - Admin');
     }
 
-    public function processSecurityAction(Request $request)
+    public function processSecurityAction()
     {
-        if (!$request->isMethod('POST')) {
+        if (!$this->request->isMethod('POST')) {
             throw new HttpException(405, 'Must be POST');
         }
 
         try {
             $command = new ImportCommand();
             $command->setContainer($this->container);
-            $command->single($request->request->all());
+            $command->single($this->request->request->all());
             $this->toView('message', 'ok', true);
         } catch (\Exception $e) {
             $this->toView('error', $e->getMessage(), true);
@@ -152,26 +155,26 @@ class AdminController extends Controller
         return $this->renderTemplate('json');
     }
 
-    public function settingsAction(Request $request)
+    public function settingsAction()
     {
         // settings were fetched globally
         $this->toView('message', null);
         $this->toView('activeTab', 'settings');
 
-        if ($request->isMethod('POST')) {
+        if ($this->request->isMethod('POST')) {
             try {
                 // save
                 $service = $this->get('app.services.config');
 
                 $settings = [
-                    'siteTitle' => $request->get('field-siteTitle', ''),
-                    'siteHostName' => $request->get('field-siteHostName', ''),
-                    'siteTagLine' => $request->get('field-siteTagLine', ''),
-                    'adsInDevMode' => (bool) $request->get('field-adsInDevMode', false),
+                    'siteTitle' => $this->request->get('field-siteTitle', ''),
+                    'siteHostName' => $this->request->get('field-siteHostName', ''),
+                    'siteTagLine' => $this->request->get('field-siteTagLine', ''),
+                    'adsInDevMode' => (bool) $this->request->get('field-adsInDevMode', false),
                 ];
                 $service->setSettings($settings);
 
-                $features = $request->get('feature-flag', []);
+                $features = $this->request->get('feature-flag', []);
                 $service->setActiveFeatures($features);
 
                 $this->toView('message', 'Saved');
@@ -184,12 +187,11 @@ class AdminController extends Controller
             }
         }
 
-        $this->setTitle('Settings - Admin');
-        return $this->renderTemplate('admin:settings');
+        return $this->renderTemplate('admin:settings', 'Settings - Admin');
 
     }
 
-    public function compareAction(Request $request)
+    public function compareAction()
     {
         $this->toView('activeTab', 'compare');
 
@@ -198,12 +200,11 @@ class AdminController extends Controller
 
         $this->toView('sourceIsins', $sourceIsins);
 
-        $this->setTitle('Settings - Compare');
-        return $this->renderTemplate('admin:compare');
+        return $this->renderTemplate('admin:compare'. 'Compare - Admin');
 
     }
 
-    public function exportAction(Request $request)
+    public function exportAction()
     {
         // settings were fetched globally
         $this->toView('message', null);
@@ -232,11 +233,10 @@ class AdminController extends Controller
         $this->toView('processed', $processed);
         $this->toView('total', $total);
         $this->toView('percentage', $percentage);
-        $this->setTitle('Settings - Export');
-        return $this->renderTemplate('admin:export');
+        return $this->renderTemplate('admin:export', 'Export - Admin');
     }
 
-    public function exportProcessAction(Request $request)
+    public function exportProcessAction()
     {
         $export = $this->getExportFile();
 
@@ -355,7 +355,7 @@ class AdminController extends Controller
         return $this->renderJSON();
     }
 
-    public function exportDownloadAction(Request $request)
+    public function exportDownloadAction()
     {
         $latestExport = $this->getExportFile();
         if (!$latestExport) {

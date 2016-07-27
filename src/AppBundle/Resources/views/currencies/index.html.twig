@@ -1,0 +1,10 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% block body %}
+    <h1 class="g-unit">Currencies</h1>
+    <div class="grid">
+        <div class="g 1/2@l">
+            {% include '@partials/_exchange-rates-table.html.twig' %}
+        </div>
+    </div>
+{% endblock %}
