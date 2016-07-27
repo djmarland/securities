@@ -17,7 +17,7 @@ class User extends Entity
         UUID $id,
         string $name,
         Email $email,
-        string $passwordDigest,
+        PasswordDigest $passwordDigest,
         bool $passwordExpired = false,
         bool $isActive = true,
         bool $isAdmin = false

@@ -73,18 +73,7 @@ class UsersService extends Service
         // generate a new token
         $token = new ResetToken();
 
-        // get the user DB entity
-        $qb = $this->getQueryBuilder(self::ENTITY);
-        $qb->where(self::TBL . '.id = :id')
-            ->setParameter('id', $user->getId()->getBinary());
-
-        /** @var DbUser $userDb */
-        $userDb = $qb->getQuery()->getOneOrNullResult();
-        if (!$userDb) {
-            throw new \InvalidArgumentException(
-                'Tried to update a user that could not be found'
-            );
-        }
+        $userDb = $this->getDbEntityFromDomain($user);
 
         $userDb->setResetTokenUsername($token->getUsername());
         $userDb->setResetTokenDigest((string) $token->getDigest());
@@ -141,5 +130,50 @@ class UsersService extends Service
 
         // success
         return true;
+    }
+
+    public function updateEmailAddress(
+        User $user,
+        Email $newEmail
+    ): bool {
+        $userDb = $this->getDbEntityFromDomain($user);
+        $userDb->setEmail((string) $newEmail);
+
+        // save it
+        $this->entityManager->persist($userDb);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    public function updatePassword(
+        User $user,
+        Password $password
+    ): bool {
+        $userDb = $this->getDbEntityFromDomain($user);
+        $userDb->setPasswordDigest((string) $password);
+
+        // save it
+        $this->entityManager->persist($userDb);
+        $this->entityManager->flush();
+
+        return true;
+    }
+
+    private function getDbEntityFromDomain(User $user): DbUser
+    {
+        // get the user DB entity
+        $qb = $this->getQueryBuilder(self::ENTITY);
+        $qb->where(self::TBL . '.id = :id')
+            ->setParameter('id', $user->getId()->getBinary());
+
+        /** @var DbUser $userDb */
+        $userDb = $qb->getQuery()->getOneOrNullResult();
+        if (!$userDb) {
+            throw new \InvalidArgumentException(
+                'Tried to update a user that could not be found'
+            );
+        }
+        return $userDb;
     }
 }

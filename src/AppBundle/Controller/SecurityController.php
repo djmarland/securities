@@ -22,7 +22,10 @@ class SecurityController extends Controller
     public function registerAction(Request $request)
     {
         if ($this->userIsLoggedIn()) {
-            // already logged in (todo - flash message)
+            $this->addFlash(
+                'info',
+                'You are already logged in'
+            );
             return $this->redirectToRoute('home');
         }
 
@@ -89,7 +92,10 @@ class SecurityController extends Controller
     public function loginAction(Request $request)
     {
         if ($this->userIsLoggedIn()) {
-            // already logged in (todo - flash message)
+            $this->addFlash(
+                'info',
+                'You are already logged in'
+            );
             return $this->redirectToRoute('home');
         }
 
@@ -117,7 +123,10 @@ class SecurityController extends Controller
     public function resetPasswordAction(Request $request)
     {
         if ($this->userIsLoggedIn()) {
-            // already logged in (todo - flash message)
+            $this->addFlash(
+                'info',
+                'You are already logged in'
+            );
             return $this->redirectToRoute('home');
         }
 
@@ -157,9 +166,8 @@ class SecurityController extends Controller
                     // don't inform if the e-mail exists.
                 }
 
-                // set success message on the current form (not flash)
                 $this->addFlash(
-                    'success',
+                    'info',
                     'If we recognise your e-mail address you will receive an e-mail shortly.
                     Check your inbox.'
                 );
@@ -178,7 +186,10 @@ class SecurityController extends Controller
     public function setPasswordAction(Request $request)
     {
         if ($this->userIsLoggedIn()) {
-            // already logged in (todo - flash message)
+            $this->addFlash(
+                'info',
+                'You are already logged in'
+            );
             return $this->redirectToRoute('home');
         }
 

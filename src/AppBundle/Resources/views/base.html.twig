@@ -117,9 +117,9 @@
                     <a class="main-nav__link" href="{{ path('logout') }}">Logout</a>
                 </li>{%
             else
-                %}<li>
+                %}{#<li>
                     <a class="main-nav__link" href="{{ path('login') }}">Login</a>
-                </li>{%
+                </li>#}{%
             endif
         %}</ul>
         </div>
@@ -127,6 +127,7 @@
 </div></header>
 <main>
     <div class="layout--max">
+        {% include '@partials/flash-messages.html.twig' %}
         {% block body %}{% endblock %}
     </div>
 </main>

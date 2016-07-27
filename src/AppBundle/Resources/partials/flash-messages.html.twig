@@ -1,0 +1,28 @@
+{% if app.session.flashBag.peek('error') or
+        app.session.flashBag.peek('warning') or
+        app.session.flashBag.peek('ok') or
+        app.session.flashBag.peek('info')
+%}
+    <ul class="messages g-unit">
+        {% for flash_message in app.session.flashBag.get('error') %}
+            <li class="message message--error">
+                {{ flash_message }}
+            </li>
+        {% endfor %}
+        {% for flash_message in app.session.flashBag.get('warning') %}
+            <li class="message message--warning">
+                {{ flash_message }}
+            </li>
+        {% endfor %}
+        {% for flash_message in app.session.flashBag.get('ok') %}
+            <li class="message message--ok">
+                {{ flash_message }}
+            </li>
+        {% endfor %}
+        {% for flash_message in app.session.flashBag.get('info') %}
+            <li class="message message--info">
+                {{ flash_message }}
+            </li>
+        {% endfor %}
+    </ul>
+{% endif %}
