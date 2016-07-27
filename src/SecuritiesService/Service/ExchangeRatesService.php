@@ -14,7 +14,7 @@ class ExchangeRatesService extends Service
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL, 'currency')
-            ->join(
+            ->leftJoin(
                 ExchangeRate::class,
                 'ex',
                 Join::WITH,
@@ -24,6 +24,7 @@ class ExchangeRatesService extends Service
                 )
             )
             ->join(self::TBL . '.currency', 'currency')
+            ->where('ex.date IS NULL')
             ->orderBy('currency.code', 'ASC');
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

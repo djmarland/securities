@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "739acbb3a3821f1e0ae31a492b33418b",
-    "content-hash": "a002208adf00522a029cff331d76799a",
+    "hash": "06dc3b239ba4d35b607c85de5219d489",
+    "content-hash": "dcb6894e91ed5a2e783a278d194aeba4",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -1013,7 +1013,7 @@
         },
         {
             "name": "fadion/fixerio",
-            "version": "dev-master",
+            "version": "1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/fadion/Fixerio.git",
@@ -3815,9 +3815,7 @@
     ],
     "aliases": [],
     "minimum-stability": "stable",
-    "stability-flags": {
-        "fadion/fixerio": 20
-    },
+    "stability-flags": [],
     "prefer-stable": false,
     "prefer-lowest": false,
     "platform": {
