@@ -222,7 +222,7 @@ class SecurityController extends Controller
                     ->resetPassword($token, $passwordDigest, $this->getApplicationTime());
 
                 $this->addFlash(
-                    'success',
+                    'ok',
                     'Password changed. You can now log in'
                 );
 
