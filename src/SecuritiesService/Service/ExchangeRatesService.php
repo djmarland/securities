@@ -2,9 +2,12 @@
 
 namespace SecuritiesService\Service;
 
+use DateTimeImmutable;
 use Doctrine\ORM\Query\Expr\Join;
-use SecuritiesService\Data\Database\Entity\ExchangeRate;
+use SecuritiesService\Data\Database\Entity\ExchangeRate as DbExchangeRate;
 use SecuritiesService\Domain\Entity\Currency;
+use SecuritiesService\Domain\Entity\ExchangeRate;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
 
 class ExchangeRatesService extends Service
 {
@@ -15,12 +18,12 @@ class ExchangeRatesService extends Service
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL, 'currency')
             ->leftJoin(
-                ExchangeRate::class,
+                DbExchangeRate::class,
                 'ex',
                 Join::WITH,
                 $qb->expr()->andX(
                     self::TBL . '.currency = ex.currency',
-                    self::TBL . '.date > ex.date'
+                    self::TBL . '.date < ex.date'
                 )
             )
             ->join(self::TBL . '.currency', 'currency')
@@ -39,5 +42,54 @@ class ExchangeRatesService extends Service
             ->setParameter('currencyId', $currency->getId()->getBinary());
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findDatesForCurrency(
+        Currency $currency,
+        DateTimeImmutable $fromDate,
+        DateTimeImmutable $toDate
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.currency = :currencyId')
+            ->andWhere(self::TBL . '.date >= :from')
+            ->andWhere(self::TBL . '.date <= :to')
+            ->orderBy(self::TBL . '.date', 'ASC')
+            ->setParameter('currencyId', $currency->getId()->getBinary())
+            ->setParameter('from', $fromDate)
+            ->setParameter('to', $toDate);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findSpecifcDatesForCurrency(
+        Currency $currency,
+        array $dates
+    ): array {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.currency = :currencyId')
+            ->andWhere(self::TBL . '.date IN (:dates)')
+            ->orderBy(self::TBL . '.date', 'ASC')
+            ->setParameter('currencyId', $currency->getId()->getBinary())
+            ->setParameter('dates', $dates);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
+    public function findEarliestForCurrency(Currency $currency): ExchangeRate
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.currency = :currencyId')
+            ->orderBy(self::TBL . '.date', 'ASC')
+            ->setParameter('currencyId', $currency->getId()->getBinary())
+            ->setMaxResults(1);
+
+        $results = $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        if (empty($results)) {
+            throw new EntityNotFoundException('No data for this currency ' . $currency->getCode());
+        }
+        return reset($results);
     }
 }

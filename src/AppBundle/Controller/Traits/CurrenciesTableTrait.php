@@ -16,8 +16,13 @@ trait CurrenciesTableTrait
         foreach ($rates as $rate) {
             $presenters[] = new ExchangeRatePresenter($rate);
         }
+        $updatedDate = null;
+        if (!empty($presenters)) {
+            $updatedDate = $presenters[0]->getValueSetDate();
+        }
 
-        $this->toView('rates', $presenters);
+        $this->toView('currenciesWithRates', $presenters);
+        $this->toView('currenciesUpdatedDate', $updatedDate);
     }
 }
 

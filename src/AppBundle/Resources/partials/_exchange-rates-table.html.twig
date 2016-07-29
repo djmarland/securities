@@ -1,20 +1,11 @@
-<table class="table table--striped">
-    <thead>
-    <tr>
-        <th>Currency</th>
-        <th>1 USD =</th>
-        <th>= USD</th>
-        <th>Date set</th>
-    </tr>
-    </thead>
-    <tbody>
-        {% for rate in rates %}
-            <tr onclick="window.location.href='{{ path(rate.pathName, rate.pathParams) }}'">
-                <td><a href="{{ path(rate.pathName, rate.pathParams) }}">{{ rate.code }}</a></td>
-                <td>{{ rate.value }}</td>
-                <td>{{ rate.valueUSD }}</td>
-                <td>{{ rate.valueSetDate }}</td>
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
+<p class="g-unit">Updated: {{ currenciesUpdatedDate }}</p>
+<div class="grid">
+    {% for rate in currenciesWithRates %}
+        <a href="{{ path(rate.pathName, rate.pathParams) }}" class="g 1/2@s 1/3@m 1/4@l">
+            <div class="island color-grey-lightest text--center">
+                <div class="d">{{ rate.code }}</div>
+                <div class="b">${{ rate.valueUSD }}</div>
+            </div>
+        </a>
+    {% endfor %}
+</div>

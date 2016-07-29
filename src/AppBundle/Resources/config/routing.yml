@@ -116,6 +116,13 @@ currencies_show:
   requirements:
     code:  "[A-Z]{3}"
 
+currencies_show_year:
+  path:     /currencies/{code}/{year}
+  defaults: { _controller: AppBundle:Currencies:showYear }
+  requirements:
+    code:  "[A-Z]{3}"
+    year:  "2[0-9]{3}"
+
 
 # Overview
 overview_show:

@@ -3,42 +3,85 @@
 {% block body %}
     <h1 class="g-unit">{{ currency.code }}</h1>
     {% if hasData %}
-        <div id="chart-area" class="g-unit">
-            <canvas id="ex-rates-chart"><p class="text--center">Drawing graph...</p></canvas>
+        <div class="grid">
+            <div class="g 1/2@s">
+                <div class="island color-grey-lightest text--center">
+                    <h2 class="d">Latest value</h2>
+                    <p class="a">${{ latestRate }}</p>
+                    <p class="e">{{ latestDate }}</p>
+                </div>
+            </div>
+            <div class="g 1/2@s">
+                <div class="island color-grey-lightest text--center">
+                    <h2 class="d">Change</h2>
+                    {% if changeRate %}
+                    <p class="a">{{ changeRate }}</p>
+                    <p class="e">since {{ changeDate }}</p>
+                    {% else %}
+                    <p>No data</p>
+                    {% endif %}
+                </div>
+            </div>
+            <div class="g 1/2@l">
+                <h2 class="g-unit">Last 100 days</h2>
+                <canvas id="ex-rates-recent-chart"><p class="text--center">Drawing graph...</p></canvas>
+            </div>
+            <div class="g 1/2@l">
+                <h2 class="g-unit">Last 10 years</h2>
+                <canvas id="ex-rates-decade-chart"><p class="text--center">Drawing graph...</p></canvas>
+            </div>
+            <div class="g">
+                <h2>By year</h2>
+                <p class="g-unit">Choose a year to see the rates in more detail</p>
+                <div class="grid">
+                    {% for year in linkableYears %}
+                        <div class="g 1/2@s 1/3@m 1/4@l 1/5\@xxxl text--center a">
+                        <a class="island color-grey-lightest" href="{{ path('currencies_show_year', year.hrefParams) }}">{{ year.text }}</a>
+                        </div>
+                    {% endfor %}
+                </div>
+            </div>
         </div>
+
+
+
+
         <script>
             (function() {
-                var ctx = document.getElementById('ex-rates-chart').getContext('2d'),
-                    settings = {{ graphSettings|json_encode|raw }};
+                var ctxRecent = document.getElementById('ex-rates-recent-chart').getContext('2d'),
+                    ctxDecade = document.getElementById('ex-rates-decade-chart').getContext('2d'),
+                    settingsRecent = {{ recentGraph|json_encode|raw }},
+                    settingsDecade = {{ decadeGraph|json_encode|raw }};
 
-                settings.options.scales.yAxes[0].ticks.callback = function (value) {
-                    return settings.options.axisFormat.replace('#', value.toFixed(4));
-                };
+                settingsRecent = setTooltips(settingsRecent);
+                settingsDecade = setTooltips(settingsDecade);
 
-                settings.options.tooltips.callbacks.label = function (tooltipItem, data) {
-                    return data.datasets[tooltipItem.datasetIndex].label + ': ' +
-                            settings.options.axisFormat.replace('#', tooltipItem.yLabel);
-                };
+                new Chart(ctxRecent, settingsRecent);
+                new Chart(ctxDecade, settingsDecade);
 
-                new Chart(ctx, settings);
+                function setTooltips(settings) {
+                    settings.options.scales.yAxes[0].ticks.callback = function (value) {
+                        return settings.options.axisFormat.replace('#', value.toFixed(4));
+                    };
+
+                    settings.options.tooltips.callbacks.label = function (tooltipItem, data) {
+                        return data.datasets[tooltipItem.datasetIndex].label + ': ' +
+                                settings.options.axisFormat.replace('#', tooltipItem.yLabel);
+                    };
+                    return settings;
+                }
             })();
         </script>
-        <table class="table table--lined">
-            <thead>
-            <tr>
-                <th>Date</th>
-                <th>USD</th>
-            </tr>
-            </thead>
-            <tbody>
-            {% for rate in rates %}
-                <tr>
-                    <td>{{ rate.date.format('d/m/Y') }}</td>
-                    <td>{{ rate.valueUSD }}</td>
-                </tr>
-            {% endfor %}
-            </tbody>
-        </table>
+    {% elseif isBase %}
+        <p>US Dollars are the Base Rate for currency conversions. Therefore, this will always be the same</p>
+        <div class="grid">
+            <div class="g 1/2@s">
+                <div class="island color-grey-lightest text--center">
+                    <h2 class="d">Latest value</h2>
+                    <p class="a">$1.00000000</p>
+                </div>
+            </div>
+        </div>
     {% else %}
         <p>No data has been collected for this currency</p>
     {% endif %}
