@@ -30,6 +30,7 @@ class AdminController extends Controller
         $statsGroups = $this->get('app.services.groups')->countAll();
         $statsSectors = $this->get('app.services.sectors')->countAll();
         $statsIndustries = $this->get('app.services.industries')->countAll();
+        $statsExchangeRates = $this->get('app.services.exchange_rates')->countAll();
         $statsUsers = $this->get('app.services.users')->countAll();
 
         $this->toView('statsAll', number_format($statsAll));
@@ -39,6 +40,7 @@ class AdminController extends Controller
         $this->toView('statsGroups', number_format($statsGroups));
         $this->toView('statsSectors', number_format($statsSectors));
         $this->toView('statsIndustries', number_format($statsIndustries));
+        $this->toView('statsExchangeRates', number_format($statsExchangeRates));
         $this->toView('statsUsers', number_format($statsUsers));
 
         return $this->renderTemplate('admin:index', 'Admin');

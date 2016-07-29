@@ -13,6 +13,13 @@ class ExchangeRatesService extends Service
 {
     const SERVICE_ENTITY = 'ExchangeRate';
 
+    public function countAll(): int
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findLatestForAllCurrencies(): array
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);

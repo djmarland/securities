@@ -7,6 +7,7 @@ use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\ExchangeRate;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\Console\Input\ArrayInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
@@ -14,6 +15,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class CurrenciesController extends Controller
 {
     use Traits\CurrenciesTableTrait;
+    use Traits\SecuritiesTrait;
 
     public function indexAction()
     {
@@ -30,6 +32,17 @@ class CurrenciesController extends Controller
         $hundredDaysAgo = $today->sub(new \DateInterval('P100D'));
 
         $ratesService = $this->get('app.services.exchange_rates');
+        $securitiesService = $this->get('app.services.securities');
+
+        $securitiesFilter = new SecuritiesFilter($currency);
+        $securitiesCount = $securitiesService->count($securitiesFilter);
+        $this->toView('securitiesCount', number_format($securitiesCount));
+        $this->toView('securitiesLinkParams', ['currency' => $currency->getCode()]);
+
+        $securities = $securitiesService->find(10, 1, $securitiesFilter);
+
+        $this->toView('securities', $this->securitiesToPresenters($securities));
+        $this->toView('hasSecurities', !empty($securities));
 
         /** @var ExchangeRate[] $rates */
         $rates = $ratesService->findDatesForCurrency($currency, $hundredDaysAgo, $today);
