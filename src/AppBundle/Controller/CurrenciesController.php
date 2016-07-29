@@ -58,14 +58,14 @@ class CurrenciesController extends Controller
 
             $changeRate = null;
 
-            $this->toView('latestRate', $latest->getValueUSD());
+            $this->toView('latestRate', $this->number($latest->getValueUSD()));
             $this->toView('latestDate', $latest->getDate()->format('d/m/Y'));
 
             if ($penultimate) {
                 $changeRate = $latest->getValueUSD() - $penultimate->getValueUSD();
             }
 
-            $this->toView('changeRate', number_format($changeRate, 9));
+            $this->toView('changeRate', $this->number($changeRate, 12));
             $this->toView('changeDate', $penultimate->getDate()->format('d/m/Y'));
 
 
@@ -255,5 +255,14 @@ class CurrenciesController extends Controller
                     }
                 }')
         ];
+    }
+
+    private function number($value)
+    {
+        $number = rtrim(number_format($value, 12), '0.');
+        if ($number === '') {
+            return '0.00';
+        }
+        return $number;
     }
 }
