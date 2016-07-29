@@ -3,11 +3,12 @@
 
 {% block body %}
 
-    <h1>Login</h1>
+    <h1 class="g-unit">Login</h1>
 
 
     {% if loginErrorMessage %}
-        <div class="alert alert--danger">{{ loginErrorMessage }}</div>
+        {# Not ready to use translations, so this sadface workaround is needed #}
+        <div class="message message--error g-unit">{{ loginErrorMessage| replace({"Bad credentials." : "E-mail or password not recognised"}) }}</div>
     {% endif %}
 
     <form action="{{ path('login') }}" method="post">
