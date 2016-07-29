@@ -21,7 +21,7 @@
                         </div>
                         <script>
                             var ctx = document.getElementById('group-products').getContext('2d');
-                            var myDoughnutChart = new Chart(ctx, {
+                            new Chart(ctx, {
                                 type: 'doughnut',
                                 data: {
                                     labels: {{ chartHeadings|json_encode|raw }},
@@ -109,15 +109,15 @@
                 </div>
                 <script>
                     var ctx = document.getElementById('top10-currencies').getContext('2d');
-                    var myDoughnutChart = new Chart(ctx, {
+                    new Chart(ctx, {
                         type: 'horizontalBar',
                         data: {
                             labels: {{ currencyChartHeadings|json_encode|raw }},
                             datasets: [{
                                 data: {{ currencyChartData|json_encode|raw }},
-                                backgroundColor: {{ chartColours|json_encode|raw }},
+                                backgroundColor: "#634D7B",
                                 hoverBorderColor: "#999",
-                                hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                                hoverBackgroundColor: "#342638"
                             }]
                         },
                         options: {
@@ -125,7 +125,10 @@
                             legend : {
                                 display: false
                             },
-                            responsive: true
+                            responsive: true,
+                            animation : {
+                                duration : 0
+                            }
                         }
                     });
                 </script>
@@ -137,15 +140,15 @@
                 </div>
                 <script>
                     var ctx = document.getElementById('top10-industries').getContext('2d');
-                    var myDoughnutChart = new Chart(ctx, {
+                    new Chart(ctx, {
                         type: 'horizontalBar',
                         data: {
                             labels: {{ industryChartHeadings|json_encode|raw }},
                             datasets: [{
                                 data: {{ industryChartData|json_encode|raw }},
-                                backgroundColor: {{ chartColours|json_encode|raw }},
+                                backgroundColor: "#634D7B",
                                 hoverBorderColor: "#999",
-                                hoverBackgroundColor: {{ chartColours|json_encode|raw }}
+                                hoverBackgroundColor: "#342638"
                             }]
                         },
                         options: {
@@ -153,7 +156,10 @@
                             legend : {
                                 display: false
                             },
-                            responsive: true
+                            responsive: true,
+                            animation : {
+                                duration : 0
+                            }
                         }
                     });
                 </script>

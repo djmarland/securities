@@ -82,7 +82,7 @@ class HomeController extends Controller
 
     public function sitemapAction()
     {
-        $prefix = 'http://www.isinanalytics.com';
+        $prefix = 'https://www.isinanalytics.com';
         $urls = [];
 
 
