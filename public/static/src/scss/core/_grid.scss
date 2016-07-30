@@ -48,9 +48,6 @@
         padding-left: 0;
     }
 }
-.g--flush {
-    padding-left: 0;
-}
 
 .grid--flat {
     margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
