@@ -10,6 +10,7 @@
 
 .form__input {
     border: solid 1px $color-primary-light;
+    border-radius: $size-grid-unit-tiny;
     padding: $size-grid-unit-small;
     transition: box-shadow 0.1s ease-out;
     &:focus {

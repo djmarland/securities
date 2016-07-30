@@ -5,7 +5,7 @@ $header-action-size: 40px;
     margin-bottom: $size-grid-unit * 2;
 }
 .header__inner {
-    @extend .layout--full;
+    @extend .layout--max;
     padding-top: $size-grid-unit-small;
     padding-bottom: $size-grid-unit-small;
     @include flexbox(inline-block);

@@ -31,6 +31,7 @@ $pagination-icon-size: 32px;
 .pagination__item {
     display: inline-block;
     line-height: $pagination-icon-size;
+    border-radius: $size-grid-unit-tiny;
 }
 
 .pagination__item--prev {

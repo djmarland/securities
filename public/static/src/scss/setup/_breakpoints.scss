@@ -7,9 +7,7 @@ $mq-breakpoints: (
         m: 600px,
         l: 768px,
         xl: 1008px,
-        xxl: 1280px,
-        xxxl: 1600px,
-        max: 1920px
+        max: 1280px
 ) !default;
 
 // convert the list of breakpoints into suffixes

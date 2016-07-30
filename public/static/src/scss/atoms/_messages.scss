@@ -3,7 +3,7 @@
     @extend .island-squashed;
     border-width: 1px;
     border-style: solid;
-    border-radius: 2px;
+    border-radius: $size-grid-unit-tiny;
     text-shadow: 0.5px 0.5px 0 $color-black;
     background: $color-primary-light;
     color: $color-primary-dark;

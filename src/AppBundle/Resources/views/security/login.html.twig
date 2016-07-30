@@ -5,32 +5,13 @@
 
     <h1 class="g-unit">Login</h1>
 
-
     {% if loginErrorMessage %}
         {# Not ready to use translations, so this sadface workaround is needed #}
-        <div class="message message--error g-unit">{{ loginErrorMessage| replace({"Bad credentials." : "E-mail or password not recognised"}) }}</div>
+        <div class="message message--error g-unit">
+            {{ loginErrorMessage| replace({"Bad credentials." : "E-mail or password not recognised"}) }}
+        </div>
     {% endif %}
 
-    <form action="{{ path('login') }}" method="post">
-        <input type="hidden" name="_csrf_token" value="{{ csrf_token('authenticate') }}" />
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="email" id="email" name="_username" value="{{ lastEmail }}" required />
-            <label class="mdl-textfield__label" for="email">Email address</label>
-        </div>
-
-        <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-            <input class="mdl-textfield__input" type="password" id="password" name="_password" required />
-            <label class="mdl-textfield__label" for="password">Password</label>
-        </div>
-
-        <div>
-            <button class="mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect" type="submit">
-                Login
-            </button>
-            <a href="{{ path('reset_password') }}" class="mdl-button mdl-js-button mdl-js-ripple-effect mdl-button--raised mdl-button--colored">
-                Reset password
-            </a>
-        </div>
-    </form>
+    {% include '@partials/_login-form.html.twig' %}
 
 {% endblock %}

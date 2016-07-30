@@ -1,5 +1,4 @@
 .main-nav {
-    @extend .layout--full;
     background: $color-black;
     display: none;
     @include mq($from: xl) {
@@ -14,9 +13,11 @@
 }
 
 .main-nav__list {
-    list-style: none;
-    margin: 0;
+    max-width: $layout-max-width;
+    margin-left: auto;
+    margin-right: auto;
     padding: 0;
+    list-style: none;
     > li {
         border-bottom:  solid 1px $color-brand;
         display: block;

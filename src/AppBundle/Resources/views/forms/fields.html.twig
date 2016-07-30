@@ -1,9 +1,9 @@
 {% block form_errors %}
     {% spaceless %}
         {% if errors|length > 0 %}
-            <ul class="form__errors alerts">
+            <ul class="g-unit messages">
                 {% for error in errors %}
-                    <li class="alert alert--danger"><i class="material-icons">error</i> {{ error.message }}</li>
+                    <li class="message message--error">{{ error.message }}</li>
                 {% endfor %}
             </ul>
         {% endif %}
@@ -12,9 +12,9 @@
 
 {% block form_row %}
 <div>
-    <div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label">
-        {{ form_label(form, label|default(null), { 'label_attr': {'class': 'mdl-textfield__label'} }) }}
-        {{ form_widget(form,  { 'attr': {'class': 'mdl-textfield__input'} }) }}
+    <div class="form__group">
+        {{ form_label(form, label|default(null), { 'label_attr': {'class': 'form__label'} }) }}
+        {{ form_widget(form,  { 'attr': {'class': 'form__input'} }) }}
         {{ form_errors(form) }}
     </div>
 </div>
@@ -33,7 +33,7 @@
 {% block submit_widget %}
     {%- set type = type|default('submit') -%}
     {%- set attr = {
-        'class': 'mdl-button mdl-js-button mdl-button--raised mdl-button--colored mdl-js-ripple-effect'
+        'class': 'button button--fat'
     } -%}
     {{ block('button_widget') }}
 {% endblock %}

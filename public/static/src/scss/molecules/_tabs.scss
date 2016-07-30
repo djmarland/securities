@@ -27,11 +27,24 @@
         text-decoration: none;
     }
 }
+.tabs__tab:first-child {
+    .tabs__link {
+        border-top-left-radius: $size-grid-unit-tiny;
+    }
+}
+.tabs__tab:last-child {
+    .tabs__link {
+        border-top-right-radius: $size-grid-unit-tiny;
+    }
+}
+
 .tabs__tab--active {
     .tabs__link {
         color: $color-body-text;
         padding-top: $size-grid-unit-small + 2px;
         border-bottom: solid 1px $color-body-bg;
         background: $color-body-bg;
+        border-top-left-radius: $size-grid-unit-tiny;
+        border-top-right-radius: $size-grid-unit-tiny;
     }
 }

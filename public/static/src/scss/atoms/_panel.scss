@@ -1,0 +1,5 @@
+.panel {
+    @extend .color-grey-lightest;
+    @extend .island;
+    border-radius: $size-grid-unit-tiny;
+}

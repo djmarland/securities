@@ -202,7 +202,7 @@ class AdminController extends Controller
 
         $this->toView('sourceIsins', $sourceIsins);
 
-        return $this->renderTemplate('admin:compare'. 'Compare - Admin');
+        return $this->renderTemplate('admin:compare', 'Compare - Admin');
 
     }
 

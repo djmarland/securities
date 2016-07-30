@@ -47,7 +47,7 @@ class HomeController extends Controller
         $this->toView('securities', null);
 
         if ($this->appConfig->featureIsActive(Features::RECENT_ISSUANCE_ON_HOMEPAGE())) {
-            $latestIssuance = $securitiesService->findLatestIssuance(5);
+            $latestIssuance = $securitiesService->findLatestIssuance(3);
             $this->toView('securities', $this->securitiesToPresenters($latestIssuance));
         }
 
@@ -118,24 +118,21 @@ class HomeController extends Controller
 
     public function aboutAction()
     {
-        $this->setTitle('About');
-        return $this->renderTemplate('home:about');
+        return $this->renderTemplate('home:about', 'About');
     }
 
     public function termsAction()
     {
-        $this->setTitle('Terms of Use');
-        return $this->renderTemplate('home:terms');
+        return $this->renderTemplate('home:terms', 'Terms of Use');
     }
 
     public function privacyAction()
     {
-        $this->setTitle('Privacy Policy');
-        return $this->renderTemplate('home:privacy');
+        return $this->renderTemplate('home:privacy', 'Privacy Policy');
     }
 
     public function styleguideAction()
     {
-        return $this->renderTemplate('home:styleguide');
+        return $this->renderTemplate('home:styleguide', 'Styleguide');
     }
 }

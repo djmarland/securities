@@ -2,6 +2,7 @@ $finder-icon-size: 32px;
 
 .finder {
     @extend .scrollpanel;
+    @extend .panel;
 }
 .finder__heading {
     margin-bottom: $size-grid-unit-small;
@@ -81,7 +82,8 @@ $finder-icon-size: 32px;
 .finder__sub {
     padding: 0 0 0 $size-grid-unit-tiny;
     margin: $size-grid-unit-small 0;
-    border-left: solid $size-grid-unit-tiny $color-grey-mid;
+    border-left: dotted 1px $color-grey-mid;
+    border-bottom: solid 1px $color-grey-mid;
 }
 
 @include mq($from: xl) {

@@ -14,6 +14,7 @@
 
 .link--button {
     @extend .link--invert;
+    border-radius: $size-grid-unit-tiny;
     padding: $size-grid-unit-small $size-grid-unit;
     display: inline-block;
 }

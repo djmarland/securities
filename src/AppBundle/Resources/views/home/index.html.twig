@@ -3,20 +3,20 @@
 
 {% block body %}
 <div class="grid">
-    <div class="g 4/5@xxxl 5/6@max">
+    <div class="g 3/4@max">
         <div><div class="grid">
         <div class="g 3/5@xl">
             <div class=" g-unit">
                 <div class="grid g--align-center">
                     <div class="g">
-                    <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
-                    <p class="d g-unit">
-                        Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
-                        Browse the site for ISIN, company, sector or industry information relating to:
-                    </p>
+                        <h1 class="invisible">ISIN Analytics - The Guide to London's Debt Capital Markets</h1>
+                        <p class="d">
+                            Welcome to ISIN Analytics. This is the gateway to London’s debt capital markets.
+                            Browse the site for ISIN, company, sector or industry information relating to:
+                        </p>
                     </div>
                     <div class="g 1/2@m">
-                        <div class="g-central" style="max-width: 280px">
+                        <div class="g-central hidden unhidden@m" style="max-width: 280px">
                             <canvas id="group-products" height="280"></canvas>
                         </div>
                         <script>
@@ -73,12 +73,17 @@
                 </div>
             </div>
             <div class="g-unit">
-                {% include adverts.templatePath with adverts.variantVars('overview') only %}
+                {% include adverts.templatePath with adverts.variantVars('homepage-mid') only %}
             </div>
             {% if securities %}
                 <div class="">
                     <h2 class="g-unit">Recent Issuance</h2>
-                    {% include '@partials/securities-list.html.twig' %}
+                    <div class="g-unit">
+                        {% include '@partials/securities-list.html.twig' %}
+                    </div>
+                    <p class="text--right">
+                        <a class="link--button" href="{{ path('overview_securities') }}">See all securities</a>
+                    </p>
                 </div>
             {% endif %}
         </div>
@@ -86,7 +91,7 @@
             <div>
             <div class="grid">
                 <div class="g 1/2@l">
-                    <div class="island color-grey-lightest text--center">
+                    <div class="panel  text--center">
                         <a href="{{ path('overview_securities') }}">
                             Total securities<br />
                             <span class="a">{{ securitiesCount }}</span>
@@ -94,7 +99,7 @@
                     </div>
                 </div>
                 <div class="g 1/2@l">
-                    <div class="island color-grey-lightest text--center">
+                    <div class="island panel color-grey-lightest text--center">
                         <a href="{{ path('group_list') }}">
                             Total issuers<br />
                             <span class="a">{{ issuersCount }}</span>
@@ -102,7 +107,7 @@
                     </div>
                 </div>
             </div>
-            <div class="color-grey-lightest island g-unit">
+            <div class="panel g-unit">
                 <h2 class="g-unit">Top 5 currencies (2016)</h2>
                 <div>
                     <canvas id="top10-currencies" height="200"></canvas>
@@ -133,7 +138,7 @@
                     });
                 </script>
             </div>
-            <div class="color-grey-lightest island">
+            <div class="panel">
                 <h2 class="g-unit">Top 5 industries (2016)</h2>
                 <div>
                     <canvas id="top10-industries" height="200"></canvas>
@@ -168,8 +173,10 @@
         </div>
         </div></div>
     </div>
-    <div class="g 1/5@xxxl 1/6@max">
-        {% include adverts.templatePath with adverts.variantVars('overview') only %}
+    <div class="g 1/4@max">
+        <div>
+            {% include adverts.templatePath with adverts.variantVars('homepage-side') only %}
+        </div>
     </div>
 </div>
 {% endblock %}

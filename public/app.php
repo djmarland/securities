@@ -15,8 +15,8 @@ $hostname = $_SERVER['HTTP_HOST'] ?? null;
 
 $environments = [
     'isin.app' => 'dev',
-    'beta.isinanalytics.com' => 'beta',
     'alpha.isinanalytics.com' => 'alpha',
+    'beta.isinanalytics.com' => 'beta',
     'www.isinanalytics.com' => 'prod',
 ];
 

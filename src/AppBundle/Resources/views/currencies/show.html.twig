@@ -4,27 +4,27 @@
     <h1 class="g-unit">{{ currency.code }}</h1>
     {% if hasData %}
         <div class="grid">
-            <div class="g 1/3@xl">
-                <div class="island color-grey-lightest text--center">
+            <div class="g 1/3@l">
+                <div class="panel text--center">
                     <h2 class="d">Latest value</h2>
-                    <p class="a">${{ latestRate }}</p>
+                    <p class="a text--truncate">${{ latestRate }}</p>
                     <p class="e">{{ latestDate }}</p>
                 </div>
             </div>
-            <div class="g 1/3@xl">
-                <div class="island color-grey-lightest text--center">
+            <div class="g 1/2@m 1/3@l">
+                <div class="panel text--center">
                     <h2 class="d">Change</h2>
                     {% if changeRate %}
-                    <p class="a">{{ changeRate }}</p>
+                    <p class="a text--truncate">{{ changeRate }}</p>
                     <p class="e">since {{ changeDate }}</p>
                     {% else %}
                     <p>No data</p>
                     {% endif %}
                 </div>
             </div>
-            <div class="g 1/3@xl">
+            <div class="g 1/2@m 1/3@l">
                 <a href="{{ path('overview_securities', securitiesLinkParams) }}"
-                   class="island color-grey-lightest text--center">
+                   class="panel text--center">
                     <h2 class="d">Total Securities</h2>
                     <p class="a">{{ securitiesCount }}</p>
                 </a>
@@ -43,7 +43,7 @@
                 <div class="grid">
                     {% for year in linkableYears %}
                         <div class="g 1/2@s 1/3@m 1/4@l 1/5\@xxxl text--center a">
-                            <a class="island color-grey-lightest" href="{{ path('currencies_show_year', year.hrefParams) }}">{{ year.text }}</a>
+                            <a class="panel" href="{{ path('currencies_show_year', year.hrefParams) }}">{{ year.text }}</a>
                         </div>
                     {% endfor %}
                 </div>
@@ -95,7 +95,7 @@
         <p>US Dollars are the Base Rate for currency conversions. Therefore, this will always be the same</p>
         <div class="grid">
             <div class="g 1/2@s">
-                <div class="island color-grey-lightest text--center">
+                <div class="panel text--center">
                     <h2 class="d">Latest value</h2>
                     <p class="a">$1.00000000</p>
                 </div>

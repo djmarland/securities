@@ -11,6 +11,8 @@ class AdvertsPresenter extends Presenter implements AdvertsPresenterInterface
     const SLOT_IDS = [
         'overview' => '2419457559',
         'isin' => '4256117558',
+        'homepage-mid' => '4923359556',
+        'homepage-side' => '6400092752',
     ];
 
     protected $options = [

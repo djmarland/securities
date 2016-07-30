@@ -4,27 +4,21 @@
 
 {% block body %}
 <div class="grid">
-    <div class="g 4/5@xxxl 5/6@max">
-        <div><div class="grid">
-            <div class="g 3/4@xl 3/4@xxxl layout-entities__core">
-                <div>
-                    <div class="g-unit entity-context">
-                        <p class="g-unit h1">{{ block('context') }}</p>
-                    </div>
-                    {% include entityNav.templatePath with entityNav.vars only %}
-                    {% block content %}{% endblock %}
-                    {% include adverts.templatePath with adverts.variantVars('overview') only %}
-                </div>
+    <div class="g 3/4@xl">
+        <div>
+            <div class="g-unit entity-context">
+                <p class="g-unit h1">{{ block('context') }}</p>
             </div>
-            <div class="g 1/4@xl 1/4@xxxl layout-entities__sidebar">
-                <div class="layout-entities__finder">
-                    {% include finder.templatePath with finder.vars only %}
-                </div>
-            </div>
-        </div></div>
+            {% include adverts.templatePath with adverts.variantVars('overview') only %}
+            {% include entityNav.templatePath with entityNav.vars only %}
+            {% block content %}{% endblock %}
+            {% include adverts.templatePath with adverts.variantVars('overview') only %}
+        </div>
     </div>
-    <div class="g 1/5@xxxl 1/6@max">
-        {% include adverts.templatePath with adverts.variantVars('overview') only %}
+    <div class="g 1/4@xl">
+        <div>
+            {% include finder.templatePath with finder.vars only %}
+        </div>
     </div>
 </div>
 {% endblock %}
