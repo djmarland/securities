@@ -7,9 +7,11 @@
     <div class="g 3/4@xl">
         <div>
             <div class="g-unit entity-context">
-                <p class="g-unit h1">{{ block('context') }}</p>
+                <p class="h1">{{ block('context') }}</p>
             </div>
-            {% include adverts.templatePath with adverts.variantVars('overview') only %}
+            <div class="g-unit">
+                {% include adverts.templatePath with adverts.variantVars('overview') only %}
+            </div>
             {% include entityNav.templatePath with entityNav.vars only %}
             {% block content %}{% endblock %}
             {% include adverts.templatePath with adverts.variantVars('overview') only %}
