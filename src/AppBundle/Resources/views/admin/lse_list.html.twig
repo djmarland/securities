@@ -1,0 +1,31 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+<h1 class="g-unit b">New Securities</h1>
+<p class="g-unit">This page allows new securities to be created from the daily LSE data.</p>
+
+<table class="table table--striped">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Title</th>
+            <th>Link</th>
+            <th>Status</th>
+        </tr>
+    </thead>
+    <tbody>
+    {% for ancmnt in announcements %}
+        <tr onclick="window.location.href='{{ path('admin_lse_show', ancmnt.routeParams) }}'">
+            <td>{{ ancmnt.dateFetched.format('Y-m-d') }}</td>
+            <td><a href="{{ path('admin_lse_show', ancmnt.routeParams) }}">
+                {{ ancmnt.title }}</a></td>
+            <td>{{ ancmnt.shortLink }}</td>
+            <td>{{ ancmnt.statusString }}</td>
+        </tr>
+    {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

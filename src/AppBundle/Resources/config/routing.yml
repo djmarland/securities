@@ -141,6 +141,14 @@ admin_export_download:
   path:     /admin/export/download.csv
   defaults: { _controller: AppBundle:Admin:exportDownload }
 
+admin_lse_list:
+  path:     /admin/lse
+  defaults: { _controller: AppBundle:Admin:lseList }
+
+admin_lse_show:
+  path:     /admin/lse/{lse_id}
+  defaults: { _controller: AppBundle:Admin:lseShow }
+
 # Currencies
 currencies_index:
   path:     /currencies

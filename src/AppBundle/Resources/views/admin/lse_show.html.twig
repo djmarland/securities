@@ -1,0 +1,95 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+<h1 class="g-unit b">{{ announcement.title }} - {{ announcement.dateFetched.format('d/m/Y') }}</h1>
+<p>This page allows new securities to be created from this daily LSE data.</p>
+<p class="g-unit text--right">
+    <a class="link--button" href="#">Mark as done</a>
+    <a class="link--button" href="#">Mark as error</a>
+</p>
+
+<table class="table table--lined g-unit">
+    <tbody>
+    <tr>
+        <th>Date fetched</th>
+        <td>{{ announcement.dateFetched.format('d/m/Y') }}</td>
+    </tr>
+    <tr>
+        <th>Title</th>
+        <td>{{ announcement.title }}</td>
+    </tr>
+    <tr>
+        <th>Description</th>
+        <td>{{ announcement.description }}</td>
+    </tr>
+    <tr>
+        <th>Link</th>
+        <td><a href="{{ announcement.link }}" target="_blank">{{ announcement.link }}</a></td>
+    </tr>
+    <tr>
+        <th>Current status</th>
+        <td>{{ announcement.statusString }}</td>
+    </tr>
+    </tbody>
+</table>
+
+<h2 class="g-unit">Securities identified</h2>
+
+<div class="grid">
+    <div class="g 1/3">
+        <p class="h3">Source</p>
+    </div>
+    <div class="g 2/3">
+        <p class="h3">Data to input</p>
+    </div>
+    {% for security in announcementSource.securities %}
+        <div class="g 1/3">
+            <table class="table table--striped">
+                <thead>
+                    <tr>
+                        <th colspan="{{ security.colspan }}">{{ security.issuer }}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        {% for cell in security.cellContents %}
+                            <td>{{ cell }}</td>
+                        {% endfor %}
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="g 2/3">
+            <div class="form">
+                <div class="grid">
+                    <div class="g 1">
+                        <div class="form__group">
+                            <label class="form__label">ISIN</label>
+                            <input class="form__input" type="text" value="{{ security.isin }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Issue Date</label>
+                            <input class="form__input" type="text" value="{{ security.date }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Issuer</label>
+                            <input class="form__input" type="text" value="{{ security.issuer }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Amount</label>
+                            <input class="form__input" type="text" value="{{ security.amount }}" />
+                        </div>
+                    </div>
+                    <div class="g">
+                        <div>
+                            <input type="submit" class="button button--fat" value="Save" />
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endfor %}
+</div>
+{% endblock %}

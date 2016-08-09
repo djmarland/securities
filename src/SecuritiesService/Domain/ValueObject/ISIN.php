@@ -2,6 +2,7 @@
 
 namespace SecuritiesService\Domain\ValueObject;
 
+use Djmarland\ISIN\Exception\InvalidISINException;
 use SecuritiesService\Domain\Exception\ValidationException;
 
 class ISIN
@@ -11,8 +12,10 @@ class ISIN
     public function __construct(
         string $isin
     ) {
-        if (strlen($isin) != 12) {
-            throw new ValidationException('ISIN must be 12 characters long');
+        try {
+            \Djmarland\ISIN\ISIN::validate($isin);
+        } catch (InvalidISINException $e) {
+            throw new ValidationException($e->getMessage());
         }
         $this->isin = $isin;
     }

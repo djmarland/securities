@@ -46,6 +46,11 @@ class MapperFactory
         return new ExchangeRateMapper($this);
     }
 
+    public function createLSEAnnouncement(): LSEAnnouncementMapper
+    {
+        return new LSEAnnouncementMapper($this);
+    }
+
     public function createIndustry(): IndustryMapper
     {
         return new IndustryMapper($this);

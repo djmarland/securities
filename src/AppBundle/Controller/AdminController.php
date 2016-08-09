@@ -10,7 +10,6 @@ use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Domain\ValueObject\UUID;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
-use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AdminController extends Controller
@@ -332,10 +331,10 @@ class AdminController extends Controller
                 try {
                     // put in database
                     $entity = $command->single($row);
-                    $isins[] = (string) $entity->getIsin();
+                    $isins[] = (string)$entity->getIsin();
                 } catch (\Exception $e) {
                     // this isin failed for some reason. we need to store it
-                    $failures[] = (object) [
+                    $failures[] = (object)[
                         'isin' => $row['ISIN'],
                         'reason' => $e->getMessage(),
                     ];
@@ -358,6 +357,55 @@ class AdminController extends Controller
         $this->toView('stats', $stats, true);
         $this->toView('securities', $securities, true);
         return $this->renderJSON();
+    }
+
+    public function lseListAction()
+    {
+        $this->toView('activeTab', 'new');
+
+        $perPage = 100;
+        $currentPage = $this->getCurrentPage();
+
+        $service = $this->get('app.services.lse_announcements');
+
+        $announcements = $service->findIncomplete($perPage, $currentPage);
+
+        // @todo - pagination
+        //$total = $service->countIncomplete();
+
+        $this->toView('announcements', $announcements);
+
+        return $this->renderTemplate('admin:lse_list', 'New Securities - Admin');
+    }
+
+    public function lseShowAction()
+    {
+        $uuid = $this->request->get('lse_id');
+
+        $service = $this->get('app.services.lse_announcements');
+
+        try {
+            $announcement = $service->findByUUID(UUID::createFromString($uuid));
+        } catch (EntityNotFoundException $e) {
+            throw new HttpException(404, 'Announcement ' . $uuid . ' does not exist.');
+        }
+
+        $announcementSource = $this->get('app.announcements')
+            ->getSource($announcement->getLink());
+
+        $this->toView('announcementSource', $announcementSource);
+        $this->toView('announcement', $announcement);
+
+        // @todo
+        // - Fetch the source feed (cache it in file cache)
+        // - identify possible securities
+        // - find those ISINs in the database (to see if already processed)
+
+        $this->toView('activeTab', 'new');
+        return $this->renderTemplate(
+            'admin:lse_show',
+            'LSE Announcement ' . $announcement->getLink() . ' - Admin'
+        );
     }
 
     public function processSecurityAction()

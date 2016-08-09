@@ -1,0 +1,644 @@
+<body class="l"><div>RNS Number : 8502G</div>  <div>London Stock Exchange Notice</div>  <div>11 August 2016</div>  <div>&#160;</div>
+<div class="k">
+<p class="x">NOTICE OF ADMISSION TO TRADING ON THE LONDON STOCK EXCHANGE</p>
+<p class="y"><span class="u">&#160;</span></p>
+<p class="y">11/08/2016 - 08:00</p>
+<p class="y"><span class="u">&#160;</span></p>
+<p class="y">The following securities are admitted to trading on the LSE with effect from the time and date of this notice</p>
+<p class="y">&#160;</p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">BOOST ISSUER PUBLIC LIMITED COMPANY</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">1,996,281</p>
+</td>
+<td class="q" valign="top">
+<p class="y">BOOST WTI OIL 3X LEVERAGE DAILY ETP SECURITIES DUE 30/11/2062, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B7ZQC61)(IE00B7ZQC614)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">24,387</p>
+</td>
+<td class="q" valign="top">
+<p class="y">BOOST WTI OIL 3X SHORT DAILY ETP SECURITIES DUE 30/11/2062, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B7SX5Y8)(IE00B7SX5Y86)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">50,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">BOOST S&amp;P 500 VIX SHORT-TERM FUTURES 2.25X LEVERAGE DAILY ETP SECURITIES DUE 30/11/2062 FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BYY8LN7)(IE00BYTYHQ58)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS COMMODITY SECURITIES LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">8,700</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 1X DAILY SHORT GASOLINE FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B24DKB9)(JE00B24DKB91)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">17,378,400</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS NATURAL GAS SECURITIES FULLY PAID&#160;&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KY10)(GB00B15KY104)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">30,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">GASOLINE CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD5.00 IN PRINCIPAL AMOUNT EACH (ETFS GASOLINE INDIVIDUAL SECURITIES), FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXW4)(GB00B15KXW40)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">1,600</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS SOFTS CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD1.1442550 IN PRINCIPAL AMOUNT EACH (ETFS SOFTS INDEX SECURITIES) FULLY PAID&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KYJ8)(GB00B15KYJ87)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">20,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG SILVER FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B2NFTS6)(JE00B2NFTS64)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">303,100</p>
+</td>
+<td class="q" valign="top">
+<p class="y">CRUDE OIL CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD5.00 IN PRINCIPAL AMOUNT EACH (ETFS CRUDE OIL INDIVIDUAL SECURITIES) FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXV3)(GB00B15KXV33)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">15,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">COPPER CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD3.00 IN PRINCIPAL AMOUNT EACH (ETFS COPPER INDIVIDUAL SECURITIES) FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXQ8)(GB00B15KXQ89)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">40,800</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG COFFEE FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B2NFTD1)(JE00B2NFTD12)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">196,500</p>
+</td>
+<td class="q" valign="top">
+<p class="y">LEAN HOGS CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD0.50 IN PRINCIPAL AMOUNT EACH (ETFS LEAN HOGS INDIVIDUAL SECURITIES) FULLY PAID&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXZ7)(GB00B15KXZ70)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">100,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">GOLD CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD.00 IN PRINCIPAL AMOUNT EACH (ETFS GOLD INDIVIDUAL SECURITIES) FULLY PAID&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXX5)(GB00B15KXX56)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">40,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS LONGER DATED GRAINS DJ-UBSCI-F3SM FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B24DMN5)(JE00B24DMN53)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">203,600</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS AGRICULTURE CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD0.9291785 IN PRINCIPAL AMOUNT EACH (ETFS AGRICULTURE INDEX SECURITIES) FULLY PAID&#160;&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KYH6)(GB00B15KYH63)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">180,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ALUMINIUM CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD1.00 IN PRINCIPAL AMOUNT EACH (ETFS ALUMINIUM INDIVIDUAL SECURITIES) FULLY PAID&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXN5)(GB00B15KXN58)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">4,700</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 3X DAILY LONG NATURAL GAS FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BYQY5H5)(JE00BYQY5H56)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">7,400</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 3X DAILY SHORT WTI CRUDE OIL FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BYQY821)(JE00BYQY8219)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">10,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG WHEAT FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BDD9QC8)(JE00BDD9QC84)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">500</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS ENERGY CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD4.7002820 IN PRINCIPAL AMOUNT EACH (ETFS ENERGY INDEX SECURITIES), FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KYB0)(GB00B15KYB02)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">15,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS PETROLEUM CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD4.5663270 IN PRINCIPAL AMOUNT EACH (ETFS PETROLEUM INDEX SECURITIES), FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KYC1)(GB00B15KYC19)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">20,200</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG LEAN HOGS FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B2NFTN1)(JE00B2NFTN10)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">595,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS ALL COMMODITIES &#163; FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KY98)(GB00B15KY989)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">18,500</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS BRENT CRUDE FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B78CGV9)(JE00B78CGV99)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">35,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 1X DAILY SHORT GOLD FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B24DKC0)(JE00B24DKC09)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">267,300</p>
+</td>
+<td class="q" valign="top">
+<p class="y">CORN CLASS UNDATED LIMITED RECOURSE SECURED DEBT SECURITIES OF USD0.25 IN PRINCIPAL AMOUNT EACH (ETFS CORN INDIVIDUAL SECURITIES), FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B15KXS0)(GB00B15KXS04)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">13,200</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG WTI CRUDE OIL FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BDD9Q84)(JE00BDD9Q840)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">7,900</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS 2X DAILY LONG NATURAL GAS FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BDD9Q95)(JE00BDD9Q956)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS FOREIGN EXCHANGE LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">1,500</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS SHORT USD LONG GBP, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B438PT2)(JE00B438PT24)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS HEDGED COMMODITY SECURITIES LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">1,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS GBP DAILY HEDGED ALL COMMODITIES FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B6S1W77)(JE00B6S1W779)</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">4,200</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS GBP DAILY HEDGED INDUSTRIAL METALS FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B63MJ07)(JE00B63MJ075)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS HEDGED METAL SECURITIES LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">50,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS GBP DAILY HEDGED PHYSICAL GOLD FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B7VG2M1)(JE00B7VG2M16)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS METAL SECURITIES LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">57,957</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS PHYSICAL GOLD SECURITIES, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B1VS377)(JE00B1VS3770)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ETFS OIL SECURITIES LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">70,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">BRENT OIL SECURITIES FULLY PAID&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B0CTWC0)(GB00B0CTWC01)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">GO UCITS ETF SOLUTIONS PLC</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">&#160;</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ETFS Lombard Odier IM Global Government Bond Fundamental GO UCITS ETF - (GBP Hedged Distributing ETF) Shares of No Par Value, fully paid</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BZ03M30)(IE00BZ03M301)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">GOLD BULLION SECURITIES LD</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">48,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">(LYXOR GBS) SECURED UNDATED ZERO COUPON NOTES FULLY PAID&#160;&#160;&#160;</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B00FHZ8)(GB00B00FHZ82)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">HARGREAVE HALE AIM VCT 1 PLC</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">235,855</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ORDINARY SHARES OF 1P EACH, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B02WHS0)(GB00B02WHS05)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">HARGREAVE HALE AIM VCT 2 PLC</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">173,008</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ORDINARY SHARES OF 1P EACH; FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B1GDYS5)(GB00B1GDYS53)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">ISHARES PHYSICAL METALS PLC</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">800,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ISHARES GOLD ETC FULLY PAID GBP</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B4R1D93)(IE00B4ND3602)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">NTPC Limited</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">INR20,000,000,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">7.375% Notes due 10/08/2021 fully paid (Registered in denominations of INR10,000,000 each and integral multiples thereof)</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BDBVS19)(XS1467374473)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">QNB FINANCE LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">EUR25,000,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">Floating Rate Notes due 11/08/2018 fully paid (Registered in denominations of EUR100,000 each)</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(BZC0RN4)(XS1471756129)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">SOURCE PHYSICAL MARKETS PLC</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">76,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">SECURED GOLD-LINKED CERTIFICATES DUE 2100, FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B599TV6)(IE00B579F325)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<table class="z" cellspacing="0" cellpadding="0">
+<tbody>
+<tr>
+<td class="s" valign="top" colspan="3">
+<p class="a">TWENTYFOUR INCOME FUND LIMITED</p>
+</td>
+</tr>
+<tr>
+<td class="r" valign="top">
+<p class="y">2,500,000</p>
+</td>
+<td class="q" valign="top">
+<p class="y">ORDINARY REDEEMABLE SHARES OF 1P EACH; FULLY PAID</p>
+</td>
+<td class="o" valign="top">
+<p class="aa">(B90J5Z9)(GG00B90J5Z95)</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p class="y"><span class="u">&#160;</span></p>
+<p class="a">If you have any queries relating to the above, please contact Market Operations at the LSE on 020 7797 4310.</p>
+</div>
+<div style="text-align:center;"><br/>This information is provided by RNS</div><div style="text-align:center;">The company news service from the London Stock Exchange</div><div>&#160;</div>  END<div>&#160;</div><div>&#160;</div>SENPMMITMBBBBAF</body>

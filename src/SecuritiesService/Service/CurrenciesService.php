@@ -13,7 +13,7 @@ class CurrenciesService extends Service
     public function findByUUID(
         UUID $id
     ): Currency {
-        parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
+        return parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
     }
 
     public function findByCode(

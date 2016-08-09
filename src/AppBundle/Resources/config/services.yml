@@ -42,6 +42,10 @@ services:
           - %mailer_user%
           - "@app.email.from_name"
 
+  app.announcements:
+      class: AppBundle\Service\AnnouncementService
+      arguments:
+          - %kernel.cache_dir%
 
   app.services.buckets:
       class: SecuritiesService\Service\BucketsService
@@ -88,6 +92,13 @@ services:
 
   app.services.groups:
       class: SecuritiesService\Service\GroupsService
+      arguments:
+          - "@doctrine.orm.default_entity_manager"
+          - "@app.bucket_provider"
+          - "@app.time_provider"
+
+  app.services.lse_announcements:
+      class: SecuritiesService\Service\LSEAnnouncementsService
       arguments:
           - "@doctrine.orm.default_entity_manager"
           - "@app.bucket_provider"
