@@ -92,7 +92,7 @@ class ByGroupService extends SecuritiesService
         ParentGroup $group
     ) {
         $qb = $this->whereAll($qb, $group);
-        return $this->filterExpired($qb);
+        return $this->filterLists($qb);
     }
 
     private function whereAll(

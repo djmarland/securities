@@ -1,6 +1,7 @@
 <?php
 namespace SecuritiesService\Data\Database\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -12,30 +13,74 @@ class Security extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
     private $name;
+
     /** @ORM\Column(type="string", length=12, unique=true) */
     private $isin;
+
     /** @ORM\Column(type="string", nullable=true) */
     private $market;
-    /** @ORM\Column(type="string", length=255) */
+
+    /** @ORM\Column(type="string", length=255, nullable=true) */
     private $exchange;
+
     /** @ORM\Column(type="float", nullable=true) */
     private $moneyRaised;
+
     /** @ORM\Column(type="date", nullable=true) */
     private $startDate;
+
     /** @ORM\Column(type="date", nullable=true) */
     private $maturityDate;
+
     /** @ORM\Column(type="string", length=255, nullable=true) */
     private $couponType;
+
     /** @ORM\Column(type="float", nullable=true) */
     private $coupon;
+
     /** @ORM\Column(type="float", nullable=true) */
     private $margin;
-    /** @ORM\ManyToOne(targetEntity="Product") */
+
+    /** @ORM\Column(type="string", nullable=true) */
+    private $source;
+
+    /** @ORM\Column(type="float", nullable=true) */
+    private $moneyRaisedLocal;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Product")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private $product;
-    /** @ORM\ManyToOne(targetEntity="Company") */
+
+    /**
+     * @ORM\ManyToOne(targetEntity="SecurityType")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $type;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Company")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private $company;
-    /** @ORM\ManyToOne(targetEntity="Currency") */
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Currency")
+     * @ORM\JoinColumn(nullable=true)
+     */
     private $currency;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="Index")
+     */
+    private $indices;
+
+    public function __construct()
+    {
+        parent::__construct();
+        $this->indices = new ArrayCollection();
+    }
 
     /** Getters/Setters */
     public function getName()
@@ -138,6 +183,21 @@ class Security extends Entity
         $this->margin = $margin;
     }
 
+    public function setSource($source)
+    {
+        $this->source = $source;
+    }
+
+    public function getMoneyRaisedLocal()
+    {
+        return $this->moneyRaisedLocal;
+    }
+
+    public function setMoneyRaisedLocal($moneyRaisedLocal)
+    {
+        $this->moneyRaisedLocal = $moneyRaisedLocal;
+    }
+
     public function getProduct()
     {
         return $this->product;
@@ -146,6 +206,16 @@ class Security extends Entity
     public function setProduct($product)
     {
         $this->product = $product;
+    }
+
+    public function getType()
+    {
+        return $this->type;
+    }
+
+    public function setType($type)
+    {
+        $this->type = $type;
     }
 
     public function getCompany()
@@ -166,5 +236,20 @@ class Security extends Entity
     public function setCurrency($currency)
     {
         $this->currency = $currency;
+    }
+
+    public function getSource()
+    {
+        return $this->source;
+    }
+
+    public function getIndices()
+    {
+        return $this->indices;
+    }
+
+    public function setVersionTypes($indices)
+    {
+        $this->indices = $indices;
     }
 }

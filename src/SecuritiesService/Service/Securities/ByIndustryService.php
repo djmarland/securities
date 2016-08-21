@@ -85,7 +85,7 @@ class ByIndustryService extends SecuritiesService
         Industry $industry
     ) {
         $qb = $this->whereAll($qb, $industry);
-        return $this->filterExpired($qb);
+        return $this->filterLists($qb);
     }
 
     private function whereAll(

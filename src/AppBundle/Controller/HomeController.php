@@ -112,7 +112,7 @@ class HomeController extends Controller
         $response->headers->set('Content-Type', 'xml');
         $this->setCacheHeaders($response);
 
-        $path = 'AppBundle:sitemap.xml.twig';
+        $path = 'AppBundle:home:sitemap.xml.twig';
         return $this->render($path, ['urls' => $urls], $response);
     }
 

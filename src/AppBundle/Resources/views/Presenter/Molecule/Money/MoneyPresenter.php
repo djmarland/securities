@@ -17,6 +17,7 @@ class MoneyPresenter extends Presenter implements MoneyPresenterInterface
 
     protected $options = [
         'scale' => false,
+        'currency' => 'GBP',
     ];
 
     public function __construct(
@@ -28,18 +29,60 @@ class MoneyPresenter extends Presenter implements MoneyPresenterInterface
         $this->amount = $amount;
     }
 
-    public function getValue(): string
+    public function getValueGBP(): string
     {
-        return (string) $this->amount;
+        if ($this->isGBP()) {
+            return (string) $this->getAmount();
+        }
+        return '';
+    }
+
+    public function getValueIssued(): string
+    {
+        if (!$this->isGBP()) {
+            return (string) $this->getAmount();
+        }
+        return '';
+    }
+
+    public function getIssueCurrency(): string
+    {
+        return $this->options['currency'];
     }
 
     public function getDisplay(): string
     {
-        $val = $this->scaleAmount($this->amount);
+        $amount = $this->getAmount();
+        if (!$amount) {
+            return '';
+        }
+
+        $val = $this->scaleAmount($amount);
 
         // todo - trim trailing zeros
         $val = number_format($val, $this->decimalPlaces);
-        return '£' . $val . $this->suffix;
+        return $this->getPrefix() . $val . $this->suffix;
+    }
+
+    private function getAmount()
+    {
+        if (0 == $this->amount) {
+            return null;
+        }
+        return $this->amount;
+    }
+
+    private function isGBP(): bool
+    {
+        return ('GBP' == $this->options['currency']);
+    }
+
+    private function getPrefix(): string
+    {
+        if ($this->isGBP()) {
+            return '£';
+        }
+        return $this->options['currency'];
     }
 
     private function scaleAmount($amount)

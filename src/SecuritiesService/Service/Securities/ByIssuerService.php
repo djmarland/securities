@@ -87,7 +87,7 @@ class ByIssuerService extends SecuritiesService
         Company $issuer
     ) {
         $qb = $this->whereAll($qb, $issuer);
-        return $this->filterExpired($qb);
+        return $this->filterLists($qb);
     }
 
     private function whereAll(

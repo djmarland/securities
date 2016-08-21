@@ -45,15 +45,29 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         return $this->domainModel->getExchange();
     }
 
-    public function getAmountRaised():MoneyPresenterInterface
+    public function getAmountRaised(): MoneyPresenterInterface
     {
         $amount = $this->domainModel->getMoneyRaised();
-        return new MoneyPresenter($amount);
+        if ($amount) {
+            return new MoneyPresenter($amount);
+        }
+        $issuedAmount = $this->domainModel->getMoneyRaisedIssue();
+        if ($issuedAmount) {
+            return new MoneyPresenter(
+                $issuedAmount,
+                ['currency' => $this->getCurrency()]
+            );
+        }
+        return new MoneyPresenter(0);
     }
 
-    public function getCurrency():string
+    public function getCurrency(): string
     {
-        return $this->domainModel->getCurrency()->getCode();
+        $currency = $this->domainModel->getCurrency();
+        if ($currency) {
+            return $currency->getCode();
+        }
+        return 'OTH';
     }
 
     public function getIssueDate():string
@@ -247,7 +261,11 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
 
     public function getProduct():string
     {
-        return (string) $this->domainModel->getProduct()->getName();
+        $product = $this->domainModel->getProduct();
+        if ($product) {
+            return (string) $product->getName();
+        }
+        return '-';
     }
 
     // @todo - be more robust

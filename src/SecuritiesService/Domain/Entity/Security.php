@@ -16,7 +16,7 @@ class Security extends Entity implements JsonSerializable
     private $startDate;
     private $maturityDate;
     private $coupon;
-    private $moneyRaised;
+    private $moneyRaisedGBP;
     private $product;
     private $currency;
     private $company;
@@ -28,7 +28,8 @@ class Security extends Entity implements JsonSerializable
         string $name,
         string $exchange,
         DateTime $startDate,
-        float $moneyRaised,
+        float $moneyRaisedGBP =null,
+        float $moneyRaisedIssue =null,
         Product $product = null,
         Company $company = null,
         Currency $currency = null,
@@ -42,7 +43,8 @@ class Security extends Entity implements JsonSerializable
         $this->isin = $isin;
         $this->startDate = $startDate;
         $this->currency = $currency;
-        $this->moneyRaised = $moneyRaised;
+        $this->moneyRaisedGBP = $moneyRaisedGBP;
+        $this->moneyRaisedIssue = $moneyRaisedIssue;
         $this->product = $product;
         $this->company = $company;
         $this->maturityDate = $maturityDate;
@@ -80,17 +82,22 @@ class Security extends Entity implements JsonSerializable
         return $this->coupon;
     }
 
-    public function getMoneyRaised(): float
+    public function getMoneyRaised()
     {
-        return $this->moneyRaised;
+        return $this->moneyRaisedGBP;
     }
 
-    public function getProduct(): Product
+    public function getMoneyRaisedIssue()
+    {
+        return $this->moneyRaisedIssue;
+    }
+
+    public function getProduct()
     {
         return $this->product;
     }
 
-    public function getCurrency(): Currency
+    public function getCurrency()
     {
         return $this->currency;
     }
@@ -121,9 +128,9 @@ class Security extends Entity implements JsonSerializable
             'maturityDate' => $this->getMaturityDate() ? $this->getMaturityDate()->format($dateFormat) : null,
             'coupon' => $this->getCoupon(),
             'amountRaised' => $this->getMoneyRaised(),
-            'currency' => $this->getCurrency()->getCode(),
-            'product' => $this->getProduct(),
-            'issuer' => $this->getCompany(),
+            'currency' => $this->getCurrency() ? $this->getCurrency()->getCode() : null,
+            'product' => $this->getProduct() ?? null,
+            'issuer' => $this->getCompany() ?? null,
         ];
     }
 }

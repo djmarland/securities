@@ -198,7 +198,7 @@ class SecuritiesService extends Service
             'sum(' . self::TBL . '.moneyRaised) as total',
             $currencyTable,
         ])
-            ->leftJoin(self::TBL . '.currency', $currencyTable)
+            ->innerJoin(self::TBL . '.currency', $currencyTable)
             ->andWhere(self::TBL . '.startDate >= :startDate')
             ->andWhere(self::TBL . '.startDate < :endDate')
             ->groupBy($currencyTable . '.id')
@@ -320,7 +320,7 @@ class SecuritiesService extends Service
             'count(' . self::TBL . '.id) as c',
             $productTable,
         ])
-            ->leftJoin(self::TBL . '.product', $productTable);
+            ->innerJoin(self::TBL . '.product', $productTable);
 
         $qb->groupBy($productTable . '.id');
 
@@ -366,7 +366,7 @@ class SecuritiesService extends Service
             'sum(' . self::TBL . '.moneyRaised) as total',
              $productTable,
         ])
-            ->leftJoin(self::TBL . '.product', $productTable);
+            ->innerJoin(self::TBL . '.product', $productTable);
 
         $filter = new SecuritiesFilter($bucket);
         $qb = $filter->apply($qb, self::TBL);
@@ -483,6 +483,14 @@ class SecuritiesService extends Service
         throw new \InvalidArgumentException('Entity was not set, so cannot filter correctly');
     }
 
+    protected function filterSource(
+        QueryBuilder $qb
+    ): QueryBuilder {
+        return $qb
+            ->andWhere(self::TBL . '.source = :source')
+            ->setParameter('source', 'LSE');
+    }
+
     protected function filterExpired(
         QueryBuilder $qb
     ): QueryBuilder {
@@ -491,9 +499,15 @@ class SecuritiesService extends Service
             ->setParameter('now', $this->appTimeProvider);
     }
 
+    protected function filterLists(
+        QueryBuilder $qb
+    ): QueryBuilder {
+        return $this->filterSource($this->filterExpired($qb));
+    }
+
     private function where(
         QueryBuilder $qb
     ): QueryBuilder {
-        return $this->filterExpired($qb);
+        return $this->filterLists($qb);
     }
 }

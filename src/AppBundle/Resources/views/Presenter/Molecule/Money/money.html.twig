@@ -1,2 +1,6 @@
 {# eventually these will be clickable to change currency #}
-<span class="money" data-value="{{ money.value }}">{{ money.display }}</span>
+<span class="money"
+      data-value-gbp="{{ money.valueGBP }}"
+      data-value-issued="{{ money.valueIssued }}"
+      data-issue-currency="{{ money.issueCurrency }}"
+>{{ money.display }}</span>

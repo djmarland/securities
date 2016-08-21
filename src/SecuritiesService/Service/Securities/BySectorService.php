@@ -88,7 +88,7 @@ class BySectorService extends SecuritiesService
         Sector $sector
     ): QueryBuilder {
         $qb = $this->whereAll($qb, $sector);
-        return $this->filterExpired($qb);
+        return $this->filterLists($qb);
     }
 
     private function whereAll(
