@@ -3,7 +3,10 @@
 namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
+use Djmarland\ISIN\Exception\InvalidISINException;
 use SecuritiesService\Domain\Entity\Security;
+use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Domain\ValueObject\UUID;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
 use Symfony\Component\HttpFoundation\Request;
@@ -44,6 +47,41 @@ class AdminController extends Controller
         $this->toView('statsUsers', number_format($statsUsers));
 
         return $this->renderTemplate('admin:index', 'Admin');
+    }
+
+    public function dataAction()
+    {
+        $this->toView('activeTab', 'data');
+        return $this->renderTemplate('admin:data', 'Admin - Data');
+    }
+
+    public function securitiesCheckAction()
+    {
+        $isin = $this->request->get('isin');
+        $status = null;
+        $message = null;
+
+
+        try {
+            \Djmarland\ISIN\ISIN::validate($isin);
+            $isin = new ISIN($isin);
+
+            $security = $this->get('app.services.securities')
+                ->fetchByIsin($isin);
+
+            $status = 'found';
+            $this->toView('security', $security, true);
+
+        } catch (InvalidISINException $e) {
+            $status = 'error';
+            $message = $e->getMessage();
+        } catch (EntityNotFoundException $e) {
+            $status = 'new';
+        }
+
+        $this->toView('status', $status, true);
+        $this->toView('message', $message, true);
+        return $this->renderJSON();
     }
 
     public function securitiesAction()

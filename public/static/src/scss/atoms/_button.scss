@@ -4,6 +4,9 @@
     padding: $size-grid-unit-tiny;
     border: 0;
     border-radius: $size-grid-unit-tiny;
+    &[disabled] {
+        opacity: 0.6;
+    }
 }
 .button--fat {
     padding: $size-grid-unit-small;

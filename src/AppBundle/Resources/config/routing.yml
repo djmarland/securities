@@ -68,6 +68,16 @@ admin:
   path:     /admin
   defaults: { _controller: AppBundle:Admin:index }
 
+admin_data:
+  path:     /admin/data
+  defaults: { _controller: AppBundle:Admin:data }
+
+admin_securities_check:
+  path:     /admin/securities-check/{isin}.json
+  defaults: { _controller: AppBundle:Admin:securitiesCheck, format: json }
+  requirements:
+    isin:  "[A-Z0-9]{12}"
+
 admin_securities:
   path:     /admin/securities
   defaults: { _controller: AppBundle:Admin:securities }
