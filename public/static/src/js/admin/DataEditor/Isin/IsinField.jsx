@@ -10,7 +10,6 @@ export default class IsinField extends React.Component {
             statusMsg : null,
             isError : false,
             isOk : false,
-            isNew : false,
             loading     : false
         }
     }
@@ -21,7 +20,6 @@ export default class IsinField extends React.Component {
             fieldText : val,
             statusMsg : null,
             isError : false,
-            isNew : false,
             isLoading : false,
             isOk : false,
         });
@@ -79,7 +77,7 @@ export default class IsinField extends React.Component {
                 if (data.status == 'new') {
                     this.setState({
                         statusMsg : 'New ISIN',
-                        isNew : true,
+                        isOk : true,
                         isLoading : false
                     });
                     this.props.onChange(this.props.id, val, true);
@@ -110,7 +108,6 @@ export default class IsinField extends React.Component {
                 isError={this.state.isError}
                 isLoading={this.state.isLoading}
                 isOk={this.state.isOk}
-                isNew={this.state.isNew}
                 message={this.state.statusMsg}
             />
         );
@@ -118,15 +115,11 @@ export default class IsinField extends React.Component {
         return (
             <div className="form__group">
                 <label htmlFor="field-isin" className="form__label">{this.props.label}</label>
-                <div className="grid grid--flat">
-                    <div className="g 2/3">
-                        <input className="form__input" id="field-isin"
-                               value={this.state.fieldText}
-                               ref="isinInput"
-                               onChange={this.handleInput.bind(this)}/>
-                    </div>
-                    <div className="g 1/3">{status}</div>
-                </div>
+                <input className="form__input" id="field-isin"
+                           value={this.state.fieldText}
+                           ref="isinInput"
+                           onChange={this.handleInput.bind(this)}/>
+                <div className="form__message">{status}</div>
             </div>
         );
     }

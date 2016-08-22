@@ -34,4 +34,7 @@
         display: block;
         width: 100%;
     }
+    .form__message:not(:empty) {
+        margin-top: $size-grid-unit-tiny;
+    }
 }

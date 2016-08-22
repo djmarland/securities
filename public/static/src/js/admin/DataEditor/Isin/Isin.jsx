@@ -68,16 +68,20 @@ export default class Isin extends React.Component {
                         </button>
                     </p>
                 </div>
-                <div className="g">
+                <div className="g 1/2">
                     <IsinField id="ISIN"
                                ref="ISIN"
                                onChange={this.onIsinChange.bind(this)}
                                label="Enter new ISIN or one to search for*"/>
+                </div>
+                <div className="g 1/2">
                     <DateField id="START_DATE"
                                ref="START_DATE"
                                onChange={this.onFormChange.bind(this)}
                                isRequired={true}
                                label="Start Date*"/>
+                </div>
+                <div className="g 1/2">
                     <DateField id="MATURITY_DATE"
                                ref="MATURITY_DATE"
                                onChange={this.onFormChange.bind(this)}

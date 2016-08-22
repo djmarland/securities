@@ -89,15 +89,11 @@ export default class DateField extends React.Component {
         return (
             <div className="form__group">
                 <label htmlFor="field-isin" className="form__label">{this.props.label}</label>
-                <div className="grid grid--flat">
-                    <div className="g 2/3">
-                        <input className="form__input" id="field-isin"
-                               value={this.state.fieldText}
-                               ref="dateInput"
-                               onChange={this.handleInput.bind(this)}/>
-                    </div>
-                    <div className="g 1/3">{status}</div>
-                </div>
+                <input className="form__input" id="field-isin"
+                       value={this.state.fieldText}
+                       ref="dateInput"
+                       onChange={this.handleInput.bind(this)}/>
+                <div className="form__message">{status}</div>
             </div>
         );
     }

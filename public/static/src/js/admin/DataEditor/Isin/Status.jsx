@@ -29,7 +29,7 @@ export default class Status extends React.Component {
 
         if (this.props.isOk) {
             return (
-                <StatusOk />
+                <StatusOk message={this.props.message} />
             );
         }
 
@@ -69,6 +69,7 @@ class StatusOk extends React.Component {
                     xmlnsXlink="http://www.w3.org/1999/xlink">
                     <use xlinkHref="#icon-ok" />
                 </svg></span>
+                <span className="icon-text__text">{this.props.message}</span>
             </span>
         );
     }
