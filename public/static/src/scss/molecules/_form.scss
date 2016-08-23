@@ -26,6 +26,10 @@
 
 .form__group {
     margin-bottom: $size-grid-unit;
+    &:last-child {
+        margin-bottom: 0;
+    }
+    position: relative;
     .form__label {
         display: block;
         margin-bottom: $size-grid-unit-tiny;
@@ -35,6 +39,8 @@
         width: 100%;
     }
     .form__message:not(:empty) {
-        margin-top: $size-grid-unit-tiny;
+        position: absolute;
+        bottom: $size-grid-unit-tiny;
+        right: $size-grid-unit-small;
     }
 }

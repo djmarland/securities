@@ -117,6 +117,7 @@ export default class IsinField extends BaseField {
             <div className="form__group">
                 <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
                 <input className="form__input" id={this.fieldId}
+                       disabled={this.state.isLoading}
                        required={true}
                        value={this.state.fieldText}
                        ref="isinInput"
