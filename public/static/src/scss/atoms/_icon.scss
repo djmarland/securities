@@ -7,10 +7,12 @@
 }
 
 .icon-text__icon {
-    width: 32px;
+    width: 28px;
+    height: 28px;
     display: inline-block;
     vertical-align: middle;
     margin-right: $size-grid-unit-tiny;
+    margin-top: -2px;
 }
 
 .icon-text__text {

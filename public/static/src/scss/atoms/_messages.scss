@@ -1,12 +1,12 @@
 .message,
 .message--info {
-    @extend .island-squashed;
+    padding: $size-grid-unit-tiny;
     border-width: 1px;
     border-style: solid;
     border-radius: $size-grid-unit-tiny;
-    text-shadow: 0.5px 0.5px 0 $color-black;
     background: $color-primary-light;
     color: $color-primary-dark;
+    fill: $color-primary-dark;
     + .message {
         margin-top: $size-grid-unit;
     }
@@ -14,12 +14,15 @@
 .message--ok {
     background: $color-tertiary-light;
     color: $color-tertiary-dark;
+    fill: $color-tertiary-dark;
 }
 .message--warning {
     background: $color-complimentary-light;
     color: $color-complimentary-dark;
+    fill: $color-complimentary-dark;
 }
 .message--error {
     background: $color-secondary-light;
     color: $color-secondary-dark;
+    fill: $color-secondary-dark;
 }

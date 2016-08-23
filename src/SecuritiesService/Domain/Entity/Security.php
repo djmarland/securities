@@ -20,13 +20,11 @@ class Security extends Entity implements JsonSerializable
     private $product;
     private $currency;
     private $company;
-    private $exchange;
 
     public function __construct(
         UUID $id,
         ISIN $isin,
         string $name,
-        string $exchange,
         DateTime $startDate,
         float $moneyRaisedGBP =null,
         float $moneyRaisedIssue =null,
@@ -39,7 +37,6 @@ class Security extends Entity implements JsonSerializable
         parent::__construct($id);
 
         $this->name = $name;
-        $this->exchange = $exchange;
         $this->isin = $isin;
         $this->startDate = $startDate;
         $this->currency = $currency;
@@ -59,7 +56,8 @@ class Security extends Entity implements JsonSerializable
 
     public function getExchange(): string
     {
-        return $this->exchange;
+        // @todo - remove?
+        return 'LSE';
     }
 
     public function getIsin(): string

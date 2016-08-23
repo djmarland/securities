@@ -41,9 +41,7 @@ export default class Status extends React.Component {
 
 class StatusEmpty extends React.Component {
     render() {
-        return (
-            <span></span>
-        );
+        return null;
     }
 }
 
@@ -54,6 +52,7 @@ class StatusLoading extends React.Component {
                 <span className="icon-text__icon">
                     <Loading/>
                 </span>
+                <span className="icon-text__text">{this.props.message}</span>
             </span>
         );
     }

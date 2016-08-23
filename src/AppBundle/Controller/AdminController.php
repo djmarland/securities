@@ -185,9 +185,16 @@ class AdminController extends Controller
         }
 
         try {
+
+            $formData = $this->request->request->all();
+            if (empty($formData)) {
+                // must be JSON
+                $formData = json_decode($this->request->getContent(), true);
+            }
+
             $command = new ImportCommand();
             $command->setContainer($this->container);
-            $command->single($this->request->request->all());
+            $command->single($formData);
             $this->toView('message', 'ok', true);
         } catch (\Exception $e) {
             $this->toView('error', $e->getMessage(), true);

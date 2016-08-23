@@ -158,6 +158,7 @@ class ImportCommand extends Command
             $security = new Security();
             $security->setIsin($isin);
         }
+        $security->setExchange(''); // wrong - to be removed
 
         $name = $this->getRowValue($row, 'SECURITY_NAME');
         if ($name) {
@@ -166,7 +167,7 @@ class ImportCommand extends Command
 
         $source = $this->getRowValue($row, 'SOURCE');
         if ($source) {
-            $security->setExchange($source);
+            $security->setSource($source);
         }
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');

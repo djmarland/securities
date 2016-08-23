@@ -33,7 +33,6 @@ class SecurityMapper extends Mapper
             $id,
             $isin,
             $item['name'],
-            $item['exchange'],
             $item['startDate'],
             $item['moneyRaised'],
             $item['moneyRaisedLocal'],

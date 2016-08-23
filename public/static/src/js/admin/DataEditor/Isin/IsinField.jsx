@@ -1,21 +1,20 @@
 import React from 'react';
+import BaseField from './BaseField';
 import Status from './Status';
 
-export default class IsinField extends React.Component {
+export default class IsinField extends BaseField {
 
     constructor() {
         super();
-        this.state = {
-            fieldText : '',
-            statusMsg : null,
-            isError : false,
-            isOk : false,
-            loading     : false
-        }
+        this.state.loading = false;
+    }
+
+    getValue() {
+        return this.refs.isinInput.value;
     }
 
     handleInput() {
-        let val = this.refs.isinInput.value;
+        let val = this.getValue();
         this.setState({
             fieldText : val,
             statusMsg : null,
@@ -40,7 +39,8 @@ export default class IsinField extends React.Component {
             return;
         }
         this.setState({
-            isLoading: true
+            isLoading: true,
+            statusMsg: 'Checking ISIN'
         });
 
         // make an ajax call to get the ISIN.
@@ -97,6 +97,7 @@ export default class IsinField extends React.Component {
                 this.setState({
                     statusMsg : 'An error occurred checking this ISIN',
                     isError : true,
+                    isLoading : false
                 });
             }.bind(this));
 
@@ -114,11 +115,12 @@ export default class IsinField extends React.Component {
 
         return (
             <div className="form__group">
-                <label htmlFor="field-isin" className="form__label">{this.props.label}</label>
-                <input className="form__input" id="field-isin"
-                           value={this.state.fieldText}
-                           ref="isinInput"
-                           onChange={this.handleInput.bind(this)}/>
+                <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
+                <input className="form__input" id={this.fieldId}
+                       required={true}
+                       value={this.state.fieldText}
+                       ref="isinInput"
+                       onChange={this.handleInput.bind(this)}/>
                 <div className="form__message">{status}</div>
             </div>
         );

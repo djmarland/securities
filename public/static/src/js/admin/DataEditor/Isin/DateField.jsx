@@ -1,16 +1,11 @@
 import React from 'react';
+import BaseField from './BaseField';
 import Status from './Status';
 
-export default class DateField extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            fieldText : '',
-            statusMsg : null,
-            isError : false,
-            isOk : false
-        }
-    };
+export default class DateField extends BaseField {
+    getValue() {
+        return this.refs.dateInput.value;
+    }
 
     setValue(val) {
         this.setState({
@@ -79,7 +74,6 @@ export default class DateField extends React.Component {
     render() {
         let status = (
             <Status
-                isLoading={this.state.isLoading}
                 isError={this.state.isError}
                 isOk={this.state.isOk}
                 message={this.state.statusMsg}
@@ -88,10 +82,11 @@ export default class DateField extends React.Component {
 
         return (
             <div className="form__group">
-                <label htmlFor="field-isin" className="form__label">{this.props.label}</label>
-                <input className="form__input" id="field-isin"
+                <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
+                <input className="form__input" id={this.fieldId}
                        value={this.state.fieldText}
                        ref="dateInput"
+                       required={this.props.isRequired}
                        onChange={this.handleInput.bind(this)}/>
                 <div className="form__message">{status}</div>
             </div>

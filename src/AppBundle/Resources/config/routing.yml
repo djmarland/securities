@@ -78,13 +78,13 @@ admin_securities_check:
   requirements:
     isin:  "[A-Z0-9]{12}"
 
-admin_securities:
-  path:     /admin/securities
-  defaults: { _controller: AppBundle:Admin:securities }
-
 admin_process_security:
   path:     /admin/process-security.json
   defaults: { _controller: AppBundle:Admin:processSecurity, format: json }
+
+admin_securities:
+  path:     /admin/securities
+  defaults: { _controller: AppBundle:Admin:securities }
 
 admin_issuers:
   path:     /admin/issuers
