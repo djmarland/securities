@@ -31,10 +31,25 @@ export default class SimpleTextField extends BaseField {
             this.props.onChange(this.props.id, val, false);
             return;
         }
-        this.setState({
-            statusMsg: 'Valid',
-            isOk: true,
-        });
+
+        if (val.length > 0 && this.props.regex) {
+            let regex = new RegExp(this.props.regex);
+            if (!regex.test(val)) {
+                this.setState({
+                    statusMsg: 'Invalid data',
+                    isError: true,
+                });
+                this.props.onChange(this.props.id, val, false);
+                return;
+            }
+        }
+
+        if (val.length > 0) {
+            this.setState({
+                statusMsg: 'Valid',
+                isOk: true,
+            });
+        }
         this.props.onChange(this.props.id, val, true);
     }
 

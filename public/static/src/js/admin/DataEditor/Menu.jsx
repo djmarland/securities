@@ -23,7 +23,9 @@ export default class Menu extends React.Component {
         });
 
         return (
-            <ul className="list--unstyled">{items}</ul>
+            <div className="finder">
+                <ul className="finder__list">{items}</ul>
+            </div>
         );
     };
 }
@@ -34,12 +36,15 @@ class MenuItem extends React.Component {
     }
 
     render(){
-        let itemClass = (this.props.currentView == this.props.id) ?
-                'color-grey-light' : '';
+        let itemClass = 'finder__item' +
+            ((this.props.currentView == this.props.id) ? ' finder__active' : '');
         return(
             <li className={itemClass}>
-                <a href="#" onClick={this.changeView.bind(this)}>
-                {this.props.title}
+                <a className="finder__link" href="#" onClick={this.changeView.bind(this)}>
+                    <span className="finder__indicator finder__indicator--nodrop"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+                        <circle cx="12" cy="12" r="8"></circle>
+                    </svg></span>
+                    <span className="finder__text">{this.props.title}</span>
                 </a>
             </li>
         );

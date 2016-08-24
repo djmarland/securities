@@ -38,6 +38,9 @@
 .g,
 .g-unit {
     margin-bottom: $size-grid-unit;
+    &:empty {
+        margin-bottom: 0;
+    }
 }
 
 .grid--flush {

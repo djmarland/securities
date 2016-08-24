@@ -45,6 +45,11 @@ export default class Isin extends React.Component {
             this.refs.SECURITY_NAME.setValue(security.name || '');
             this.refs.SECURITY_START_DATE.setValue(security.startDate || '');
             this.refs.MATURITY_DATE.setValue(security.maturityDate || '');
+            this.refs.SOURCE.setValue(security.maturityDate || '');
+            this.refs.COUPON_RATE.setValue(security.coupon || '');
+            this.refs.MONEY_RAISED_GBP.setValue(security.amountRaised || '');
+            this.refs.MONEY_RAISED_LOCAL.setValue(security.amountRaisedLocal || '');
+            this.refs.TRADING_CURRENCY.setValue(security.currency || '');
         }
     }
 
@@ -61,7 +66,12 @@ export default class Isin extends React.Component {
             'ISIN',
             'SECURITY_NAME',
             'SECURITY_START_DATE',
-            'MATURITY_DATE'
+            'MATURITY_DATE',
+            'SOURCE',
+            'COUPON_RATE',
+            'MONEY_RAISED_GBP',
+            'MONEY_RAISED_LOCAL',
+            'TRADING_CURRENCY'
         ];
 
         let postData = {};
@@ -71,7 +81,6 @@ export default class Isin extends React.Component {
            }
         }.bind(this));
 
-        // make an ajax call
         fetch('/admin/process-security.json', {
             method: 'post',
             body: JSON.stringify(postData),
@@ -109,6 +118,7 @@ export default class Isin extends React.Component {
     render() {
         return (
             <form onSubmit={this.onSave.bind(this)}>
+            <h1 className="b g-unit">Add/Edit ISIN</h1>
             <div className="grid">
                 <div className="g 1/2">
                     <span className="e">* Required</span>
@@ -129,13 +139,13 @@ export default class Isin extends React.Component {
                         type={this.state.messageType}
                     />
                 </div>
-                <div className="g 1/2">
+                <div className="g">
                     <IsinField id="ISIN"
                                ref="ISIN"
                                onChange={this.onIsinChange.bind(this)}
                                label="Enter new ISIN or one to search for*"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g">
                     <SimpleTextField id="SECURITY_NAME"
                                      ref="SECURITY_NAME"
                                      onChange={this.onFormChange.bind(this)}
@@ -155,6 +165,40 @@ export default class Isin extends React.Component {
                                onChange={this.onFormChange.bind(this)}
                                isRequired={false}
                                label="Maturity Date"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="SOURCE"
+                                     ref="SOURCE"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="Source"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="COUPON_RATE"
+                                     ref="COUPON_RATE"
+                                     regex="^[0-9.]+[%]?$"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="Coupon (decimal, or with %)"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="MONEY_RAISED_GBP"
+                                     ref="MONEY_RAISED_GBP"
+                                     regex="^[0-9.]+$"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="Money Raised (GBP £m)"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="MONEY_RAISED_LOCAL"
+                                     ref="MONEY_RAISED_LOCAL"
+                                     regex="^[0-9.]+$"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="Money Raised (Local Currency)"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="TRADING_CURRENCY"
+                                     ref="TRADING_CURRENCY"
+                                     regex="^[A-Z]{3}$"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="Trading Currency"/>
                 </div>
             </div>
             </form>

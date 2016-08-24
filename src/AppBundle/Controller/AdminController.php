@@ -70,7 +70,8 @@ class AdminController extends Controller
                 ->fetchByIsin($isin);
 
             $status = 'found';
-            $this->toView('security', $security, true);
+
+            $this->toView('security', $security->jsonSerialize(true), true);
 
         } catch (InvalidISINException $e) {
             $status = 'error';

@@ -200,9 +200,18 @@ class ImportCommand extends Command
         if ($moneyRaised) {
             $moneyRaised = str_replace(',', '', $moneyRaised);
             if (!is_numeric($moneyRaised)) {
-                throw new \Exception('Money Raised is not a number');
+                throw new \Exception('Money Raised (GBP) is not a number');
             }
             $security->setMoneyRaised($moneyRaised);
+        }
+
+        $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_LOCAL');
+        if ($moneyRaised) {
+            $moneyRaised = str_replace(',', '', $moneyRaised);
+            if (!is_numeric($moneyRaised)) {
+                throw new \Exception('Money Raised (Local) is not a number');
+            }
+            $security->setMoneyRaisedLocal($moneyRaised);
         }
 
         $coupon = $this->getRowValue($row, 'COUPON_RATE');
