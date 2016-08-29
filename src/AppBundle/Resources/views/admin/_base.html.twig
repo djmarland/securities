@@ -26,5 +26,8 @@
 {% endblock %}
 
 {% block footerScript %}
+    <script>
+        window.ISIN.productOptions = {{ productOptions|json_encode|raw }};
+    </script>
     <script src="{{ 'admin.js'|asset_path }}"></script>
 {% endblock %}

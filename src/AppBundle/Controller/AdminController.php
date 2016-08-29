@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
 use Djmarland\ISIN\Exception\InvalidISINException;
+use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
@@ -17,6 +18,24 @@ class AdminController extends Controller
     use Traits\CurrenciesTableTrait;
 
     protected $cacheTime = null;
+
+    public function initialize(Request $request)
+    {
+        parent::initialize($request);
+        $products = $this->get('app.services.products')
+            ->findAll();
+        $productOptions = [];
+        foreach ($products as $product) {
+            /** @var Product $product */
+            $productOptions[] = [
+                'value' => $product->getNumber(),
+                'label' => $product->getName() . ' (' . $product->getNumber() . ')'
+            ];
+        }
+
+        $this->toView('productOptions', $productOptions);
+
+    }
 
     public function indexAction()
     {

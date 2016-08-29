@@ -2,6 +2,7 @@ import React from 'react';
 import IsinField from './IsinField';
 import DateField from './DateField';
 import SimpleTextField from './SimpleTextField';
+import SimpleSelectField from './SimpleSelectField';
 import Status from './Status';
 import Message from '../../Utils/Message';
 
@@ -50,6 +51,13 @@ export default class Isin extends React.Component {
             this.refs.MONEY_RAISED_GBP.setValue(security.amountRaised || '');
             this.refs.MONEY_RAISED_LOCAL.setValue(security.amountRaisedLocal || '');
             this.refs.TRADING_CURRENCY.setValue(security.currency || '');
+            this.refs.MARGIN.setValue(security.margin || '');
+
+            let product = '';
+            if (security.product) {
+                product = security.product.number;
+            }
+            this.refs.PRA_ITEM_4748.setValue(product);
         }
     }
 
@@ -71,7 +79,9 @@ export default class Isin extends React.Component {
             'COUPON_RATE',
             'MONEY_RAISED_GBP',
             'MONEY_RAISED_LOCAL',
-            'TRADING_CURRENCY'
+            'TRADING_CURRENCY',
+            'MARGIN',
+            'PRA_ITEM_4748',
         ];
 
         let postData = {};
@@ -143,62 +153,76 @@ export default class Isin extends React.Component {
                     <IsinField id="ISIN"
                                ref="ISIN"
                                onChange={this.onIsinChange.bind(this)}
-                               label="Enter new ISIN or one to search for*"/>
+                               label="ISIN: Enter new ISIN or one to search for*"/>
                 </div>
                 <div className="g">
                     <SimpleTextField id="SECURITY_NAME"
                                      ref="SECURITY_NAME"
                                      onChange={this.onFormChange.bind(this)}
                                      isRequired={true}
-                                     label="Security Name*"/>
+                                     label="SECURITY_NAME: Security Name*"/>
                 </div>
                 <div className="g 1/2">
                     <DateField id="SECURITY_START_DATE"
                                ref="SECURITY_START_DATE"
                                onChange={this.onFormChange.bind(this)}
                                isRequired={true}
-                               label="Start Date*"/>
+                               label="SECURITY_START_DATE: Start Date*"/>
                 </div>
                 <div className="g 1/2">
                     <DateField id="MATURITY_DATE"
                                ref="MATURITY_DATE"
                                onChange={this.onFormChange.bind(this)}
                                isRequired={false}
-                               label="Maturity Date"/>
+                               label="MATURITY_DATE: Maturity Date"/>
                 </div>
                 <div className="g 1/2">
                     <SimpleTextField id="SOURCE"
                                      ref="SOURCE"
                                      onChange={this.onFormChange.bind(this)}
-                                     label="Source"/>
+                                     label="SOURCE: Source"/>
                 </div>
                 <div className="g 1/2">
                     <SimpleTextField id="COUPON_RATE"
                                      ref="COUPON_RATE"
                                      regex="^[0-9.]+[%]?$"
                                      onChange={this.onFormChange.bind(this)}
-                                     label="Coupon (decimal, or with %)"/>
+                                     label="COUPON_RATE: Coupon (decimal, or with %)"/>
                 </div>
                 <div className="g 1/2">
                     <SimpleTextField id="MONEY_RAISED_GBP"
                                      ref="MONEY_RAISED_GBP"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
-                                     label="Money Raised (GBP £m)"/>
+                                     label="MONEY_RAISED_GBP: Money Raised (GBP £m)"/>
                 </div>
                 <div className="g 1/2">
                     <SimpleTextField id="MONEY_RAISED_LOCAL"
                                      ref="MONEY_RAISED_LOCAL"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
-                                     label="Money Raised (Local Currency)"/>
+                                     label="MONEY_RAISED_LOCAL: Money Raised (Local Currency)"/>
                 </div>
                 <div className="g 1/2">
                     <SimpleTextField id="TRADING_CURRENCY"
                                      ref="TRADING_CURRENCY"
                                      regex="^[A-Z]{3}$"
                                      onChange={this.onFormChange.bind(this)}
-                                     label="Trading Currency"/>
+                                     label="TRADING_CURRENCY: Trading Currency"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleTextField id="MARGIN"
+                                     ref="MARGIN"
+                                     regex="^[0-9.]+[%]?$"
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="MARGIN: Margin (decimal, or with %)"/>
+                </div>
+                <div className="g 1/2">
+                    <SimpleSelectField id="PRA_ITEM_4748"
+                                     ref="PRA_ITEM_4748"
+                                     options={this.props.productOptions}
+                                     onChange={this.onFormChange.bind(this)}
+                                     label="PRA_ITEM_4748: Product Type"/>
                 </div>
             </div>
             </form>

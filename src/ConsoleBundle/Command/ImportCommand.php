@@ -228,6 +228,20 @@ class ImportCommand extends Command
             $security->setCoupon($coupon);
         }
 
+        $margin = $this->getRowValue($row, 'MARGIN');
+        if ($margin) {
+            if (strtolower($margin) != 'n/a') {
+                $marginValue = floatval($row['MARGIN']);
+                if (strpos($this->getRowValue($row, 'MARGIN'), '%') !== false) {
+                    $marginValue = $marginValue / 100;
+                }
+                $margin = $marginValue;
+            } else {
+                $margin = null;
+            }
+            $security->setMargin($margin);
+        }
+
 
 //        $security->setMarket($row['MARKET']);
 //        $security->setTIDM($row['TIDM']);

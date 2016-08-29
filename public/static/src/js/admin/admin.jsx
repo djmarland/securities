@@ -13,7 +13,8 @@ import Compare from './Compare';
             compare = document.getElementById('compare-editor');
 
         if (data) {
-            ReactDOM.render(<DataEditor />, data);
+            let productOptions = window.ISIN.productOptions || null;
+            ReactDOM.render(<DataEditor productOptions={productOptions} />, data);
         } else if (issuer) {
             ReactDOM.render(<Issuer />, issuer);
         } else if (compare) {

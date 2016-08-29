@@ -32,7 +32,7 @@ export default class DataEditor extends React.Component {
             case 'isin':
             default:
                 contentArea = (
-                    <Isin />
+                    <Isin productOptions={this.props.productOptions} />
                 );
         }
 
