@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
 use Djmarland\ISIN\Exception\InvalidISINException;
+use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -18,6 +19,7 @@ class AdminController extends Controller
     use Traits\CurrenciesTableTrait;
 
     protected $cacheTime = null;
+    protected $bulkStats = null;
 
     public function initialize(Request $request)
     {
@@ -35,6 +37,9 @@ class AdminController extends Controller
 
         $this->toView('productOptions', $productOptions);
 
+        // get the current status of the bulk upload
+        $this->bulkStats = $this->getBulkStats();
+        $this->toView('bulkStats', $this->bulkStats);
     }
 
     public function indexAction()
@@ -71,7 +76,90 @@ class AdminController extends Controller
     public function dataAction()
     {
         $this->toView('activeTab', 'data');
+
         return $this->renderTemplate('admin:data', 'Admin - Data');
+    }
+
+    public function bulkUploadAction()
+    {
+        $file = $this->request->getContent();
+        if (empty($file)) {
+            $this->toView('status', 'error', true);
+            $this->toView('message', 'No file receieved', true);
+            return $this->renderJSON();
+        }
+
+        $filePath = $this->getParameter('kernel.cache_dir') . '/bulk/';
+        $fileName = $filePath . 'bulk-upload.csv';
+
+        if (!is_dir($filePath)) {
+            mkdir($filePath);
+        }
+
+        // save the file as-is first
+        file_put_contents($fileName, $file);
+
+        // re-read the CSV one line at a time, saving it into chunks
+        $headings = null;
+        $totalLines = 0;
+        $currentChunkLines = 0;
+        $currentChunkCount = 1;
+        $maxPerChunk = 100;
+        $currentChunk = null;
+
+        $handle = fopen($fileName, 'r');
+        while (($line = fgets($handle)) !== false) {
+            // grab and store the headings from the first list
+            if (!$headings) {
+                $headings = $line;
+                continue;
+            }
+
+            if (!$currentChunk) {
+                // create a new chunk
+                $currentChunk = $headings;
+            }
+
+            $totalLines++;
+            $currentChunkLines++;
+            $currentChunk .= $line;
+
+            if ($currentChunkLines == $maxPerChunk) {
+                // save the chunk
+                $fileName = $filePath . 'bulk-chunk-' . $currentChunkCount . '.csv';
+                file_put_contents($fileName, $currentChunk);
+
+                // reset for the next chunk
+                $currentChunk = null;
+                $currentChunkLines = 0;
+                $currentChunkCount++;
+            }
+        }
+
+        fclose($handle);
+
+        // save the last chunk if it's not empty (in case last row wasn't a full chunk)
+        if ($currentChunk) {
+            $fileName = $filePath . 'bulk-chunk-' . $currentChunkCount . '.csv';
+            file_put_contents($fileName, $currentChunk);
+        }
+
+        // now store the stats
+        $bulkStats = (object) [
+            'totalToProcess' => $totalLines,
+            'totalProcessed' => 0,
+            'totalToProcessFormatted' => number_format($totalLines),
+            'totalProcessedFormatted' => 0,
+            'totalBatches' => $currentChunkCount,
+            'lastBatchCompleted' => 0
+        ];
+
+        file_put_contents($filePath . 'bulk-stats.json', json_encode($bulkStats));
+
+        $this->toView('status', 'ok', true);
+        $this->toView('message', 'File uploaded', true);
+        $this->toView('stats', $bulkStats, true);
+        return $this->renderJSON();
     }
 
     public function securitiesCheckAction()
@@ -101,6 +189,24 @@ class AdminController extends Controller
 
         $this->toView('status', $status, true);
         $this->toView('message', $message, true);
+        return $this->renderJSON();
+    }
+
+    public function searchAction()
+    {
+        $search = trim($this->request->get('q'));
+        $type = trim($this->request->get('type'));
+
+        switch($type) {
+            case 'issuer':
+                $results = $this->get('app.services.issuers')
+                    ->search($search);
+            break;
+            default:
+                throw new HttpException(400, 'Missing type');
+        }
+
+        $this->toView('results', $results, true);
         return $this->renderJSON();
     }
 
@@ -196,6 +302,54 @@ class AdminController extends Controller
         $this->toView('noParent', $noParent);
 
         return $this->renderTemplate('admin:issuers', 'Issuers - Admin');
+    }
+
+    public function bulkProcessAction()
+    {
+        if (!$this->request->isMethod('POST')) {
+            throw new HttpException(405, 'Must be POST');
+        }
+
+        $stats = $this->bulkStats;
+        if (!$stats) {
+            throw new HttpException(404, 'Nothing to process');
+        }
+
+        $newBatchNumber = $stats->lastBatchCompleted + 1;
+        if ($newBatchNumber <= $stats->totalBatches) {
+            // get the file
+            $filePath = $this->getParameter('kernel.cache_dir') . '/bulk/';
+            $fileName = $filePath . 'bulk-chunk-' . $newBatchNumber . '.csv';
+            $csv = file_get_contents($fileName);
+
+            // process the CSV and get the ISINs back out of it
+            $data = $this->csvToArray($csv);
+
+            $command = new ImportCommand();
+            $command->setContainer($this->container);
+            $isins = [];
+            foreach ($data as $row) {
+                // put in database
+                $entity = $command->single($row);
+                $stats->totalProcessed++;
+                $isins[] = (string) $entity->getIsin();
+            }
+
+            // now let's fetch back all the securities we just saved
+            $securities = $this->get('app.services.securities')->fetchMultipleByIsin($isins);
+
+            // resave the updated status
+            $stats->totalProcessedFormatted = number_format($stats->totalProcessed);
+            $stats->lastBatchCompleted = $newBatchNumber;
+
+            $statusFileName = $filePath . 'bulk-stats.json';
+            file_put_contents($statusFileName, json_encode($stats));
+        }
+
+
+        $this->toView('stats', $stats, true);
+        $this->toView('securities', $securities, true);
+        return $this->renderJSON();
     }
 
     public function processSecurityAction()
@@ -438,6 +592,15 @@ class AdminController extends Controller
         $response->headers->set('Content-Type', 'text/csv');
         $response->headers->set('Content-Disposition', 'attachment; filename="export.csv"');
         return $response;
+    }
+
+    private function getBulkStats()
+    {
+        $fileName = $this->getParameter('kernel.cache_dir') . '/bulk/bulk-stats.json';
+        if (file_exists($fileName)) {
+            return json_decode(file_get_contents($fileName));
+        }
+        return null;
     }
 
     private function getExportFile()

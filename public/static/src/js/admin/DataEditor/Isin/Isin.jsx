@@ -3,6 +3,7 @@ import IsinField from './IsinField';
 import DateField from './DateField';
 import SimpleTextField from './SimpleTextField';
 import SimpleSelectField from './SimpleSelectField';
+import AutoCompleteField from './AutoCompleteField';
 import Status from './Status';
 import Message from '../../Utils/Message';
 
@@ -46,12 +47,16 @@ export default class Isin extends React.Component {
             this.refs.SECURITY_NAME.setValue(security.name || '');
             this.refs.SECURITY_START_DATE.setValue(security.startDate || '');
             this.refs.MATURITY_DATE.setValue(security.maturityDate || '');
-            this.refs.SOURCE.setValue(security.maturityDate || '');
+            this.refs.SOURCE.setValue(security.source || '');
             this.refs.COUPON_RATE.setValue(security.coupon || '');
             this.refs.MONEY_RAISED_GBP.setValue(security.amountRaised || '');
             this.refs.MONEY_RAISED_LOCAL.setValue(security.amountRaisedLocal || '');
             this.refs.TRADING_CURRENCY.setValue(security.currency || '');
             this.refs.MARGIN.setValue(security.margin || '');
+
+            if (security.issuer) {
+                this.setDataFromIssuer(security.issuer);
+            }
 
             let product = '';
             if (security.product) {
@@ -59,6 +64,30 @@ export default class Isin extends React.Component {
             }
             this.refs.PRA_ITEM_4748.setValue(product);
         }
+    }
+
+    onIssuerChange(id, data, valid) {
+        this.onFormChange(id, data, valid);
+        if (data) {
+            this.setDataFromIssuer(data, true);
+        } else {
+            // this.refs.COUNTRY_OF_INCORPORATION.enable();
+        }
+
+    }
+
+    setDataFromIssuer(issuer, excludeIssuerItself) {
+        // let country = '';
+        // if (issuer.country) {
+        //     country = issuer.country.name;
+        // }
+        // this.refs.COUNTRY_OF_INCORPORATION.setValue(country);
+        // this.refs.COUNTRY_OF_INCORPORATION.disable();
+
+        if (excludeIssuerItself) {
+            return;
+        }
+        this.refs.COMPANY_NAME.setValue(issuer.name);
     }
 
     onSave(e) {
@@ -69,7 +98,7 @@ export default class Isin extends React.Component {
             messageText: null
         });
 
-        // prepare the ISIN
+        // prepare the ISIN data
         let fields = [
             'ISIN',
             'SECURITY_NAME',
@@ -82,6 +111,8 @@ export default class Isin extends React.Component {
             'TRADING_CURRENCY',
             'MARGIN',
             'PRA_ITEM_4748',
+            'COMPANY_NAME',
+            // 'COUNTRY_OF_INCORPORATION',
         ];
 
         let postData = {};
@@ -224,6 +255,20 @@ export default class Isin extends React.Component {
                                      onChange={this.onFormChange.bind(this)}
                                      label="PRA_ITEM_4748: Product Type"/>
                 </div>
+                <div className="g 1/2">
+                    <AutoCompleteField id="COMPANY_NAME"
+                                       ref="COMPANY_NAME"
+                                       sourceUrl="/admin/search.json?type=issuer&q={search}"
+                                       onChange={this.onIssuerChange.bind(this)}
+                                       label="COMPANY_NAME: Issuer Name"/>
+                </div>
+                {/*<div className="g 1/2">*/}
+                    {/*<AutoCompleteField id="COUNTRY_OF_INCORPORATION"*/}
+                                       {/*ref="COUNTRY_OF_INCORPORATION"*/}
+                                       {/*sourceUrl="/admin/search.json?type=country&q={search}"*/}
+                                       {/*onChange={this.onFormChange.bind(this)}*/}
+                                       {/*label="COUNTRY_OF_INCORPORATION: Issuer Country" />*/}
+                {/*</div>*/}
             </div>
             </form>
         );

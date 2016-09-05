@@ -38,6 +38,14 @@ class SecuritiesService extends Service
         return reset($results);
     }
 
+    public function fetchMultipleByIsin(array $isins): array
+    {
+        $qb = $this->selectFullSet();
+        $qb->where(self::TBL . '.isin IN (:isins)')
+            ->setParameter('isins', $isins);
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+    }
+
     public function findAllSimple(): array
     {
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);

@@ -1,18 +1,22 @@
 import React from 'react';
 import Menu from './Menu';
 import Isin from './Isin/Isin';
+import BulkUpload from './BulkUpload/BulkUpload';
 
 export default class DataEditor extends React.Component {
     constructor() {
         super();
+        let view = window.location.hash || 'isin';
+        view = view.replace('#','');
+
         this.state = {
-            currentView : "isin"
+            currentView : view
         };
         this.allViews = [
             {id : "isin", title : "Add/Edit ISIN"},
             {id : "isin-bulk", title : "Bulk upload ISIN"},
             {id : "hierachy-bulk", title : "Bulk upload hiearchy"},
-            {id : "indices", title : "Indices"}
+            // {id : "indices", title : "Indices"}
         ];
     };
 
@@ -22,11 +26,10 @@ export default class DataEditor extends React.Component {
 
     render() {
         let contentArea;
-
         switch (this.state.currentView) {
-            case 'isin-search':
+            case 'isin-bulk':
                 contentArea = (
-                    <IsinSearch />
+                    <BulkUpload bulkStats={this.props.bulkStats} />
                 );
                 break;
             case 'isin':

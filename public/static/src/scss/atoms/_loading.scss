@@ -51,6 +51,14 @@ $loading-size: 28px;
     -webkit-animation: loading-rotate $loading-duration linear infinite;
     animation: loading-rotate $loading-duration linear infinite;
 }
+
+.loading--sibling {
+    display: inline-block;
+    margin-right: 8px;
+    position: relative;
+    top: 8px;
+}
+
 .loading__spinner {
     width: $loading-size;
     height: $loading-size;

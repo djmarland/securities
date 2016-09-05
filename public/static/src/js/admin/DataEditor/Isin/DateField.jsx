@@ -7,46 +7,30 @@ export default class DateField extends BaseField {
         return this.refs.dateInput.value;
     }
 
-    setValue(val) {
-        this.setState({
-           fieldText: val
-        });
-        this.handleInput();
-    }
-
     handleInput() {
         let val = this.refs.dateInput.value;
         this.setState({
             fieldText : val,
-            statusMsg : null,
-            isError : false,
-            isOk : false,
+            statusType : null,
+            statusText : null
         });
         if (val.length == 0) {
-            if (this.props.isRequired) {
-                this.setState({
-                    statusMsg : 'Required',
-                    isError : true,
-                });
-                this.props.onChange(this.props.id, val, false);
-            } else {
-                this.props.onChange(this.props.id, val, true);
-            }
+            this.validateRequired();
             return;
         }
 
         if (this.isValidDate(val)) {
             this.setState({
-                statusMsg : 'Valid',
-                isOk : true,
+                statusType : Status.STATUS_OK,
+                statusText : 'Valid'
             });
             this.props.onChange(this.props.id, val, true);
             return;
         }
 
         this.setState({
-            statusMsg : 'Must be valid DD/MM/YYYY',
-            isError : true,
+            statusType : Status.STATUS_ERROR,
+            statusText : 'Must be valid DD/MM/YYYY'
         });
         this.props.onChange(this.props.id, val, false);
     }
@@ -72,14 +56,6 @@ export default class DateField extends BaseField {
     }
 
     render() {
-        let status = (
-            <Status
-                isError={this.state.isError}
-                isOk={this.state.isOk}
-                message={this.state.statusMsg}
-            />
-        );
-
         return (
             <div className="form__group">
                 <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
@@ -88,7 +64,7 @@ export default class DateField extends BaseField {
                        ref="dateInput"
                        required={this.props.isRequired}
                        onChange={this.handleInput.bind(this)}/>
-                <div className="form__message">{status}</div>
+                <div className="form__message">{this.getStatusElement()}</div>
             </div>
         );
     }

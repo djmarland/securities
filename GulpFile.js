@@ -10,7 +10,7 @@ var gulp = require('gulp'),
     source = require('vinyl-source-stream'),
     // gutil = require('gulp-util'),
     // eslint = require('gulp-eslint'),
-    babelify = require('babelify'),
+    // babelify = require('babelify'),
     // streamify = require('gulp-streamify'),
     staticPathSrc = 'public/static/src/',
     staticPathDist = 'public/static/dist/',
@@ -30,8 +30,8 @@ var gulp = require('gulp'),
 
 var jsFiles = {
     vendor: [
-        staticPathSrc + 'js/vendor/react.min.js',
-        staticPathSrc + 'js/vendor/react-dom.min.js',
+        // staticPathSrc + 'js/vendor/react.min.js',
+        // staticPathSrc + 'js/vendor/react-dom.min.js',
         staticPathSrc + 'js/vendor/react.js',
         staticPathSrc + 'js/vendor/react-dom.js',
     ],
@@ -131,13 +131,16 @@ gulp.task('vendor', function() {
 });
 
 gulp.task('admin-js', function () {
-    return browserify({
+    var appBundler = browserify({
         entries: staticPathSrc + 'js/admin/admin.jsx',
         extensions: ['.jsx'],
-        debug: true
+        debug: false
     })
         .transform('babelify', {presets: ['es2015', 'react']})
-        .bundle()
+        .require('./' + staticPathSrc + 'js/import-react.js', {expose: 'react'})
+        .require('./' + staticPathSrc + 'js/import-react-dom.js', {expose: 'react-dom'});
+
+    return appBundler.bundle()
         .pipe(source('admin.js'))
         .pipe(gulp.dest(staticPathDist));
 

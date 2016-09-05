@@ -1,4 +1,5 @@
 {% block body %}
+<div id="hello"></div>
 <p class="h1">Admin</p>
 <div class="grid">
     <div class="g">
@@ -28,6 +29,10 @@
 {% block footerScript %}
     <script>
         window.ISIN.productOptions = {{ productOptions|json_encode|raw }};
+        window.ISIN.bulkStats = {{ bulkStats|json_encode|raw }};
+
     </script>
+    <script src="{{ 'vendor.js'|asset_path }}"></script>
     <script src="{{ 'admin.js'|asset_path }}"></script>
+    {#<script src="{{ 'admin.js'|asset_path }}"></script>#}
 {% endblock %}

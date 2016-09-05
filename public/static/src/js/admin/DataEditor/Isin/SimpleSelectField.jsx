@@ -7,14 +7,6 @@ export default class SimpleSelectField extends BaseField {
         return this.refs.inputField.value;
     }
 
-    setValue(val) {
-        this.setState({
-            fieldText: val
-        });
-        this.handleInput();
-    }
-
-
     handleInput() {
         let val = this.refs.inputField.value;
         this.setState({

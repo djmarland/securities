@@ -17,30 +17,28 @@ export default class IsinField extends BaseField {
         let val = this.getValue();
         this.setState({
             fieldText : val,
-            statusMsg : null,
-            isError : false,
-            isLoading : false,
-            isOk : false,
+            statusType : null,
+            statusText : null
         });
         this.props.onChange(this.props.id, val, false);
         if (val.length == 0) {
             this.setState({
-                statusMsg : 'Required',
-                isError : true,
+                statusType : Status.STATUS_ERROR,
+                statusText : 'Required'
             });
             return;
         }
 
         if (val.length != 12) {
             this.setState({
-                statusMsg : 'Must be 12 characters',
-                isError : true,
+                statusType : Status.STATUS_ERROR,
+                statusText : 'Must be 12 characters'
             });
             return;
         }
         this.setState({
-            isLoading: true,
-            statusMsg: 'Checking ISIN'
+            statusType : Status.STATUS_LOADING,
+            statusText : 'Checking ISIN'
         });
 
         // make an ajax call to get the ISIN.
@@ -55,18 +53,16 @@ export default class IsinField extends BaseField {
             .then(function(data) {
                 if (data.status == 'error') {
                     this.setState({
-                        statusMsg : 'Not a valid ISIN',
-                        isError : true,
-                        isLoading : false
+                        statusType : Status.STATUS_ERROR,
+                        statusText : 'Not a valid ISIN'
                     });
                     return;
                 }
 
                 if (data.status == 'found') {
                     this.setState({
-                        statusMsg : 'ISIN found',
-                        isOk : true,
-                        isLoading : false
+                        statusType : Status.STATUS_OK,
+                        statusText : 'ISIN found'
                     });
 
                     // send the data back to the main form, to complete all fields
@@ -76,43 +72,32 @@ export default class IsinField extends BaseField {
 
                 if (data.status == 'new') {
                     this.setState({
-                        statusMsg : 'New ISIN',
-                        isOk : true,
-                        isLoading : false
+                        statusType : Status.STATUS_NEW,
+                        statusText : 'New ISIN'
                     });
                     this.props.onChange(this.props.id, val, true);
                     return;
                 }
 
                 this.setState({
-                    statusMsg : 'ISIN could not be processed',
-                    isError : true,
-                    isLoading : false
+                    statusType : Status.STATUS_ERROR,
+                    statusText : 'ISIN could not be processed'
                 });
                 this.props.onChange(this.props.id, val, true);
 
 
             }.bind(this))
             .catch(function(err) {
+                console.log(err);
                 this.setState({
-                    statusMsg : 'An error occurred checking this ISIN',
-                    isError : true,
-                    isLoading : false
+                    statusType : Status.STATUS_ERROR,
+                    statusText : 'An error occurred checking this ISIN'
                 });
             }.bind(this));
 
     }
 
     render() {
-        let status = (
-            <Status
-                isError={this.state.isError}
-                isLoading={this.state.isLoading}
-                isOk={this.state.isOk}
-                message={this.state.statusMsg}
-            />
-        );
-
         return (
             <div className="form__group">
                 <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
@@ -122,7 +107,7 @@ export default class IsinField extends BaseField {
                        value={this.state.fieldText}
                        ref="isinInput"
                        onChange={this.handleInput.bind(this)}/>
-                <div className="form__message">{status}</div>
+                <div className="form__message">{this.getStatusElement()}</div>
             </div>
         );
     }

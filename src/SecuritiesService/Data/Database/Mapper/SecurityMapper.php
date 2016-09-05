@@ -40,7 +40,9 @@ class SecurityMapper extends Mapper
             $company,
             $currency,
             $item['maturityDate'],
-            $item['coupon']
+            $item['coupon'],
+            $item['margin'],
+            $item['source']
         );
         return $security;
     }

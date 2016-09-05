@@ -16,6 +16,7 @@ class Security extends Entity implements JsonSerializable
     private $startDate;
     private $maturityDate;
     private $coupon;
+    private $margin;
     private $moneyRaisedGBP;
     private $moneyRaisedLocal;
     private $product;
@@ -35,6 +36,7 @@ class Security extends Entity implements JsonSerializable
         Currency $currency = null,
         DateTime $maturityDate = null,
         float $coupon = null,
+        float $margin = null,
         string $source = null
     ) {
         parent::__construct($id);
@@ -49,6 +51,7 @@ class Security extends Entity implements JsonSerializable
         $this->company = $company;
         $this->maturityDate = $maturityDate;
         $this->coupon = $coupon;
+        $this->margin = $margin;
         $this->source = $source;
     }
 
@@ -82,6 +85,11 @@ class Security extends Entity implements JsonSerializable
     public function getCoupon()
     {
         return $this->coupon;
+    }
+
+    public function getMargin()
+    {
+        return $this->margin;
     }
 
     public function getMoneyRaised()
@@ -133,6 +141,7 @@ class Security extends Entity implements JsonSerializable
             'startDate' => $this->getStartDate()->format($dateFormat),
             'maturityDate' => $this->getMaturityDate() ? $this->getMaturityDate()->format($dateFormat) : null,
             'coupon' => $this->getCoupon(),
+            'margin' => $this->getMargin(),
             'amountRaised' => $this->getMoneyRaised(),
             'amountRaisedLocal' => $this->getMoneyRaisedLocal(),
             'currency' => $this->getCurrency() ? $this->getCurrency()->getCode() : null,

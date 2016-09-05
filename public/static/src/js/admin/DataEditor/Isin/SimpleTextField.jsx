@@ -7,26 +7,17 @@ export default class SimpleTextField extends BaseField {
         return this.refs.textInput.value;
     }
 
-    setValue(val) {
-        this.setState({
-            fieldText: val
-        });
-        this.handleInput();
-    }
-
-
     handleInput() {
         let val = this.refs.textInput.value;
         this.setState({
             fieldText : val,
-            statusMsg : null,
-            isError : false,
-            isOk : false,
+            statusType : null,
+            statusText : null
         });
         if (val.length == 0 && this.props.isRequired) {
             this.setState({
-                statusMsg: 'Required',
-                isError: true,
+                statusType : Status.STATUS_ERROR,
+                statusText : 'Required'
             });
             this.props.onChange(this.props.id, val, false);
             return;
@@ -36,8 +27,8 @@ export default class SimpleTextField extends BaseField {
             let regex = new RegExp(this.props.regex);
             if (!regex.test(val)) {
                 this.setState({
-                    statusMsg: 'Invalid data',
-                    isError: true,
+                    statusType : Status.STATUS_ERROR,
+                    statusText : 'Invalid data'
                 });
                 this.props.onChange(this.props.id, val, false);
                 return;
@@ -46,22 +37,14 @@ export default class SimpleTextField extends BaseField {
 
         if (val.length > 0) {
             this.setState({
-                statusMsg: 'Valid',
-                isOk: true,
+                statusType : Status.STATUS_OK,
+                statusText : 'OK'
             });
         }
         this.props.onChange(this.props.id, val, true);
     }
 
     render() {
-        let status = (
-            <Status
-                isError={this.state.isError}
-                isOk={this.state.isOk}
-                message={this.state.statusMsg}
-            />
-        );
-
         return (
             <div className="form__group">
                 <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
@@ -70,7 +53,7 @@ export default class SimpleTextField extends BaseField {
                        ref="textInput"
                        required={this.props.isRequired}
                        onChange={this.handleInput.bind(this)}/>
-                <div className="form__message">{status}</div>
+                <div className="form__message">{this.getStatusElement()}</div>
             </div>
         );
     }

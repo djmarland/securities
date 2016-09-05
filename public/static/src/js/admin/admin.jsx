@@ -14,12 +14,21 @@ import Compare from './Compare';
 
         if (data) {
             let productOptions = window.ISIN.productOptions || null;
-            ReactDOM.render(<DataEditor productOptions={productOptions} />, data);
+            let bulkStats = window.ISIN.bulkStats || null;
+            ReactDOM.render(<DataEditor productOptions={productOptions} bulkStats={bulkStats} />, data);
         } else if (issuer) {
             ReactDOM.render(<Issuer />, issuer);
         } else if (compare) {
             ReactDOM.render(<Compare />, compare);
         }
+
+        // disable some events globally
+        ['dragover', 'drop'].forEach(function(name) {
+            window.addEventListener(name,function(e){
+                e = e || event;
+                e.preventDefault();
+            },false);
+        });
     }
 
     // Cut the mustard

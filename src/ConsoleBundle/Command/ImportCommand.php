@@ -39,7 +39,7 @@ class ImportCommand extends Command
     public function single($row)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->processRow($row);
+        return $this->processRow($row);
     }
 
     public function singleIssuer($row)

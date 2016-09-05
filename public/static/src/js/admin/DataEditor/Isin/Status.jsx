@@ -1,36 +1,29 @@
-import React from 'react';
-import Loading from '../../Utils/Loading';
+// import React from 'react';
+// import Loading from '../../Utils/Loading';
 
 export default class Status extends React.Component {
-    constructor() {
-        super();
-        this.state = {
-            message: null
-        };
-    }
+    static get STATUS_OK() { return 'ok'; }
+    static get STATUS_NEW() { return 'new'; }
+    static get STATUS_ERROR() { return 'error'; }
+    static get STATUS_LOADING() { return 'loading'; }
     render() {
-        if (this.props.isLoading) {
-            return (
-                <StatusLoading />
-            );
-        }
-
-        if (this.props.isError) {
-            return (
-                <StatusError message={this.props.message} />
-            );
-        }
-
-        if (this.props.isNew) {
-            return (
-                <StatusNew message={this.props.message} />
-            );
-        }
-
-        if (this.props.isOk) {
-            return (
-                <StatusOk message={this.props.message} />
-            );
+        switch (this.props.type) {
+            case Status.STATUS_LOADING:
+                return (
+                    <StatusLoading />
+                );
+            case Status.STATUS_ERROR:
+                return (
+                    <StatusError message={this.props.message} />
+                );
+            case Status.STATUS_NEW:
+                return (
+                    <StatusNew message={this.props.message} />
+                );
+            case Status.STATUS_OK:
+                return (
+                    <StatusOk message={this.props.message} />
+                );
         }
 
         return (
