@@ -9,6 +9,7 @@
 }
 
 .form__input {
+    background: $color-white;
     border: solid 1px $color-primary-light;
     border-radius: $size-grid-unit-tiny;
     padding: $size-grid-unit-small;
@@ -26,6 +27,10 @@
 
 .form__group {
     margin-bottom: $size-grid-unit;
+    &:last-child {
+        margin-bottom: 0;
+    }
+    position: relative;
     .form__label {
         display: block;
         margin-bottom: $size-grid-unit-tiny;
@@ -33,5 +38,30 @@
     .form__input {
         display: block;
         width: 100%;
+    }
+    .form__message:not(:empty) {
+        position: absolute;
+        bottom: $size-grid-unit-tiny;
+        right: $size-grid-unit-small;
+    }
+}
+
+.form__autocomplete  {
+    @extend .list--unstyled;
+    background: $color-white;
+    position: absolute;
+    z-index: 10;
+    display: block;
+    width: 100%;
+    box-shadow: 0 4px 8px $color-primary-dark;
+    border: solid 1px $color-primary-dark;
+    margin-top: -1px;
+}
+.form__autocomplete-item {
+    @extend .island-squashed;
+    &:hover,
+    &.form__autocomplete-item--active {
+        cursor: pointer;
+        background: $color-grey-lightest;
     }
 }

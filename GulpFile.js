@@ -7,119 +7,83 @@ var gulp = require('gulp'),
     concat = require('gulp-concat'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
-    gutil = require('gulp-util'),
-    babelify = require('babelify'),
-    streamify = require('gulp-streamify'),
     staticPathSrc = 'public/static/src/',
     staticPathDist = 'public/static/dist/',
-    manifestFile = 'assets.json',
-    manifestPath = 'app/config/',
-    scriptsCount = 0,
-    dependencies = [
-        'react',
-        'react-dom'
-    ];
+    manifestJsApp = 'assets-js-app.json',
+    manifestCss = 'assets-css.json',
+    manifestImages = 'assets-images.json',
+    manifestPath = 'app/config/';
 
-gulp.task('apply-prod-environment', function() {
-    process.stdout.write("Setting NODE_ENV to 'production'" + "\n");
-    process.env.NODE_ENV = 'production';
-    if (process.env.NODE_ENV != 'production') {
-        throw new Error("Failed to set NODE_ENV to production!!!!");
-    } else {
-        process.stdout.write("Successfully set NODE_ENV to production" + "\n");
-    }
-});
+var jsFiles = {
+    vendor: [
+        // staticPathSrc + 'js/vendor/react.min.js',
+        // staticPathSrc + 'js/vendor/react-dom.min.js',
+        staticPathSrc + 'js/vendor/react.js',
+        staticPathSrc + 'js/vendor/react-dom.js',
+    ],
+    source: [
+        staticPathSrc + 'js/admin/DataEditor/DataEditor.jsx',
+        staticPathSrc + 'js/admin/DataEditor/Menu.jsx',
+        staticPathSrc + 'js/admin/admin.jsx',
+    ]
+};
 
 gulp.task('sass', function() {
     gulp.src(staticPathSrc + 'scss/**/*.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
         .pipe(hash())
         .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestFile))
+        .pipe(hash.manifest(manifestCss))
         .pipe(gulp.dest(manifestPath));
 });
 
 gulp.task('js-app', function() {
     gulp.src([
         staticPathSrc + 'js/vendor/stickyfill.js',
-        staticPathSrc + 'js/bootstrap.js'
+        staticPathSrc + 'js/app/app.js'
     ])
         .pipe(concat('app.js'))
         .pipe(uglify())
         .pipe(hash())
         .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestFile))
+        .pipe(hash.manifest(manifestJsApp))
         .pipe(gulp.dest(manifestPath));
-});
-
-gulp.task('js-admin', function() {
-    bundleApp('admin', true);
 });
 
 gulp.task('img', function() {
     gulp.src(staticPathSrc + 'img/**/*.*')
         .pipe(hash())
         .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestFile))
+        .pipe(hash.manifest(manifestImages))
         .pipe(gulp.dest(manifestPath));
 });
 
-gulp.task('default', ['apply-prod-environment', 'sass', 'js-admin', 'js-app', 'img']);
+gulp.task('vendor', function() {
+    gulp.src(jsFiles.vendor)
+        .pipe(concat('vendor.js'))
+        .pipe(gulp.dest(staticPathDist));
+});
+
+gulp.task('admin-js', function () {
+    var appBundler = browserify({
+        entries: staticPathSrc + 'js/admin/admin.jsx',
+        extensions: ['.jsx'],
+        debug: false
+    })
+        .transform('babelify', {presets: ['es2015', 'react']})
+        .require('./' + staticPathSrc + 'js/import-react.js', {expose: 'react'})
+        .require('./' + staticPathSrc + 'js/import-react-dom.js', {expose: 'react-dom'});
+
+    return appBundler.bundle()
+        .pipe(source('admin.js'))
+        .pipe(gulp.dest(staticPathDist));
+});
+
+gulp.task('default', ['sass', 'vendor', 'admin-js', 'js-app', 'img']);
 
 gulp.task('watch',function() {
-    gulp.watch(staticPathSrc + 'scss/**/*.scss',['default']);
-    gulp.watch(staticPathSrc + 'js/**/*.js',['default']);
+    gulp.watch(staticPathSrc + 'scss/**/*.scss',['sass']);
+    gulp.watch(staticPathSrc + 'js/admin/**/*.js',['concat']);
+    gulp.watch(staticPathSrc + 'js/admin/**/*.jsx',['admin-js']);
+    gulp.watch(staticPathSrc + 'js/app/**/*.js',['js-app']);
 });
-
-// Private Functions
-// ----------------------------------------------------------------------------
-function bundleApp(bootstrapFile, isProduction) {
-    scriptsCount++;
-    // Browserify will bundle all our js files together in to one and will let
-    // us use modules in the front end.
-    var appBundler = browserify({
-        entries: staticPathSrc + 'js/' + bootstrapFile + '.js',
-        debug: true
-    });
-
-    // If it's not for production, a separate vendors.js file will be created
-    // the first time gulp is run so that we don't have to rebundle things like
-    // react everytime there's a change in the js file
-    // If it's not for production, a separate vendors.js file will be created
-    // the first time gulp is run so that we don't have to rebundle things like
-    // react everytime there's a change in the js file
-    if (!isProduction && scriptsCount === 1){
-        // create vendors.js for dev environment.
-        browserify({
-            require: dependencies,
-            debug: true
-        })
-            .bundle()
-            .on('error', gutil.log)
-            .pipe(source('vendors.js'))
-            .pipe(hash())
-            .pipe(gulp.dest(staticPathDist))
-            .pipe(hash.manifest(manifestFile))
-            .pipe(gulp.dest(manifestPath));
-    }
-    if (!isProduction){
-        // make the dependencies external so they dont get bundled by the
-        // app bundler. Dependencies are already bundled in vendor.js for
-        // development environments.
-        dependencies.forEach(function(dep){
-            appBundler.external(dep);
-        })
-    }
-
-    appBundler
-    // transform ES6 and JSX to ES5 with babelify
-        .transform("babelify", {presets: ["es2015", "react"]})
-        .bundle()
-        .on('error',gutil.log)
-        .pipe(source(bootstrapFile + '.js'))
-        .pipe(streamify(uglify()))
-        .pipe(hash())
-        .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestFile))
-        .pipe(gulp.dest(manifestPath));
-}

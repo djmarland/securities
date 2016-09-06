@@ -68,13 +68,36 @@ admin:
   path:     /admin
   defaults: { _controller: AppBundle:Admin:index }
 
-admin_securities:
-  path:     /admin/securities
-  defaults: { _controller: AppBundle:Admin:securities }
+admin_data:
+  path:     /admin/data
+  defaults: { _controller: AppBundle:Admin:data }
+
+admin_data_bulk:
+  path:     /admin/data/bulk-upload.json
+  defaults: { _controller: AppBundle:Admin:bulkUpload, format: json }
+
+
+admin_data_bulk_process:
+  path:     /admin/data/bulk-process.json
+  defaults: { _controller: AppBundle:Admin:bulkProcess, format: json }
+
+admin_securities_check:
+  path:     /admin/securities-check/{isin}.json
+  defaults: { _controller: AppBundle:Admin:securitiesCheck, format: json }
+  requirements:
+    isin:  "[A-Z0-9]{12}"
+
+admin_issuers_search:
+  path:     /admin/search.json
+  defaults: { _controller: AppBundle:Admin:search, format: json }
 
 admin_process_security:
   path:     /admin/process-security.json
   defaults: { _controller: AppBundle:Admin:processSecurity, format: json }
+
+admin_securities:
+  path:     /admin/securities
+  defaults: { _controller: AppBundle:Admin:securities }
 
 admin_issuers:
   path:     /admin/issuers

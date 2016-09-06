@@ -39,7 +39,7 @@ class ImportCommand extends Command
     public function single($row)
     {
         $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $this->processRow($row);
+        return $this->processRow($row);
     }
 
     public function singleIssuer($row)
@@ -158,6 +158,7 @@ class ImportCommand extends Command
             $security = new Security();
             $security->setIsin($isin);
         }
+        $security->setExchange(''); // wrong - to be removed
 
         $name = $this->getRowValue($row, 'SECURITY_NAME');
         if ($name) {
@@ -166,7 +167,7 @@ class ImportCommand extends Command
 
         $source = $this->getRowValue($row, 'SOURCE');
         if ($source) {
-            $security->setExchange($source);
+            $security->setSource($source);
         }
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
@@ -178,13 +179,12 @@ class ImportCommand extends Command
 //        }
 
         $startDate = $this->getRowValue($row, 'SECURITY_START_DATE');
-        if ($startDate) {
+        if (!empty($startDate)) {
             $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $startDate);
-            if (!$startDate) {
-                throw new \Exception('Start Date invalid');
-            }
-            $security->setStartDate($startDate);
+        } else {
+            $startDate = new DateTimeImmutable('1970-01-01T00:00:00Z');
         }
+        $security->setStartDate($startDate);
         $maturityDate = $this->getRowValue($row, 'MATURITY_DATE');
         if ($maturityDate) {
             if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
@@ -199,9 +199,18 @@ class ImportCommand extends Command
         if ($moneyRaised) {
             $moneyRaised = str_replace(',', '', $moneyRaised);
             if (!is_numeric($moneyRaised)) {
-                throw new \Exception('Money Raised is not a number');
+                throw new \Exception('Money Raised (GBP) is not a number');
             }
             $security->setMoneyRaised($moneyRaised);
+        }
+
+        $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_LOCAL');
+        if ($moneyRaised) {
+            $moneyRaised = str_replace(',', '', $moneyRaised);
+            if (!is_numeric($moneyRaised)) {
+                throw new \Exception('Money Raised (Local) is not a number');
+            }
+            $security->setMoneyRaisedLocal($moneyRaised);
         }
 
         $coupon = $this->getRowValue($row, 'COUPON_RATE');
@@ -216,6 +225,20 @@ class ImportCommand extends Command
                 $coupon = null;
             }
             $security->setCoupon($coupon);
+        }
+
+        $margin = $this->getRowValue($row, 'MARGIN');
+        if ($margin) {
+            if (strtolower($margin) != 'n/a') {
+                $marginValue = floatval($row['MARGIN']);
+                if (strpos($this->getRowValue($row, 'MARGIN'), '%') !== false) {
+                    $marginValue = $marginValue / 100;
+                }
+                $margin = $marginValue;
+            } else {
+                $margin = null;
+            }
+            $security->setMargin($margin);
         }
 
 

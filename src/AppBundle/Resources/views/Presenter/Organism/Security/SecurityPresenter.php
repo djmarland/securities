@@ -51,7 +51,7 @@ class SecurityPresenter extends Presenter implements SecurityPresenterInterface
         if ($amount) {
             return new MoneyPresenter($amount);
         }
-        $issuedAmount = $this->domainModel->getMoneyRaisedIssue();
+        $issuedAmount = $this->domainModel->getMoneyRaisedLocal();
         if ($issuedAmount) {
             return new MoneyPresenter(
                 $issuedAmount,

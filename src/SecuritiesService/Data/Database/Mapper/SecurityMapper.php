@@ -33,7 +33,6 @@ class SecurityMapper extends Mapper
             $id,
             $isin,
             $item['name'],
-            $item['exchange'],
             $item['startDate'],
             $item['moneyRaised'],
             $item['moneyRaisedLocal'],
@@ -41,7 +40,9 @@ class SecurityMapper extends Mapper
             $company,
             $currency,
             $item['maturityDate'],
-            $item['coupon']
+            $item['coupon'],
+            $item['margin'],
+            $item['source']
         );
         return $security;
     }

@@ -1,10 +1,13 @@
 {% block body %}
+<div id="hello"></div>
 <p class="h1">Admin</p>
 <div class="grid">
     <div class="g">
         <nav><ul class="tabs"
             ><li class="tabs__tab {% if activeTab == 'dashboard' %}tabs__tab--active{% endif %}"
                 ><a class="tabs__link" href="{{ path('admin') }}">Dashboard</a></li
+            ><li class="tabs__tab {% if activeTab == 'data' %}tabs__tab--active{% endif %}"
+                ><a class="tabs__link" href="{{ path('admin_data') }}">Data</a></li
             ><li class="tabs__tab {% if activeTab == 'securities' %}tabs__tab--active{% endif %}"
                 ><a class="tabs__link" href="{{ path('admin_securities') }}">Securities</a></li
             ><li class="tabs__tab {% if activeTab == 'issuers' %}tabs__tab--active{% endif %}"
@@ -23,4 +26,13 @@
 </div>
 {% endblock %}
 
-{% block footerScript %}<script src="{{ 'admin.js'|asset_path }}"></script>{% endblock %}
+{% block footerScript %}
+    <script>
+        window.ISIN.productOptions = {{ productOptions|json_encode|raw }};
+        window.ISIN.bulkStats = {{ bulkStats|json_encode|raw }};
+
+    </script>
+    <script src="{{ 'vendor.js'|asset_path }}"></script>
+    <script src="{{ 'admin.js'|asset_path }}"></script>
+    {#<script src="{{ 'admin.js'|asset_path }}"></script>#}
+{% endblock %}

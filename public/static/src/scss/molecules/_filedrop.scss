@@ -1,0 +1,26 @@
+.filedrop {
+    display: block;
+    padding: $size-grid-unit;
+    text-align: center;
+    border: dashed 2px $color-grey-mid;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+.filedrop--drag {
+    background: $color-grey-lightest;
+}
+
+.filedrop__icon {
+    width: 100%;
+    max-width: 120px;
+    margin: 0 auto;
+    fill: $color-grey-mid;
+}
+
+.filedrop__text {
+    width: 100%;
+    max-width: 320px;
+    margin: 0 auto;
+}

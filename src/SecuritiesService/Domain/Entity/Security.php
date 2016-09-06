@@ -16,39 +16,43 @@ class Security extends Entity implements JsonSerializable
     private $startDate;
     private $maturityDate;
     private $coupon;
+    private $margin;
     private $moneyRaisedGBP;
+    private $moneyRaisedLocal;
     private $product;
     private $currency;
     private $company;
-    private $exchange;
+    private $source;
 
     public function __construct(
         UUID $id,
         ISIN $isin,
         string $name,
-        string $exchange,
         DateTime $startDate,
-        float $moneyRaisedGBP =null,
-        float $moneyRaisedIssue =null,
+        float $moneyRaisedGBP = null,
+        float $moneyRaisedLocal = null,
         Product $product = null,
         Company $company = null,
         Currency $currency = null,
         DateTime $maturityDate = null,
-        float $coupon = null
+        float $coupon = null,
+        float $margin = null,
+        string $source = null
     ) {
         parent::__construct($id);
 
         $this->name = $name;
-        $this->exchange = $exchange;
         $this->isin = $isin;
         $this->startDate = $startDate;
         $this->currency = $currency;
         $this->moneyRaisedGBP = $moneyRaisedGBP;
-        $this->moneyRaisedIssue = $moneyRaisedIssue;
+        $this->moneyRaisedLocal = $moneyRaisedLocal;
         $this->product = $product;
         $this->company = $company;
         $this->maturityDate = $maturityDate;
         $this->coupon = $coupon;
+        $this->margin = $margin;
+        $this->source = $source;
     }
 
 
@@ -59,7 +63,8 @@ class Security extends Entity implements JsonSerializable
 
     public function getExchange(): string
     {
-        return $this->exchange;
+        // @todo - remove?
+        return 'LSE';
     }
 
     public function getIsin(): string
@@ -82,14 +87,19 @@ class Security extends Entity implements JsonSerializable
         return $this->coupon;
     }
 
+    public function getMargin()
+    {
+        return $this->margin;
+    }
+
     public function getMoneyRaised()
     {
         return $this->moneyRaisedGBP;
     }
 
-    public function getMoneyRaisedIssue()
+    public function getMoneyRaisedLocal()
     {
-        return $this->moneyRaisedIssue;
+        return $this->moneyRaisedLocal;
     }
 
     public function getProduct()
@@ -107,6 +117,11 @@ class Security extends Entity implements JsonSerializable
         return $this->company;
     }
 
+    public function getSource()
+    {
+        return $this->source;
+    }
+
     public function getTerm()
     {
         if ($this->maturityDate) {
@@ -116,21 +131,33 @@ class Security extends Entity implements JsonSerializable
         return null;
     }
 
-    public function jsonSerialize()
+    public function jsonSerialize($full = false)
     {
         $dateFormat = 'd/m/Y';
 
-        return (object) [
+        $data = [
             'isin' => $this->getIsin(),
             'name' => $this->getName(),
-            'exchange' => $this->getExchange(),
             'startDate' => $this->getStartDate()->format($dateFormat),
             'maturityDate' => $this->getMaturityDate() ? $this->getMaturityDate()->format($dateFormat) : null,
             'coupon' => $this->getCoupon(),
+            'margin' => $this->getMargin(),
             'amountRaised' => $this->getMoneyRaised(),
+            'amountRaisedLocal' => $this->getMoneyRaisedLocal(),
             'currency' => $this->getCurrency() ? $this->getCurrency()->getCode() : null,
             'product' => $this->getProduct() ?? null,
             'issuer' => $this->getCompany() ?? null,
         ];
+
+        ksort($data);
+
+        if (!$full) {
+            return (object) $data;
+        }
+
+        $data['source'] = $this->getSource();
+
+        ksort($data);
+        return $data;
     }
 }

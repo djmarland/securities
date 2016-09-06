@@ -38,6 +38,9 @@
 .g,
 .g-unit {
     margin-bottom: $size-grid-unit;
+    &:empty {
+        margin-bottom: 0;
+    }
 }
 
 .grid--flush {
@@ -51,9 +54,6 @@
 
 .grid--flat {
     margin: 0 0 (-$size-grid-unit) (-$size-grid-unit); // need brackets or Scss combines with the zero
-    > .g {
-        margin-bottom: 0;
-    }
 }
 
 // include fractions unprefixed

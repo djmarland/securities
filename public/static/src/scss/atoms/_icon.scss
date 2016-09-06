@@ -1,0 +1,39 @@
+.icon {
+
+}
+
+.icon-text {
+
+}
+
+.icon-text__icon {
+    width: 28px;
+    height: 28px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: $size-grid-unit-tiny;
+    margin-top: -2px;
+}
+
+.icon-text__text {
+}
+
+.icon-text--ok {
+    color: $color-tertiary-dark;
+    fill: $color-tertiary-dark;
+}
+
+.icon-text--warning {
+    color: $color-complimentary-dark;
+    fill: $color-complimentary-dark;
+}
+
+.icon-text--error {
+    color: $color-secondary-dark;
+    fill: $color-secondary-dark;
+}
+
+.icon-text--info {
+    color: $color-primary-dark;
+    fill: $color-primary-dark;
+}
