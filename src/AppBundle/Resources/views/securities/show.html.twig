@@ -124,20 +124,35 @@
     {% if group and group.sector and group.sector.industry %}
         /* Industry */
         ga('set', 'contentGroup1', '{{ group.sector.industry.name }}');
+    {% else %}
+        ga('set', 'contentGroup1', 'no_data');
     {% endif %}
 
     {% if group and group.sector %}
         /* Sector */
         ga('set', 'contentGroup2', '{{ group.sector.name }}');
+    {% else %}
+        ga('set', 'contentGroup4', 'no_data');
     {% endif %}
 
     {% if group %}
         /* Group */
         ga('set', 'contentGroup3', '{{ group.name }}');
+    {% else %}
+        ga('set', 'contentGroup3', 'no_data');
     {% endif %}
 
     {% if issuer %}
         /* Issuer */
         ga('set', 'contentGroup4', '{{ issuer.name }}');
+    {% else %}
+        ga('set', 'contentGroup4', 'no_data');
+    {% endif %}
+
+    {% if product %}
+        /* Produt */
+        ga('set', 'contentGroup5', '{{ product.name }}');
+    {% else %}
+        ga('set', 'contentGroup5', 'no_data');
     {% endif %}
 {% endblock %}
