@@ -315,7 +315,9 @@ class AdminController extends Controller
             throw new HttpException(404, 'Nothing to process');
         }
 
+        $failures = [];
         $newBatchNumber = $stats->lastBatchCompleted + 1;
+        $securities = [];
         if ($newBatchNumber <= $stats->totalBatches) {
             // get the file
             $filePath = $this->getParameter('kernel.cache_dir') . '/bulk/';
@@ -329,10 +331,18 @@ class AdminController extends Controller
             $command->setContainer($this->container);
             $isins = [];
             foreach ($data as $row) {
-                // put in database
-                $entity = $command->single($row);
+                try {
+                    // put in database
+                    $entity = $command->single($row);
+                    $isins[] = (string)$entity->getIsin();
+                } catch (\Exception $e) {
+                    // this isin failed for some reason. we need to store it
+                    $failures[] = (object) [
+                        'isin' => $row['ISIN'],
+                        'reason' => $e->getMessage(),
+                    ];
+                }
                 $stats->totalProcessed++;
-                $isins[] = (string) $entity->getIsin();
             }
 
             // now let's fetch back all the securities we just saved
@@ -341,6 +351,7 @@ class AdminController extends Controller
             // resave the updated status
             $stats->totalProcessedFormatted = number_format($stats->totalProcessed);
             $stats->lastBatchCompleted = $newBatchNumber;
+            $stats->failures = array_merge($stats->failures ?? [], $failures);
 
             $statusFileName = $filePath . 'bulk-stats.json';
             file_put_contents($statusFileName, json_encode($stats));

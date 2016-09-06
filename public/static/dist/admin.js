@@ -2292,7 +2292,9 @@ var BulkUpload = function (_React$Component) {
                     results: results.slice(0, 500)
                 });
 
-                if (this.loop) {
+                var complete = data.stats.totalProcessed >= data.stats.totalToProcess;
+
+                if (this.loop && !complete) {
                     return this.handleClickBatch();
                 }
 
@@ -2319,6 +2321,8 @@ var BulkUpload = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var _this2 = this;
+
             var filepanel = _react2.default.createElement(_FileDrop2.default, { onFileRecieved: this.handleReceievedFile.bind(this) }),
                 panel = null;
 
@@ -2326,6 +2330,8 @@ var BulkUpload = function (_React$Component) {
                 panel = _react2.default.createElement(_Loading2.default, null);
                 filepanel = null;
             }
+
+            var results = null;
 
             if (this.state.stats) {
                 var processButtons = _react2.default.createElement(
@@ -2347,12 +2353,60 @@ var BulkUpload = function (_React$Component) {
                         'Process All'
                     )
                 ),
-                    complete = this.state.stats.totalProcessed == this.state.totalToProcess;
-
+                    complete = this.state.stats.totalProcessed >= this.state.stats.totalToProcess;
                 if (complete) {
                     processButtons = null;
                 } else {
-                    filepanel = null;
+                    (function () {
+                        filepanel = null;
+                        var items = [];
+                        if (_this2.state.results.length > 0) {
+                            _this2.state.results.forEach(function (item) {
+                                items.push(_react2.default.createElement(BulkUploadSecurity, { key: item.isin, data: item }));
+                            });
+                            results = _react2.default.createElement(
+                                'div',
+                                { className: 'g-unit' },
+                                _react2.default.createElement(
+                                    'h2',
+                                    { className: 'g-unit' },
+                                    'Last processed set'
+                                ),
+                                _react2.default.createElement(
+                                    'table',
+                                    { className: 'table table--striped' },
+                                    _react2.default.createElement(
+                                        'thead',
+                                        null,
+                                        _react2.default.createElement(
+                                            'tr',
+                                            null,
+                                            _react2.default.createElement(
+                                                'th',
+                                                null,
+                                                'ISIN'
+                                            ),
+                                            _react2.default.createElement(
+                                                'th',
+                                                null,
+                                                'Name'
+                                            ),
+                                            _react2.default.createElement(
+                                                'th',
+                                                null,
+                                                'Start Date'
+                                            )
+                                        )
+                                    ),
+                                    _react2.default.createElement(
+                                        'tbody',
+                                        null,
+                                        items
+                                    )
+                                )
+                            );
+                        }
+                    })();
                 }
 
                 if (this.state.status == BulkUpload.STATUS_PROCESSING) {
@@ -2404,42 +2458,48 @@ var BulkUpload = function (_React$Component) {
                 message = _react2.default.createElement(_Message2.default, { type: _Message2.default.TYPE_ERROR, message: 'An error occurred' });
             }
 
-            var results = null,
-                items = [];
-            if (this.state.results.length > 0) {
-                this.state.results.forEach(function (item) {
-                    items.push(_react2.default.createElement(BulkUploadSecurity, { key: item.isin, data: item }));
+            var failures = [];
+            if (this.state.stats && this.state.stats.failures && this.state.stats.failures.length > 0) {
+                this.state.stats.failures.forEach(function (item) {
+                    failures.push(_react2.default.createElement(BulkUploadFailure, { key: item.isin, data: item }));
                 });
-                results = _react2.default.createElement(
-                    'table',
-                    { className: 'table table--striped' },
+                var failCount = this.state.stats.failures.length;
+                failures = _react2.default.createElement(
+                    'div',
+                    { className: 'g-unit color-secondary-mid' },
                     _react2.default.createElement(
-                        'thead',
-                        null,
-                        _react2.default.createElement(
-                            'tr',
-                            null,
-                            _react2.default.createElement(
-                                'th',
-                                null,
-                                'ISIN'
-                            ),
-                            _react2.default.createElement(
-                                'th',
-                                null,
-                                'Name'
-                            ),
-                            _react2.default.createElement(
-                                'th',
-                                null,
-                                'Start Date'
-                            )
-                        )
+                        'h2',
+                        { className: 'g-unit' },
+                        'Failed ISINs (',
+                        failCount,
+                        ')'
                     ),
                     _react2.default.createElement(
-                        'tbody',
-                        null,
-                        items
+                        'table',
+                        { className: 'table table--striped' },
+                        _react2.default.createElement(
+                            'thead',
+                            null,
+                            _react2.default.createElement(
+                                'tr',
+                                null,
+                                _react2.default.createElement(
+                                    'th',
+                                    null,
+                                    'ISIN'
+                                ),
+                                _react2.default.createElement(
+                                    'th',
+                                    null,
+                                    'Reason for failure'
+                                )
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'tbody',
+                            null,
+                            failures
+                        )
                     )
                 );
             }
@@ -2455,7 +2515,8 @@ var BulkUpload = function (_React$Component) {
                 filepanel,
                 panel,
                 message,
-                results
+                results,
+                failures
             );
         }
     }]);
@@ -2505,6 +2566,43 @@ var BulkUploadSecurity = function (_React$Component2) {
     }]);
 
     return BulkUploadSecurity;
+}(_react2.default.Component);
+
+var BulkUploadFailure = function (_React$Component3) {
+    _inherits(BulkUploadFailure, _React$Component3);
+
+    function BulkUploadFailure() {
+        _classCallCheck(this, BulkUploadFailure);
+
+        return _possibleConstructorReturn(this, (BulkUploadFailure.__proto__ || Object.getPrototypeOf(BulkUploadFailure)).apply(this, arguments));
+    }
+
+    _createClass(BulkUploadFailure, [{
+        key: 'render',
+        value: function render() {
+            var url = '/securities/' + this.props.data.isin;
+            return _react2.default.createElement(
+                'tr',
+                null,
+                _react2.default.createElement(
+                    'td',
+                    null,
+                    _react2.default.createElement(
+                        'a',
+                        { href: url },
+                        this.props.data.isin
+                    )
+                ),
+                _react2.default.createElement(
+                    'td',
+                    null,
+                    this.props.data.reason
+                )
+            );
+        }
+    }]);
+
+    return BulkUploadFailure;
 }(_react2.default.Component);
 
 },{"../../Utils/FileDrop":36,"../../Utils/Loading":37,"../../Utils/Message":38,"react":"react"}],24:[function(require,module,exports){

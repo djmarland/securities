@@ -79,7 +79,9 @@ export default class BulkUpload extends React.Component {
                     results : results.slice(0,500)
                 });
 
-                if (this.loop) {
+                let complete = data.stats.totalProcessed >= data.stats.totalToProcess
+
+                if (this.loop && !complete) {
                     return this.handleClickBatch();
                 }
 
@@ -114,6 +116,8 @@ export default class BulkUpload extends React.Component {
             filepanel = null;
         }
 
+        let results = null;
+
         if (this.state.stats) {
             let processButtons = (
                 <span>
@@ -126,12 +130,36 @@ export default class BulkUpload extends React.Component {
                         >Process All</button>
                 </span>
             ),
-                complete = this.state.stats.totalProcessed == this.state.totalToProcess;
-
+                complete = this.state.stats.totalProcessed >= this.state.stats.totalToProcess;
             if (complete) {
                 processButtons = null;
             } else {
                 filepanel = null;
+                let items = [];
+                if (this.state.results.length > 0) {
+                    this.state.results.forEach(function(item) {
+                        items.push(
+                            <BulkUploadSecurity key={item.isin} data={item} />
+                        );
+                    });
+                    results = (
+                        <div className="g-unit">
+                            <h2 className="g-unit">Last processed set</h2>
+                            <table className="table table--striped">
+                                <thead>
+                                <tr>
+                                    <th>ISIN</th>
+                                    <th>Name</th>
+                                    <th>Start Date</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                {items}
+                                </tbody>
+                            </table>
+                        </div>
+                    )
+                }
             }
 
             if (this.state.status == BulkUpload.STATUS_PROCESSING) {
@@ -170,27 +198,29 @@ export default class BulkUpload extends React.Component {
             message =(<Message type={Message.TYPE_ERROR} message="An error occurred" />);
         }
 
-        let results = null,
-            items = [];
-        if (this.state.results.length > 0) {
-            this.state.results.forEach(function(item) {
-                items.push(
-                    <BulkUploadSecurity key={item.isin} data={item} />
+        let failures = [];
+        if (this.state.stats && this.state.stats.failures && this.state.stats.failures.length > 0) {
+            this.state.stats.failures.forEach(function(item) {
+                failures.push(
+                    <BulkUploadFailure key={item.isin} data={item} />
                 );
             });
-            results = (
-                <table className="table table--striped">
-                    <thead>
+            let failCount = this.state.stats.failures.length;
+            failures = (
+                <div className="g-unit color-secondary-mid">
+                    <h2 className="g-unit">Failed ISINs ({failCount})</h2>
+                    <table className="table table--striped">
+                        <thead>
                         <tr>
                             <th>ISIN</th>
-                            <th>Name</th>
-                            <th>Start Date</th>
+                            <th>Reason for failure</th>
                         </tr>
-                    </thead>
-                    <tbody>
-                        {items}
-                    </tbody>
-                </table>
+                        </thead>
+                        <tbody>
+                        {failures}
+                        </tbody>
+                    </table>
+                </div>
             )
         }
 
@@ -201,6 +231,7 @@ export default class BulkUpload extends React.Component {
                 {panel}
                 {message}
                 {results}
+                {failures}
             </div>
         );
     };
@@ -214,6 +245,18 @@ class BulkUploadSecurity extends React.Component {
                 <td><a href={url}>{this.props.data.isin}</a></td>
                 <td>{this.props.data.name}</td>
                 <td>{this.props.data.startDate}</td>
+            </tr>
+        )
+    }
+}
+
+class BulkUploadFailure extends React.Component {
+    render() {
+        let url = '/securities/' + this.props.data.isin;
+        return (
+            <tr>
+                <td><a href={url}>{this.props.data.isin}</a></td>
+                <td>{this.props.data.reason}</td>
             </tr>
         )
     }
