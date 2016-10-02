@@ -1,6 +1,10 @@
+.tabs-wrap {
+    white-space: nowrap;
+    overflow-x: auto;
+    margin-bottom: $size-grid-unit;
+}
 .tabs {
     display: block;
-    margin-bottom: $size-grid-unit;
     text-align: center;
     list-style: none;
     border-bottom: solid 1px $color-body-keyline;

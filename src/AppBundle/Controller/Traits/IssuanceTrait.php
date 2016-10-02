@@ -22,7 +22,7 @@ trait IssuanceTrait
             $entityType = $entity->getRoutePrefix();
             $securitiesService = $this->get('app.services.securities_by_' . $entityType);
             $securitiesService->setDomainEntity($entity);
-            $this->setTitle('Issuance  - ' . $titleSuffix . ' - ' . $entity->getName());
+            $title = 'Issuance  - ' . $titleSuffix . ' - ' . $entity->getName();
             $this->toView(
                 'monthlyPath',
                 $this->generateUrl(
@@ -42,7 +42,7 @@ trait IssuanceTrait
             );
         } else {
             $securitiesService = $this->get('app.services.securities');
-            $this->setTitle('Issuance  - ' . $titleSuffix);
+            $title = 'Issuance  - ' . $titleSuffix;
             $this->toView(
                 'monthlyPath',
                 $this->generateUrl('overview_issuance')
@@ -79,6 +79,6 @@ trait IssuanceTrait
         $this->toView('entity', $entity);
         $this->toView('entityNav', new EntityNavPresenter($entity, 'issuance'));
 
-        return $this->renderTemplate('entities:issuance');
+        return $this->renderTemplate('entities:issuance', $title);
     }
 }

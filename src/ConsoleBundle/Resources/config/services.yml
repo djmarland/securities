@@ -1,5 +1,12 @@
 services:
 
+  guzzle_client:
+      class: GuzzleHttp\Client
+
   console.services.securities:
       class: SecuritiesService\Service\SecuritiesService
       arguments: ["@doctrine.orm.default_entity_manager"]
+
+  console.services.rates:
+     class: Djmarland\OpenExchangeRates\Client
+     arguments: ["@guzzle_client", '%ex_rates_api_key%']

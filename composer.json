@@ -10,6 +10,12 @@
       "SymfonyStandard\\": "app/SymfonyStandard/"
     }
   },
+  "repositories": [
+    {
+      "type": "vcs",
+      "url": "git@github.com:djmarland/openexchangerates.git"
+    }
+  ],
   "require": {
     "php": "~5.5 || >=7",
     "symfony/symfony": "~3.0",
@@ -24,6 +30,7 @@
     "ramsey/uuid": "^3.2",
     "ramsey/uuid-doctrine": "^1.1",
     "djmarland/isin": "^1.0",
+    "djmarland/openexchangerates": "~0.1.0",
     "guzzlehttp/guzzle": "^6.1",
     "fadion/fixerio": "~1.1"
   },

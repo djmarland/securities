@@ -66,7 +66,6 @@ trait SecuritiesTrait
         $this->toView('total', $total);
         $this->toView('filterActive', $filter->isActive());
         $this->toView('filterText', $filter->getStatus());
-        $this->setTitle(implode(' - ', $this->titleParts));
 
         $this->setPagination(
             $total,
@@ -75,7 +74,7 @@ trait SecuritiesTrait
         );
 
         $this->toView('entityNav', new EntityNavPresenter($entity, 'securities'));
-        return $this->renderTemplate('entities:securities');
+        return $this->renderTemplate('entities:securities', implode(' - ', $this->titleParts));
     }
 
     private function setFilter(Request $request)
