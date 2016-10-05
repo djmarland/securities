@@ -2,6 +2,7 @@
 namespace ConsoleBundle\Command;
 
 use DateTimeImmutable;
+use Djmarland\OpenExchangeRates\Exception\ApiQuotaReachedException;
 use Fadion\Fixerio\Exchange;
 use SecuritiesService\Data\Database\Entity\Currency;
 use SecuritiesService\Data\Database\Entity\ExchangeRate;
@@ -18,91 +19,61 @@ class ExchangeRatesCommand extends Command
     {
         $this
             ->setName('rates:fetch')
-            ->setDescription('Import Exchange Rates')
-            ->addArgument(
-                'dateFrom',
-                InputArgument::OPTIONAL,
-                'Date to fetch from'
-            )
-            ->addArgument(
-                'dateTo',
-                InputArgument::OPTIONAL,
-                'Date to fetch to'
-            );
+            ->setDescription('Import Exchange Rates');
     }
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $fromDate = $input->getArgument('dateFrom');
-        if (!$fromDate) {
-            $this->process(new DateTimeImmutable(), $output);
+        $now = new DateTimeImmutable();
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
+        $rateRepo = $this->em->getRepository('SecuritiesService:ExchangeRate');
+        $dateToUse = $now;
+
+        // find the most recent date
+        $rate = $rateRepo->findBy([], ['date' => 'DESC']);
+
+        if (!empty($rate)) {
+            $latest = reset($rate);
+            /** @var \DateTime $rateDate */
+            $rateDate = $latest->getDate();
+            // if the date is today, then stop as we're up to date
+            if ($rateDate->format('Y-m-d') == $now->format('Y-m-d')) {
+                $output->writeln('Already up to date. Stopping');
+                return;
+            }
+            // otherwise, we'll add one day to the date
+            $dateToUse = $rateDate->add(new \DateInterval('P1D'));
+        }
+
+        $output->writeln($dateToUse->format('Y-m-d') . ' not yet fetched. Fetching...');
+
+        $ratesClient = $this->getContainer()->get('console.services.rates');
+
+        try {
+            $result = $ratesClient->getHistorical($dateToUse);
+            $date = $result->getDate();
+            foreach($result->getRates() as $currency => $value) {
+                $this->addRate($currency, $value, $date);
+                $output->writeln('Saved ' . $currency . ': ' . $value);
+            }
+        } catch (ApiQuotaReachedException $e) {
+            $output->writeln('Quota reached. Doing nothing');
             return;
         }
 
-        $fromDate = new DateTimeImmutable($fromDate);
-        $toDate = $input->getArgument('dateTo');
-        if ($toDate) {
-            $toDate = new DateTimeImmutable($toDate);
-        } else {
-            $toDate = $fromDate;
-        }
-
-        $oneDay = new \DateInterval('P1D');
-
-        while ($fromDate <= $toDate) {
-            $this->process($fromDate, $output);
-            $fromDate = $fromDate->add($oneDay);
-        }
-        $output->writeln('Finished All');
         return;
     }
 
-    private function process($date, OutputInterface $output)
+    private function addRate($code, $value, $date)
     {
-        $formattedDate = $date->format('Y-m-d');
-        $output->writeln('Fetching for ' . $formattedDate);
-
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $rateRepo = $this->em->getRepository('SecuritiesService:ExchangeRate');
-
-        // find an item in the database for this date
-        $rate = $rateRepo->findOneBy(
-            ['date' => $date]
-        );
-
-        if ($rate) {
-            $output->writeln('Rates already fetched for this date');
-            return;
-        }
-        $output->writeln('Not yet fetched. Fetching...');
-
-        $fixerioExchange = new Exchange();
-        $fixerioExchange
-            ->base(\Fadion\Fixerio\Currency::USD)
-            ->historical($formattedDate);
-
-        $result = $fixerioExchange->getResult();
-        $resultDate = $result->getDate()->format('Y-m-d');
-
-        if ($resultDate != $formattedDate) {
-            $output->writeln('Date of feed is ' . $resultDate . '. Expected ' . $formattedDate . '. Stopping');
-            return;
-        }
-
-        $rates = $result->getRates();
-
-        foreach ($rates as $code => $rate) {
-            $currency = $this->getCurrency($code);
-            $exchangeRate = new ExchangeRate();
-            $exchangeRate->setCurrency($currency);
-            $exchangeRate->setDate($date);
-            $exchangeRate->setRate($rate);
-            $this->em->persist($exchangeRate);
-            $this->em->flush();
-            $output->writeln('Saved ' . $currency->getCode() . ' at ' . $rate);
-        }
+        $currency = $this->getCurrency($code);
+        $rate = new ExchangeRate();
+        $rate->setCurrency($currency);
+        $rate->setDate($date);
+        $rate->setRate($value);
+        $this->em->persist($rate);
+        $this->em->flush();
     }
-
 
     private function getCurrency($code)
     {

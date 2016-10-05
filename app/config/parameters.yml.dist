@@ -19,3 +19,4 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     ex_rates_api_key:  ~
+    historical_rates_api_key:  ~

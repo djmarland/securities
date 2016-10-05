@@ -133,6 +133,10 @@ currencies_update:
   path:     /currencies/update
   defaults: { _controller: AppBundle:Currencies:update }
 
+currencies_historical:
+  path:     /currencies/historical
+  defaults: { _controller: AppBundle:Currencies:historical }
+
 currencies_show:
   path:     /currencies/{code}
   defaults: { _controller: AppBundle:Currencies:show }

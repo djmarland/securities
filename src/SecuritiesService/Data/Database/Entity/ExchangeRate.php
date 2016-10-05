@@ -16,9 +16,6 @@ class ExchangeRate extends Entity
     /** @ORM\Column(type="date", nullable=false) */
     private $date;
 
-    /** @ORM\Column(type="string", nullable=true) */
-    private $source;
-
     /** @ORM\ManyToOne(targetEntity="Currency") */
     private $currency;
 
@@ -41,16 +38,6 @@ class ExchangeRate extends Entity
     public function setDate($date)
     {
         $this->date = $date;
-    }
-
-    public function getSource()
-    {
-        return $this->source;
-    }
-
-    public function setSource($source)
-    {
-        $this->source = $source;
     }
 
     public function getCurrency()

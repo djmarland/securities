@@ -3,12 +3,14 @@
 namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ExchangeRatesCommand;
+use ConsoleBundle\Command\HistoricalRatesCommand;
 use DateTimeImmutable;
 use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\ExchangeRate;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Service\Filter\SecuritiesFilter;
 use Symfony\Component\Console\Input\ArrayInput;
+use Symfony\Component\Console\Input\StringInput;
 use Symfony\Component\Console\Output\BufferedOutput;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
@@ -63,11 +65,9 @@ class CurrenciesController extends Controller
 
             if ($penultimate) {
                 $changeRate = $latest->getValueUSD() - $penultimate->getValueUSD();
+                $this->toView('changeDate', $penultimate->getDate()->format('d/m/Y'));
             }
-
             $this->toView('changeRate', $this->number($changeRate, 12));
-            $this->toView('changeDate', $penultimate->getDate()->format('d/m/Y'));
-
 
             $graphData = [];
             $graphLabels = [];
@@ -174,15 +174,24 @@ class CurrenciesController extends Controller
 
     public function updateAction()
     {
-        $fromDate = $this->request->get('fromDate');
-        $toDate = $this->request->get('toDate');
-
         $command = new ExchangeRatesCommand();
         $command->setContainer($this->container);
-        $input = new ArrayInput([
-            'dateFrom' => $fromDate,
-            'dateTo' => $toDate
-        ]);
+        $input = new StringInput('');
+        $output = new BufferedOutput();
+
+        $command->run($input, $output);
+        $content = $output->fetch();
+
+        $lines = explode("\n", trim($content));
+        $this->toView('messages', $lines, true);
+        return $this->renderTemplate('json');
+    }
+
+    public function historicalAction()
+    {
+        $command = new HistoricalRatesCommand();
+        $command->setContainer($this->container);
+        $input = new StringInput('');
         $output = new BufferedOutput();
 
         $command->run($input, $output);
@@ -259,6 +268,9 @@ class CurrenciesController extends Controller
 
     private function number($value)
     {
+        if (is_null($value)) {
+            return null;
+        }
         $number = rtrim(number_format($value, 12), '0.');
         if ($number === '') {
             return '0.00';

@@ -22,11 +22,27 @@ class HistoricalRatesCommand extends Command
     {
         $output->writeln('Starting');
         $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $ratesClient = $this->getContainer()->get('console.services.rates');
+        $ratesClient = $this->getContainer()->get('console.services.rates_historical');
+        $now = new \DateTimeImmutable();
+
+        $limiterFilename = $this->getContainer()->getParameter('kernel.cache_dir') . '/api-limiter';
+        if (file_exists($limiterFilename)) {
+            $expiryTime = new \DateTimeImmutable(file_get_contents($limiterFilename));
+            if ($expiryTime > $now) {
+                $output->writeln('Limited use due to API Key limit. Expires on ' . $expiryTime->format('c'));
+                return;
+            }
+        }
 
         // get the oldest exchange rate we've already fetched
         $repo = $this->em->getRepository('SecuritiesService:ExchangeRate');
         $rate = $repo->findBy([], ['date' => 'ASC']);
+
+        if (empty($rate)) {
+            $output->writeln('No starting point. Exiting');
+            return;
+        }
+
         $rate = reset($rate);
         /** @var \DateTime $rateDate */
         $rateDate = $rate->getDate();
@@ -51,6 +67,9 @@ class HistoricalRatesCommand extends Command
                 $output->writeln('Saved ' . $currency . ': ' . $value);
             }
         } catch (ApiQuotaReachedException $e) {
+            // create an limiter time
+            $expiryTime = $now->add(new \DateInterval('P1D'));
+            file_put_contents($limiterFilename, $expiryTime->format('c'));
             $output->writeln('Quota reached. Doing nothing');
             return;
         }
@@ -66,7 +85,6 @@ class HistoricalRatesCommand extends Command
         $rate->setCurrency($currency);
         $rate->setDate($date);
         $rate->setRate($value);
-        $rate->setSource('oxr');
         $this->em->persist($rate);
         $this->em->flush();
     }
