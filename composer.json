@@ -30,7 +30,7 @@
     "ramsey/uuid": "^3.2",
     "ramsey/uuid-doctrine": "^1.1",
     "djmarland/isin": "^1.0",
-    "djmarland/openexchangerates": "~0.1.0",
+    "djmarland/openexchangerates": "~0.2",
     "guzzlehttp/guzzle": "^6.1",
     "fadion/fixerio": "~1.1"
   },

@@ -4,8 +4,8 @@
         "Read more about it at https://getcomposer.org/doc/01-basic-usage.md#composer-lock-the-lock-file",
         "This file is @generated automatically"
     ],
-    "hash": "cc1dc6f411ec0c6c263d02294d8fafc4",
-    "content-hash": "1a6c652b5ef215a282e3abaffe6a479c",
+    "hash": "d42536e132199e3d98f63db4e5f2c38f",
+    "content-hash": "0ac3e242f414de3dd3128d2f42de51bb",
     "packages": [
         {
             "name": "beberlei/DoctrineExtensions",
@@ -119,16 +119,16 @@
         },
         {
             "name": "djmarland/openexchangerates",
-            "version": "v0.1.0",
+            "version": "v0.2.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/djmarland/openexchangerates.git",
-                "reference": "2d815bf1605f9e84dfdbe4e2e412f830fc3899b1"
+                "reference": "6b7812429b6461095cf0acd3eb6c68393bd294b6"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/djmarland/openexchangerates/zipball/2d815bf1605f9e84dfdbe4e2e412f830fc3899b1",
-                "reference": "2d815bf1605f9e84dfdbe4e2e412f830fc3899b1",
+                "url": "https://api.github.com/repos/djmarland/openexchangerates/zipball/6b7812429b6461095cf0acd3eb6c68393bd294b6",
+                "reference": "6b7812429b6461095cf0acd3eb6c68393bd294b6",
                 "shasum": ""
             },
             "require": {
@@ -172,7 +172,7 @@
                 "issues": "https://github.com/djmarland/openexchangerates/issues",
                 "source": "https://github.com/djmarland/openexchangerates"
             },
-            "time": "2016-10-02 20:44:52"
+            "time": "2016-10-02 22:06:49"
         },
         {
             "name": "doctrine/annotations",
@@ -2264,16 +2264,16 @@
         },
         {
             "name": "symfony/symfony",
-            "version": "v3.1.4",
+            "version": "v3.1.5",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/symfony.git",
-                "reference": "65ca9e4fbdb34f6d463ef77898ca583b101a4162"
+                "reference": "e7e1d01fe103de78bca6fbf7f6f4acf64482d63c"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/symfony/zipball/65ca9e4fbdb34f6d463ef77898ca583b101a4162",
-                "reference": "65ca9e4fbdb34f6d463ef77898ca583b101a4162",
+                "url": "https://api.github.com/repos/symfony/symfony/zipball/e7e1d01fe103de78bca6fbf7f6f4acf64482d63c",
+                "reference": "e7e1d01fe103de78bca6fbf7f6f4acf64482d63c",
                 "shasum": ""
             },
             "require": {
@@ -2286,7 +2286,7 @@
                 "symfony/polyfill-php56": "~1.0",
                 "symfony/polyfill-php70": "~1.0",
                 "symfony/polyfill-util": "~1.0",
-                "twig/twig": "~1.23|~2.0"
+                "twig/twig": "~1.26|~2.0"
             },
             "conflict": {
                 "phpdocumentor/reflection-docblock": "<3.0",
@@ -2355,6 +2355,7 @@
                 "ocramius/proxy-manager": "~0.4|~1.0|~2.0",
                 "phpdocumentor/reflection-docblock": "^3.0",
                 "predis/predis": "~1.0",
+                "symfony/phpunit-bridge": "~3.2",
                 "symfony/polyfill-apcu": "~1.1",
                 "symfony/security-acl": "~2.8|~3.0"
             },
@@ -2400,20 +2401,20 @@
             "keywords": [
                 "framework"
             ],
-            "time": "2016-09-03 15:28:43"
+            "time": "2016-10-03 19:01:14"
         },
         {
             "name": "twig/twig",
-            "version": "v1.26.0",
+            "version": "v1.26.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/twigphp/Twig.git",
-                "reference": "81c2b5fd36581370c7731387f05dcdb577050513"
+                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/twigphp/Twig/zipball/81c2b5fd36581370c7731387f05dcdb577050513",
-                "reference": "81c2b5fd36581370c7731387f05dcdb577050513",
+                "url": "https://api.github.com/repos/twigphp/Twig/zipball/a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
+                "reference": "a09d8ee17ac1cfea29ed60c83960ad685c6a898d",
                 "shasum": ""
             },
             "require": {
@@ -2461,7 +2462,7 @@
             "keywords": [
                 "templating"
             ],
-            "time": "2016-10-02 16:19:13"
+            "time": "2016-10-05 18:57:41"
         },
         {
             "name": "zendframework/zend-code",
@@ -3191,16 +3192,16 @@
         },
         {
             "name": "phpunit/phpunit-mock-objects",
-            "version": "3.2.7",
+            "version": "3.3.1",
             "source": {
                 "type": "git",
                 "url": "https://github.com/sebastianbergmann/phpunit-mock-objects.git",
-                "reference": "546898a2c0c356ef2891b39dd7d07f5d82c8ed0a"
+                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/546898a2c0c356ef2891b39dd7d07f5d82c8ed0a",
-                "reference": "546898a2c0c356ef2891b39dd7d07f5d82c8ed0a",
+                "url": "https://api.github.com/repos/sebastianbergmann/phpunit-mock-objects/zipball/03500345483e1e17b52e2e4d34a89c9408ab2902",
+                "reference": "03500345483e1e17b52e2e4d34a89c9408ab2902",
                 "shasum": ""
             },
             "require": {
@@ -3246,7 +3247,7 @@
                 "mock",
                 "xunit"
             ],
-            "time": "2016-09-06 16:07:45"
+            "time": "2016-10-04 11:03:26"
         },
         {
             "name": "sebastian/code-unit-reverse-lookup",
