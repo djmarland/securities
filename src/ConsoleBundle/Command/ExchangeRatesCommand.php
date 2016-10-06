@@ -25,27 +25,6 @@ class ExchangeRatesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
-        $this->em = $this->getContainer()->get('doctrine')->getManager();
-        $now = new DateTimeImmutable();
-        $stop = new DateTimeImmutable('2001-01-01');
-
-            $currency = $this->getCurrency('GBP');
-        while ($now > $stop) {
-
-            $rate = new ExchangeRate();
-            $rate->setCurrency($currency);
-            $rate->setDate($now);
-            $rate->setRate(1 + (rand(0, 1000)/1000));
-            $this->em->persist($rate);
-            $this->em->flush();
-            $output->writeln('Saved ' . $now->format('c'));
-            $now = $now->sub(new \DateInterval('P1D'));
-        }
-
-
-            return;
-
-
         $this->output = $output;
         $now = new DateTimeImmutable('now', new \DateTimeZone('UTC'));
         $this->output->writeln('Current time ' . $now->format('c'));
