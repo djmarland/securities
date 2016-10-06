@@ -71,8 +71,12 @@ class ExchangeRatesService extends Service
 
     public function findSpecifcDatesForCurrency(
         Currency $currency,
-        array $dates
+        array $dateTimes
     ): array {
+        $dates = array_map(function($date) {
+            return $date->format('Y-m-d');
+        }, $dateTimes);
+
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL)
             ->where(self::TBL . '.currency = :currencyId')

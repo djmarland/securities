@@ -6,7 +6,7 @@ use Doctrine\ORM\Mapping as ORM;
 /**
  * @ORM\Entity
  * @ORM\HasLifecycleCallbacks()
- * @ORM\Table(name="exchange_rates")})
+ * @ORM\Table(name="exchange_rates",indexes={@ORM\Index(name="exchange_rates_date_idx", columns={"date"})})
  */
 class ExchangeRate extends Entity
 {

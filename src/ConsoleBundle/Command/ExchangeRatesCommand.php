@@ -14,6 +14,7 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ExchangeRatesCommand extends Command
 {
     protected $em;
+    protected $output;
 
     protected function configure()
     {
@@ -24,28 +25,51 @@ class ExchangeRatesCommand extends Command
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
+        $this->em = $this->getContainer()->get('doctrine')->getManager();
         $now = new DateTimeImmutable();
+        $stop = new DateTimeImmutable('2001-01-01');
+
+            $currency = $this->getCurrency('GBP');
+        while ($now > $stop) {
+
+            $rate = new ExchangeRate();
+            $rate->setCurrency($currency);
+            $rate->setDate($now);
+            $rate->setRate(1 + (rand(0, 1000)/1000));
+            $this->em->persist($rate);
+            $this->em->flush();
+            $output->writeln('Saved ' . $now->format('c'));
+            $now = $now->sub(new \DateInterval('P1D'));
+        }
+
+
+            return;
+
+
+        $this->output = $output;
+        $now = new DateTimeImmutable('now', new \DateTimeZone('UTC'));
+        $this->output->writeln('Current time ' . $now->format('c'));
+
         $this->em = $this->getContainer()->get('doctrine')->getManager();
         $rateRepo = $this->em->getRepository('SecuritiesService:ExchangeRate');
         $dateToUse = $now;
 
         // find the most recent date
-        $rate = $rateRepo->findBy([], ['date' => 'DESC']);
+        $rate = $rateRepo->findOneBy([], ['date' => 'DESC']);
 
-        if (!empty($rate)) {
-            $latest = reset($rate);
+        if ($rate) {
             /** @var \DateTime $rateDate */
-            $rateDate = $latest->getDate();
+            $rateDate = $rate->getDate();
             // if the date is today, then stop as we're up to date
             if ($rateDate->format('Y-m-d') == $now->format('Y-m-d')) {
-                $output->writeln('Already up to date. Stopping');
+                $this->output->writeln('Already up to date. Stopping');
                 return;
             }
             // otherwise, we'll add one day to the date
             $dateToUse = $rateDate->add(new \DateInterval('P1D'));
         }
 
-        $output->writeln($dateToUse->format('Y-m-d') . ' not yet fetched. Fetching...');
+        $this->output->writeln($dateToUse->format('Y-m-d') . ' not yet fetched. Fetching...');
 
         $ratesClient = $this->getContainer()->get('console.services.rates');
 
@@ -54,10 +78,10 @@ class ExchangeRatesCommand extends Command
             $date = $result->getDate();
             foreach($result->getRates() as $currency => $value) {
                 $this->addRate($currency, $value, $date);
-                $output->writeln('Saved ' . $currency . ': ' . $value);
+                $this->output->writeln('Saved ' . $currency . ': ' . $value);
             }
         } catch (ApiQuotaReachedException $e) {
-            $output->writeln('Quota reached. Doing nothing');
+            $this->output->writeln('Quota reached. Doing nothing');
             return;
         }
 

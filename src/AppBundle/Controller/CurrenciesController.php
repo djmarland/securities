@@ -81,25 +81,29 @@ class CurrenciesController extends Controller
             $earliestRate = $ratesService->findEarliestForCurrency($currency);
             $earliestYear = (int) $earliestRate->getDate()->format('Y');
             $currentYear = (int) $today->format('Y');
-            $tenYearsAgo = $currentYear - 10;
+
+            // start a counter, one decade ago
+            $dateCounter = $today->sub(new \DateInterval('P10Y'));
 
             $linkableYears = [];
             $lastDecadeDates = [];
 
-            for ($i = $earliestYear; $i <= $currentYear; $i++) {
+            foreach(range($currentYear, $earliestYear) as $year) {
                 $linkableYears[] = (object) [
                     'hrefParams' => [
                         'code' => $currency->getCode(),
-                        'year' => $i
+                        'year' => $year
                     ],
-                    'text' => $i,
+                    'text' => $year,
                 ];
-                if ($i >= $tenYearsAgo) {
-                    $lastDecadeDates[] = $i . $yesterday->format('-m-d');
-                }
             }
 
-            $this->toView('linkableYears', array_reverse($linkableYears));
+            while ($dateCounter <= $today) {
+                $lastDecadeDates[] = $dateCounter;
+                $dateCounter = $dateCounter->add(new \DateInterval('P1M'));
+            }
+
+            $this->toView('linkableYears', $linkableYears);
 
             $decadeRates = $ratesService->findSpecifcDatesForCurrency($currency, $lastDecadeDates);
             $dGraphData = [];
@@ -189,9 +193,13 @@ class CurrenciesController extends Controller
 
     public function historicalAction()
     {
+        $date = $this->request->get('date', null);
+
         $command = new HistoricalRatesCommand();
         $command->setContainer($this->container);
-        $input = new StringInput('');
+        $input = new ArrayInput([
+            'date' => $date
+        ]);
         $output = new BufferedOutput();
 
         $command->run($input, $output);
