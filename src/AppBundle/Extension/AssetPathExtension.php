@@ -35,7 +35,7 @@ class AssetPathExtension extends \Twig_Extension
         return '/static/dist/' . ($this->assetsManifest[$asset] ? $this->assetsManifest[$asset] : $asset);
     }
 
-    private function getManifest($name): array
+    private function getManifest($name)
     {
         $manifest = @file_get_contents($this->configPath . '/' . $name . '.json');
         if ($manifest) {
