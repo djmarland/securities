@@ -3,8 +3,7 @@
 namespace SecuritiesService\Service;
 
 use DateTimeImmutable;
-use Doctrine\ORM\Query\Expr\Join;
-use SecuritiesService\Data\Database\Entity\ExchangeRate as DbExchangeRate;
+use Doctrine\ORM\Query\ResultSetMappingBuilder;
 use SecuritiesService\Domain\Entity\Currency;
 use SecuritiesService\Domain\Entity\ExchangeRate;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
@@ -22,22 +21,28 @@ class ExchangeRatesService extends Service
 
     public function findLatestForAllCurrencies(): array
     {
-        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL, 'currency')
-            ->leftJoin(
-                DbExchangeRate::class,
-                'ex',
-                Join::WITH,
-                $qb->expr()->andX(
-                    self::TBL . '.currency = ex.currency',
-                    self::TBL . '.date < ex.date'
-                )
+        $builder = new ResultSetMappingBuilder(
+            $this->entityManager,
+            ResultSetMappingBuilder::COLUMN_RENAMING_INCREMENT
+        );
+        $builder->addRootEntityFromClassMetadata('SecuritiesService:ExchangeRate', 'ex');
+        $builder->addJoinedEntityFromClassMetadata(
+            'SecuritiesService:Currency',
+            'c',
+            'ex',
+            'currency',
+            ['id' => 'currency_id']
+        );
+        $sql = 'SELECT ' . $builder . '
+            FROM exchange_rates ex
+              INNER JOIN currencies c ON ex.currency_id = c.id
+            WHERE ex.date = ( 
+                SELECT MAX(date) FROM exchange_rates
             )
-            ->join(self::TBL . '.currency', 'currency')
-            ->where('ex.date IS NULL')
-            ->orderBy('currency.code', 'ASC');
+            ORDER BY c.code ASC';
+        $query = $this->entityManager->createNativeQuery($sql, $builder);
 
-        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
+        return $this->getDomainFromQueryObject($query, self::SERVICE_ENTITY);
     }
 
     public function findAllForCurrency(Currency $currency): array

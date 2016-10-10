@@ -5,6 +5,7 @@ namespace SecuritiesService\Service;
 use DateTimeImmutable;
 use Doctrine\ORM\EntityManager;
 use Doctrine\ORM\EntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\BucketProviderInterface;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
@@ -47,10 +48,17 @@ abstract class Service
     }
 
     protected function getDomainFromQuery(
-        QueryBuilder $query,
+        QueryBuilder $qb,
         string $entityType
     ): array {
-        $result = $query->getQuery()->getArrayResult();
+        return $this->getDomainFromQueryObject($qb->getQuery(), $entityType);
+    }
+
+    protected function getDomainFromQueryObject(
+        $query,
+        string $entityType
+    ): array {
+        $result = $query->getArrayResult();
         $entities = [];
         $mapper = $this->mapperFactory->createMapper($entityType);
         foreach ($result as $item) {
