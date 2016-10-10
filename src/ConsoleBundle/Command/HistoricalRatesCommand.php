@@ -62,9 +62,9 @@ class HistoricalRatesCommand extends Command
             $rateDate = $rate->getDate();
             $this->output->writeln('Oldest Rate: '. $rateDate->format('c'));
             // if the date is earlier than 2000, exit
-            $endAt = new \DateTimeImmutable('2000-01-01');
+            $endAt = new \DateTimeImmutable('1999-01-01');
             if ($endAt > $rateDate) {
-                $this->output->writeln('Jan 2000 reached. Doing nothing');
+                $this->output->writeln('Jan 1999 reached. Doing nothing');
                 return;
             }
 
