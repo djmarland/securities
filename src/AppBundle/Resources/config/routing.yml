@@ -133,10 +133,6 @@ currencies_update:
   path:     /currencies/update
   defaults: { _controller: AppBundle:Currencies:update }
 
-currencies_historical:
-  path:     /currencies/historical
-  defaults: { _controller: AppBundle:Currencies:historical }
-
 currencies_show:
   path:     /currencies/{code}
   defaults: { _controller: AppBundle:Currencies:show }
@@ -148,7 +144,7 @@ currencies_show_year:
   defaults: { _controller: AppBundle:Currencies:showYear }
   requirements:
     code:  "[A-Z]{3}"
-    year:  "2[0-9]{3}"
+    year:  "[1-2][0-9]{3}"
 
 
 # Overview

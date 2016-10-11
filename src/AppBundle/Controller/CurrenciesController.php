@@ -135,43 +135,43 @@ class CurrenciesController extends Controller
 
         /** @var ExchangeRate[] $rates */
         $rates = $ratesService->findDatesForCurrency($currency, $startOfYear, $endOfYear);
-        if (!empty($rates)) {
-            $this->toView('hasData', true);
-            $graphData = [];
-            $graphLabels = [];
-
-            $months = [];
-            $months[1] = ['name' => 'January', 'rates' => null];
-            $months[2] = ['name' => 'February', 'rates' => null];
-            $months[3] = ['name' => 'March', 'rates' => null];
-            $months[4] = ['name' => 'April', 'rates' => null];
-            $months[5] = ['name' => 'May', 'rates' => null];
-            $months[6] = ['name' => 'June', 'rates' => null];
-            $months[7] = ['name' => 'July', 'rates' => null];
-            $months[8] = ['name' => 'August', 'rates' => null];
-            $months[9] = ['name' => 'September', 'rates' => null];
-            $months[10] = ['name' => 'October', 'rates' => null];
-            $months[11] = ['name' => 'November', 'rates' => null];
-            $months[12] = ['name' => 'December', 'rates' => null];
-
-            foreach ($rates as $rate) {
-                $date = $rate->getDate()->format('d/m/Y');
-                $rateUSD = $rate->getValueUSD();
-                $graphLabels[] = $date;
-                $graphData[] = $rateUSD;
-                $month = (int) $rate->getDate()->format('m');
-                if (!isset($months[$month]['rates'])) {
-                    $months[$month]['rates'] = [];
-                }
-                $months[$month]['rates'][] = [
-                    'date' => $date,
-                    'rate' => $rateUSD,
-                ];
-            }
-            $this->toView('yearGraph', $this->makeGraph($currency->getCode(), $graphData, $graphLabels));
-            $this->toView('yearMonths', $months);
+        if (empty($rates)) {
+            throw new HttpException(404, 'No data for this year');
         }
+        $this->toView('hasData', true);
+        $graphData = [];
+        $graphLabels = [];
 
+        $months = [];
+        $months[1] = ['name' => 'January', 'rates' => null];
+        $months[2] = ['name' => 'February', 'rates' => null];
+        $months[3] = ['name' => 'March', 'rates' => null];
+        $months[4] = ['name' => 'April', 'rates' => null];
+        $months[5] = ['name' => 'May', 'rates' => null];
+        $months[6] = ['name' => 'June', 'rates' => null];
+        $months[7] = ['name' => 'July', 'rates' => null];
+        $months[8] = ['name' => 'August', 'rates' => null];
+        $months[9] = ['name' => 'September', 'rates' => null];
+        $months[10] = ['name' => 'October', 'rates' => null];
+        $months[11] = ['name' => 'November', 'rates' => null];
+        $months[12] = ['name' => 'December', 'rates' => null];
+
+        foreach ($rates as $rate) {
+            $date = $rate->getDate()->format('d/m/Y');
+            $rateUSD = $rate->getValueUSD();
+            $graphLabels[] = $date;
+            $graphData[] = $rateUSD;
+            $month = (int) $rate->getDate()->format('m');
+            if (!isset($months[$month]['rates'])) {
+                $months[$month]['rates'] = [];
+            }
+            $months[$month]['rates'][] = [
+                'date' => $date,
+                'rate' => $rateUSD,
+            ];
+        }
+        $this->toView('yearGraph', $this->makeGraph($currency->getCode(), $graphData, $graphLabels));
+        $this->toView('yearMonths', $months);
 
         return $this->renderTemplate('currencies:show-year', 'Currency - ' . $currency->getCode() . ' - ' . $year);
     }
@@ -181,25 +181,6 @@ class CurrenciesController extends Controller
         $command = new ExchangeRatesCommand();
         $command->setContainer($this->container);
         $input = new StringInput('');
-        $output = new BufferedOutput();
-
-        $command->run($input, $output);
-        $content = $output->fetch();
-
-        $lines = explode("\n", trim($content));
-        $this->toView('messages', $lines, true);
-        return $this->renderTemplate('json');
-    }
-
-    public function historicalAction()
-    {
-        $date = $this->request->get('date', null);
-
-        $command = new HistoricalRatesCommand();
-        $command->setContainer($this->container);
-        $input = new ArrayInput([
-            'date' => $date
-        ]);
         $output = new BufferedOutput();
 
         $command->run($input, $output);
