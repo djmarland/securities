@@ -6,7 +6,3 @@ services:
   console.services.rates:
      class: Djmarland\OpenExchangeRates\Client
      arguments: ["@guzzle_client", '%ex_rates_api_key%']
-
-  console.services.rates_historical:
-     class: Djmarland\OpenExchangeRates\Client
-     arguments: ["@guzzle_client", '%historical_rates_api_key%']
