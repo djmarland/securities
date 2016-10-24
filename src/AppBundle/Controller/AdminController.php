@@ -4,7 +4,6 @@ namespace AppBundle\Controller;
 
 use ConsoleBundle\Command\ImportCommand;
 use Djmarland\ISIN\Exception\InvalidISINException;
-use SecuritiesService\Data\Database\Mapper\MapperFactory;
 use SecuritiesService\Domain\Entity\Product;
 use SecuritiesService\Domain\Entity\Security;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;

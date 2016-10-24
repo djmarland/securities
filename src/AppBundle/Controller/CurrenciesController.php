@@ -2,6 +2,8 @@
 
 namespace AppBundle\Controller;
 
+use ConsoleBundle\Command\CurrenciesLocalCommand;
+use ConsoleBundle\Command\CurrenciesUsdCommand;
 use ConsoleBundle\Command\ExchangeRatesCommand;
 use ConsoleBundle\Command\HistoricalRatesCommand;
 use DateTimeImmutable;
@@ -179,6 +181,38 @@ class CurrenciesController extends Controller
     public function updateAction()
     {
         $command = new ExchangeRatesCommand();
+        $command->setContainer($this->container);
+        $input = new StringInput('');
+        $output = new BufferedOutput();
+
+        $command->run($input, $output);
+        $content = $output->fetch();
+
+        $lines = explode("\n", trim($content));
+        $this->toView('messages', $lines, true);
+        return $this->renderTemplate('json');
+    }
+
+    public function localAction()
+    {
+        // sets the local currency for anything missing one
+        $command = new CurrenciesLocalCommand();
+        $command->setContainer($this->container);
+        $input = new StringInput('');
+        $output = new BufferedOutput();
+
+        $command->run($input, $output);
+        $content = $output->fetch();
+
+        $lines = explode("\n", trim($content));
+        $this->toView('messages', $lines, true);
+        return $this->renderTemplate('json');
+    }
+
+    public function usdAction()
+    {
+        // sets the local currency for anything missing one
+        $command = new CurrenciesUsdCommand();
         $command->setContainer($this->container);
         $input = new StringInput('');
         $output = new BufferedOutput();

@@ -133,6 +133,14 @@ currencies_update:
   path:     /currencies/update
   defaults: { _controller: AppBundle:Currencies:update }
 
+currencies_update_local:
+  path:     /currencies/local
+  defaults: { _controller: AppBundle:Currencies:local }
+
+currencies_update_usd:
+  path:     /currencies/usd
+  defaults: { _controller: AppBundle:Currencies:usd }
+
 currencies_show:
   path:     /currencies/{code}
   defaults: { _controller: AppBundle:Currencies:show }

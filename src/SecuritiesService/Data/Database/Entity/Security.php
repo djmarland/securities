@@ -47,6 +47,12 @@ class Security extends Entity
     /** @ORM\Column(type="float", nullable=true) */
     private $moneyRaisedLocal;
 
+    /** @ORM\Column(type="float", nullable=true) */
+    private $usdValueNow;
+
+    /** @ORM\Column(type="date", nullable=true) */
+    private $usdCalculationDate;
+
     /**
      * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(nullable=true)
@@ -196,6 +202,26 @@ class Security extends Entity
     public function setMoneyRaisedLocal($moneyRaisedLocal)
     {
         $this->moneyRaisedLocal = $moneyRaisedLocal;
+    }
+
+    public function getUsdValueNow()
+    {
+        return $this->usdValueNow;
+    }
+
+    public function setUsdValueNow($usdValueNow)
+    {
+        $this->usdValueNow = $usdValueNow;
+    }
+
+    public function getUsdCalculationDate()
+    {
+        return $this->usdCalculationDate;
+    }
+
+    public function setUsdCalculationDate($usdCalculationDate)
+    {
+        $this->usdCalculationDate = $usdCalculationDate;
     }
 
     public function getProduct()
