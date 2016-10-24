@@ -99,8 +99,8 @@ class CurrenciesLocalCommand extends Command
             return true;
         }
 
-        if ($toCode == 'GPX') {
-            // GPX is penny prices, so in that currency will be 100 times bigger
+        if ($toCode == 'GBX') {
+            // GBX is penny prices, so in that currency will be 100 times bigger
             $security->setMoneyRaisedLocal($moneyRaised * 100);
             $this->output->writeln('Saving GBX');
             $this->em->persist($security);

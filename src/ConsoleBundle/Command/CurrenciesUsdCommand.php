@@ -120,7 +120,7 @@ class CurrenciesUsdCommand extends Command
             return false;
         }
 
-        if ($fromCode == 'GPX') {
+        if ($fromCode == 'GBX') {
             // lets pretend its GBP
             $fromCode = 'GBP';
             $moneyRaised = $moneyRaised / 100;
