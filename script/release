@@ -1,0 +1,14 @@
+#!/bin/sh
+
+subdomain="$1"
+version="$2"
+
+cd ../$subdomain.isinanalytics.com
+pwd
+comoser install
+
+#git fetch
+#git checkout $version
+#composer install
+#rm -rf app/cache
+#sudo cp
