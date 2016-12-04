@@ -3,6 +3,7 @@
 namespace SecuritiesService\Service;
 
 use DateTimeImmutable;
+use Doctrine\ORM\Query\Expr\Join;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\Security;
@@ -202,14 +203,18 @@ class SecuritiesService extends Service
         $currencyTable = 'currency';
 
         $qb->select([
-            self::TBL,
             'sum(' . self::TBL . '.moneyRaised) as total',
             $currencyTable,
         ])
-            ->innerJoin(self::TBL . '.currency', $currencyTable)
+            ->innerJoin(
+                'SecuritiesService:Currency',
+                $currencyTable,
+                Join::WITH,
+                self::TBL . '.currency = ' . $currencyTable
+            )
             ->andWhere(self::TBL . '.startDate >= :startDate')
             ->andWhere(self::TBL . '.startDate < :endDate')
-            ->groupBy($currencyTable . '.id')
+            ->groupBy($currencyTable)
             ->orderBy('total', 'DESC')
             ->setMaxResults($limit)
             ->setParameter('startDate', $issuedFrom)
@@ -225,7 +230,7 @@ class SecuritiesService extends Service
         $currencies = [];
         $mapper = $this->mapperFactory->createMapper('Currency');
         foreach ($results as $result) {
-            $currency = $mapper->getDomainModel($result[0]['currency']);
+            $currency = $mapper->getDomainModel($result[0]);
             $total = (int) $result['total'];
             $currencies[] = (object) [
                 'currency' => $currency,
@@ -249,20 +254,36 @@ class SecuritiesService extends Service
         $industryTable = 'industry';
 
         $qb->select([
-            self::TBL,
             'sum(' . self::TBL . '.moneyRaised) as total',
-            $issuerTable,
-            $groupTable,
-            $sectorTable,
             $industryTable,
         ])
-            ->join(self::TBL . '.company', $issuerTable)
-            ->join($issuerTable . '.parentGroup', $groupTable)
-            ->join($groupTable . '.sector', $sectorTable)
-            ->join($sectorTable . '.industry', $industryTable)
+            ->innerJoin(
+                'SecuritiesService:Company',
+                $issuerTable,
+                Join::WITH,
+                self::TBL . '.company = ' . $issuerTable
+            )
+            ->innerJoin(
+                'SecuritiesService:ParentGroup',
+                $groupTable,
+                Join::WITH,
+                $issuerTable . '.parentGroup = ' . $groupTable
+            )
+            ->innerJoin(
+                'SecuritiesService:Sector',
+                $sectorTable,
+                Join::WITH,
+                $groupTable . '.sector = ' . $sectorTable
+            )
+            ->innerJoin(
+                'SecuritiesService:Industry',
+                $industryTable,
+                Join::WITH,
+                $sectorTable . '.industry = ' . $industryTable
+            )
             ->andWhere(self::TBL . '.startDate >= :startDate')
             ->andWhere(self::TBL . '.startDate < :endDate')
-            ->groupBy($industryTable . '.id')
+            ->groupBy($industryTable)
             ->orderBy('total', 'DESC')
             ->setMaxResults($limit)
             ->setParameter('startDate', $issuedFrom)
@@ -278,7 +299,7 @@ class SecuritiesService extends Service
         $industries = [];
         $mapper = $this->mapperFactory->createMapper('Industry');
         foreach ($results as $result) {
-            $industry = $mapper->getDomainModel($result[0]['company']['parentGroup']['sector']['industry']);
+            $industry = $mapper->getDomainModel($result[0]);
             $total = (int) $result['total'];
             $industries[] = (object) [
                 'industry' => $industry,
@@ -324,13 +345,17 @@ class SecuritiesService extends Service
         $productTable = 'product';
 
         $qb->select([
-            self::TBL,
             'count(' . self::TBL . '.id) as c',
             $productTable,
         ])
-            ->innerJoin(self::TBL . '.product', $productTable);
+            ->innerJoin(
+                'SecuritiesService:Product',
+                $productTable,
+                Join::WITH,
+                self::TBL . '.product = ' . $productTable
+            );
 
-        $qb->groupBy($productTable . '.id');
+        $qb->groupBy($productTable);
 
         /*
          * List of:
@@ -338,11 +363,10 @@ class SecuritiesService extends Service
          * c => count
         */
         $results = $qb->getQuery()->getArrayResult();
-
         $products = [];
         $mapper = $this->mapperFactory->createMapper('Product');
         foreach ($results as $result) {
-            $product = $mapper->getDomainModel($result[0]['product']);
+            $product = $mapper->getDomainModel($result[0]);
             $total = (int) $result['c'];
             $products[] = (object) [
                 'product' => $product,
@@ -370,15 +394,19 @@ class SecuritiesService extends Service
         $productTable = 'product';
 
         $qb->select([
-            self::TBL,
             'sum(' . self::TBL . '.moneyRaised) as total',
              $productTable,
         ])
-            ->innerJoin(self::TBL . '.product', $productTable);
+            ->innerJoin(
+                'SecuritiesService:Product',
+                $productTable,
+                Join::WITH,
+                self::TBL . '.product = ' . $productTable
+            );
 
         $filter = new SecuritiesFilter($bucket);
         $qb = $filter->apply($qb, self::TBL);
-        $qb->groupBy($productTable . '.id');
+        $qb->groupBy($productTable);
 
         /*
          * List of:
@@ -390,7 +418,7 @@ class SecuritiesService extends Service
         $products = [];
         $mapper = $this->mapperFactory->createMapper('Product');
         foreach ($results as $result) {
-            $product = $mapper->getDomainModel($result[0]['product']);
+            $product = $mapper->getDomainModel($result[0]);
             $total = (int) $result['total'];
             $products[] = (object) [
                 'product' => $product,
@@ -406,7 +434,6 @@ class SecuritiesService extends Service
         int $year
     ): array {
         $qb->select([
-            self::TBL,
             'DATE_FORMAT(' . self::TBL . '.startDate, \'%m\') as m',
             'sum(' . self::TBL . '.moneyRaised) as totalSum',
         ])
