@@ -32,7 +32,7 @@ class AssetPathExtension extends \Twig_Extension
 
     public function assetPath($asset)
     {
-        return '/static/dist/' . ($this->assetsManifest[$asset] ? $this->assetsManifest[$asset] : $asset);
+        return '/static/dist/' . ($this->assetsManifest[$asset] ?? $asset);
     }
 
     private function getManifest($name)
