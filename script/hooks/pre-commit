@@ -1,0 +1,9 @@
+#!/bin/sh
+#
+#  .git/hooks/pre-commit
+#
+
+DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+$DIR/../../script/update-release-time.sh
+git add $DIR/../../app/config/release-time.txt

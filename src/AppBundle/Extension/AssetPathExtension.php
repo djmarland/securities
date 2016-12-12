@@ -3,19 +3,14 @@ namespace AppBundle\Extension;
 
 class AssetPathExtension extends \Twig_Extension
 {
-    private $configPath;
-
-    private $assetsManifest;
+    private $timestamp;
 
     public function __construct($configPath)
     {
-        $this->configPath = $configPath;
-        $this->assetsManifest = array_merge(
-            $this->getManifest('assets-css'),
-            $this->getManifest('assets-images'),
-            $this->getManifest('assets-js-admin'),
-            $this->getManifest('assets-js-app')
-        );
+        $this->timestamp = @file_get_contents($configPath . '/release-time.txt');
+        if (!$this->timestamp) {
+            $this->timestamp = time();
+        }
     }
 
     public function getName()
@@ -32,15 +27,6 @@ class AssetPathExtension extends \Twig_Extension
 
     public function assetPath($asset)
     {
-        return '/static/dist/' . ($this->assetsManifest[$asset] ?? $asset);
-    }
-
-    private function getManifest($name)
-    {
-        $manifest = @file_get_contents($this->configPath . '/' . $name . '.json');
-        if ($manifest) {
-            return json_decode($manifest, true);
-        }
-        return [];
+        return '/static/' . $this->timestamp . '/' .  $asset;
     }
 }

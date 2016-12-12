@@ -39,6 +39,9 @@
     "escapestudios/symfony2-coding-standard": "~2.0"
   },
   "scripts": {
+    "post-install-cmd": [
+      "bash script/install-hooks.sh"
+    ],
     "post-root-package-install": [
       "SymfonyStandard\\Composer::hookRootPackageInstall"
     ]

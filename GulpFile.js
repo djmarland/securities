@@ -3,16 +3,11 @@
 var gulp = require('gulp'),
     sass = require('gulp-sass'),
     uglify = require('gulp-uglify'),
-    hash = require('gulp-hash'),
     concat = require('gulp-concat'),
     browserify = require('browserify'),
     source = require('vinyl-source-stream'),
     staticPathSrc = 'public/static/src/',
-    staticPathDist = 'public/static/dist/',
-    manifestJsApp = 'assets-js-app.json',
-    manifestCss = 'assets-css.json',
-    manifestImages = 'assets-images.json',
-    manifestPath = 'app/config/';
+    staticPathDist = 'public/static/dist/';
 
 var jsFiles = {
     vendor: [
@@ -31,10 +26,7 @@ var jsFiles = {
 gulp.task('sass', function() {
     gulp.src(staticPathSrc + 'scss/**/*.scss')
         .pipe(sass({outputStyle: 'compressed'}).on('error', sass.logError))
-        .pipe(hash())
-        .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestCss))
-        .pipe(gulp.dest(manifestPath));
+        .pipe(gulp.dest(staticPathDist));
 });
 
 gulp.task('js-app', function() {
@@ -44,18 +36,12 @@ gulp.task('js-app', function() {
     ])
         .pipe(concat('app.js'))
         .pipe(uglify())
-        .pipe(hash())
-        .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestJsApp))
-        .pipe(gulp.dest(manifestPath));
+        .pipe(gulp.dest(staticPathDist));
 });
 
 gulp.task('img', function() {
     gulp.src(staticPathSrc + 'img/**/*.*')
-        .pipe(hash())
-        .pipe(gulp.dest(staticPathDist))
-        .pipe(hash.manifest(manifestImages))
-        .pipe(gulp.dest(manifestPath));
+        .pipe(gulp.dest(staticPathDist));
 });
 
 gulp.task('vendor', function() {
