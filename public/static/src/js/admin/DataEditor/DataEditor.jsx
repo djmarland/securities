@@ -15,7 +15,7 @@ export default class DataEditor extends React.Component {
         this.allViews = [
             {id : "isin", title : "Add/Edit ISIN"},
             {id : "isin-bulk", title : "Bulk upload ISIN"},
-            {id : "hierachy-bulk", title : "Bulk upload hiearchy"},
+            // {id : "hierachy-bulk", title : "Bulk upload hiearchy"},
             // {id : "indices", title : "Indices"}
         ];
     };
@@ -41,14 +41,14 @@ export default class DataEditor extends React.Component {
 
         return (
             <div className="grid">
-                <div className="g 1/5">
+                <div className="g 1/5@xl">
                     <Menu
                         onChangeView={this.changeView.bind(this)}
                         currentView={this.state.currentView}
                         allViews = {this.allViews}
                     />
                 </div>
-                <div className="g 4/5">{contentArea}</div>
+                <div className="g 4/5@xl">{contentArea}</div>
             </div>
         );
     };

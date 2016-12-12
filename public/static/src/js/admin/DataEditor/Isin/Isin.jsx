@@ -157,6 +157,11 @@ export default class Isin extends React.Component {
     }
 
     render() {
+        let saveButtonStatusType = null;
+        if (this.state.saving) {
+            saveButtonStatusType = Status.STATUS_LOADING;
+        }
+
         return (
             <form onSubmit={this.onSave.bind(this)}>
             <h1 className="b g-unit">Add/Edit ISIN</h1>
@@ -166,7 +171,7 @@ export default class Isin extends React.Component {
                 </div>
                 <div className="g 1/2">
                     <div className="text--right">
-                        <Status isLoading={this.state.saving}/>
+                        <Status type={saveButtonStatusType} />
                         <button className="button button--fat"
                                 type="submit"
                                 disabled={!this.canBeSaved()}>
@@ -193,69 +198,69 @@ export default class Isin extends React.Component {
                                      isRequired={true}
                                      label="SECURITY_NAME: Security Name*"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <DateField id="SECURITY_START_DATE"
                                ref="SECURITY_START_DATE"
                                onChange={this.onFormChange.bind(this)}
                                isRequired={true}
                                label="SECURITY_START_DATE: Start Date*"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <DateField id="MATURITY_DATE"
                                ref="MATURITY_DATE"
                                onChange={this.onFormChange.bind(this)}
                                isRequired={false}
                                label="MATURITY_DATE: Maturity Date"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="SOURCE"
                                      ref="SOURCE"
                                      onChange={this.onFormChange.bind(this)}
                                      label="SOURCE: Source"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="COUPON_RATE"
                                      ref="COUPON_RATE"
                                      regex="^[0-9.]+[%]?$"
                                      onChange={this.onFormChange.bind(this)}
                                      label="COUPON_RATE: Coupon (decimal, or with %)"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="MONEY_RAISED_GBP"
                                      ref="MONEY_RAISED_GBP"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
                                      label="MONEY_RAISED_GBP: Money Raised (GBP £m)"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="MONEY_RAISED_LOCAL"
                                      ref="MONEY_RAISED_LOCAL"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
                                      label="MONEY_RAISED_LOCAL: Money Raised (Local Currency)"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="TRADING_CURRENCY"
                                      ref="TRADING_CURRENCY"
                                      regex="^[A-Z]{3}$"
                                      onChange={this.onFormChange.bind(this)}
                                      label="TRADING_CURRENCY: Trading Currency"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleTextField id="MARGIN"
                                      ref="MARGIN"
                                      regex="^[0-9.]+[%]?$"
                                      onChange={this.onFormChange.bind(this)}
                                      label="MARGIN: Margin (decimal, or with %)"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <SimpleSelectField id="PRA_ITEM_4748"
                                      ref="PRA_ITEM_4748"
                                      options={this.props.productOptions}
                                      onChange={this.onFormChange.bind(this)}
                                      label="PRA_ITEM_4748: Product Type"/>
                 </div>
-                <div className="g 1/2">
+                <div className="g 1/2@l">
                     <AutoCompleteField id="COMPANY_NAME"
                                        ref="COMPANY_NAME"
                                        sourceUrl="/admin/search.json?type=issuer&q={search}"
@@ -269,6 +274,16 @@ export default class Isin extends React.Component {
                                        {/*onChange={this.onFormChange.bind(this)}*/}
                                        {/*label="COUNTRY_OF_INCORPORATION: Issuer Country" />*/}
                 {/*</div>*/}
+                <div className="g">
+                    <div className="text--right">
+                        <Status type={saveButtonStatusType} />
+                        <button className="button button--fat"
+                                type="submit"
+                                disabled={!this.canBeSaved()}>
+                            Save
+                        </button>
+                    </div>
+                </div>
             </div>
             </form>
         );

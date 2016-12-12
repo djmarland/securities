@@ -14,7 +14,7 @@ export default class IsinField extends BaseField {
     }
 
     handleInput() {
-        let val = this.getValue();
+        let val = this.getValue().toUpperCase();
         this.setState({
             fieldText : val,
             statusType : null,
@@ -48,7 +48,6 @@ export default class IsinField extends BaseField {
         })
             .then(function(response) {
                 return response.json();
-
             }.bind(this))
             .then(function(data) {
                 if (data.status == 'error') {
@@ -88,7 +87,6 @@ export default class IsinField extends BaseField {
 
             }.bind(this))
             .catch(function(err) {
-                console.log(err);
                 this.setState({
                     statusType : Status.STATUS_ERROR,
                     statusText : 'An error occurred checking this ISIN'

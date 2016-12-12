@@ -2652,7 +2652,7 @@ var DataEditor = function (_React$Component) {
         _this.state = {
             currentView: view
         };
-        _this.allViews = [{ id: "isin", title: "Add/Edit ISIN" }, { id: "isin-bulk", title: "Bulk upload ISIN" }, { id: "hierachy-bulk", title: "Bulk upload hiearchy" }];
+        _this.allViews = [{ id: "isin", title: "Add/Edit ISIN" }, { id: "isin-bulk", title: "Bulk upload ISIN" }];
         return _this;
     }
 
@@ -2679,7 +2679,7 @@ var DataEditor = function (_React$Component) {
                 { className: 'grid' },
                 _react2.default.createElement(
                     'div',
-                    { className: 'g 1/5' },
+                    { className: 'g 1/5@xl' },
                     _react2.default.createElement(_Menu2.default, {
                         onChangeView: this.changeView.bind(this),
                         currentView: this.state.currentView,
@@ -2688,7 +2688,7 @@ var DataEditor = function (_React$Component) {
                 ),
                 _react2.default.createElement(
                     'div',
-                    { className: 'g 4/5' },
+                    { className: 'g 4/5@xl' },
                     contentArea
                 )
             );
@@ -3413,6 +3413,11 @@ var Isin = function (_React$Component) {
     }, {
         key: 'render',
         value: function render() {
+            var saveButtonStatusType = null;
+            if (this.state.saving) {
+                saveButtonStatusType = _Status2.default.STATUS_LOADING;
+            }
+
             return _react2.default.createElement(
                 'form',
                 { onSubmit: this.onSave.bind(this) },
@@ -3439,7 +3444,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(
                             'div',
                             { className: 'text--right' },
-                            _react2.default.createElement(_Status2.default, { isLoading: this.state.saving }),
+                            _react2.default.createElement(_Status2.default, { type: saveButtonStatusType }),
                             _react2.default.createElement(
                                 'button',
                                 { className: 'button button--fat',
@@ -3476,7 +3481,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_DateField2.default, { id: 'SECURITY_START_DATE',
                             ref: 'SECURITY_START_DATE',
                             onChange: this.onFormChange.bind(this),
@@ -3485,7 +3490,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_DateField2.default, { id: 'MATURITY_DATE',
                             ref: 'MATURITY_DATE',
                             onChange: this.onFormChange.bind(this),
@@ -3494,7 +3499,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'SOURCE',
                             ref: 'SOURCE',
                             onChange: this.onFormChange.bind(this),
@@ -3502,7 +3507,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'COUPON_RATE',
                             ref: 'COUPON_RATE',
                             regex: '^[0-9.]+[%]?$',
@@ -3511,7 +3516,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'MONEY_RAISED_GBP',
                             ref: 'MONEY_RAISED_GBP',
                             regex: '^[0-9.]+$',
@@ -3520,7 +3525,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'MONEY_RAISED_LOCAL',
                             ref: 'MONEY_RAISED_LOCAL',
                             regex: '^[0-9.]+$',
@@ -3529,7 +3534,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'TRADING_CURRENCY',
                             ref: 'TRADING_CURRENCY',
                             regex: '^[A-Z]{3}$',
@@ -3538,7 +3543,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'MARGIN',
                             ref: 'MARGIN',
                             regex: '^[0-9.]+[%]?$',
@@ -3547,7 +3552,7 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_SimpleSelectField2.default, { id: 'PRA_ITEM_4748',
                             ref: 'PRA_ITEM_4748',
                             options: this.props.productOptions,
@@ -3556,12 +3561,28 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2' },
+                        { className: 'g 1/2@l' },
                         _react2.default.createElement(_AutoCompleteField2.default, { id: 'COMPANY_NAME',
                             ref: 'COMPANY_NAME',
                             sourceUrl: '/admin/search.json?type=issuer&q={search}',
                             onChange: this.onIssuerChange.bind(this),
                             label: 'COMPANY_NAME: Issuer Name' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g' },
+                        _react2.default.createElement(
+                            'div',
+                            { className: 'text--right' },
+                            _react2.default.createElement(_Status2.default, { type: saveButtonStatusType }),
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'button button--fat',
+                                    type: 'submit',
+                                    disabled: !this.canBeSaved() },
+                                'Save'
+                            )
+                        )
                     )
                 )
             );
@@ -3622,7 +3643,7 @@ var IsinField = function (_BaseField) {
     }, {
         key: 'handleInput',
         value: function handleInput() {
-            var val = this.getValue();
+            var val = this.getValue().toUpperCase();
             this.setState({
                 fieldText: val,
                 statusType: null,
@@ -3690,7 +3711,6 @@ var IsinField = function (_BaseField) {
                 });
                 this.props.onChange(this.props.id, val, true);
             }.bind(this)).catch(function (err) {
-                console.log(err);
                 this.setState({
                     statusType: _Status2.default.STATUS_ERROR,
                     statusText: 'An error occurred checking this ISIN'
@@ -3939,14 +3959,18 @@ Object.defineProperty(exports, "__esModule", {
 
 var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
+var _Loading = require('../../Utils/Loading');
+
+var _Loading2 = _interopRequireDefault(_Loading);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
 
-function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; } // import React from 'react';
 
-// import React from 'react';
-// import Loading from '../../Utils/Loading';
 
 var Status = function (_React$Component) {
     _inherits(Status, _React$Component);
@@ -4037,7 +4061,7 @@ var StatusLoading = function (_React$Component3) {
                 React.createElement(
                     'span',
                     { className: 'icon-text__icon' },
-                    React.createElement(Loading, null)
+                    React.createElement(_Loading2.default, null)
                 ),
                 React.createElement(
                     'span',
@@ -4168,7 +4192,7 @@ var StatusError = function (_React$Component6) {
     return StatusError;
 }(React.Component);
 
-},{}],33:[function(require,module,exports){
+},{"../../Utils/Loading":37}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {

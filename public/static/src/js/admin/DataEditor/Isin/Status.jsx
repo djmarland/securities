@@ -1,5 +1,5 @@
 // import React from 'react';
-// import Loading from '../../Utils/Loading';
+import Loading from '../../Utils/Loading';
 
 export default class Status extends React.Component {
     static get STATUS_OK() { return 'ok'; }
