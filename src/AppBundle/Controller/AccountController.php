@@ -31,7 +31,7 @@ class AccountController extends Controller
         $user = $usersService->findByEmail(new Email($visitor->getUsername()));
 
         $emailForm = $this->createForm(ChangeEmail::class, [
-            'currentEmail' => $user->getEmail()
+            'currentEmail' => $user->getEmail(),
         ]);
         $passwordForm = $this->createForm(NewPassword::class);
 
@@ -65,7 +65,6 @@ class AccountController extends Controller
                     'ok',
                     'Email address changed. You may need to login again'
                 );
-
             } catch (ValidationException $e) {
                 $emailForm->addError(new FormError($e->getMessage()));
             } catch (FormInvalidException $e) {
@@ -98,7 +97,6 @@ class AccountController extends Controller
                     'ok',
                     'Password changed sucessfully'
                 );
-
             } catch (ValidationException $e) {
                 $passwordForm->addError(new FormError($e->getMessage()));
             } catch (FormInvalidException $e) {

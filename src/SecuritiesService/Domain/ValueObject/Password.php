@@ -6,9 +6,10 @@ use SecuritiesService\Domain\Exception\ValidationException;
 
 class Password
 {
+    private $digest;
 
     public function __construct(
-        $plainText
+        string $plainText
     ) {
         $this->validate($plainText);
 
@@ -18,40 +19,27 @@ class Password
         unset($plainText); // even remove it from memory
     }
 
-    /**
-     * @var string
-     */
-    private $digest;
+    public function __toString(): string
+    {
+        return (string) $this->getDigest();
+    }
 
-    public function getDigest()
+    public function getDigest(): PasswordDigest
     {
         return $this->digest;
     }
 
-    /**
-     * @param $plainText
-     * @return bool
-     * @throws ValidationException
-     */
-    protected function validate($plainText)
+    private function validate(string $plainText): bool
     {
         if (strlen($plainText) < 6) {
             throw new ValidationException('Password must be at least 6 characters long');
         }
         if (in_array($plainText, [
             '123456',
-            'password'
+            'password',
         ])) {
             throw new ValidationException('You must choose a more secure password');
         }
         return true;
-    }
-
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return (string) $this->getDigest();
     }
 }

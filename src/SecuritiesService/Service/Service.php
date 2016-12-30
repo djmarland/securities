@@ -9,6 +9,7 @@ use Doctrine\ORM\Query;
 use Doctrine\ORM\QueryBuilder;
 use SecuritiesService\Data\BucketProviderInterface;
 use SecuritiesService\Data\Database\Mapper\MapperFactory;
+use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
@@ -70,7 +71,7 @@ abstract class Service
     protected function simpleFindByUUID(
         UUID $id,
         string $type
-    ) {
+    ): Entity {
         $qb = $this->getQueryBuilder($type);
         $qb->select(self::TBL)
             ->where(self::TBL . '.id = :id')
@@ -95,7 +96,7 @@ abstract class Service
         QueryBuilder $qb,
         int $limit,
         int $page
-    ) {
+    ): QueryBuilder {
         return $qb->setMaxResults($limit)
             ->setFirstResult($this->getOffset($limit, $page));
     }

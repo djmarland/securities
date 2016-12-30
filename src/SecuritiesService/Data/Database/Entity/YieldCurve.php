@@ -11,64 +11,13 @@ use Doctrine\ORM\Mapping as ORM;
 class YieldCurve extends Entity
 {
     /** @ORM\Column(type="integer") */
-    private $year;
+    public $year;
     /** @ORM\Column(type="string") */
-    private $type;
+    public $type;
     /** @ORM\Column(type="text",length=5000) */
-    private $dataPoints;
+    public $dataPoints;
     /** @ORM\ManyToOne(targetEntity="Currency") */
-    private $currency;
+    public $currency;
     /** @ORM\ManyToOne(targetEntity="ParentGroup") */
-    private $parentGroup;
-
-    /** Getters/Setters */
-    public function getYear()
-    {
-        return $this->year;
-    }
-
-    public function setYear($year)
-    {
-        $this->year = $year;
-    }
-
-    public function getType()
-    {
-        return $this->type;
-    }
-
-    public function setType($type)
-    {
-        $this->type = $type;
-    }
-
-    public function getDataPoints()
-    {
-        return $this->dataPoints;
-    }
-
-    public function setDataPoints($dataPoints)
-    {
-        $this->dataPoints = $dataPoints;
-    }
-
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
-
-    public function getParentGroup()
-    {
-        return $this->parentGroup;
-    }
-
-    public function setParentGroup($parentGroup)
-    {
-        $this->parentGroup = $parentGroup;
-    }
+    public $parentGroup;
 }

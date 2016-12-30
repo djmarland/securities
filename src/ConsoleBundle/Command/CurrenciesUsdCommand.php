@@ -93,7 +93,7 @@ class CurrenciesUsdCommand extends Command
 
         // calculate their local currency rate for that date
         foreach ($securities as $security) {
-            $this->output->writeln('Setting USD value for ' . $security->getIsin());
+            $this->output->writeln('Setting USD value for ' . $security->isin);
             /** @var Security $security */
             if ($this->fixSecurity($security, $rates)) {
                 $this->output->writeln('Success');
@@ -113,8 +113,8 @@ class CurrenciesUsdCommand extends Command
     private function fixSecurity(Security $security, array $rates)
     {
         // fetch the data needed to calculate this
-        $fromCode = $security->getCurrency()->getCode();
-        $moneyRaised = $security->getMoneyRaisedLocal();
+        $fromCode = $security->currency->code;
+        $moneyRaised = $security->moneyRaisedLocal;
 
         if (!$fromCode || !$moneyRaised) {
             return false;
@@ -136,13 +136,12 @@ class CurrenciesUsdCommand extends Command
         // now we need to do math!
         $usdValue = $moneyRaised / $rate;
 
-        $security->setUsdValueNow($usdValue);
-        $security->setUsdCalculationDate($this->today);
+        $security->usdValueNow = $usdValue;
+        $security->usdCalculationDate = $this->today;
         $this->output->writeln('Converting ' . $fromCode . $moneyRaised . ' to $' . $usdValue);
         $this->em->persist($security);
         $this->em->flush();
 
         return true;
     }
-
 }

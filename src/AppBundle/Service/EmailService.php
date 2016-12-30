@@ -38,5 +38,4 @@ class EmailService
 
         return $this->mailer->send($message);
     }
-
 }

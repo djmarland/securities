@@ -55,7 +55,7 @@ class ExchangeRatesCommand extends Command
         try {
             $result = $ratesClient->getHistorical($dateToUse);
             $date = $result->getDate();
-            foreach($result->getRates() as $currency => $value) {
+            foreach ($result->getRates() as $currency => $value) {
                 $this->addRate($currency, $value, $date);
                 $this->output->writeln('Saved ' . $currency . ': ' . $value);
             }
@@ -71,9 +71,9 @@ class ExchangeRatesCommand extends Command
     {
         $currency = $this->getCurrency($code);
         $rate = new ExchangeRate();
-        $rate->setCurrency($currency);
-        $rate->setDate($date);
-        $rate->setRate($value);
+        $rate->currency = $currency;
+        $rate->date = $date;
+        $rate->rate = $value;
         $this->em->persist($rate);
         $this->em->flush();
     }
@@ -87,7 +87,7 @@ class ExchangeRatesCommand extends Command
         if (!$currency) {
             $currency = new Currency();
         }
-        $currency->setCode($code);
+        $currency->code = $code;
         $this->em->persist($currency);
         $this->em->flush();
         return $currency;

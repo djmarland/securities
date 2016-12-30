@@ -28,9 +28,9 @@ class ConfigService extends Service
         array $newSettings
     ) {
         $entity = $this->getDbEntity();
-        $settings = $entity->getSettings();
+        $settings = $entity->settings;
         $settings = array_merge($settings, $newSettings);
-        $entity->setSettings($settings);
+        $entity->settings = $settings;
         return $this->save($entity);
     }
 
@@ -43,7 +43,7 @@ class ConfigService extends Service
             $activeFeatures[$feature] = (in_array($feature, $features));
         }
         $entity = $this->getDbEntity();
-        $entity->setFeatures($activeFeatures);
+        $entity->features = $activeFeatures;
         return $this->save($entity);
     }
 

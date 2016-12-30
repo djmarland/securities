@@ -11,27 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Sector extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
-    private $name;
+    public $name;
     /** @ORM\ManyToOne(targetEntity="Industry") */
-    private $industry;
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getIndustry()
-    {
-        return $this->industry;
-    }
-
-    public function setIndustry($industry)
-    {
-        $this->industry = $industry;
-    }
+    public $industry;
 }

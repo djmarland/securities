@@ -30,7 +30,7 @@ class AdminController extends Controller
             /** @var Product $product */
             $productOptions[] = [
                 'value' => $product->getNumber(),
-                'label' => $product->getName() . ' (' . $product->getNumber() . ')'
+                'label' => $product->getName() . ' (' . $product->getNumber() . ')',
             ];
         }
 
@@ -150,7 +150,7 @@ class AdminController extends Controller
             'totalToProcessFormatted' => number_format($totalLines),
             'totalProcessedFormatted' => 0,
             'totalBatches' => $currentChunkCount,
-            'lastBatchCompleted' => 0
+            'lastBatchCompleted' => 0,
         ];
 
         file_put_contents($filePath . 'bulk-stats.json', json_encode($bulkStats));
@@ -178,7 +178,6 @@ class AdminController extends Controller
             $status = 'found';
 
             $this->toView('security', $security->jsonSerialize(true), true);
-
         } catch (InvalidISINException $e) {
             $status = 'error';
             $message = $e->getMessage();
@@ -196,11 +195,11 @@ class AdminController extends Controller
         $search = trim($this->request->get('q'));
         $type = trim($this->request->get('type'));
 
-        switch($type) {
+        switch ($type) {
             case 'issuer':
                 $results = $this->get('app.services.issuers')
                     ->search($search);
-            break;
+                break;
             default:
                 throw new HttpException(400, 'Missing type');
         }
@@ -333,7 +332,7 @@ class AdminController extends Controller
                 try {
                     // put in database
                     $entity = $command->single($row);
-                    $isins[] = (string)$entity->getIsin();
+                    $isins[] = (string) $entity->getIsin();
                 } catch (\Exception $e) {
                     // this isin failed for some reason. we need to store it
                     $failures[] = (object) [
@@ -356,7 +355,6 @@ class AdminController extends Controller
             file_put_contents($statusFileName, json_encode($stats));
         }
 
-
         $this->toView('stats', $stats, true);
         $this->toView('securities', $securities, true);
         return $this->renderJSON();
@@ -369,7 +367,6 @@ class AdminController extends Controller
         }
 
         try {
-
             $formData = $this->request->request->all();
             if (empty($formData)) {
                 // must be JSON
@@ -419,7 +416,6 @@ class AdminController extends Controller
         }
 
         return $this->renderTemplate('admin:settings', 'Settings - Admin');
-
     }
 
     public function compareAction()
@@ -432,7 +428,6 @@ class AdminController extends Controller
         $this->toView('sourceIsins', $sourceIsins);
 
         return $this->renderTemplate('admin:compare', 'Compare - Admin');
-
     }
 
     public function exportAction()
@@ -454,7 +449,6 @@ class AdminController extends Controller
             if ($percentage == 100) {
                 $download = true;
             }
-
         }
 
         $this->toView('showExportButton', (
@@ -480,7 +474,7 @@ class AdminController extends Controller
             $export = (object) [
                 'fileName' => time() . '.csv',
                 'processed' => 0,
-                'total' => $service->countAll()
+                'total' => $service->countAll(),
             ];
 
             // create the data file with the headings
@@ -542,7 +536,6 @@ class AdminController extends Controller
                             $industryName = (string) $sector->getIndustry()->getName();
                         }
                     }
-
                 }
             }
 
@@ -569,7 +562,7 @@ class AdminController extends Controller
                 $currency,
                 $startDate,
                 $endDate,
-                $coupon
+                $coupon,
             ];
             $this->addRow($values, $export->fileName);
         }

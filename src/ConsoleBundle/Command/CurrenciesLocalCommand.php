@@ -82,17 +82,17 @@ class CurrenciesLocalCommand extends Command
     private function fixSecurity(Security $security)
     {
         // fetch the data needed to calculate this
-        $date = $security->getStartDate();
+        $date = $security->startDate;
         $fromCode = 'GBP';
-        $toCode = $security->getCurrency()->getCode();
-        $moneyRaised = $security->getMoneyRaised();
+        $toCode = $security->currency->code;
+        $moneyRaised = $security->moneyRaised;
 
         if (!$date || !$fromCode || !$toCode || !$moneyRaised) {
             return false;
         }
 
         if ($fromCode == $toCode) {
-            $security->setMoneyRaisedLocal($moneyRaised);
+            $security->moneyRaisedLocal = $moneyRaised;
             $this->output->writeln('Saving simple GBP to GBP');
             $this->em->persist($security);
             $this->em->flush();
@@ -101,7 +101,7 @@ class CurrenciesLocalCommand extends Command
 
         if ($toCode == 'GBX') {
             // GBX is penny prices, so in that currency will be 100 times bigger
-            $security->setMoneyRaisedLocal($moneyRaised * 100);
+            $security->moneyRaisedLocal = ($moneyRaised * 100);
             $this->output->writeln('Saving GBX');
             $this->em->persist($security);
             $this->em->flush();
@@ -110,7 +110,7 @@ class CurrenciesLocalCommand extends Command
 
         $currenciesRepo = $this->em->getRepository('SecuritiesService:Currency');
         $gbp = $currenciesRepo->findOneBy(['code' => 'GBP']);
-        $local = $security->getCurrency();
+        $local = $security->currency;
 
         $ratesRepo = $this->em->getRepository('SecuritiesService:ExchangeRate');
         // for that day get the relevant exchange rates
@@ -119,23 +119,22 @@ class CurrenciesLocalCommand extends Command
 
         if (!$gbpRate || !$localRate) {
             $this->output->writeln(
-                'Could not find exchange rates for GBP or ' . $local->getCode() . ' on ' . $date->format('c')
+                'Could not find exchange rates for GBP or ' . $local->code . ' on ' . $date->format('c')
             );
             return false;
         }
 
         // now we need to do math!
         // convert the GBP value to USD
-        $usdValue = $moneyRaised / $gbpRate->getRate();
+        $usdValue = $moneyRaised / $gbpRate->rate;
         // convert this usd value to local
-        $localValue = $usdValue * $localRate->getRate();
+        $localValue = $usdValue * $localRate->rate;
 
-        $security->setMoneyRaisedLocal($localValue);
-        $this->output->writeln('Saving as ' . $local->getCode() . ':' . $localValue);
+        $security->moneyRaisedLocal = $localValue;
+        $this->output->writeln('Saving as ' . $local->code . ':' . $localValue);
         $this->em->persist($security);
         $this->em->flush();
 
         return true;
     }
-
 }

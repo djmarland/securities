@@ -25,7 +25,3 @@ trait CurrenciesTableTrait
         $this->toView('currenciesUpdatedDate', $updatedDate);
     }
 }
-
-
-
-

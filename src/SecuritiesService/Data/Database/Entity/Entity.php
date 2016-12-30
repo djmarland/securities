@@ -12,44 +12,23 @@ abstract class Entity
      * @ORM\Column(type="uuid_binary")
      * @ORM\GeneratedValue(strategy="NONE")
      */
-    protected $id;
+    public $id;
 
     /**
      * @ORM\Column(type="string")
      */
-    protected $uuid;
+    public $uuid;
 
     /** @ORM\Column(type="datetime", nullable=false) */
-    protected $createdAt;
+    public $createdAt;
 
     /** @ORM\Column(type="datetime", nullable=false) */
-    protected $updatedAt;
+    public $updatedAt;
 
     public function __construct()
     {
         $this->id = Uuid::uuid4();
         $this->uuid = (string) $this->id;
-    }
-
-    /** Getters/Setters */
-    public function getId()
-    {
-        return $this->id;
-    }
-
-    public function getUuid()
-    {
-        return $this->uuid;
-    }
-
-    public function getCreatedAt()
-    {
-        return $this->createdAt;
-    }
-
-    public function getUpdatedAt()
-    {
-        return $this->updatedAt;
     }
 
     /**
@@ -59,8 +38,8 @@ abstract class Entity
      */
     public function onCreate()
     {
-        $this->createdAt = new \DateTime();
-        $this->updatedAt = new \DateTime();
+        $this->createdAt = new DateTime();
+        $this->updatedAt = new DateTime();
     }
 
     /**
@@ -70,6 +49,6 @@ abstract class Entity
      */
     public function onUpdate()
     {
-        $this->updatedAt = new \DateTime();
+        $this->updatedAt = new DateTime();
     }
 }

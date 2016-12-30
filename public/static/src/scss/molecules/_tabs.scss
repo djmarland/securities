@@ -1,6 +1,7 @@
 .tabs-wrap {
     white-space: nowrap;
     overflow-x: auto;
+    overflow-y: hidden;
     margin-bottom: $size-grid-unit;
 }
 .tabs {

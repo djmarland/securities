@@ -1,0 +1,45 @@
+version: '2'
+
+services:
+
+  web:
+    image: nginx:latest
+    ports:
+      - "8085:80"
+    volumes:
+      - .:/app
+      - ./nginx/www.isinanalytics.local.conf:/etc/nginx/conf.d/www.isinanalytics.local.conf
+    links:
+      - php
+    depends_on:
+      - php
+
+  php:
+    build: ./docker/php
+    expose:
+      - 9000
+    restart: always
+    volumes:
+      - ./docker/php/conf/php.ini:/usr/local/etc/php/conf.d/custom.ini
+      - .:/app
+    links:
+      - db
+
+  db:
+    image: mysql:5.7
+    expose:
+      - "3306"
+    ports:
+      - "3306:3306"
+    volumes:
+      - ./data:/data
+      - db_data:/var/lib/mysql
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: root
+      MYSQL_DATABASE: app
+      MYSQL_USER: dbuser
+      MYSQL_PASSWORD: password
+
+volumes:
+  db_data:

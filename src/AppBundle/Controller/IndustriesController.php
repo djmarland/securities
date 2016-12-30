@@ -66,7 +66,6 @@ class IndustriesController extends Controller
     {
         $industry = $this->getIndustry($request);
         return $this->renderSecurities($request, $industry);
-
     }
 
     public function maturityProfileAction(Request $request)

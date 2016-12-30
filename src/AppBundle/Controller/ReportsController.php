@@ -50,7 +50,7 @@ class ReportsController extends Controller
 
         $filter = new SecuritiesFilter([
             'start' => $twoWeeksAgo,
-            'end' => $date
+            'end' => $date,
         ]);
         $securities = $this->get('app.services.securities')
             ->find(1000, 1, $filter);
@@ -72,7 +72,7 @@ class ReportsController extends Controller
 
         // to build a bubble chart
         $colours = [
-            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638"
+            "#634D7B", "#B66D6D", "#B6B16D", "#579157", '#777', "#342638",
         ];
         $headings = [];
         $chartData = [];
@@ -94,7 +94,7 @@ class ReportsController extends Controller
                     'x' => $security->getTerm(),
                     'y' => $security->getCoupon() * 100,
                     'r' => ($security->getMoneyRaised() / $largest) * 100,
-                    'label' => $security->getIsin() . ': ' . $security->getCompany()->getName()
+                    'label' => $security->getIsin() . ': ' . $security->getCompany()->getName(),
                 ];
             }
         }

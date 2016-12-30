@@ -10,18 +10,18 @@ use Symfony\Component\Form\FormBuilderInterface;
 
 class ChangeEmail extends AbstractType
 {
-    public function buildForm(FormBuilderInterface $builder, array $options)
+    public function buildForm(FormBuilderInterface $builder, array $options): void
     {
         $builder
             ->add('email', EmailType::class, [
                 'label' => 'E-mail address',
-                'data' => (string) $options['data']['currentEmail']
+                'data' => (string) $options['data']['currentEmail'],
             ])
             ->add('old_password', PasswordType::class, ['label' => 'Current Password'])
             ->add('save', SubmitType::class, ['label' => 'Update e-mail address']);
     }
 
-    public function getName()
+    public function getName(): string
     {
         return 'app_account_change_email';
     }

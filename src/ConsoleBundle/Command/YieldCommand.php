@@ -56,11 +56,11 @@ class YieldCommand extends Command
         $data = $this->getDataPoints($row);
 
         $yieldCurve = new YieldCurve();
-        $yieldCurve->setType($type);
-        $yieldCurve->setYear($year);
-        $yieldCurve->setDataPoints($data);
-        $yieldCurve->setParentGroup($this->getParentGroup($row));
-        $yieldCurve->setCurrency($this->getCurrency($row));
+        $yieldCurve->type = $type;
+        $yieldCurve->year = $year;
+        $yieldCurve->dataPoints = $data;
+        $yieldCurve->parentGroup = $this->getParentGroup($row);
+        $yieldCurve->currency = $this->getCurrency($row);
         $this->em->persist($yieldCurve);
         $this->em->flush();
     }

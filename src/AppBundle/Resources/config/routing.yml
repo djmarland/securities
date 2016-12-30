@@ -301,3 +301,17 @@ report_fsa54:
 report_fsa50:
   path:     /reports/fsa50
   defaults: { _controller: AppBundle:Reports:fsa50 }
+
+# Curves
+curves_today:
+  path:     /curves
+  defaults: { _controller: AppBundle:Curves:show }
+
+curves_today_date:
+  path:     /curves/{year}-{month}-{day}
+  defaults: { _controller: AppBundle:Curves:show }
+  requirements:
+    year:  "[0-9]{4}"
+    month: "[0-9]{2}"
+    day:   "[0-9]{2}"
+

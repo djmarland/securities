@@ -18,7 +18,7 @@ class UserProvider implements UserProviderInterface
         $this->usersService = $usersService;
     }
 
-    public function loadUserByUsername($email)
+    public function loadUserByUsername($email): Visitor
     {
         try {
             $user = $this->usersService->findByEmail(new Email($email));
@@ -29,7 +29,7 @@ class UserProvider implements UserProviderInterface
         return $visitor;
     }
 
-    public function refreshUser(UserInterface $visitor)
+    public function refreshUser(UserInterface $visitor): Visitor
     {
         if (!$visitor instanceof Visitor) {
             throw new UnsupportedUserException(
@@ -38,8 +38,8 @@ class UserProvider implements UserProviderInterface
         }
         return $this->loadUserByUsername((string) $visitor->getUsername());
     }
-    
-    public function supportsClass($class)
+
+    public function supportsClass($class): bool
     {
         return $class === 'AppBundle\Security\Visitor';
     }

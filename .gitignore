@@ -1,10 +1,6 @@
-/.bash_history
 /.cache
-/.vagrant
 /.composer
 /.idea
-/.viminfo
-/.mysql_history
 /app/config/parameters.yml
 /app/bootstrap.php.cache
 /app/SymfonyRequirements.php
@@ -17,12 +13,6 @@
 /node_modules
 /tmp/
 /.npm/
-/.v8flags.3.14.5.9.vagrant.json
 /.ssh/
 /data/
-.mysql_history.TMP
 build/
-/isin/
-/fixerio/
-/openexchangerates/
-/html/

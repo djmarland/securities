@@ -11,42 +11,9 @@ use Doctrine\ORM\Mapping as ORM;
 class ExchangeRate extends Entity
 {
     /** @ORM\Column(type="float", nullable=false) */
-    private $rate;
-
+    public $rate;
     /** @ORM\Column(type="date", nullable=false) */
-    private $date;
-
+    public $date;
     /** @ORM\ManyToOne(targetEntity="Currency") */
-    private $currency;
-
-    /** Getters/Setters */
-    public function getRate()
-    {
-        return $this->rate;
-    }
-
-    public function setRate($rate)
-    {
-        $this->rate = $rate;
-    }
-
-    public function getDate()
-    {
-        return $this->date;
-    }
-
-    public function setDate($date)
-    {
-        $this->date = $date;
-    }
-
-    public function getCurrency()
-    {
-        return $this->currency;
-    }
-
-    public function setCurrency($currency)
-    {
-        $this->currency = $currency;
-    }
+    public $currency;
 }

@@ -90,11 +90,11 @@ class CurrenciesController extends Controller
             $linkableYears = [];
             $lastDecadeDates = [];
 
-            foreach(range($currentYear, $earliestYear) as $year) {
+            foreach (range($currentYear, $earliestYear) as $year) {
                 $linkableYears[] = (object) [
                     'hrefParams' => [
                         'code' => $currency->getCode(),
-                        'year' => $year
+                        'year' => $year,
                     ],
                     'text' => $year,
                 ];
@@ -253,39 +253,39 @@ class CurrenciesController extends Controller
                         'borderWidth' => 1,
                         'pointRadius' => 0,
                         'pointHitRadius' => 3,
-                        'borderColor' =>'#634D7B',
-                        'backgroundColor' =>'#B8B0C0',
+                        'borderColor' => '#634D7B',
+                        'backgroundColor' => '#B8B0C0',
                         'data' => $data,
                     ],
                 ],
             ],
             'options' => json_decode('{
-                    "axisFormat" : "$#",
-                    "tooltips"  : {
-                        "callbacks" : {}
-                    },
-                    "scales" : {
-                        "yAxes" : [{
-                            "ticks": {}
-                        }]
-                    },
-                    "legend" : {
-                        "display": false
-                    },
-                    "responsive": true,
-                    "hover" : {
-                        "mode" : "label"
-                    },
-                    "maintainAspectRatio": true,
-                    "elements" : {
-                        "line": {
-                            "tension": 0.2
-                        }
-                    },
-                    "animation" : {
-                        "duration" : 0
+                "axisFormat" : "$#",
+                "tooltips"  : {
+                    "callbacks" : {}
+                },
+                "scales" : {
+                    "yAxes" : [{
+                        "ticks": {}
+                    }]
+                },
+                "legend" : {
+                    "display": false
+                },
+                "responsive": true,
+                "hover" : {
+                    "mode" : "label"
+                },
+                "maintainAspectRatio": true,
+                "elements" : {
+                    "line": {
+                        "tension": 0.2
                     }
-                }')
+                },
+                "animation" : {
+                    "duration" : 0
+                }
+            }'),
         ];
     }
 

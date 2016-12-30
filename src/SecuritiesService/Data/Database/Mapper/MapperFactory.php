@@ -36,6 +36,11 @@ class MapperFactory
         return new CurrencyMapper($this);
     }
 
+    public function createCurve(): CurveMapper
+    {
+        return new CurveMapper($this);
+    }
+
     public function createExchangeRate(): ExchangeRateMapper
     {
         return new ExchangeRateMapper($this);

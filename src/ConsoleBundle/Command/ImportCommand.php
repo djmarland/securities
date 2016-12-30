@@ -121,8 +121,8 @@ class ImportCommand extends Command
                 $product = new Product();
             }
 
-            $product->setNumber($number);
-            $product->setName($name);
+            $product->number = $number;
+            $product->name = $name;
             $this->em->persist($product);
             $this->em->flush();
 
@@ -156,18 +156,18 @@ class ImportCommand extends Command
         );
         if (!$security) {
             $security = new Security();
-            $security->setIsin($isin);
+            $security->isin = $isin;
         }
-        $security->setExchange(''); // wrong - to be removed
+        $security->exchange = ''; // wrong - to be removed
 
         $name = $this->getRowValue($row, 'SECURITY_NAME');
         if ($name) {
-            $security->setName($name);
+            $security->name = $name;
         }
 
         $source = $this->getRowValue($row, 'SOURCE');
         if ($source) {
-            $security->setSource($source);
+            $security->source = $source;
         }
 
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
@@ -184,7 +184,7 @@ class ImportCommand extends Command
         } else {
             $startDate = new DateTimeImmutable('1970-01-01T00:00:00Z');
         }
-        $security->setStartDate($startDate);
+        $security->startDate = $startDate;
         $maturityDate = $this->getRowValue($row, 'MATURITY_DATE');
         if ($maturityDate) {
             if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
@@ -192,7 +192,7 @@ class ImportCommand extends Command
             } else {
                 $maturityDate = null;
             }
-            $security->setMaturityDate($maturityDate);
+            $security->maturityDate = $maturityDate;
         }
 
         $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_GBP');
@@ -201,7 +201,7 @@ class ImportCommand extends Command
             if (!is_numeric($moneyRaised)) {
                 throw new \Exception('Money Raised (GBP) is not a number');
             }
-            $security->setMoneyRaised($moneyRaised);
+            $security->moneyRaised = $moneyRaised;
         }
 
         $moneyRaised = $this->getRowValue($row, 'MONEY_RAISED_LOCAL');
@@ -210,7 +210,7 @@ class ImportCommand extends Command
             if (!is_numeric($moneyRaised)) {
                 throw new \Exception('Money Raised (Local) is not a number');
             }
-            $security->setMoneyRaisedLocal($moneyRaised);
+            $security->moneyRaisedLocal = $moneyRaised;
         }
 
         $coupon = $this->getRowValue($row, 'COUPON_RATE');
@@ -224,7 +224,7 @@ class ImportCommand extends Command
             } else {
                 $coupon = null;
             }
-            $security->setCoupon($coupon);
+            $security->coupon = $coupon;
         }
 
         $margin = $this->getRowValue($row, 'MARGIN');
@@ -238,7 +238,7 @@ class ImportCommand extends Command
             } else {
                 $margin = null;
             }
-            $security->setMargin($margin);
+            $security->margin = $margin;
         }
 
 
@@ -248,17 +248,17 @@ class ImportCommand extends Command
 
         $product = $this->getRowValue($row, 'PRA_ITEM_4748');
         if ($product) {
-            $security->setProduct($this->getProduct($row));
+            $security->product = $this->getProduct($row);
         }
 
         $currency = $this->getRowValue($row, 'TRADING_CURRENCY');
         if ($currency) {
-            $security->setCurrency($this->getCurrency($row));
+            $security->currency = $this->getCurrency($row);
         }
 
         $company = $this->getRowValue($row, 'COMPANY_NAME');
         if ($company) {
-            $security->setCompany($this->getCompany($row));
+            $security->company = $this->getCompany($row);
         }
 
         $this->em->persist($security);
@@ -310,16 +310,16 @@ class ImportCommand extends Command
         if (!$company) {
             $company = new Company();
         }
-        $company->setName($name);
+        $company->name = $name;
 
         $country = $this->getRowValue($row, 'COUNTRY_OF_INCORPORATION');
         if ($country) {
-            $company->setCountry($this->getCountry($row));
+            $company->country = $this->getCountry($row);
         }
 
         $parent = $this->getRowValue($row, 'COMPANY_PARENT');
         if ($parent) {
-            $company->setParentGroup($this->getParentGroup($row));
+            $company->parentGroup = $this->getParentGroup($row);
         }
 
         $this->em->persist($company);
@@ -337,7 +337,7 @@ class ImportCommand extends Command
         if (!$currency) {
             $currency = new Currency();
         }
-        $currency->setCode($code);
+        $currency->code = $code;
         $this->em->persist($currency);
         $this->em->flush();
         return $currency;
@@ -357,7 +357,7 @@ class ImportCommand extends Command
         if (!$parentGroup) {
             $parentGroup = new ParentGroup();
         }
-        $parentGroup->setName($name);
+        $parentGroup->name = $name;
 
         $sector = $this->getRowValue($row, 'ICB_SECTOR');
         if ($sector) {
@@ -381,8 +381,8 @@ class ImportCommand extends Command
         if (!$sector) {
             $sector = new Sector();
         }
-        $sector->setName($name);
-        $sector->setIndustry($this->getIndustry($row));
+        $sector->name = $name;
+        $sector->industry = $this->getIndustry($row);
         $this->em->persist($sector);
         $this->em->flush();
         return $sector;
@@ -401,7 +401,7 @@ class ImportCommand extends Command
         if (!$industry) {
             $industry = new Industry();
         }
-        $industry->setName($name);
+        $industry->name = $name;
         $this->em->persist($industry);
         $this->em->flush();
         return $industry;
@@ -424,8 +424,8 @@ class ImportCommand extends Command
         }
 
         $country = new Country();
-        $country->setName($countryName);
-        $country->setRegion($this->getRegion($row));
+        $country->name = $countryName;
+        $country->region = $this->getRegion($row);
         $this->em->persist($country);
         $this->em->flush();
         return $country;
@@ -445,7 +445,7 @@ class ImportCommand extends Command
             return $region;
         }
         $region = new Region();
-        $region->setName($name);
+        $region->name = $name;
         $this->em->persist($region);
         $this->em->flush();
         return $region;

@@ -70,7 +70,7 @@ class SecuritiesService extends Service
         $qb->select(self::TBL . '.isin');
         $items = $qb->getQuery()->getArrayResult();
 
-        return array_map(function($i) {
+        return array_map(function ($i) {
             return $i['isin'];
         }, $items);
     }

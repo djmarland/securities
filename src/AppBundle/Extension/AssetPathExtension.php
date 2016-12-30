@@ -27,6 +27,6 @@ class AssetPathExtension extends \Twig_Extension
 
     public function assetPath($asset)
     {
-        return '/static/' . $this->timestamp . '/' .  $asset;
+        return '/static/' . $this->timestamp . '/' . $asset;
     }
 }

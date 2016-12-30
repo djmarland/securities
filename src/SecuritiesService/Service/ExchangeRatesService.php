@@ -78,7 +78,7 @@ class ExchangeRatesService extends Service
         Currency $currency,
         array $dateTimes
     ): array {
-        $dates = array_map(function($date) {
+        $dates = array_map(function ($date) {
             return $date->format('Y-m-d');
         }, $dateTimes);
 

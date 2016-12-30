@@ -1,44 +1,35 @@
 <?php
 namespace SecuritiesService\Domain\ValueObject;
+
 use SecuritiesService\Domain\Exception\ValidationException;
-/**
- * Class Address
- * For handling addresses
- */
+
 class Email
 {
+    private $email;
+
     public function __construct(
-        $email
+        string $email
     ) {
         $email = trim(strtolower($email));
         $this->validate($email);
         $this->email = $email;
     }
-    /**
-     * @var string
-     */
-    private $email;
-    public function getEmail()
+
+    public function __toString()
+    {
+        return $this->getEmail();
+    }
+
+    public function getEmail(): string
     {
         return $this->email;
     }
-    /**
-     * @param $email
-     * @return bool
-     * @throws ValidationException
-     */
-    protected function validate($email)
+
+    private function validate(string $email): bool
     {
         if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
             throw new ValidationException('E-mail address is not valid');
         }
         return true;
-    }
-    /**
-     * @return string
-     */
-    public function __toString()
-    {
-        return $this->getEmail();
     }
 }

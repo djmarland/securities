@@ -1,16 +1,15 @@
 <?php
 namespace AppBundle\Security;
+
 use SecuritiesService\Domain\Entity\User;
 use Symfony\Component\Security\Core\User\EquatableInterface;
 use Symfony\Component\Security\Core\User\UserInterface;
+
 class Visitor implements UserInterface, \Serializable, EquatableInterface
 {
     private $userEntity;
-
     private $username;
-
     private $password;
-
     private $id;
 
     public function __construct(
@@ -22,46 +21,44 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         $this->password = (string) $userEntity->getPasswordDigest();
     }
 
-    public function getUser()
+    public function getUser(): User
     {
         return $this->userEntity;
     }
 
-    public function getUsername()
+    public function getUsername(): string
     {
         return $this->username;
     }
 
-    public function getDisplayName()
+    public function getDisplayName(): string
     {
         return $this->getUsername();
     }
 
-    public function getId()
+    public function getId(): string
     {
         return $this->id;
     }
 
-    public function getPassword()
+    public function getPassword(): ?string
     {
         return $this->password;
     }
 
-    public function passwordMatches($match)
+    public function passwordMatches(string $match): bool
     {
         return $this->getUser()->passwordMatches($match);
     }
 
-    public function getSalt()
+    public function getSalt(): ?string
     {
         return null; // no salt
     }
 
-    public function getRoles()
+    public function getRoles(): array
     {
-        $roles = [
-            'ROLE_USER'
-        ];
+        $roles = ['ROLE_USER'];
 
 //        if ($this->getUser()->getLevel() == User::BRONZE) {
 //            $roles[] = 'ROLE_BRONZE';
@@ -74,21 +71,21 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         return $roles;
     }
 
-    public function eraseCredentials()
+    public function eraseCredentials(): void
     {
         $this->userEntity = null;
     }
 
     public function serialize()
     {
-        return serialize(array(
+        return serialize([
             $this->id,
             $this->username,
-            $this->password
-        ));
+            $this->password,
+        ]);
     }
 
-    public function unserialize($serialized)
+    public function unserialize($serialized): void
     {
         list (
             $this->id,
@@ -97,7 +94,7 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
             ) = unserialize($serialized);
     }
 
-    public function isEqualTo(UserInterface $user)
+    public function isEqualTo(UserInterface $user): bool
     {
         return (
             (string) $this->getId() == (string) $user->getId() &&

@@ -3,7 +3,6 @@
 
 namespace SecuritiesService\Data\Database\Mapper;
 
-
 use SecuritiesService\Domain\Entity\Entity;
 use SecuritiesService\Domain\Entity\User;
 use SecuritiesService\Domain\ValueObject\Email;

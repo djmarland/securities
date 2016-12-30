@@ -1,17 +1,20 @@
 <?php
 namespace SecuritiesService\Domain\Entity;
+
 use SecuritiesService\Domain\ValueObject\Email;
 use SecuritiesService\Domain\ValueObject\UUID;
-use SecuritiesService\Domain\ValueObject\Password;
 use SecuritiesService\Domain\ValueObject\PasswordDigest;
-use DateTime;
-/**
- * Class User
- * For describe users of the system
- */
+
 class User extends Entity
 {
     const KEY_PREFIX = 'U';
+
+    private $name;
+    private $email;
+    private $passwordDigest;
+    private $passwordExpired = false;
+    private $isActive = true;
+    private $isAdmin = false;
 
     public function __construct(
         UUID $id,
@@ -30,127 +33,87 @@ class User extends Entity
         $this->isActive = $isActive;
         $this->isAdmin = $isAdmin;
     }
-    /**
-     * @var string
-     */
-    private $name;
-    /**
-     * @return string
-     */
-    public function getName()
+
+    public function getName(): string
     {
         return $this->name;
     }
-    public function setName($name)
-    {
-        if ($name != $this->name) {
-            // @todo - validate not empty
-            $this->name = $name;
-            $this->updated();
-        }
-    }
-    /**
-     * @var string
-     */
-    private $email;
-    /**
-     * @return string
-     */
-    public function getEmail()
+//    public function setName(string $name): void
+//    {
+//        if ($name != $this->name) {
+//            // @todo - validate not empty
+//            $this->name = $name;
+//            $this->updated();
+//        }
+//    }
+
+    public function getEmail(): Email
     {
         return $this->email;
     }
-    public function setEmail(Email $email)
-    {
-        if ((string)$email != (string)$this->email) {
-            // @todo - validate not empty
-            // @todo - reset the user to unconfirmed
-            $this->email = $email;
-            $this->updated();
-        }
-    }
-    /**
-     * @var PasswordDigest
-     */
-    private $passwordDigest;
-    /**
-     * @return PasswordDigest
-     */
-    public function getPasswordDigest()
+//    public function setEmail(Email $email): void
+//    {
+//        if ((string) $email != (string) $this->email) {
+//            // @todo - validate not empty
+//            // @todo - reset the user to unconfirmed
+//            $this->email = $email;
+//            $this->updated();
+//        }
+//    }
+
+    public function getPasswordDigest(): PasswordDigest
     {
         return $this->passwordDigest;
     }
-    /**
-     * @param $newPassword
-     */
-    public function setPasswordDigest($newPassword)
-    {
-        $password = new Password($newPassword);
-        $this->passwordDigest = $password->getDigest();
-    }
-    public function passwordMatches($match)
+
+//    public function setPasswordDigest($newPassword): void
+//    {
+//        $password = new Password($newPassword);
+//        $this->passwordDigest = $password->getDigest();
+//    }
+    public function passwordMatches($match): bool
     {
         return $this->getPasswordDigest()->matches($match);
     }
-    /**
-     * @var boolean
-     */
-    private $passwordExpired = false;
-    /**
-     * @return boolean
-     */
-    public function passwordHasExpired()
+
+    public function passwordHasExpired(): bool
     {
         return $this->passwordExpired;
     }
-    public function expirePassword()
-    {
-        $this->passwordExpired = true;
-    }
-    public function renewPassword()
-    {
-        $this->passwordExpired = false;
-    }
-    /**
-     * @var boolean
-     */
-    private $isActive = true;
-    /**
-     * @return boolean
-     */
-    public function isActive()
+//    public function expirePassword()
+//    {
+//        $this->passwordExpired = true;
+//    }
+//    public function renewPassword()
+//    {
+//        $this->passwordExpired = false;
+//    }
+    public function isActive(): bool
     {
         return $this->isActive;
     }
-    public function activate()
-    {
-        $this->isActive = true;
-        $this->updated();
-    }
-    public function deactivate()
-    {
-        $this->isActive = false;
-        $this->updated();
-    }
-    /**
-     * @var boolean
-     */
-    private $isAdmin = false;
-    /**
-     * @return boolean
-     */
-    public function isAdmin()
+//    public function activate()
+//    {
+//        $this->isActive = true;
+//        $this->updated();
+//    }
+//    public function deactivate()
+//    {
+//        $this->isActive = false;
+//        $this->updated();
+//    }
+    public function isAdmin(): bool
     {
         return $this->isAdmin;
     }
-    public function makeAdmin()
-    {
-        $this->isAdmin = true;
-        $this->updated();
-    }
-    public function revokeAdmin()
-    {
-        $this->isAdmin = false;
-        $this->updated();
-    }
+//    public function makeAdmin(): void
+//    {
+//        $this->isAdmin = true;
+//        $this->updated();
+//    }
+//    public function revokeAdmin(): void
+//    {
+//        $this->isAdmin = false;
+//        $this->updated();
+//    }
 }

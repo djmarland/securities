@@ -14,7 +14,7 @@ $debugMode = false;
 $hostname = $_SERVER['HTTP_HOST'] ?? null;
 
 $environments = [
-    'isin.app' => 'dev',
+    'www.isinanalytics.local:8085' => 'dev',
     'alpha.isinanalytics.com' => 'alpha',
     'beta.isinanalytics.com' => 'beta',
     'www.isinanalytics.com' => 'prod',

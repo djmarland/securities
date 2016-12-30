@@ -11,29 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Config extends Entity
 {
     /** @ORM\Column(type="json_array") */
-    private $settings = [];
-
+    public $settings = [];
     /** @ORM\Column(type="json_array") */
-    private $features = [];
-
-    /** Getters/Setters */
-    public function getSettings()
-    {
-        return $this->settings;
-    }
-
-    public function setSettings($settings)
-    {
-        $this->settings = $settings;
-    }
-
-    public function getFeatures()
-    {
-        return $this->features;
-    }
-
-    public function setFeatures($features)
-    {
-        $this->features = $features;
-    }
+    public $features = [];
 }

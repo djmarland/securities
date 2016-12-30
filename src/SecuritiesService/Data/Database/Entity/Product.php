@@ -11,28 +11,7 @@ use Doctrine\ORM\Mapping as ORM;
 class Product extends Entity
 {
     /** @ORM\Column(type="integer", length=2) */
-    private $number;
+    public $number;
     /** @ORM\Column(type="string", length=255) */
-    private $name;
-
-    /** Getters/Setters */
-    public function getNumber()
-    {
-        return $this->number;
-    }
-
-    public function setNumber($number)
-    {
-        $this->number = $number;
-    }
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+    public $name;
 }

@@ -11,15 +11,5 @@ use Doctrine\ORM\Mapping as ORM;
 class SecurityType extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
-    private $name;
-
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
+    public $name;
 }

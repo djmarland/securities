@@ -36,7 +36,6 @@ class SecurityController extends Controller
             $data = $form->getData();
             // begin to process form
             try {
-
                 // attempt to create an e-mail address object
                 try {
                     $email = new Email($data['email']);
@@ -76,7 +75,6 @@ class SecurityController extends Controller
                 $this->get('security.token_storage')->setToken($token);
 
                 return $this->redirectToRoute('welcome');
-
             } catch (ValidationException $e) {
                 $form->addError(new FormError($e->getMessage()));
             } catch (FormInvalidException $e) {
@@ -152,7 +150,7 @@ class SecurityController extends Controller
 
                     $emailBody = $this->renderEmail('reset-password', [
                         'name' => $user->getName(),
-                        'link' => $webLink
+                        'link' => $webLink,
                     ]);
 
                     $this->get('app.email.sender')->send(
@@ -160,7 +158,6 @@ class SecurityController extends Controller
                         'Reset Password',
                         $emailBody
                     );
-
                 } catch (EntityNotFoundException $e) {
                     // silently catch.
                     // don't inform if the e-mail exists.

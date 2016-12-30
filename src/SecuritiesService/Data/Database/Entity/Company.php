@@ -11,52 +11,11 @@ use Doctrine\ORM\Mapping as ORM;
 class Company extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
-    private $name;
+    public $name;
     /** @ORM\Column(type="string", length=255, nullable=true) */
-    private $marketCode;
+    public $marketCode;
     /** @ORM\ManyToOne(targetEntity="Country") */
-    private $country;
+    public $country;
     /** @ORM\ManyToOne(targetEntity="ParentGroup") */
-    private $parentGroup;
-
-    /** Getters/Setters */
-    public function getName()
-    {
-        return $this->name;
-    }
-
-    public function setName($name)
-    {
-        $this->name = $name;
-    }
-
-    public function getMarketCode()
-    {
-        return $this->marketCode;
-    }
-
-    public function setMarketCode($marketCode)
-    {
-        $this->marketCode = $marketCode;
-    }
-
-    public function getCountry()
-    {
-        return $this->country;
-    }
-
-    public function setCountry($country)
-    {
-        $this->country = $country;
-    }
-
-    public function getParentGroup()
-    {
-        return $this->parentGroup;
-    }
-
-    public function setParentGroup($parentGroup)
-    {
-        $this->parentGroup = $parentGroup;
-    }
+    public $parentGroup;
 }

@@ -11,16 +11,5 @@ use Doctrine\ORM\Mapping as ORM;
 class Currency extends Entity
 {
     /** @ORM\Column(type="string", length=255) */
-    private $code;
-
-    /** Getters/Setters */
-    public function getCode()
-    {
-        return $this->code;
-    }
-
-    public function setCode($code)
-    {
-        $this->code = $code;
-    }
+    public $code;
 }
