@@ -44,6 +44,9 @@
     ],
     "post-root-package-install": [
       "SymfonyStandard\\Composer::hookRootPackageInstall"
+    ],
+    "post-update-cmd": [
+      "bash script/install-hooks.sh"
     ]
   },
   "config": {
