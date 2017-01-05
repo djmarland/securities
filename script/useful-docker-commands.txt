@@ -1,0 +1,5 @@
+docker exec -it securities_php_1 /bin/bash
+
+docker-compose stop php
+docker-compose build php
+docker-compose up -d --no-deps php
