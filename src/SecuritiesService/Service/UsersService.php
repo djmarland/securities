@@ -52,8 +52,8 @@ class UsersService extends Service
     ): User {
         // create a user database entity
         $user = new DbUser();
-        $user->setEmail((string) $email);
-        $user->setPasswordDigest((string) $password);
+        $user->email = (string) $email;
+        $user->passwordDigest = (string) $password;
 
         $this->entityManager->persist($user);
         $this->entityManager->flush();
@@ -75,9 +75,9 @@ class UsersService extends Service
 
         $userDb = $this->getDbEntityFromDomain($user);
 
-        $userDb->setResetTokenUsername($token->getUsername());
-        $userDb->setResetTokenDigest((string) $token->getDigest());
-        $userDb->setResetTokenExpiry($expiry);
+        $userDb->resetTokenUsername = $token->getUsername();
+        $userDb->resetTokenDigest = (string) $token->getDigest();
+        $userDb->resetTokenExpiry = $expiry;
 
         // save it
         $this->entityManager->persist($userDb);
@@ -106,23 +106,23 @@ class UsersService extends Service
         }
 
         // ensure the token expiry hasn't passed
-        if ($userDb->getResetTokenExpiry() < $now) {
+        if ($userDb->resetTokenExpiry < $now) {
             throw new InvalidCredentialsException('Token expired');
         }
 
         // ensure the reset password is correct
-        $digest = new PasswordDigest($userDb->getResetTokenDigest());
+        $digest = new PasswordDigest($userDb->resetTokenDigest);
         if (!$digest->matches($token->getPassword())) {
             throw new InvalidCredentialsException('Token invalid');
         }
 
         // update the password
-        $userDb->setPasswordDigest((string) $newPassword);
+        $userDb->passwordDigest = (string) $newPassword;
 
         // remove the reset token details
-        $userDb->setResetTokenUsername(null);
-        $userDb->setResetTokenDigest(null);
-        $userDb->setResetTokenExpiry(null);
+        $userDb->resetTokenUsername = null;
+        $userDb->resetTokenDigest = null;
+        $userDb->resetTokenExpiry = null;
 
         // save it
         $this->entityManager->persist($userDb);
@@ -137,7 +137,7 @@ class UsersService extends Service
         Email $newEmail
     ): bool {
         $userDb = $this->getDbEntityFromDomain($user);
-        $userDb->setEmail((string) $newEmail);
+        $userDb->email = (string) $newEmail;
 
         // save it
         $this->entityManager->persist($userDb);
@@ -151,7 +151,7 @@ class UsersService extends Service
         Password $password
     ): bool {
         $userDb = $this->getDbEntityFromDomain($user);
-        $userDb->setPasswordDigest((string) $password);
+        $userDb->passwordDigest = (string) $password;
 
         // save it
         $this->entityManager->persist($userDb);
