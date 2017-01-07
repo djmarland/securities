@@ -53,7 +53,9 @@ class HomeController extends Controller
 
         // top 10 currencies, year to date
         $now = new \DateTimeImmutable();
-        $startOfYear = new \DateTimeImmutable($now->format('Y') . '-01-01T00:00:00Z');
+        $year = $now->format('Y');
+        $startOfYear = new \DateTimeImmutable($year . '-01-01T00:00:00Z');
+        $this->toView('chartYear', $year);
 
         $top10Currencies = $securitiesService->sumByCurrencyForDateRange($startOfYear, $now, 5);
         $currencyChartHeadings = [];
@@ -78,6 +80,21 @@ class HomeController extends Controller
         $this->toView('industryChartData', $industryChartData);
 
         return $this->renderTemplate('home:index');
+    }
+
+    public function robotsAction()
+    {
+        $response = new Response();
+        $response->headers->set('Content-Type', 'text/plain');
+
+        // default state should always be prod
+        $path = 'AppBundle:home:robots.txt.twig';
+        $enabled = $this->getParameter('enable_robots_txt');
+        if ($enabled === false) {
+            $path = 'AppBundle:home:robots-off.txt.twig';
+        }
+
+        return $this->render($path, [], $response);
     }
 
     public function sitemapAction()
