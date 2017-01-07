@@ -41,7 +41,7 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         return $this->id;
     }
 
-    public function getPassword(): ?string
+    public function getPassword()//: ?string
     {
         return $this->password;
     }
@@ -51,7 +51,7 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         return $this->getUser()->passwordMatches($match);
     }
 
-    public function getSalt(): ?string
+    public function getSalt()//: ?string
     {
         return null; // no salt
     }
@@ -71,7 +71,7 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         return $roles;
     }
 
-    public function eraseCredentials(): void
+    public function eraseCredentials()//: void
     {
         $this->userEntity = null;
     }
@@ -85,7 +85,7 @@ class Visitor implements UserInterface, \Serializable, EquatableInterface
         ]);
     }
 
-    public function unserialize($serialized): void
+    public function unserialize($serialized)//: void
     {
         list (
             $this->id,
