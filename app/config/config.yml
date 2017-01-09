@@ -115,3 +115,15 @@ swiftmailer:
     port: 587
     encryption: "tls"
     auth_mode: "login"
+
+hwi_oauth:
+    # list of names of the firewalls in which this bundle is active, this setting MUST be set
+    firewall_names: [main]
+    resource_owners:
+        google:
+            type:                google
+            client_id:           "%google_client_id%"
+            client_secret:       "%google_client_secret%"
+            scope:               "email"
+            options:
+                csrf: true

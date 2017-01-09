@@ -21,6 +21,15 @@ security:
                 lifetime: 9.46708e8 # 30 years
                 path:     /
                 always_remember_me: true
+            oauth:
+                resource_owners:
+                    google:             "/login/check-google"
+                login_path:        /login
+                use_forward:       false
+                failure_path:      /login
+
+                oauth_user_provider:
+                    service: app.security.user_provider
 
     access_control:
         - { path: ^/(login|register), roles: IS_AUTHENTICATED_ANONYMOUSLY }

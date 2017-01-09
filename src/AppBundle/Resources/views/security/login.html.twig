@@ -12,6 +12,13 @@
         </div>
     {% endif %}
 
-    {% include '@partials/_login-form.html.twig' %}
+    <div class="grid">
+        <div class="g 1/2@xl">
+            {% include '@partials/_login-form.html.twig' %}
+        </div>
+        <div class="g 1/2@xl">
+            {% include '@partials/_login-oauth.html.twig' %}
+        </div>
+    </div>
 
 {% endblock %}

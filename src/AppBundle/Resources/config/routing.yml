@@ -1,3 +1,16 @@
+# OAuth Routes
+hwi_oauth_redirect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/redirect.xml"
+    prefix:   /connect
+
+hwi_oauth_connect:
+    resource: "@HWIOAuthBundle/Resources/config/routing/connect.xml"
+    prefix:   /connect
+
+google_login:
+    path: /login/check-google
+
+# App routes
 home:
   path:     /
   defaults: { _controller: AppBundle:Home:index }

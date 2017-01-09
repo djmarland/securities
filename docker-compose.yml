@@ -8,7 +8,7 @@ services:
       - "8085:80"
     volumes:
       - .:/app
-      - ./nginx/www.isinanalytics.local.conf:/etc/nginx/conf.d/www.isinanalytics.local.conf
+      - ./nginx/dev.isinanalytics.com.conf:/etc/nginx/conf.d/dev.isinanalytics.com.conf
     links:
       - php
     depends_on:

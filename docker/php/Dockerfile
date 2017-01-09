@@ -18,6 +18,7 @@ RUN apt-get install -y libicu-dev
 RUN docker-php-ext-install -j$(nproc) intl
 
 # Composer
+RUN apt-get install -y zip unzip
 RUN php -r "copy('https://getcomposer.org/installer', 'composer-setup.php');"
 RUN php composer-setup.php
 RUN php -r "unlink('composer-setup.php');"

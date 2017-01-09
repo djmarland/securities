@@ -19,3 +19,6 @@ parameters:
     secret:            ThisTokenIsNotSoSecretChangeIt
 
     ex_rates_api_key:  ~
+
+    google_client_id:  ~
+    google_client_secret:  ~
