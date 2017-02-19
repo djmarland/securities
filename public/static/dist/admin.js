@@ -2605,7 +2605,7 @@ var BulkUploadFailure = function (_React$Component3) {
     return BulkUploadFailure;
 }(_react2.default.Component);
 
-},{"../../Utils/FileDrop":36,"../../Utils/Loading":37,"../../Utils/Message":38,"react":"react"}],24:[function(require,module,exports){
+},{"../../Utils/FileDrop":40,"../../Utils/Loading":41,"../../Utils/Message":42,"react":"react"}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3030,6 +3030,7 @@ var BaseField = function (_React$Component) {
 
         var _this = _possibleConstructorReturn(this, (BaseField.__proto__ || Object.getPrototypeOf(BaseField)).call(this));
 
+        _this.processInitial = false;
         _this.fieldId = 'field-' + Math.floor(Math.random() * 10000);
         _this.state = {
             fieldText: '',
@@ -3041,6 +3042,24 @@ var BaseField = function (_React$Component) {
     }
 
     _createClass(BaseField, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            if (this.props.value) {
+                this.processInitial = true;
+                this.setState({
+                    fieldText: this.props.value
+                });
+            }
+        }
+    }, {
+        key: 'componentDidUpdate',
+        value: function componentDidUpdate() {
+            if (this.handleInput && this.processInitial) {
+                this.processInitial = false;
+                this.handleInput();
+            }
+        }
+    }, {
         key: 'disable',
         value: function disable() {
             this.setState({
@@ -3417,6 +3436,7 @@ var Isin = function (_React$Component) {
             if (this.state.saving) {
                 saveButtonStatusType = _Status2.default.STATUS_LOADING;
             }
+            var fieldValues = this.props.fieldValues || {};
 
             return _react2.default.createElement(
                 'form',
@@ -3468,6 +3488,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_IsinField2.default, { id: 'ISIN',
                             ref: 'ISIN',
                             onChange: this.onIsinChange.bind(this),
+                            value: fieldValues.ISIN || null,
                             label: 'ISIN: Enter new ISIN or one to search for*' })
                     ),
                     _react2.default.createElement(
@@ -3594,7 +3615,7 @@ var Isin = function (_React$Component) {
 
 exports.default = Isin;
 
-},{"../../Utils/Message":38,"./AutoCompleteField":25,"./DateField":27,"./IsinField":29,"./SimpleSelectField":30,"./SimpleTextField":31,"./Status":32,"react":"react"}],29:[function(require,module,exports){
+},{"../../Utils/Message":42,"./AutoCompleteField":25,"./DateField":27,"./IsinField":29,"./SimpleSelectField":30,"./SimpleTextField":31,"./Status":32,"react":"react"}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4192,7 +4213,7 @@ var StatusError = function (_React$Component6) {
     return StatusError;
 }(React.Component);
 
-},{"../../Utils/Loading":37}],33:[function(require,module,exports){
+},{"../../Utils/Loading":41}],33:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5271,7 +5292,7 @@ var GroupResult = function (_React$Component11) {
     return GroupResult;
 }(_react2.default.Component);
 
-},{"./../utils/AutoComplete":40,"./Lightbox":35,"react":"react"}],35:[function(require,module,exports){
+},{"./../utils/AutoComplete":44,"./Lightbox":35,"react":"react"}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5375,6 +5396,554 @@ exports.default = Lightbox;
 ;
 
 },{"react":"react","react-modal":21}],36:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Table = require('./Table');
+
+var _Table2 = _interopRequireDefault(_Table);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Handled = function (_React$Component) {
+    _inherits(Handled, _React$Component);
+
+    function Handled() {
+        _classCallCheck(this, Handled);
+
+        var _this = _possibleConstructorReturn(this, (Handled.__proto__ || Object.getPrototypeOf(Handled)).call(this));
+
+        _this.state = {};
+        return _this;
+    }
+
+    _createClass(Handled, [{
+        key: 'restoreISIN',
+        value: function restoreISIN(isin) {
+            this.props.onIsinToNew(isin);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            var items = [];
+            this.props.items.forEach(function (item, i) {
+                items.push(_react2.default.createElement(HandledItem, { key: i, item: item, onRestore: _this2.restoreISIN.bind(_this2) }));
+            });
+
+            return _react2.default.createElement(
+                'ul',
+                { className: 'list--lined' },
+                items
+            );
+        }
+    }]);
+
+    return Handled;
+}(_react2.default.Component);
+
+exports.default = Handled;
+
+var HandledItem = function (_React$Component2) {
+    _inherits(HandledItem, _React$Component2);
+
+    function HandledItem() {
+        _classCallCheck(this, HandledItem);
+
+        return _possibleConstructorReturn(this, (HandledItem.__proto__ || Object.getPrototypeOf(HandledItem)).apply(this, arguments));
+    }
+
+    _createClass(HandledItem, [{
+        key: 'restore',
+        value: function restore() {
+            this.props.onRestore(this.props.item.isin);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var item = this.props.item;
+            return _react2.default.createElement(
+                'li',
+                { className: 'g-unit' },
+                _react2.default.createElement(_Table2.default, { item: item }),
+                _react2.default.createElement(
+                    'p',
+                    { className: 'text--right g-unit' },
+                    _react2.default.createElement(
+                        'button',
+                        { className: 'button button--fat', onClick: this.restore.bind(this) },
+                        'Move back to New'
+                    )
+                )
+            );
+        }
+    }]);
+
+    return HandledItem;
+}(_react2.default.Component);
+
+},{"./Table":39,"react":"react"}],37:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Handled = require('./Handled');
+
+var _Handled2 = _interopRequireDefault(_Handled);
+
+var _Ready = require('./Ready');
+
+var _Ready2 = _interopRequireDefault(_Ready);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Lse = function (_React$Component) {
+    _inherits(Lse, _React$Component);
+
+    function Lse() {
+        _classCallCheck(this, Lse);
+
+        var _this = _possibleConstructorReturn(this, (Lse.__proto__ || Object.getPrototypeOf(Lse)).call(this));
+
+        _this.state = {
+            currentView: 'todo',
+            toDoItems: [],
+            doneItems: [],
+            ignoredItems: []
+        };
+        _this.storedData = {};
+        _this.announcementId = null;
+        return _this;
+    }
+
+    _createClass(Lse, [{
+        key: 'componentDidMount',
+        value: function componentDidMount() {
+            this.announcementId = this.props.announceid;
+            this.announcements = this.props.announcements;
+            this.setupStorage();
+            this.sortAnnouncements();
+        }
+    }, {
+        key: 'sortAnnouncements',
+        value: function sortAnnouncements() {
+            var _this2 = this;
+
+            var toDo = [];
+            var done = [];
+            var ignored = [];
+
+            this.announcements.forEach(function (item) {
+                if (_this2.inArray(_this2.storedData.doneIsins, item.isin)) {
+                    done.push(item);
+                } else if (_this2.inArray(_this2.storedData.ignoredIsins, item.isin)) {
+                    ignored.push(item);
+                } else {
+                    toDo.push(item);
+                }
+            });
+
+            this.setState({
+                toDoItems: toDo,
+                doneItems: done,
+                ignoredItems: ignored
+            });
+        }
+    }, {
+        key: 'inArray',
+        value: function inArray(array, item) {
+            return array.indexOf(item) != -1;
+        }
+    }, {
+        key: 'saveData',
+        value: function saveData() {
+            localStorage.setItem(this.announcementId, JSON.stringify(this.storedData));
+        }
+    }, {
+        key: 'setupStorage',
+        value: function setupStorage() {
+            // check local storage. remove anything too old
+            this.storedData = JSON.parse(localStorage.getItem(this.announcementId)) || {
+                doneIsins: [],
+                ignoredIsins: []
+            };
+        }
+    }, {
+        key: 'showTodo',
+        value: function showTodo() {
+            this.setState({ currentView: 'todo' });
+        }
+    }, {
+        key: 'showDone',
+        value: function showDone() {
+            this.setState({ currentView: 'done' });
+        }
+    }, {
+        key: 'showIgnored',
+        value: function showIgnored() {
+            this.setState({ currentView: 'ignored' });
+        }
+    }, {
+        key: 'onIsinToNew',
+        value: function onIsinToNew(isin) {
+            var index = this.storedData.doneIsins.indexOf(isin);
+            if (index !== -1) {
+                this.storedData.doneIsins.splice(index, 1);
+            }
+            index = this.storedData.ignoredIsins.indexOf(isin);
+            if (index !== -1) {
+                this.storedData.ignoredIsins.splice(index, 1);
+            }
+            this.saveData();
+            this.sortAnnouncements();
+        }
+    }, {
+        key: 'onIsinToDone',
+        value: function onIsinToDone(isin) {
+            var _this3 = this;
+
+            this.storedData.doneIsins.push(isin);
+            this.storedData.doneIsins = this.storedData.doneIsins.filter(function (item, pos) {
+                return _this3.storedData.doneIsins.indexOf(item) == pos;
+            });
+            this.saveData();
+            this.sortAnnouncements();
+        }
+    }, {
+        key: 'onIsinToIgnored',
+        value: function onIsinToIgnored(isin) {
+            var _this4 = this;
+
+            this.storedData.ignoredIsins.push(isin);
+            this.storedData.ignoredIsins = this.storedData.ignoredIsins.filter(function (item, pos) {
+                return _this4.storedData.ignoredIsins.indexOf(item) == pos;
+            });
+            this.saveData();
+            this.sortAnnouncements();
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var toDoCount = this.state.toDoItems.length;
+            var doneCount = this.state.doneItems.length;
+            var ignoredCount = this.state.ignoredItems.length;
+            var toDoClass = 'tabs__tab';
+            var doneClass = 'tabs__tab';
+            var ignoredClass = 'tabs__tab';
+            var activeClass = ' tabs__tab--active';
+            var contentArea = void 0;
+            switch (this.state.currentView) {
+                case 'done':
+                    doneClass += activeClass;
+                    contentArea = _react2.default.createElement(_Handled2.default, { items: this.state.doneItems, onIsinToNew: this.onIsinToNew.bind(this) });
+                    break;
+                case 'ignored':
+                    ignoredClass += activeClass;
+                    contentArea = _react2.default.createElement(_Handled2.default, { items: this.state.ignoredItems, onIsinToNew: this.onIsinToNew.bind(this) });
+                    break;
+                default:
+                    toDoClass += activeClass;
+                    contentArea = _react2.default.createElement(_Ready2.default, { items: this.state.toDoItems,
+                        onIsinToDone: this.onIsinToDone.bind(this),
+                        onIsinToIgnore: this.onIsinToIgnored.bind(this) });
+                    break;
+            }
+
+            return _react2.default.createElement(
+                'div',
+                null,
+                _react2.default.createElement(
+                    'div',
+                    { className: 'tabs-wrap' },
+                    _react2.default.createElement(
+                        'ul',
+                        { className: 'tabs' },
+                        _react2.default.createElement(
+                            'li',
+                            { className: toDoClass },
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'tabs__link', onClick: this.showTodo.bind(this) },
+                                'New (',
+                                toDoCount,
+                                ')'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'li',
+                            { className: doneClass },
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'tabs__link', onClick: this.showDone.bind(this) },
+                                'Done (',
+                                doneCount,
+                                ')'
+                            )
+                        ),
+                        _react2.default.createElement(
+                            'li',
+                            { className: ignoredClass },
+                            _react2.default.createElement(
+                                'button',
+                                { className: 'tabs__link', onClick: this.showIgnored.bind(this) },
+                                'Ignored (',
+                                ignoredCount,
+                                ')'
+                            )
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    contentArea
+                )
+            );
+        }
+    }]);
+
+    return Lse;
+}(_react2.default.Component);
+
+exports.default = Lse;
+
+},{"./Handled":36,"./Ready":38,"react":"react"}],38:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _Isin = require('../DataEditor/Isin/Isin');
+
+var _Isin2 = _interopRequireDefault(_Isin);
+
+var _Table = require('./Table');
+
+var _Table2 = _interopRequireDefault(_Table);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Ready = function (_React$Component) {
+    _inherits(Ready, _React$Component);
+
+    function Ready() {
+        _classCallCheck(this, Ready);
+
+        var _this = _possibleConstructorReturn(this, (Ready.__proto__ || Object.getPrototypeOf(Ready)).call(this));
+
+        _this.state = {};
+        return _this;
+    }
+
+    _createClass(Ready, [{
+        key: 'ignore',
+        value: function ignore(isin) {
+            this.props.onIsinToIgnore(isin);
+        }
+    }, {
+        key: 'done',
+        value: function done(isin) {
+            this.props.onIsinToDone(isin);
+        }
+    }, {
+        key: 'getFieldValues',
+        value: function getFieldValues(item) {
+            return {
+                ISIN: item.isin
+            };
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var _this2 = this;
+
+            // just one in this bit
+            if (!this.props.items[0]) {
+                return null;
+            }
+            var item = this.props.items[0];
+            var fieldValues = this.getFieldValues(item);
+            var onClick = function onClick() {
+                _this2.ignore(item.isin);
+            };
+            var details = _react2.default.createElement(_Isin2.default, { productOptions: window.ISIN.productOptions,
+                fieldValues: fieldValues });
+            return _react2.default.createElement(
+                'div',
+                { className: 'g-unit' },
+                _react2.default.createElement(_Table2.default, { item: item }),
+                _react2.default.createElement(
+                    'p',
+                    { className: 'text--right g-unit' },
+                    'Check details below or ',
+                    _react2.default.createElement(
+                        'button',
+                        { className: 'button button--fat', onClick: onClick },
+                        'Ignore'
+                    )
+                ),
+                _react2.default.createElement(
+                    'div',
+                    null,
+                    details
+                )
+            );
+        }
+    }]);
+
+    return Ready;
+}(_react2.default.Component);
+
+exports.default = Ready;
+
+var ReadyItem = function (_React$Component2) {
+    _inherits(ReadyItem, _React$Component2);
+
+    function ReadyItem() {
+        _classCallCheck(this, ReadyItem);
+
+        return _possibleConstructorReturn(this, (ReadyItem.__proto__ || Object.getPrototypeOf(ReadyItem)).apply(this, arguments));
+    }
+
+    _createClass(ReadyItem, [{
+        key: 'ignore',
+        value: function ignore() {
+            this.props.onIgnore(this.props.item.isin);
+        }
+    }, {
+        key: 'done',
+        value: function done() {
+            this.props.onDone(this.props.item.isin);
+        }
+    }, {
+        key: 'render',
+        value: function render() {}
+    }]);
+
+    return ReadyItem;
+}(_react2.default.Component);
+
+},{"../DataEditor/Isin/Isin":28,"./Table":39,"react":"react"}],39:[function(require,module,exports){
+"use strict";
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require("react");
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var Table = function (_React$Component) {
+    _inherits(Table, _React$Component);
+
+    function Table() {
+        _classCallCheck(this, Table);
+
+        return _possibleConstructorReturn(this, (Table.__proto__ || Object.getPrototypeOf(Table)).apply(this, arguments));
+    }
+
+    _createClass(Table, [{
+        key: "render",
+        value: function render() {
+            var item = this.props.item;
+            var cells = [];
+            item.cellContents.forEach(function (cell, i) {
+                cells.push(_react2.default.createElement(
+                    "td",
+                    { key: i },
+                    cell
+                ));
+            });
+
+            return _react2.default.createElement(
+                "table",
+                { className: "table table--striped g-unit" },
+                _react2.default.createElement(
+                    "thead",
+                    null,
+                    _react2.default.createElement(
+                        "tr",
+                        null,
+                        _react2.default.createElement(
+                            "th",
+                            { colSpan: item.colspan },
+                            item.issuer
+                        )
+                    )
+                ),
+                _react2.default.createElement(
+                    "tbody",
+                    null,
+                    _react2.default.createElement(
+                        "tr",
+                        null,
+                        cells
+                    )
+                )
+            );
+        }
+    }]);
+
+    return Table;
+}(_react2.default.Component);
+
+exports.default = Table;
+
+},{"react":"react"}],40:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5536,7 +6105,7 @@ var FileDrop = function (_React$Component) {
 
 exports.default = FileDrop;
 
-},{"./Message":38,"react":"react"}],37:[function(require,module,exports){
+},{"./Message":42,"react":"react"}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5588,7 +6157,7 @@ var Loading = function (_React$Component) {
 
 exports.default = Loading;
 
-},{"react":"react"}],38:[function(require,module,exports){
+},{"react":"react"}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5846,7 +6415,7 @@ var MessageNone = function (_React$Component6) {
     return MessageNone;
 }(_react2.default.Component);
 
-},{"react":"react"}],39:[function(require,module,exports){
+},{"react":"react"}],43:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -5860,6 +6429,10 @@ var _reactDom2 = _interopRequireDefault(_reactDom);
 var _DataEditor = require('./DataEditor/DataEditor');
 
 var _DataEditor2 = _interopRequireDefault(_DataEditor);
+
+var _Lse = require('./Lse/Lse');
+
+var _Lse2 = _interopRequireDefault(_Lse);
 
 var _Issuer = require('./Issuer');
 
@@ -5877,6 +6450,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     function init() {
         var data = document.getElementById('data-editor'),
             issuer = document.getElementById('issuer-editor'),
+            lse = document.getElementById('lse-editor'),
             compare = document.getElementById('compare-editor');
 
         if (data) {
@@ -5887,6 +6461,10 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
             _reactDom2.default.render(_react2.default.createElement(_Issuer2.default, null), issuer);
         } else if (compare) {
             _reactDom2.default.render(_react2.default.createElement(_Compare2.default, null), compare);
+        } else if (lse) {
+            var announcements = JSON.parse(lse.dataset.lse);
+            var id = lse.dataset.announceid;
+            _reactDom2.default.render(_react2.default.createElement(_Lse2.default, { announcements: announcements, announceid: id }), lse);
         }
 
         // disable some events globally
@@ -5904,7 +6482,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 })();
 
-},{"./Compare":22,"./DataEditor/DataEditor":24,"./Issuer":34,"react":"react","react-dom":"react-dom"}],40:[function(require,module,exports){
+},{"./Compare":22,"./DataEditor/DataEditor":24,"./Issuer":34,"./Lse/Lse":37,"react":"react","react-dom":"react-dom"}],44:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5968,4 +6546,4 @@ module.exports = window.ReactDOM;
 
 module.exports = window.React;
 
-},{}]},{},[39]);
+},{}]},{},[43]);

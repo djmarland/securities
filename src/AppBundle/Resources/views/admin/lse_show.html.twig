@@ -37,15 +37,20 @@
 
 <h2 class="g-unit">Securities identified</h2>
 
+<div id="lse-editor"
+     data-lse="{{ announcementSource.securities|json_encode }}"
+     data-announceid="{{ announcement.id }}">Loading...</div>
+
+{#
 <div class="grid">
-    <div class="g 1/3">
+    <div class="g 1/3@xl">
         <p class="h3">Source</p>
     </div>
-    <div class="g 2/3">
+    <div class="g 2/3@xl">
         <p class="h3">Data to input</p>
     </div>
     {% for security in announcementSource.securities %}
-        <div class="g 1/3">
+        <div class="g 1/3@xl">
             <table class="table table--striped">
                 <thead>
                     <tr>
@@ -61,7 +66,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="g 2/3">
+        <div class="g 2/3@xl">
             <div class="form">
                 <div class="grid">
                     <div class="g 1">
@@ -70,16 +75,32 @@
                             <input class="form__input" type="text" value="{{ security.isin }}" />
                         </div>
                         <div class="form__group">
+                            <label class="form__label">Description</label>
+                            <input class="form__input" type="text" value="{{ security.description }}" />
+                        </div>
+                        <div class="form__group">
                             <label class="form__label">Issue Date</label>
                             <input class="form__input" type="text" value="{{ security.date }}" />
                         </div>
                         <div class="form__group">
-                            <label class="form__label">Issuer</label>
-                            <input class="form__input" type="text" value="{{ security.issuer }}" />
+                            <label class="form__label">End Date</label>
+                            <input class="form__input" type="text" value="{{ security.endDate }}" />
                         </div>
                         <div class="form__group">
-                            <label class="form__label">Amount</label>
+                            <label class="form__label">Amount (millions)</label>
                             <input class="form__input" type="text" value="{{ security.amount }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Coupon (%)</label>
+                            <input class="form__input" type="text" value="{{ security.coupon }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Currency</label>
+                            <input class="form__input" type="text" value="{{ security.currency }}" />
+                        </div>
+                        <div class="form__group">
+                            <label class="form__label">Issuer</label>
+                            <input class="form__input" type="text" value="{{ security.issuer }}" />
                         </div>
                     </div>
                     <div class="g">
@@ -92,4 +113,5 @@
         </div>
     {% endfor %}
 </div>
+#}
 {% endblock %}

@@ -10,6 +10,7 @@ use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use SecuritiesService\Domain\ValueObject\UUID;
 use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpKernel\Exception\HttpException;
 
 class AdminController extends Controller
@@ -331,10 +332,10 @@ class AdminController extends Controller
                 try {
                     // put in database
                     $entity = $command->single($row);
-                    $isins[] = (string)$entity->getIsin();
+                    $isins[] = (string) $entity->getIsin();
                 } catch (\Exception $e) {
                     // this isin failed for some reason. we need to store it
-                    $failures[] = (object)[
+                    $failures[] = (object) [
                         'isin' => $row['ISIN'],
                         'reason' => $e->getMessage(),
                     ];

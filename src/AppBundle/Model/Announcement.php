@@ -80,10 +80,10 @@ class Announcement
         $cellContents = [];
         foreach ($row->getElementsByTagName('td') as $cell) {
             /** @var $cell DOMElement */
-            $cellContents[] = $cell->textContent;
+            $cellContents[] = trim($cell->textContent);
         }
 
-        if (!isset($cellContents[2])) {
+        if (!isset($cellContents[2]) || empty($cellContents[2])) {
             return [];
         }
 
@@ -95,30 +95,52 @@ class Announcement
         }
 
         $isin = $this->parseIsin($isinCell);
+        $currency = $this->parseCurrency($amountCell, $detailCell);
         $amount = $this->parseAmount($amountCell);
 
         return [
             'cellContents' => $cellContents,
             'issuer' => $issuer,
-            'isin' => $isin,
-            'date' => $this->date->format('Y-m-d'),
+            'isin' => (string) $isin,
+            'description' => $detailCell,
+            'date' => $this->date->format('d/m/Y'),
+            'endDate' => $this->parseEnd($detailCell),
+            'coupon' => $this->parseCoupon($detailCell),
             'colspan' => count($cellContents),
-            'amount' => $amount
+            'currency' => $currency,
+            'amount' => $amount,
         ];
     }
 
-    private function parseAmount(string $amount): int
+    private function parseCoupon(string $details)
     {
-        return (int) str_replace(',','',$amount);
+        preg_match('/[0-9.]+%/', $details, $coupons);
+        return $coupons[0] ?? null;
+    }
+
+    private function parseEnd(string $details)
+    {
+        preg_match('/[0-9]{2}\/[0-9]{2}\/20[0-9]{2}/', $details, $dates);
+        return $dates[0] ?? null;
+    }
+
+    private function parseAmount(string $amount): float
+    {
+        return ((int) preg_replace("/[^0-9]/", "",$amount)) / 1000000;
+    }
+
+    private function parseCurrency(string $amount, string $detail): string
+    {
+        if (strpos($detail, '1P EACH') !== false) {
+            return 'GBX';
+        }
+        preg_match("/[A-Z]{3}/", $amount, $matches);
+        return $matches[0] ?? 'GBP';
     }
 
     private function parseIsin(string $cell): ISIN
     {
         preg_match(\Djmarland\ISIN\ISIN::VALIDATION_PATTERN, $cell, $isins);
-        if (!isset($isins[0])) {
-            var_dump($cell, $isins);
-            die;
-        }
         return new ISIN($isins[0]);
     }
 

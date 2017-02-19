@@ -161,6 +161,7 @@ export default class Isin extends React.Component {
         if (this.state.saving) {
             saveButtonStatusType = Status.STATUS_LOADING;
         }
+        let fieldValues = this.props.fieldValues || {};
 
         return (
             <form onSubmit={this.onSave.bind(this)}>
@@ -189,6 +190,7 @@ export default class Isin extends React.Component {
                     <IsinField id="ISIN"
                                ref="ISIN"
                                onChange={this.onIsinChange.bind(this)}
+                               value={fieldValues.ISIN || null}
                                label="ISIN: Enter new ISIN or one to search for*"/>
                 </div>
                 <div className="g">

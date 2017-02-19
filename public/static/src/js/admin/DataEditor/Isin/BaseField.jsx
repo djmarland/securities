@@ -4,6 +4,7 @@ import Status from './Status';
 export default class BaseField extends React.Component {
     constructor() {
         super();
+        this.processInitial = false;
         this.fieldId = 'field-' + Math.floor((Math.random() * 10000));
         this.state = {
             fieldText : '',
@@ -12,6 +13,22 @@ export default class BaseField extends React.Component {
             statusText : null
         };
     };
+
+    componentDidMount() {
+        if (this.props.value) {
+            this.processInitial = true;
+            this.setState({
+                fieldText : this.props.value
+            });
+        }
+    }
+
+    componentDidUpdate() {
+        if (this.handleInput && this.processInitial) {
+            this.processInitial = false;
+            this.handleInput();
+        }
+    }
 
     disable() {
         this.setState({
