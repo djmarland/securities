@@ -36,7 +36,6 @@ export default class Lse extends React.Component {
                 toDo.push(item);
             }
         });
-
         this.setState({
             toDoItems : toDo,
             doneItems : done,

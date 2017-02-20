@@ -64,7 +64,7 @@ class Announcement
         foreach ($rows as $i => $row) {
             /** @var $row DOMElement */
             if ($i == 0) {
-                $issuer = trim($row->textContent);
+                $issuer = strtoupper(trim($row->textContent));
                 continue;
             }
             $security = $this->handleRow($row, $issuer);
@@ -97,19 +97,36 @@ class Announcement
         $isin = $this->parseIsin($isinCell);
         $currency = $this->parseCurrency($amountCell, $detailCell);
         $amount = $this->parseAmount($amountCell);
+        $gbpAmount = null;
+        $localAmount = null;
+        if ($currency === 'GBP') {
+            $gbpAmount = $amount;
+        } else {
+            $localAmount = $amount;
+        }
 
         return [
             'cellContents' => $cellContents,
-            'issuer' => $issuer,
+            'issuer' => $this->cleanText($issuer),
             'isin' => (string) $isin,
-            'description' => $detailCell,
+            'description' => $this->cleanText($detailCell),
             'date' => $this->date->format('d/m/Y'),
             'endDate' => $this->parseEnd($detailCell),
             'coupon' => $this->parseCoupon($detailCell),
             'colspan' => count($cellContents),
             'currency' => $currency,
-            'amount' => $amount,
+            'gbpAmount' => $gbpAmount,
+            'localAmount' => $localAmount,
         ];
+    }
+
+    private function cleanText(string $text): string
+    {
+        $what   = "\\x00-\\x20";
+        $text = htmlentities($text, null, 'utf-8');
+        $text = str_replace("&nbsp;", "", $text);
+        $text = trim( preg_replace( "/[".$what."]+/" , ' ' , $text ) , $what );
+        return trim(html_entity_decode($text));
     }
 
     private function parseCoupon(string $details)
@@ -131,7 +148,7 @@ class Announcement
 
     private function parseCurrency(string $amount, string $detail): string
     {
-        if (strpos($detail, '1P EACH') !== false) {
+        if (strpos(strtoupper($detail), '1P EACH') !== false) {
             return 'GBX';
         }
         preg_match("/[A-Z]{3}/", $amount, $matches);

@@ -146,6 +146,10 @@ export default class Isin extends React.Component {
                     messageText : 'Security saved successfully'
                 });
 
+                if (this.props.onSave) {
+                    this.props.onSave();
+                }
+
             }.bind(this))
             .catch(function(err) {
                 this.setState({
@@ -197,6 +201,7 @@ export default class Isin extends React.Component {
                     <SimpleTextField id="SECURITY_NAME"
                                      ref="SECURITY_NAME"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.SECURITY_NAME || null}
                                      isRequired={true}
                                      label="SECURITY_NAME: Security Name*"/>
                 </div>
@@ -204,6 +209,7 @@ export default class Isin extends React.Component {
                     <DateField id="SECURITY_START_DATE"
                                ref="SECURITY_START_DATE"
                                onChange={this.onFormChange.bind(this)}
+                               value={fieldValues.SECURITY_START_DATE || null}
                                isRequired={true}
                                label="SECURITY_START_DATE: Start Date*"/>
                 </div>
@@ -211,6 +217,7 @@ export default class Isin extends React.Component {
                     <DateField id="MATURITY_DATE"
                                ref="MATURITY_DATE"
                                onChange={this.onFormChange.bind(this)}
+                               value={fieldValues.MATURITY_DATE || null}
                                isRequired={false}
                                label="MATURITY_DATE: Maturity Date"/>
                 </div>
@@ -218,6 +225,7 @@ export default class Isin extends React.Component {
                     <SimpleTextField id="SOURCE"
                                      ref="SOURCE"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.SOURCE || null}
                                      label="SOURCE: Source"/>
                 </div>
                 <div className="g 1/2@l">
@@ -225,6 +233,7 @@ export default class Isin extends React.Component {
                                      ref="COUPON_RATE"
                                      regex="^[0-9.]+[%]?$"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.COUPON_RATE || null}
                                      label="COUPON_RATE: Coupon (decimal, or with %)"/>
                 </div>
                 <div className="g 1/2@l">
@@ -232,6 +241,7 @@ export default class Isin extends React.Component {
                                      ref="MONEY_RAISED_GBP"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.MONEY_RAISED_GBP || null}
                                      label="MONEY_RAISED_GBP: Money Raised (GBP £m)"/>
                 </div>
                 <div className="g 1/2@l">
@@ -239,6 +249,7 @@ export default class Isin extends React.Component {
                                      ref="MONEY_RAISED_LOCAL"
                                      regex="^[0-9.]+$"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.MONEY_RAISED_LOCAL || null}
                                      label="MONEY_RAISED_LOCAL: Money Raised (Local Currency)"/>
                 </div>
                 <div className="g 1/2@l">
@@ -246,6 +257,7 @@ export default class Isin extends React.Component {
                                      ref="TRADING_CURRENCY"
                                      regex="^[A-Z]{3}$"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.TRADING_CURRENCY || null}
                                      label="TRADING_CURRENCY: Trading Currency"/>
                 </div>
                 <div className="g 1/2@l">
@@ -253,19 +265,22 @@ export default class Isin extends React.Component {
                                      ref="MARGIN"
                                      regex="^[0-9.]+[%]?$"
                                      onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.MARGIN || null}
                                      label="MARGIN: Margin (decimal, or with %)"/>
                 </div>
                 <div className="g 1/2@l">
                     <SimpleSelectField id="PRA_ITEM_4748"
-                                     ref="PRA_ITEM_4748"
-                                     options={this.props.productOptions}
-                                     onChange={this.onFormChange.bind(this)}
-                                     label="PRA_ITEM_4748: Product Type"/>
+                                       ref="PRA_ITEM_4748"
+                                       options={this.props.productOptions}
+                                       onChange={this.onFormChange.bind(this)}
+                                       value={fieldValues.PRA_ITEM_4748 || null}
+                                       label="PRA_ITEM_4748: Product Type"/>
                 </div>
                 <div className="g 1/2@l">
                     <AutoCompleteField id="COMPANY_NAME"
                                        ref="COMPANY_NAME"
                                        sourceUrl="/admin/search.json?type=issuer&q={search}"
+                                       value={fieldValues.COMPANY_NAME || null}
                                        onChange={this.onIssuerChange.bind(this)}
                                        label="COMPANY_NAME: Issuer Name"/>
                 </div>

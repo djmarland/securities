@@ -17,7 +17,18 @@ export default class Ready extends React.Component {
 
     getFieldValues(item) {
         return {
-            ISIN : item.isin
+            ISIN : item.isin,
+            SECURITY_NAME : item.description,
+            SECURITY_START_DATE : item.date,
+            MATURITY_DATE : item.endDate,
+            SOURCE : 'LSE',
+            COUPON_RATE : item.coupon,
+            MONEY_RAISED_GBP : item.gbpAmount,
+            MONEY_RAISED_LOCAL : item.localAmount,
+            TRADING_CURRENCY : item.currency,
+            MARGIN : '',
+            PRA_ITEM_4748 : '',
+            COMPANY_NAME : item.issuer
         };
     }
 
@@ -29,8 +40,10 @@ export default class Ready extends React.Component {
         let item = this.props.items[0];
         let fieldValues = this.getFieldValues(item);
         let onClick = () => {this.ignore(item.isin)};
-        let details = <Isin productOptions={window.ISIN.productOptions}
-                            fieldValues={fieldValues} />;
+        let details = <Isin key={item.isin}
+                            productOptions={window.ISIN.productOptions}
+                            fieldValues={fieldValues}
+                            onSave={() => this.done(item.isin)}/>;
         return(
             <div className="g-unit">
                 <Table item={item} />
@@ -44,18 +57,5 @@ export default class Ready extends React.Component {
                 </div>
             </div>
         );
-    }
-}
-
-class ReadyItem extends React.Component {
-    ignore() {
-        this.props.onIgnore(this.props.item.isin);
-    }
-    done() {
-        this.props.onDone(this.props.item.isin);
-    }
-
-    render() {
-
     }
 }

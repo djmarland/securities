@@ -3421,6 +3421,10 @@ var Isin = function (_React$Component) {
                     messageType: _Message2.default.TYPE_OK,
                     messageText: 'Security saved successfully'
                 });
+
+                if (this.props.onSave) {
+                    this.props.onSave();
+                }
             }.bind(this)).catch(function (err) {
                 this.setState({
                     saving: false,
@@ -3497,6 +3501,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'SECURITY_NAME',
                             ref: 'SECURITY_NAME',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.SECURITY_NAME || null,
                             isRequired: true,
                             label: 'SECURITY_NAME: Security Name*' })
                     ),
@@ -3506,6 +3511,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_DateField2.default, { id: 'SECURITY_START_DATE',
                             ref: 'SECURITY_START_DATE',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.SECURITY_START_DATE || null,
                             isRequired: true,
                             label: 'SECURITY_START_DATE: Start Date*' })
                     ),
@@ -3515,6 +3521,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_DateField2.default, { id: 'MATURITY_DATE',
                             ref: 'MATURITY_DATE',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.MATURITY_DATE || null,
                             isRequired: false,
                             label: 'MATURITY_DATE: Maturity Date' })
                     ),
@@ -3524,6 +3531,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_SimpleTextField2.default, { id: 'SOURCE',
                             ref: 'SOURCE',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.SOURCE || null,
                             label: 'SOURCE: Source' })
                     ),
                     _react2.default.createElement(
@@ -3533,6 +3541,7 @@ var Isin = function (_React$Component) {
                             ref: 'COUPON_RATE',
                             regex: '^[0-9.]+[%]?$',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.COUPON_RATE || null,
                             label: 'COUPON_RATE: Coupon (decimal, or with %)' })
                     ),
                     _react2.default.createElement(
@@ -3542,6 +3551,7 @@ var Isin = function (_React$Component) {
                             ref: 'MONEY_RAISED_GBP',
                             regex: '^[0-9.]+$',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.MONEY_RAISED_GBP || null,
                             label: 'MONEY_RAISED_GBP: Money Raised (GBP £m)' })
                     ),
                     _react2.default.createElement(
@@ -3551,6 +3561,7 @@ var Isin = function (_React$Component) {
                             ref: 'MONEY_RAISED_LOCAL',
                             regex: '^[0-9.]+$',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.MONEY_RAISED_LOCAL || null,
                             label: 'MONEY_RAISED_LOCAL: Money Raised (Local Currency)' })
                     ),
                     _react2.default.createElement(
@@ -3560,6 +3571,7 @@ var Isin = function (_React$Component) {
                             ref: 'TRADING_CURRENCY',
                             regex: '^[A-Z]{3}$',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.TRADING_CURRENCY || null,
                             label: 'TRADING_CURRENCY: Trading Currency' })
                     ),
                     _react2.default.createElement(
@@ -3569,6 +3581,7 @@ var Isin = function (_React$Component) {
                             ref: 'MARGIN',
                             regex: '^[0-9.]+[%]?$',
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.MARGIN || null,
                             label: 'MARGIN: Margin (decimal, or with %)' })
                     ),
                     _react2.default.createElement(
@@ -3578,6 +3591,7 @@ var Isin = function (_React$Component) {
                             ref: 'PRA_ITEM_4748',
                             options: this.props.productOptions,
                             onChange: this.onFormChange.bind(this),
+                            value: fieldValues.PRA_ITEM_4748 || null,
                             label: 'PRA_ITEM_4748: Product Type' })
                     ),
                     _react2.default.createElement(
@@ -3586,6 +3600,7 @@ var Isin = function (_React$Component) {
                         _react2.default.createElement(_AutoCompleteField2.default, { id: 'COMPANY_NAME',
                             ref: 'COMPANY_NAME',
                             sourceUrl: '/admin/search.json?type=issuer&q={search}',
+                            value: fieldValues.COMPANY_NAME || null,
                             onChange: this.onIssuerChange.bind(this),
                             label: 'COMPANY_NAME: Issuer Name' })
                     ),
@@ -5572,7 +5587,6 @@ var Lse = function (_React$Component) {
                     toDo.push(item);
                 }
             });
-
             this.setState({
                 toDoItems: toDo,
                 doneItems: done,
@@ -5792,7 +5806,18 @@ var Ready = function (_React$Component) {
         key: 'getFieldValues',
         value: function getFieldValues(item) {
             return {
-                ISIN: item.isin
+                ISIN: item.isin,
+                SECURITY_NAME: item.description,
+                SECURITY_START_DATE: item.date,
+                MATURITY_DATE: item.endDate,
+                SOURCE: 'LSE',
+                COUPON_RATE: item.coupon,
+                MONEY_RAISED_GBP: item.gbpAmount,
+                MONEY_RAISED_LOCAL: item.localAmount,
+                TRADING_CURRENCY: item.currency,
+                MARGIN: '',
+                PRA_ITEM_4748: '',
+                COMPANY_NAME: item.issuer
             };
         }
     }, {
@@ -5809,8 +5834,12 @@ var Ready = function (_React$Component) {
             var onClick = function onClick() {
                 _this2.ignore(item.isin);
             };
-            var details = _react2.default.createElement(_Isin2.default, { productOptions: window.ISIN.productOptions,
-                fieldValues: fieldValues });
+            var details = _react2.default.createElement(_Isin2.default, { key: item.isin,
+                productOptions: window.ISIN.productOptions,
+                fieldValues: fieldValues,
+                onSave: function onSave() {
+                    return _this2.done(item.isin);
+                } });
             return _react2.default.createElement(
                 'div',
                 { className: 'g-unit' },
@@ -5838,33 +5867,6 @@ var Ready = function (_React$Component) {
 }(_react2.default.Component);
 
 exports.default = Ready;
-
-var ReadyItem = function (_React$Component2) {
-    _inherits(ReadyItem, _React$Component2);
-
-    function ReadyItem() {
-        _classCallCheck(this, ReadyItem);
-
-        return _possibleConstructorReturn(this, (ReadyItem.__proto__ || Object.getPrototypeOf(ReadyItem)).apply(this, arguments));
-    }
-
-    _createClass(ReadyItem, [{
-        key: 'ignore',
-        value: function ignore() {
-            this.props.onIgnore(this.props.item.isin);
-        }
-    }, {
-        key: 'done',
-        value: function done() {
-            this.props.onDone(this.props.item.isin);
-        }
-    }, {
-        key: 'render',
-        value: function render() {}
-    }]);
-
-    return ReadyItem;
-}(_react2.default.Component);
 
 },{"../DataEditor/Isin/Isin":28,"./Table":39,"react":"react"}],39:[function(require,module,exports){
 "use strict";
