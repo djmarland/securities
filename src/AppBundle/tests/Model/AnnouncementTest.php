@@ -18,7 +18,6 @@ class AnnouncementTest extends PHPUnit_Framework_TestCase
         $this->assertSame(43, count($securities));
 
         $this->assertEquals(new ISIN('IE00B7ZQC614'), $securities[0]['isin']);
-        $this->assertEquals(1996281, $securities[0]['amount']);
-
+        $this->assertEquals(1.996281, $securities[0]['gbpAmount']);
     }
 }

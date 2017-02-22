@@ -57,12 +57,12 @@ class LSEAnnouncementsService extends Service
 
     public function markAsDone(LSEAnnouncement $announcement)
     {
-        return $this->updateStatus($announcement,AnnouncementStatus::DONE);
+        return $this->updateStatus($announcement, AnnouncementStatus::DONE);
     }
 
     public function markAsError(LSEAnnouncement $announcement)
     {
-        return $this->updateStatus($announcement,AnnouncementStatus::ERROR);
+        return $this->updateStatus($announcement, AnnouncementStatus::ERROR);
     }
 
     private function updateStatus(LSEAnnouncement $announcement, $status)

@@ -2,7 +2,6 @@
 
 namespace AppBundle\Model;
 
-
 use DateTimeImmutable;
 use DateTimeZone;
 use DOMDocument;
@@ -21,7 +20,6 @@ class Announcement
     {
         $this->announcementBody = $announcementBody;
         $this->parse();
-
     }
 
     public function getDate(): DateTimeImmutable
@@ -125,7 +123,7 @@ class Announcement
         $what   = "\\x00-\\x20";
         $text = htmlentities($text, null, 'utf-8');
         $text = str_replace("&nbsp;", "", $text);
-        $text = trim( preg_replace( "/[".$what."]+/" , ' ' , $text ) , $what );
+        $text = trim(preg_replace("/[" . $what . "]+/", ' ', $text), $what);
         return trim(html_entity_decode($text));
     }
 
@@ -143,7 +141,7 @@ class Announcement
 
     private function parseAmount(string $amount): float
     {
-        return ((int) preg_replace("/[^0-9]/", "",$amount)) / 1000000;
+        return ((int) preg_replace("/[^0-9]/", "", $amount)) / 1000000;
     }
 
     private function parseCurrency(string $amount, string $detail): string

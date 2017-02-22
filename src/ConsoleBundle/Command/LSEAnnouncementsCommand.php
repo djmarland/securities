@@ -34,7 +34,7 @@ class LSEAnnouncementsCommand extends Command
 
         $feeds = [
             'http://www.londonstockexchange.com/exchange/CompanyNewsRSS.html?newsSource=RNS&headlineCode=NOT',
-            'http://www.londonstockexchange.com/exchange/CompanyNewsRSS.html?newsSource=RNS&headlineCode=SEN'
+            'http://www.londonstockexchange.com/exchange/CompanyNewsRSS.html?newsSource=RNS&headlineCode=SEN',
         ];
 
         foreach ($feeds as $feed) {
@@ -63,7 +63,7 @@ class LSEAnnouncementsCommand extends Command
             $this->output->writeln('No news found');
             return;
         }
-        foreach($rss->channel->item as $item) {
+        foreach ($rss->channel->item as $item) {
             $title = (string) $item->title;
             $description = (string) $item->description;
             $link = (string) $item->link;

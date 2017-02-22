@@ -54,9 +54,7 @@ class LSEAnnouncement extends Entity
 
     public function getRouteParams(): array
     {
-        return [
-            'lse_id' => (string) $this->id
-        ];
+        return ['lse_id' => (string) $this->id];
     }
 
     public function getRowClass(): string
