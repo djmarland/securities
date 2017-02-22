@@ -18,11 +18,11 @@
     <tbody>
     {% for ancmnt in announcements %}
         <tr onclick="window.location.href='{{ path('admin_lse_show', ancmnt.routeParams) }}'">
-            <td>{{ ancmnt.dateFetched.format('Y-m-d') }}</td>
-            <td><a href="{{ path('admin_lse_show', ancmnt.routeParams) }}">
+            <td class="{{ ancmnt.rowClass }}">{{ ancmnt.dateFetched.format('Y-m-d') }}</td>
+            <td class="{{ ancmnt.rowClass }}"><a href="{{ path('admin_lse_show', ancmnt.routeParams) }}">
                 {{ ancmnt.title }}</a></td>
-            <td>{{ ancmnt.shortLink }}</td>
-            <td>{{ ancmnt.statusString }}</td>
+            <td class="{{ ancmnt.rowClass }}">{{ ancmnt.shortLink }}</td>
+            <td class="{{ ancmnt.rowClass }}">{{ ancmnt.statusString }}</td>
         </tr>
     {% endfor %}
     </tbody>

@@ -364,12 +364,12 @@ class AdminController extends Controller
     {
         $this->toView('activeTab', 'new');
 
-        $perPage = 100;
-        $currentPage = $this->getCurrentPage();
+//        $perPage = 100;
+//        $currentPage = $this->getCurrentPage();
 
         $service = $this->get('app.services.lse_announcements');
 
-        $announcements = $service->findIncomplete($perPage, $currentPage);
+        $announcements = $service->findLatest();
 
         // @todo - pagination
         //$total = $service->countIncomplete();
@@ -390,6 +390,21 @@ class AdminController extends Controller
         } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Announcement ' . $uuid . ' does not exist.');
         }
+
+
+        if ($this->request->isMethod('POST')) {
+            $done = $this->request->request->has('submit-done');
+            $error = $this->request->request->has('submit-error');
+            if ($done || $error) {
+                if ($done) {
+                    $service->markAsDone($announcement);
+                } elseif ($error) {
+                    $service->markAsError($announcement);
+                }
+                return $this->redirectToRoute('admin_lse_list', [], 302);
+            }
+        }
+
 
         $announcementSource = $this->get('app.announcements')
             ->getSource($announcement->getLink());

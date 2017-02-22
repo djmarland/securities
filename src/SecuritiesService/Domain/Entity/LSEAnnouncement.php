@@ -59,6 +59,17 @@ class LSEAnnouncement extends Entity
         ];
     }
 
+    public function getRowClass(): string
+    {
+        if ($this->getStatus() == AnnouncementStatus::DONE) {
+            return 'message--ok';
+        }
+        if ($this->getStatus() == AnnouncementStatus::ERROR) {
+            return 'message--error';
+        }
+        return '';
+    }
+
     public function getDateFetched(): DateTimeImmutable
     {
         return $this->dateFetched;

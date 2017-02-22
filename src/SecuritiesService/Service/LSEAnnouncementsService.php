@@ -2,10 +2,9 @@
 
 namespace SecuritiesService\Service;
 
-use SecuritiesService\Domain\Entity\Currency;
+use SecuritiesService\Data\Database\Entity\LSEAnnouncement as DbEntity;
 use SecuritiesService\Domain\Entity\Enum\AnnouncementStatus;
 use SecuritiesService\Domain\Entity\LSEAnnouncement;
-use SecuritiesService\Domain\Exception\EntityNotFoundException;
 use SecuritiesService\Domain\ValueObject\UUID;
 
 class LSEAnnouncementsService extends Service
@@ -16,6 +15,21 @@ class LSEAnnouncementsService extends Service
         UUID $id
     ): LSEAnnouncement {
         return parent::simpleFindByUUID($id, self::SERVICE_ENTITY);
+    }
+
+    public function findLatest()
+    {
+        $since = $this->appTimeProvider->sub(new \DateInterval('P14D')); // 14 days
+
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.status != :doneStatus')
+            ->orWhere(self::TBL . '.dateFetched > :since')
+            ->orderBy(self::TBL . '.dateFetched', 'DESC')
+            ->setParameter('doneStatus', AnnouncementStatus::DONE)
+            ->setParameter('since', $since);
+
+        return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);
     }
 
     public function findIncomplete(
@@ -39,5 +53,32 @@ class LSEAnnouncementsService extends Service
             ->where(self::TBL . '.status != :status')
             ->setParameter('status', AnnouncementStatus::DONE);
         return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
+    public function markAsDone(LSEAnnouncement $announcement)
+    {
+        return $this->updateStatus($announcement,AnnouncementStatus::DONE);
+    }
+
+    public function markAsError(LSEAnnouncement $announcement)
+    {
+        return $this->updateStatus($announcement,AnnouncementStatus::ERROR);
+    }
+
+    private function updateStatus(LSEAnnouncement $announcement, $status)
+    {
+        $entity = $this->getEntityFromDomain($announcement);
+        $entity->status = $status;
+        $this->entityManager->persist($entity);
+        $this->entityManager->flush();
+    }
+
+    private function getEntityFromDomain(LSEAnnouncement $announcement): DbEntity
+    {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select(self::TBL)
+            ->where(self::TBL . '.id = :id')
+            ->setParameter('id', $announcement->getId()->getBinary());
+        return $qb->getQuery()->getOneOrNullResult();
     }
 }

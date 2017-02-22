@@ -5,10 +5,12 @@
 {% block content %}
 <h1 class="g-unit b">{{ announcement.title }} - {{ announcement.dateFetched.format('d/m/Y') }}</h1>
 <p>This page allows new securities to be created from this daily LSE data.</p>
-<p class="g-unit text--right">
-    <a class="link--button" href="#">Mark as done</a>
-    <a class="link--button" href="#">Mark as error</a>
-</p>
+<form method="post">
+    <p class="g-unit text--right">
+        <button class="button button--fat" name="submit-done">Mark as done</button>
+        <button class="button button--fat" name="submit-error">Mark as error</button>
+    </p>
+</form>
 
 <table class="table table--lined g-unit">
     <tbody>

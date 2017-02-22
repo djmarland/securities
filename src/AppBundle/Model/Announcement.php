@@ -148,7 +148,7 @@ class Announcement
 
     private function parseCurrency(string $amount, string $detail): string
     {
-        if (strpos(strtoupper($detail), '1P EACH') !== false) {
+        if (strpos(strtoupper($detail), ' 1P EACH') !== false) {
             return 'GBX';
         }
         preg_match("/[A-Z]{3}/", $amount, $matches);
