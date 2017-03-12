@@ -38,7 +38,7 @@ class ExchangeRatesCommand extends Command
 
         if ($rate) {
             /** @var \DateTime $rateDate */
-            $rateDate = $rate->getDate();
+            $rateDate = $rate->date;
             // if the date is today, then stop as we're up to date
             if ($rateDate->format('Y-m-d') == $now->format('Y-m-d')) {
                 $this->output->writeln('Already up to date. Stopping');
