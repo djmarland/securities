@@ -12,7 +12,7 @@ use Symfony\Component\Console\Input\InputArgument;
 use Symfony\Component\Console\Input\InputInterface;
 use Symfony\Component\Console\Output\OutputInterface;
 
-class LSEAnnouncementsCommand extends Command
+class LSEBulkCommand extends Command
 {
     protected $em;
 
@@ -46,7 +46,7 @@ class LSEAnnouncementsCommand extends Command
         }
 
         foreach ($data as $item) {
-            $this->createAnnouncement($item['URL'], $item['Issue date']);
+            $this->createAnnouncement($item['URL'], $item['IssueDate']);
         }
         $this->output->writeln('Finished');
         return;
