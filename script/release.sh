@@ -12,9 +12,9 @@ version="$2"
 cd ../$subdomain.isinanalytics.com
 pwd
 
-git fetch
-git checkout $version
-composer install
-rm -rf app/cache
+sudo git fetch
+sudo git checkout $version
+sudo composer install
+sudo rm -rf app/cache/*
 sudo cp nginx/$subdomain.isinanalytics.com.conf /etc/nginx/sites-available/$subdomain.isinanalytics.com.conf
 sudo systemctl reload nginx
