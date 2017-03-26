@@ -59,8 +59,8 @@ trait IssuanceTrait
         $oldYear = $lastYear - 1;
         $results = [];
 
-        $results[$oldYear] = $securitiesService->sumByMonthForYear($oldYear, $entity);
-        $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
+//        $results[$oldYear] = $securitiesService->sumByMonthForYear($oldYear, $entity);
+//        $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
         $results[$currentYear] = $securitiesService->sumByMonthForYear($currentYear, $entity);
 
         $hasData = false;
