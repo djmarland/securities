@@ -16,7 +16,7 @@ class LSEAnnouncement extends Entity
     public $link;
     /** @ORM\Column(type="string", length=255, nullable=false) */
     public $description;
-    /** @ORM\Column(type="string", length=255, nullable=false) */
+    /** @ORM\Column(type="integer", nullable=false) */
     public $status;
     /** @ORM\Column(type="datetime", nullable=false) */
     public $dateFetched;

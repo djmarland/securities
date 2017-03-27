@@ -81,8 +81,13 @@ class LSEAnnouncementsCommand extends Command
                 return;
             }
 
+            $status = AnnouncementStatus::LOW;
+            if (strpos($title, 'trading') !== false) {
+                $status = AnnouncementStatus::NEW;
+            }
+
             $announcement = new LSEAnnouncement();
-            $announcement->status = AnnouncementStatus::NEW;
+            $announcement->status = $status;
             $announcement->title = $title;
             $announcement->description = $description;
             $announcement->link = $link;

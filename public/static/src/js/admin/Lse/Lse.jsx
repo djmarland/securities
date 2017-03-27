@@ -19,7 +19,39 @@ export default class Lse extends React.Component {
         this.announcementId = this.props.announceid;
         this.announcements = this.props.announcements;
         this.setupStorage();
+
+        if (localStorage.getItem(this.announcementId) === null) {
+            let ignoredOnInitial = 0;
+            this.announcements.forEach((item) => {
+                if (this.ignoreOnInitial(item)) {
+                    ignoredOnInitial++;
+                    this.onIsinToIgnored(item.isin);
+                }
+            });
+            if (ignoredOnInitial) {
+                alert(ignoredOnInitial + ' items automatically set to ignore');
+            }
+        }
         this.sortAnnouncements();
+    }
+
+    strContains(needle, haystack) {
+        return haystack.toString().indexOf(needle) != -1;
+    }
+
+    ignoreOnInitial(item) {
+        if (
+            this.strContains('SOURCE PHYSICAL', item.issuer) ||
+            this.strContains('BOOST', item.issuer) ||
+            this.strContains('ETFS', item.issuer) ||
+            this.strContains('ISHARES', item.issuer) ||
+            this.strContains('ORDINARY SHARES', item.description) ||
+            this.strContains('ETP ', item.description) ||
+            this.strContains('ETF ', item.description)
+        ) {
+            return true;
+        }
+        return false;
     }
 
     sortAnnouncements() {

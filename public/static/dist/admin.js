@@ -5564,24 +5564,54 @@ var Lse = function (_React$Component) {
     _createClass(Lse, [{
         key: 'componentDidMount',
         value: function componentDidMount() {
+            var _this2 = this;
+
             this.announcementId = this.props.announceid;
             this.announcements = this.props.announcements;
             this.setupStorage();
+
+            if (localStorage.getItem(this.announcementId) === null) {
+                (function () {
+                    var ignoredOnInitial = 0;
+                    _this2.announcements.forEach(function (item) {
+                        if (_this2.ignoreOnInitial(item)) {
+                            ignoredOnInitial++;
+                            _this2.onIsinToIgnored(item.isin);
+                        }
+                    });
+                    if (ignoredOnInitial) {
+                        alert(ignoredOnInitial + ' items automatically set to ignore');
+                    }
+                })();
+            }
             this.sortAnnouncements();
+        }
+    }, {
+        key: 'strContains',
+        value: function strContains(needle, haystack) {
+            return haystack.toString().indexOf(needle) != -1;
+        }
+    }, {
+        key: 'ignoreOnInitial',
+        value: function ignoreOnInitial(item) {
+            if (this.strContains('SOURCE PHYSICAL', item.issuer) || this.strContains('BOOST', item.issuer) || this.strContains('ETFS', item.issuer) || this.strContains('ISHARES', item.issuer) || this.strContains('ORDINARY SHARES', item.description) || this.strContains('ETP ', item.description) || this.strContains('ETF ', item.description)) {
+                return true;
+            }
+            return false;
         }
     }, {
         key: 'sortAnnouncements',
         value: function sortAnnouncements() {
-            var _this2 = this;
+            var _this3 = this;
 
             var toDo = [];
             var done = [];
             var ignored = [];
 
             this.announcements.forEach(function (item) {
-                if (_this2.inArray(_this2.storedData.doneIsins, item.isin)) {
+                if (_this3.inArray(_this3.storedData.doneIsins, item.isin)) {
                     done.push(item);
-                } else if (_this2.inArray(_this2.storedData.ignoredIsins, item.isin)) {
+                } else if (_this3.inArray(_this3.storedData.ignoredIsins, item.isin)) {
                     ignored.push(item);
                 } else {
                     toDo.push(item);
@@ -5644,11 +5674,11 @@ var Lse = function (_React$Component) {
     }, {
         key: 'onIsinToDone',
         value: function onIsinToDone(isin) {
-            var _this3 = this;
+            var _this4 = this;
 
             this.storedData.doneIsins.push(isin);
             this.storedData.doneIsins = this.storedData.doneIsins.filter(function (item, pos) {
-                return _this3.storedData.doneIsins.indexOf(item) == pos;
+                return _this4.storedData.doneIsins.indexOf(item) == pos;
             });
             this.saveData();
             this.sortAnnouncements();
@@ -5656,11 +5686,11 @@ var Lse = function (_React$Component) {
     }, {
         key: 'onIsinToIgnored',
         value: function onIsinToIgnored(isin) {
-            var _this4 = this;
+            var _this5 = this;
 
             this.storedData.ignoredIsins.push(isin);
             this.storedData.ignoredIsins = this.storedData.ignoredIsins.filter(function (item, pos) {
-                return _this4.storedData.ignoredIsins.indexOf(item) == pos;
+                return _this5.storedData.ignoredIsins.indexOf(item) == pos;
             });
             this.saveData();
             this.sortAnnouncements();

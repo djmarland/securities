@@ -23,10 +23,11 @@ class LSEAnnouncementsService extends Service
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
         $qb->select(self::TBL)
-            ->where(self::TBL . '.status != :doneStatus')
+            ->where(self::TBL . '.status = :newStatus')
             ->orWhere(self::TBL . '.dateFetched > :since')
-            ->orderBy(self::TBL . '.dateFetched', 'DESC')
-            ->setParameter('doneStatus', AnnouncementStatus::DONE)
+            ->orderBy(self::TBL . '.status', 'DESC')
+            ->addOrderBy(self::TBL . '.dateFetched', 'DESC')
+            ->setParameter('newStatus', AnnouncementStatus::NEW)
             ->setParameter('since', $since);
 
         return $this->getDomainFromQuery($qb, self::SERVICE_ENTITY);

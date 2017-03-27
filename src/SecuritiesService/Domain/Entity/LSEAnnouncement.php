@@ -89,6 +89,9 @@ class LSEAnnouncement extends Entity
         if ($this->status == AnnouncementStatus::NEW) {
             return 'New';
         }
+        if ($this->status == AnnouncementStatus::LOW) {
+            return 'Low Priority';
+        }
         return 'Unknown';
     }
 
