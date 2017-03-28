@@ -6,6 +6,7 @@ use AppBundle\Controller\Traits\FinderTrait;
 use AppBundle\Controller\Traits\SecuritiesTrait;
 use AppBundle\Presenter\Molecule\Money\MoneyPresenter;
 use SecuritiesService\Domain\Exception\EntityNotFoundException;
+use SecuritiesService\Domain\Exception\ValidationException;
 use SecuritiesService\Domain\ValueObject\ISIN;
 use AppBundle\Presenter\Organism\Security\SecurityPresenter;
 use Symfony\Component\HttpFoundation\Request;
@@ -35,6 +36,8 @@ class SecuritiesController extends Controller
                 ->fetchByIsin(new ISIN($isin));
         } catch (EntityNotFoundException $e) {
             throw new HttpException(404, 'Security ' . $isin . ' does not exist.');
+        } catch (ValidationException $e) {
+            throw new HttpException(404, 'Security ' . $isin . ' is not valid.');
         }
 
         $this->toView('issuer', null);
