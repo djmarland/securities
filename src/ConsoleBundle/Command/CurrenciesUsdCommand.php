@@ -71,7 +71,7 @@ class CurrenciesUsdCommand extends Command
         $unsetCount = $qb->getQuery()->getSingleScalarResult();
         $this->output->writeln('Securities not updated for todays rate: ' . $unsetCount);
 
-        // get a batch of 100 securities
+        // get a batch of 500 securities
         $offset = mt_rand(0, $unsetCount);
         $this->output->writeln('Starting from random offset: ' . $offset);
         $qb = $securitiesRepo->createQueryBuilder('security')
@@ -84,7 +84,7 @@ class CurrenciesUsdCommand extends Command
             // exchange rates are not available pre 1999
             ->setParameter('date', new DateTimeImmutable('1999-01-01'))
             ->setParameter('today', $todayFormatted)
-            ->setMaxResults(100)
+            ->setMaxResults(500)
             ->setFirstResult($offset);
         $securities = $qb->getQuery()->getResult();
 

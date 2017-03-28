@@ -62,7 +62,7 @@ class CurrenciesLocalCommand extends Command
 
         // calculate their local currency rate for that date
         foreach ($securities as $security) {
-            $this->output->writeln('Fixing ' . $security->getIsin());
+            $this->output->writeln('Fixing ' . $security->isin);
             /** @var Security $security */
             if ($this->fixSecurity($security)) {
                 $this->output->writeln('Success');

@@ -203,7 +203,7 @@ class SecuritiesService extends Service
         $currencyTable = 'currency';
 
         $qb->select([
-            'sum(' . self::TBL . '.moneyRaised) as total',
+            'sum(' . self::TBL . '.usdValueNow) as total',
             $currencyTable,
         ])
             ->innerJoin(
@@ -254,7 +254,7 @@ class SecuritiesService extends Service
         $industryTable = 'industry';
 
         $qb->select([
-            'sum(' . self::TBL . '.moneyRaised) as total',
+            'sum(' . self::TBL . '.usdValueNow) as total',
             $industryTable,
         ])
             ->innerJoin(
