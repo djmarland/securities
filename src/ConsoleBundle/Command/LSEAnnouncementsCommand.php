@@ -82,7 +82,7 @@ class LSEAnnouncementsCommand extends Command
             }
 
             $status = AnnouncementStatus::LOW;
-            if (strpos($title, 'trading') !== false) {
+            if (strpos(strtolower($title), 'admission') !== false) {
                 $status = AnnouncementStatus::NEW;
             }
 
