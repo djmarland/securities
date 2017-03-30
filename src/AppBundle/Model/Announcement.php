@@ -78,7 +78,8 @@ class Announcement
         $cellContents = [];
         foreach ($row->getElementsByTagName('td') as $cell) {
             /** @var $cell DOMElement */
-            $cellContents[] = trim($cell->textContent);
+            $content = str_replace("\xc2\xa0", ' ', $cell->textContent);
+            $cellContents[] = trim($content);
         }
 
         if (!isset($cellContents[2]) || empty($cellContents[2])) {
