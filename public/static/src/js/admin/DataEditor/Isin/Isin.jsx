@@ -2,8 +2,9 @@ import React from 'react';
 import IsinField from './IsinField';
 import DateField from './DateField';
 import SimpleTextField from './SimpleTextField';
-import SimpleSelectField from './SimpleSelectField';
+import SimpleRadioField from './SimpleRadioField';
 import AutoCompleteField from './AutoCompleteField';
+import SimpleCheckbox from './SimpleCheckbox';
 import Status from './Status';
 import Message from '../../Utils/Message';
 
@@ -53,6 +54,7 @@ export default class Isin extends React.Component {
             this.refs.MONEY_RAISED_LOCAL.setValue(security.amountRaisedLocal || '');
             this.refs.TRADING_CURRENCY.setValue(security.currency || '');
             this.refs.MARGIN.setValue(security.margin || '');
+            this.refs.MARK_AS_INTERESTING.setValue(security.isInteresting || false);
 
             if (security.issuer) {
                 this.setDataFromIssuer(security.issuer);
@@ -112,6 +114,7 @@ export default class Isin extends React.Component {
             'MARGIN',
             'PRA_ITEM_4748',
             'COMPANY_NAME',
+            'MARK_AS_INTERESTING'
             // 'COUNTRY_OF_INCORPORATION',
         ];
 
@@ -268,8 +271,8 @@ export default class Isin extends React.Component {
                                      value={fieldValues.MARGIN || null}
                                      label="MARGIN: Margin (decimal, or with %)"/>
                 </div>
-                <div className="g 1/2@l">
-                    <SimpleSelectField id="PRA_ITEM_4748"
+                <div className="g">
+                    <SimpleRadioField id="PRA_ITEM_4748"
                                        ref="PRA_ITEM_4748"
                                        options={this.props.productOptions}
                                        onChange={this.onFormChange.bind(this)}
@@ -277,20 +280,51 @@ export default class Isin extends React.Component {
                                        label="PRA_ITEM_4748: Product Type"/>
                 </div>
                 <div className="g 1/2@l">
+                    <div>
                     <AutoCompleteField id="COMPANY_NAME"
                                        ref="COMPANY_NAME"
                                        sourceUrl="/admin/search.json?type=issuer&q={search}"
                                        value={fieldValues.COMPANY_NAME || null}
                                        onChange={this.onIssuerChange.bind(this)}
                                        label="COMPANY_NAME: Issuer Name"/>
+                    {
+                        (fieldValues.COMPANY_NAME) ? (
+                            <p className="text--right">
+                                <a href={'https://google.com?q=' + fieldValues.COMPANY_NAME}
+                                   target="_blank">Search online for company &gt;</a>
+                            </p>
+                        ) : null
+                    }
+                    </div>
                 </div>
-                {/*<div className="g 1/2">*/}
-                    {/*<AutoCompleteField id="COUNTRY_OF_INCORPORATION"*/}
-                                       {/*ref="COUNTRY_OF_INCORPORATION"*/}
-                                       {/*sourceUrl="/admin/search.json?type=country&q={search}"*/}
-                                       {/*onChange={this.onFormChange.bind(this)}*/}
-                                       {/*label="COUNTRY_OF_INCORPORATION: Issuer Country" />*/}
-                {/*</div>*/}
+                <div className="g 1/2@l">
+                    <SimpleTextField id="PARENT_COMPANY"
+                                       ref="PARENT_COMPANY"
+                                       onChange={this.onFormChange.bind(this)}
+                                       value={fieldValues.PARENT_COMPANY || null}
+                                       label="PARENT_COMPANY"/>
+                </div>
+                <div className="g 1/2@l">
+                    <SimpleTextField id="SECTOR"
+                                     ref="SECTOR"
+                                     onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.SECTOR || null}
+                                     label="SECTOR"/>
+                </div>
+                <div className="g 1/2@l">
+                    <SimpleTextField id="INDUSTRY"
+                                     ref="INDUSTRY"
+                                     onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.INDUSTRY || null}
+                                     label="INDUSTRY"/>
+                </div>
+                <div className="g 1/2@l">
+                    <SimpleCheckbox id="MARK_AS_INTERESTING"
+                                     ref="MARK_AS_INTERESTING"
+                                     onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.MARK_AS_INTERESTING || false}
+                                     label="MARK_AS_INTERESTING"/>
+                </div>
                 <div className="g">
                     <div className="text--right">
                         <Status type={saveButtonStatusType} />

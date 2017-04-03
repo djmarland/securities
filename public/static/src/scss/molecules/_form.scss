@@ -24,7 +24,6 @@
     }
 }
 
-
 .form__group {
     margin-bottom: $size-grid-unit;
     &:last-child {
@@ -38,6 +37,12 @@
     .form__input {
         display: block;
         width: 100%;
+    }
+    .form__input--checkbox {
+        text-align: left;
+        width: 24px;
+        height: 24px;
+        cursor: pointer;
     }
     .form__message:not(:empty) {
         position: absolute;
@@ -64,4 +69,27 @@
         cursor: pointer;
         background: $color-grey-lightest;
     }
+}
+
+.form__radio {
+    @include flexbox(block);
+    @include flex-align(center);
+}
+.form__radio-label {
+    @include flexbox(block);
+    @include flex-align(center);
+    text-align: center;
+    cursor: pointer;
+    background: $color-grey-lightest;
+    padding: $size-grid-unit-small;
+    border-radius: 4px;
+    height: 100%;
+}
+.form__radio-input:checked + .form__radio-label {
+    background: $color-primary-dark;
+    color: $color-white;
+}
+.form__radio-input {
+    position: absolute;
+    visibility: hidden;
 }

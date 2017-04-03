@@ -91,6 +91,23 @@ class SecuritiesService extends Service
         return $this->buildFind($qb, $limit, $page);
     }
 
+    public function findInteresting(
+        int $limit = self::DEFAULT_LIMIT,
+        int $page = self::DEFAULT_PAGE
+    ): array {
+        $qb = $this->selectWithJoins();
+        $qb->where(self::TBL . '.isInteresting = 1');
+        $qb->orderBy(self::TBL . '.issueDate', 'DESC');
+        return $this->buildFind($qb, $limit, $page);
+    }
+
+    public function countInteresting(): int {
+        $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
+        $qb->select('count(' . self::TBL . '.id)');
+        $qb->where(self::TBL . '.isInteresting = true');
+        return (int) $qb->getQuery()->getSingleScalarResult();
+    }
+
     public function findUpcomingMaturities(
         DateTimeImmutable $dateFrom,
         int $limit = self::DEFAULT_LIMIT
@@ -435,7 +452,7 @@ class SecuritiesService extends Service
     ): array {
         $qb->select([
             'DATE_FORMAT(' . self::TBL . '.startDate, \'%m\') as m',
-            'sum(' . self::TBL . '.moneyRaised) as totalSum',
+            'sum(' . self::TBL . '.usdValueNow) as totalSum',
         ])
             ->andWhere('DATE_FORMAT(' . self::TBL . '.startDate, \'%Y\') = :year');
         $qb->groupBy('m');

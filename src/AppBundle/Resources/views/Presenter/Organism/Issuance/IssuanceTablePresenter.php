@@ -70,7 +70,10 @@ class IssuanceTablePresenter extends Issuance implements IssuanceTablePresenterI
                 }
 
                 if ($value) {
-                    $col['presenter'] = new MoneyPresenter($value, ['scale' => true]);
+                    $col['presenter'] = new MoneyPresenter($value, [
+                        'scale' => true,
+                        'currency' => '$'
+                    ]);
                 }
 
                 $row[] = $col;

@@ -2605,7 +2605,7 @@ var BulkUploadFailure = function (_React$Component3) {
     return BulkUploadFailure;
 }(_react2.default.Component);
 
-},{"../../Utils/FileDrop":40,"../../Utils/Loading":41,"../../Utils/Message":42,"react":"react"}],24:[function(require,module,exports){
+},{"../../Utils/FileDrop":41,"../../Utils/Loading":42,"../../Utils/Message":43,"react":"react"}],24:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2700,7 +2700,7 @@ var DataEditor = function (_React$Component) {
 
 exports.default = DataEditor;
 
-},{"./BulkUpload/BulkUpload":23,"./Isin/Isin":28,"./Menu":33,"react":"react"}],25:[function(require,module,exports){
+},{"./BulkUpload/BulkUpload":23,"./Isin/Isin":28,"./Menu":34,"react":"react"}],25:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -2800,7 +2800,7 @@ var AutoCompleteField = function (_BaseField) {
             }).then(function (response) {
                 return response.json();
             }.bind(this)).then(function (data) {
-                if (data.results.length == 0) {
+                if (data.results.length === 0) {
                     this.setState({
                         statusType: _Status2.default.STATUS_NEW,
                         statusText: 'New entry'
@@ -2808,11 +2808,15 @@ var AutoCompleteField = function (_BaseField) {
                     this.props.onChange(this.props.id, null, true);
                     return;
                 }
+                if (data.results.length === 1) {
+                    this.handleAutoCompleteSelect(data.results[0]);
+                    return;
+                }
 
                 var autoValues = [],
                     matches = null;
                 data.results.forEach(function (item) {
-                    if (item.name == val) {
+                    if (item.name === val) {
                         matches = item;
                     }
                     autoValues.push({
@@ -2831,7 +2835,7 @@ var AutoCompleteField = function (_BaseField) {
                     return;
                 }
 
-                if (autoValues.length == 0) {
+                if (autoValues.length === 0) {
                     this.setState({
                         statusType: _Status2.default.STATUS_NEW,
                         statusText: 'New Entry'
@@ -2997,7 +3001,7 @@ var AutoCompleteItem = function (_React$Component) {
     return AutoCompleteItem;
 }(_react2.default.Component);
 
-},{"./BaseField":26,"./Status":32,"react":"react"}],26:[function(require,module,exports){
+},{"./BaseField":26,"./Status":33,"react":"react"}],26:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3118,7 +3122,7 @@ var BaseField = function (_React$Component) {
 
 exports.default = BaseField;
 
-},{"./Status":32,"react":"react"}],27:[function(require,module,exports){
+},{"./Status":33,"react":"react"}],27:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3242,7 +3246,7 @@ var DateField = function (_BaseField) {
 
 exports.default = DateField;
 
-},{"./BaseField":26,"./Status":32,"react":"react"}],28:[function(require,module,exports){
+},{"./BaseField":26,"./Status":33,"react":"react"}],28:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3267,13 +3271,17 @@ var _SimpleTextField = require('./SimpleTextField');
 
 var _SimpleTextField2 = _interopRequireDefault(_SimpleTextField);
 
-var _SimpleSelectField = require('./SimpleSelectField');
+var _SimpleRadioField = require('./SimpleRadioField');
 
-var _SimpleSelectField2 = _interopRequireDefault(_SimpleSelectField);
+var _SimpleRadioField2 = _interopRequireDefault(_SimpleRadioField);
 
 var _AutoCompleteField = require('./AutoCompleteField');
 
 var _AutoCompleteField2 = _interopRequireDefault(_AutoCompleteField);
+
+var _SimpleCheckbox = require('./SimpleCheckbox');
+
+var _SimpleCheckbox2 = _interopRequireDefault(_SimpleCheckbox);
 
 var _Status = require('./Status');
 
@@ -3343,6 +3351,7 @@ var Isin = function (_React$Component) {
                 this.refs.MONEY_RAISED_LOCAL.setValue(security.amountRaisedLocal || '');
                 this.refs.TRADING_CURRENCY.setValue(security.currency || '');
                 this.refs.MARGIN.setValue(security.margin || '');
+                this.refs.MARK_AS_INTERESTING.setValue(security.isInteresting || false);
 
                 if (security.issuer) {
                     this.setDataFromIssuer(security.issuer);
@@ -3391,7 +3400,9 @@ var Isin = function (_React$Component) {
             });
 
             // prepare the ISIN data
-            var fields = ['ISIN', 'SECURITY_NAME', 'SECURITY_START_DATE', 'MATURITY_DATE', 'SOURCE', 'COUPON_RATE', 'MONEY_RAISED_GBP', 'MONEY_RAISED_LOCAL', 'TRADING_CURRENCY', 'MARGIN', 'PRA_ITEM_4748', 'COMPANY_NAME'];
+            var fields = ['ISIN', 'SECURITY_NAME', 'SECURITY_START_DATE', 'MATURITY_DATE', 'SOURCE', 'COUPON_RATE', 'MONEY_RAISED_GBP', 'MONEY_RAISED_LOCAL', 'TRADING_CURRENCY', 'MARGIN', 'PRA_ITEM_4748', 'COMPANY_NAME', 'MARK_AS_INTERESTING'
+            // 'COUNTRY_OF_INCORPORATION',
+            ];
 
             var postData = {};
             fields.forEach(function (fieldId) {
@@ -3586,8 +3597,8 @@ var Isin = function (_React$Component) {
                     ),
                     _react2.default.createElement(
                         'div',
-                        { className: 'g 1/2@l' },
-                        _react2.default.createElement(_SimpleSelectField2.default, { id: 'PRA_ITEM_4748',
+                        { className: 'g' },
+                        _react2.default.createElement(_SimpleRadioField2.default, { id: 'PRA_ITEM_4748',
                             ref: 'PRA_ITEM_4748',
                             options: this.props.productOptions,
                             onChange: this.onFormChange.bind(this),
@@ -3597,12 +3608,62 @@ var Isin = function (_React$Component) {
                     _react2.default.createElement(
                         'div',
                         { className: 'g 1/2@l' },
-                        _react2.default.createElement(_AutoCompleteField2.default, { id: 'COMPANY_NAME',
-                            ref: 'COMPANY_NAME',
-                            sourceUrl: '/admin/search.json?type=issuer&q={search}',
-                            value: fieldValues.COMPANY_NAME || null,
-                            onChange: this.onIssuerChange.bind(this),
-                            label: 'COMPANY_NAME: Issuer Name' })
+                        _react2.default.createElement(
+                            'div',
+                            null,
+                            _react2.default.createElement(_AutoCompleteField2.default, { id: 'COMPANY_NAME',
+                                ref: 'COMPANY_NAME',
+                                sourceUrl: '/admin/search.json?type=issuer&q={search}',
+                                value: fieldValues.COMPANY_NAME || null,
+                                onChange: this.onIssuerChange.bind(this),
+                                label: 'COMPANY_NAME: Issuer Name' }),
+                            fieldValues.COMPANY_NAME ? _react2.default.createElement(
+                                'p',
+                                { className: 'text--right' },
+                                _react2.default.createElement(
+                                    'a',
+                                    { href: 'https://google.com?q=' + fieldValues.COMPANY_NAME,
+                                        target: '_blank' },
+                                    'Search online for company >'
+                                )
+                            ) : null
+                        )
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g 1/2@l' },
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'PARENT_COMPANY',
+                            ref: 'PARENT_COMPANY',
+                            onChange: this.onFormChange.bind(this),
+                            value: fieldValues.PARENT_COMPANY || null,
+                            label: 'PARENT_COMPANY' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g 1/2@l' },
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'SECTOR',
+                            ref: 'SECTOR',
+                            onChange: this.onFormChange.bind(this),
+                            value: fieldValues.SECTOR || null,
+                            label: 'SECTOR' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g 1/2@l' },
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'INDUSTRY',
+                            ref: 'INDUSTRY',
+                            onChange: this.onFormChange.bind(this),
+                            value: fieldValues.INDUSTRY || null,
+                            label: 'INDUSTRY' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g 1/2@l' },
+                        _react2.default.createElement(_SimpleCheckbox2.default, { id: 'MARK_AS_INTERESTING',
+                            ref: 'MARK_AS_INTERESTING',
+                            onChange: this.onFormChange.bind(this),
+                            value: fieldValues.MARK_AS_INTERESTING || false,
+                            label: 'MARK_AS_INTERESTING' })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -3630,7 +3691,7 @@ var Isin = function (_React$Component) {
 
 exports.default = Isin;
 
-},{"../../Utils/Message":42,"./AutoCompleteField":25,"./DateField":27,"./IsinField":29,"./SimpleSelectField":30,"./SimpleTextField":31,"./Status":32,"react":"react"}],29:[function(require,module,exports){
+},{"../../Utils/Message":43,"./AutoCompleteField":25,"./DateField":27,"./IsinField":29,"./SimpleCheckbox":30,"./SimpleRadioField":31,"./SimpleTextField":32,"./Status":33,"react":"react"}],29:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3784,7 +3845,83 @@ var IsinField = function (_BaseField) {
 
 exports.default = IsinField;
 
-},{"./BaseField":26,"./Status":32,"react":"react"}],30:[function(require,module,exports){
+},{"./BaseField":26,"./Status":33,"react":"react"}],30:[function(require,module,exports){
+'use strict';
+
+Object.defineProperty(exports, "__esModule", {
+    value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = require('react');
+
+var _react2 = _interopRequireDefault(_react);
+
+var _BaseField2 = require('./BaseField');
+
+var _BaseField3 = _interopRequireDefault(_BaseField2);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var SimpleCheckbox = function (_BaseField) {
+    _inherits(SimpleCheckbox, _BaseField);
+
+    function SimpleCheckbox() {
+        _classCallCheck(this, SimpleCheckbox);
+
+        return _possibleConstructorReturn(this, (SimpleCheckbox.__proto__ || Object.getPrototypeOf(SimpleCheckbox)).apply(this, arguments));
+    }
+
+    _createClass(SimpleCheckbox, [{
+        key: 'getValue',
+        value: function getValue() {
+            return this.refs.inputField.value;
+        }
+    }, {
+        key: 'handleInput',
+        value: function handleInput() {
+            var val = !this.state.fieldText;
+            this.setState({
+                fieldText: val
+            });
+            this.props.onChange(this.props.id, val, true);
+        }
+    }, {
+        key: 'render',
+        value: function render() {
+            var checked = !!this.state.fieldText;
+
+            return _react2.default.createElement(
+                'div',
+                { className: 'form__group' },
+                _react2.default.createElement(
+                    'label',
+                    { htmlFor: this.fieldId, className: 'form__label' },
+                    this.props.label
+                ),
+                _react2.default.createElement('input', { type: 'checkbox',
+                    className: 'form__input form__input--checkbox',
+                    ref: 'inputField',
+                    id: this.fieldId,
+                    checked: checked,
+                    onChange: this.handleInput.bind(this) })
+            );
+        }
+    }]);
+
+    return SimpleCheckbox;
+}(_BaseField3.default);
+
+exports.default = SimpleCheckbox;
+
+},{"./BaseField":26,"react":"react"}],31:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3813,16 +3950,16 @@ function _possibleConstructorReturn(self, call) { if (!self) { throw new Referen
 
 function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
 
-var SimpleSelectField = function (_BaseField) {
-    _inherits(SimpleSelectField, _BaseField);
+var SimpleRadioField = function (_BaseField) {
+    _inherits(SimpleRadioField, _BaseField);
 
-    function SimpleSelectField() {
-        _classCallCheck(this, SimpleSelectField);
+    function SimpleRadioField() {
+        _classCallCheck(this, SimpleRadioField);
 
-        return _possibleConstructorReturn(this, (SimpleSelectField.__proto__ || Object.getPrototypeOf(SimpleSelectField)).apply(this, arguments));
+        return _possibleConstructorReturn(this, (SimpleRadioField.__proto__ || Object.getPrototypeOf(SimpleRadioField)).apply(this, arguments));
     }
 
-    _createClass(SimpleSelectField, [{
+    _createClass(SimpleRadioField, [{
         key: 'getValue',
         value: function getValue() {
             return this.refs.inputField.value;
@@ -3839,43 +3976,53 @@ var SimpleSelectField = function (_BaseField) {
     }, {
         key: 'render',
         value: function render() {
-            var items = [];
-            items.push(_react2.default.createElement('option', { key: '', value: '' }));
-            this.props.options.forEach(function (option, i) {
-                items.push(_react2.default.createElement(
-                    'option',
-                    { key: option.value, value: option.value },
-                    option.label
-                ));
-            }.bind(this));
+            var _this2 = this;
+
+            var items = this.props.options.map(function (option, i) {
+                return _react2.default.createElement(
+                    'div',
+                    { className: 'g 1/3 1/6@xl', key: i },
+                    _react2.default.createElement(
+                        'label',
+                        { className: 'form__radio' },
+                        _react2.default.createElement('input', { className: 'form__radio-input',
+                            type: 'radio',
+                            name: _this2.fieldId,
+                            ref: option.value,
+                            value: option.value,
+                            onChange: _this2.handleInput.bind(_this2) }),
+                        _react2.default.createElement(
+                            'span',
+                            { className: 'form__radio-label' },
+                            option.label
+                        )
+                    )
+                );
+            });
 
             return _react2.default.createElement(
                 'div',
                 { className: 'form__group' },
                 _react2.default.createElement(
-                    'label',
-                    { htmlFor: this.fieldId, className: 'form__label' },
+                    'p',
+                    { className: 'form__label' },
                     this.props.label
                 ),
                 _react2.default.createElement(
-                    'select',
-                    { className: 'form__input',
-                        ref: 'inputField',
-                        id: this.fieldId,
-                        value: this.state.fieldText,
-                        onChange: this.handleInput.bind(this) },
+                    'div',
+                    { className: 'grid' },
                     items
                 )
             );
         }
     }]);
 
-    return SimpleSelectField;
+    return SimpleRadioField;
 }(_BaseField3.default);
 
-exports.default = SimpleSelectField;
+exports.default = SimpleRadioField;
 
-},{"./BaseField":26,"./Status":32,"react":"react"}],31:[function(require,module,exports){
+},{"./BaseField":26,"./Status":33,"react":"react"}],32:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -3986,7 +4133,7 @@ var SimpleTextField = function (_BaseField) {
 
 exports.default = SimpleTextField;
 
-},{"./BaseField":26,"./Status":32,"react":"react"}],32:[function(require,module,exports){
+},{"./BaseField":26,"./Status":33,"react":"react"}],33:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -4228,7 +4375,7 @@ var StatusError = function (_React$Component6) {
     return StatusError;
 }(React.Component);
 
-},{"../../Utils/Loading":41}],33:[function(require,module,exports){
+},{"../../Utils/Loading":42}],34:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -4343,7 +4490,7 @@ var MenuItem = function (_React$Component2) {
     return MenuItem;
 }(_react2.default.Component);
 
-},{"react":"react"}],34:[function(require,module,exports){
+},{"react":"react"}],35:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5307,7 +5454,7 @@ var GroupResult = function (_React$Component11) {
     return GroupResult;
 }(_react2.default.Component);
 
-},{"./../utils/AutoComplete":44,"./Lightbox":35,"react":"react"}],35:[function(require,module,exports){
+},{"./../utils/AutoComplete":45,"./Lightbox":36,"react":"react"}],36:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5410,7 +5557,7 @@ var Lightbox = function (_React$Component) {
 exports.default = Lightbox;
 ;
 
-},{"react":"react","react-modal":21}],36:[function(require,module,exports){
+},{"react":"react","react-modal":21}],37:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5513,7 +5660,7 @@ var HandledItem = function (_React$Component2) {
     return HandledItem;
 }(_react2.default.Component);
 
-},{"./Table":39,"react":"react"}],37:[function(require,module,exports){
+},{"./Table":40,"react":"react"}],38:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5781,7 +5928,7 @@ var Lse = function (_React$Component) {
 
 exports.default = Lse;
 
-},{"./Handled":36,"./Ready":38,"react":"react"}],38:[function(require,module,exports){
+},{"./Handled":37,"./Ready":39,"react":"react"}],39:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -5898,7 +6045,7 @@ var Ready = function (_React$Component) {
 
 exports.default = Ready;
 
-},{"../DataEditor/Isin/Isin":28,"./Table":39,"react":"react"}],39:[function(require,module,exports){
+},{"../DataEditor/Isin/Isin":28,"./Table":40,"react":"react"}],40:[function(require,module,exports){
 "use strict";
 
 Object.defineProperty(exports, "__esModule", {
@@ -5975,7 +6122,7 @@ var Table = function (_React$Component) {
 
 exports.default = Table;
 
-},{"react":"react"}],40:[function(require,module,exports){
+},{"react":"react"}],41:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6137,7 +6284,7 @@ var FileDrop = function (_React$Component) {
 
 exports.default = FileDrop;
 
-},{"./Message":42,"react":"react"}],41:[function(require,module,exports){
+},{"./Message":43,"react":"react"}],42:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6189,7 +6336,7 @@ var Loading = function (_React$Component) {
 
 exports.default = Loading;
 
-},{"react":"react"}],42:[function(require,module,exports){
+},{"react":"react"}],43:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6447,7 +6594,7 @@ var MessageNone = function (_React$Component6) {
     return MessageNone;
 }(_react2.default.Component);
 
-},{"react":"react"}],43:[function(require,module,exports){
+},{"react":"react"}],44:[function(require,module,exports){
 'use strict';
 
 var _react = require('react');
@@ -6514,7 +6661,7 @@ function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { de
     }
 })();
 
-},{"./Compare":22,"./DataEditor/DataEditor":24,"./Issuer":34,"./Lse/Lse":37,"react":"react","react-dom":"react-dom"}],44:[function(require,module,exports){
+},{"./Compare":22,"./DataEditor/DataEditor":24,"./Issuer":35,"./Lse/Lse":38,"react":"react","react-dom":"react-dom"}],45:[function(require,module,exports){
 'use strict';
 
 Object.defineProperty(exports, "__esModule", {
@@ -6578,4 +6725,4 @@ module.exports = window.ReactDOM;
 
 module.exports = window.React;
 
-},{}]},{},[43]);
+},{}]},{},[44]);
