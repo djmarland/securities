@@ -181,6 +181,9 @@ class ImportCommand extends Command
         $startDate = $this->getRowValue($row, 'SECURITY_START_DATE');
         if (!empty($startDate)) {
             $startDate = DateTimeImmutable::createFromFormat('d/m/Y', $startDate);
+            if ($startDate === false) {
+                throw new \InvalidArgumentException('Start Date ' . $startDate . ' not valid');
+            }
         } else {
             $startDate = new DateTimeImmutable('1970-01-01T00:00:00Z');
         }
@@ -189,6 +192,9 @@ class ImportCommand extends Command
         if ($maturityDate) {
             if (preg_match('/\d{1,2}\/\d{1,2}\/\d{4}/', $maturityDate)) {
                 $maturityDate = DateTimeImmutable::createFromFormat('d/m/Y', $maturityDate);
+                if ($maturityDate === false) {
+                    throw new \InvalidArgumentException('Maturity date ' . $maturityDate . ' not valid');
+                }
             } else {
                 $maturityDate = null;
             }

@@ -332,7 +332,7 @@ class AdminController extends Controller
                 try {
                     // put in database
                     $entity = $command->single($row);
-                    $isins[] = (string) $entity->getIsin();
+                    $isins[] = (string) $entity->isin;
                 } catch (\Exception $e) {
                     // this isin failed for some reason. we need to store it
                     $failures[] = (object) [
