@@ -63,7 +63,7 @@ export default class AutoCompleteField extends BaseField {
 
             }.bind(this))
             .then(function(data) {
-                if (data.results.length == 0) {
+                if (data.results.length === 0) {
                     this.setState({
                         statusType : Status.STATUS_NEW,
                         statusText : 'New entry'
@@ -71,11 +71,15 @@ export default class AutoCompleteField extends BaseField {
                     this.props.onChange(this.props.id, null, true);
                     return;
                 }
+                if (data.results.length === 1) {
+                    this.handleAutoCompleteSelect(data.results[0]);
+                    return;
+                }
 
                 let autoValues = [],
                     matches = null;
                 data.results.forEach(function(item) {
-                    if (item.name == val) {
+                    if (item.name === val) {
                         matches = item;
                     }
                     autoValues.push({
@@ -94,7 +98,7 @@ export default class AutoCompleteField extends BaseField {
                     return;
                 }
 
-                if (autoValues.length == 0) {
+                if (autoValues.length === 0) {
                     this.setState({
                         statusType : Status.STATUS_NEW,
                         statusText : 'New Entry'

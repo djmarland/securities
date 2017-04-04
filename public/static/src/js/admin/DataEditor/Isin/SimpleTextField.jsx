@@ -49,6 +49,7 @@ export default class SimpleTextField extends BaseField {
             <div className="form__group">
                 <label htmlFor={this.fieldId} className="form__label">{this.props.label}</label>
                 <input className="form__input" id={this.fieldId}
+                       disabled={this.state.disabled}
                        value={this.state.fieldText}
                        ref="textInput"
                        required={this.props.isRequired}

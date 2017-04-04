@@ -39,6 +39,8 @@ class Security extends Entity
     public $usdValueNow;
     /** @ORM\Column(type="date", nullable=true) */
     public $usdCalculationDate;
+    /** @ORM\Column(type="boolean", nullable=false) */
+    public $isInteresting = 0;
     /**
      * @ORM\ManyToOne(targetEntity="Product")
      * @ORM\JoinColumn(nullable=true)

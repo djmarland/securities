@@ -222,10 +222,10 @@ class IssuanceGraphPresenter extends Issuance implements IssuanceGraphPresenterI
         // todo - share this logic with MoneyPresenter
         if ($largest > 1000000) { // trillions
             $this->scale = 1000000;
-            $this->axisFormat = '£#tr';
+            $this->axisFormat = '$#tr';
         } elseif ($largest > 1000) { // billions
             $this->scale = 1000;
-            $this->axisFormat = '£#bn';
+            $this->axisFormat = '$#bn';
         }
     }
 }

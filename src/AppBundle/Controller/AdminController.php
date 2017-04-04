@@ -16,6 +16,7 @@ use Symfony\Component\HttpKernel\Exception\HttpException;
 class AdminController extends Controller
 {
     use Traits\CurrenciesTableTrait;
+    use Traits\SecuritiesTrait;
 
     protected $cacheTime = null;
     protected $bulkStats = null;
@@ -492,6 +493,38 @@ class AdminController extends Controller
         $this->toView('sourceIsins', $sourceIsins);
 
         return $this->renderTemplate('admin:compare', 'Compare - Admin');
+    }
+
+    public function interestingAction()
+    {
+        $this->toView('activeTab', 'interesting');
+        $securitiesService = $this->get('app.services.securities');
+        $total = $securitiesService->countInteresting();
+        $presenters = null;
+
+        $perPage = 20;
+        $currentPage = $this->getCurrentPage();
+
+        if ($total) {
+            $securities = $securitiesService
+                ->findInteresting(
+                    $perPage,
+                    $currentPage
+                );
+            $presenters = $this->securitiesToPresenters($securities);
+        }
+        $this->setPagination(
+            $total,
+            $currentPage,
+            $perPage
+        );
+
+        $this->toView('securities', $presenters);
+
+        return $this->renderTemplate(
+            'admin:interesting',
+            'Interesting Securities - Admin'
+        );
     }
 
     public function exportAction()

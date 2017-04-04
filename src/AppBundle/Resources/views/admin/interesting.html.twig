@@ -1,0 +1,14 @@
+{% extends 'AppBundle::base.html.twig' %}
+
+{% use "AppBundle::admin/_base.html.twig" %}
+
+{% block content %}
+    <h1 class="g-unit b">Interesting Securities</h1>
+    {% if pagination.total > 0 %}
+        {% include '@partials/securities-list.html.twig' %}
+        {% include pagination.templatePath with pagination.vars only %}
+    {% else %}
+        <p>There are no interesting securities yet</p>
+    {% endif %}
+
+{% endblock %}

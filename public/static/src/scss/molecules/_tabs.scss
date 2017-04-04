@@ -9,12 +9,16 @@
     text-align: center;
     list-style: none;
     border-bottom: solid 1px $color-body-keyline;
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
 }
 .tabs__tab {
     display: inline-block;
     background: $color-body-bg;
     position: relative;
     top: 1px;
+    white-space: normal;
 }
 .tabs__link {
     padding: $size-grid-unit-small $size-grid-unit;

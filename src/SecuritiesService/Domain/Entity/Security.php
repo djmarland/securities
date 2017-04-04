@@ -14,6 +14,7 @@ class Security extends Entity implements JsonSerializable
     private $name;
     private $isin;
     private $startDate;
+    private $isInteresting;
     private $maturityDate;
     private $coupon;
     private $margin;
@@ -29,6 +30,7 @@ class Security extends Entity implements JsonSerializable
         ISIN $isin,
         string $name,
         DateTime $startDate,
+        bool $isInteresting,
         float $moneyRaisedGBP = null,
         float $moneyRaisedLocal = null,
         Product $product = null,
@@ -44,6 +46,7 @@ class Security extends Entity implements JsonSerializable
         $this->name = $name;
         $this->isin = $isin;
         $this->startDate = $startDate;
+        $this->isInteresting = $isInteresting;
         $this->currency = $currency;
         $this->moneyRaisedGBP = $moneyRaisedGBP;
         $this->moneyRaisedLocal = $moneyRaisedLocal;
@@ -75,6 +78,11 @@ class Security extends Entity implements JsonSerializable
     public function getStartDate(): DateTime
     {
         return $this->startDate;
+    }
+
+    public function isInteresting(): bool
+    {
+        return $this->isInteresting;
     }
 
     public function getMaturityDate()
@@ -147,6 +155,7 @@ class Security extends Entity implements JsonSerializable
             'currency' => $this->getCurrency() ? $this->getCurrency()->getCode() : null,
             'product' => $this->getProduct() ?? null,
             'issuer' => $this->getCompany() ?? null,
+            'isInteresting' => $this->isInteresting(),
         ];
 
         ksort($data);

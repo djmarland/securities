@@ -13,6 +13,9 @@ export default class Ready extends React.Component {
     }
     done(isin) {
         this.props.onIsinToDone(isin);
+        if (document) {
+            document.getElementById('securities-identified').scrollIntoView();
+        }
     }
 
     getFieldValues(item) {
@@ -48,7 +51,7 @@ export default class Ready extends React.Component {
             <div className="g-unit">
                 <Table item={item} />
                 <p className="text--right g-unit">
-                    Check details below or <button className="button button--fat" onClick={onClick}>
+                    Check details below or <button className="button button--warning button--fat" onClick={onClick}>
                     Ignore
                 </button>
                 </p>

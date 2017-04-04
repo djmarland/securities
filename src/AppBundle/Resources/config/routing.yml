@@ -149,6 +149,10 @@ admin_lse_show:
   path:     /admin/lse/{lse_id}
   defaults: { _controller: AppBundle:Admin:lseShow }
 
+admin_interesting:
+  path:     /admin/interesting
+  defaults: { _controller: AppBundle:Admin:interesting }
+
 # Currencies
 currencies_index:
   path:     /currencies
