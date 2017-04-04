@@ -4,28 +4,32 @@ import Status from './Status';
 
 export default class SimpleRadioField extends BaseField {
     getValue() {
-        return this.refs.inputField.value;
+        return this.state.fieldText;
     }
 
-    handleInput() {
-        let val = this.refs.inputField.value;
+    handleInput(val) {
         this.setState({
             fieldText : val
         });
         this.props.onChange(this.props.id, val, true);
     }
 
+    isChecked(value) {
+        return (value === this.state.fieldText);
+    }
+
     render() {
         const items = this.props.options.map((option, i) => {
             return (
-                <div className="g 1/3 1/6@xl" key={i}>
+                <div className="g 1/2 1/3@s 1/6@xl" key={i}>
                     <label className="form__radio">
-                    <input className="form__radio-input"
-                           type="radio"
-                           name={this.fieldId}
-                           ref={option.value}
-                           value={option.value}
-                           onChange={this.handleInput.bind(this)} />
+                        <input className="form__radio-input"
+                               type="radio"
+                               checked={this.isChecked(option.value)}
+                               name={this.fieldId}
+                               ref={option.value}
+                               value={option.value}
+                               onChange={() => {this.handleInput(option.value)}} />
                         <span className="form__radio-label">{option.label}</span>
                     </label>
                 </div>

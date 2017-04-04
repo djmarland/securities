@@ -14,6 +14,7 @@ export default class Isin extends React.Component {
         this.state = {
             start : true,
             saving : false,
+            companySearch : null,
             messageType : null,
             messageText: null,
             invalidItems : []
@@ -24,7 +25,7 @@ export default class Isin extends React.Component {
         return (
             !this.state.start &&
             !this.state.saving &&
-            Object.keys(this.state.invalidItems).length == 0
+            Object.keys(this.state.invalidItems).length === 0
         );
     }
 
@@ -34,12 +35,17 @@ export default class Isin extends React.Component {
         if (!valid) {
             invalidItems[id] = true;
         }
-        this.setState({
+        let state = {
             start : false,
             messageType : null,
             messageText: null,
             invalidItems : invalidItems
-        })
+        };
+        if (id === 'COMPANY_NAME') {
+            state.companySearch = this.refs['COMPANY_NAME'].getValue();
+        }
+
+        this.setState(state)
     }
 
     onIsinChange(id, value, valid, security) {
@@ -70,26 +76,41 @@ export default class Isin extends React.Component {
 
     onIssuerChange(id, data, valid) {
         this.onFormChange(id, data, valid);
+        this.refs.COUNTRY_OF_INCORPORATION.enable();
+        this.refs.COMPANY_PARENT.enable();
+        this.refs.ICB_SECTOR.enable();
+        this.refs.ICB_INDUSTRY.enable();
         if (data) {
             this.setDataFromIssuer(data, true);
-        } else {
-            // this.refs.COUNTRY_OF_INCORPORATION.enable();
         }
 
     }
 
     setDataFromIssuer(issuer, excludeIssuerItself) {
-        // let country = '';
-        // if (issuer.country) {
-        //     country = issuer.country.name;
-        // }
-        // this.refs.COUNTRY_OF_INCORPORATION.setValue(country);
-        // this.refs.COUNTRY_OF_INCORPORATION.disable();
-
-        if (excludeIssuerItself) {
-            return;
+        if (!excludeIssuerItself) {
+            this.refs.COMPANY_NAME.setValue(issuer.name);
         }
-        this.refs.COMPANY_NAME.setValue(issuer.name);
+
+        if (issuer.country) {
+            this.refs.COUNTRY_OF_INCORPORATION.setValue(issuer.country.name);
+            this.refs.COUNTRY_OF_INCORPORATION.disable();
+        }
+
+        if (issuer.parentGroup) {
+            const parentGroup = issuer.parentGroup;
+            this.refs.COMPANY_PARENT.setValue(parentGroup.name);
+            this.refs.COMPANY_PARENT.disable();
+            if (parentGroup.sector) {
+                const sector = parentGroup.sector;
+                this.refs.ICB_SECTOR.setValue(sector.name);
+                this.refs.ICB_SECTOR.disable();
+                if (sector.industry) {
+                    this.refs.ICB_INDUSTRY.setValue(sector.industry.name);
+                    this.refs.ICB_INDUSTRY.disable();
+                }
+            }
+
+        }
     }
 
     onSave(e) {
@@ -114,8 +135,11 @@ export default class Isin extends React.Component {
             'MARGIN',
             'PRA_ITEM_4748',
             'COMPANY_NAME',
-            'MARK_AS_INTERESTING'
-            // 'COUNTRY_OF_INCORPORATION',
+            'MARK_AS_INTERESTING',
+            'COMPANY_PARENT',
+            'COUNTRY_OF_INCORPORATION',
+            'ICB_SECTOR',
+            'ICB_INDUSTRY'
         ];
 
         let postData = {};
@@ -169,24 +193,23 @@ export default class Isin extends React.Component {
             saveButtonStatusType = Status.STATUS_LOADING;
         }
         let fieldValues = this.props.fieldValues || {};
+        let companySearch = null;
+        if (this.state.companySearch) {
+            companySearch = (
+                <p className="text--right">
+                    <a href={'https://www.google.co.uk/search?q=' + this.state.companySearch}
+                       target="_blank">Search online for company &gt;</a>
+                </p>
+            );
+        }
 
         return (
             <form onSubmit={this.onSave.bind(this)}>
-            <h1 className="b g-unit">Add/Edit ISIN</h1>
+            <h1 className="b g-unit">
+                Add/Edit ISIN
+                <span className="e"> (* Required)</span>
+            </h1>
             <div className="grid">
-                <div className="g 1/2">
-                    <span className="e">* Required</span>
-                </div>
-                <div className="g 1/2">
-                    <div className="text--right">
-                        <Status type={saveButtonStatusType} />
-                        <button className="button button--fat"
-                                type="submit"
-                                disabled={!this.canBeSaved()}>
-                            Save
-                        </button>
-                    </div>
-                </div>
                 <div className="g">
                     <Message
                         message={this.state.messageText}
@@ -287,36 +310,36 @@ export default class Isin extends React.Component {
                                        value={fieldValues.COMPANY_NAME || null}
                                        onChange={this.onIssuerChange.bind(this)}
                                        label="COMPANY_NAME: Issuer Name"/>
-                    {
-                        (fieldValues.COMPANY_NAME) ? (
-                            <p className="text--right">
-                                <a href={'https://google.com?q=' + fieldValues.COMPANY_NAME}
-                                   target="_blank">Search online for company &gt;</a>
-                            </p>
-                        ) : null
-                    }
+                    {companySearch}
                     </div>
                 </div>
                 <div className="g 1/2@l">
-                    <SimpleTextField id="PARENT_COMPANY"
-                                       ref="PARENT_COMPANY"
+                    <SimpleTextField id="COUNTRY_OF_INCORPORATION"
+                                     ref="COUNTRY_OF_INCORPORATION"
+                                     onChange={this.onFormChange.bind(this)}
+                                     value={fieldValues.COUNTRY_OF_INCORPORATION || null}
+                                     label="COUNTRY_OF_INCORPORATION"/>
+                </div>
+                <div className="g 1/2@l">
+                    <SimpleTextField id="COMPANY_PARENT"
+                                       ref="COMPANY_PARENT"
                                        onChange={this.onFormChange.bind(this)}
-                                       value={fieldValues.PARENT_COMPANY || null}
-                                       label="PARENT_COMPANY"/>
+                                       value={fieldValues.COMPANY_PARENT || null}
+                                       label="COMPANY_PARENT"/>
                 </div>
                 <div className="g 1/2@l">
-                    <SimpleTextField id="SECTOR"
-                                     ref="SECTOR"
+                    <SimpleTextField id="ICB_SECTOR"
+                                     ref="ICB_SECTOR"
                                      onChange={this.onFormChange.bind(this)}
-                                     value={fieldValues.SECTOR || null}
-                                     label="SECTOR"/>
+                                     value={fieldValues.ICB_SECTOR || null}
+                                     label="ICB_SECTOR"/>
                 </div>
                 <div className="g 1/2@l">
-                    <SimpleTextField id="INDUSTRY"
-                                     ref="INDUSTRY"
+                    <SimpleTextField id="ICB_INDUSTRY"
+                                     ref="ICB_INDUSTRY"
                                      onChange={this.onFormChange.bind(this)}
-                                     value={fieldValues.INDUSTRY || null}
-                                     label="INDUSTRY"/>
+                                     value={fieldValues.ICB_INDUSTRY || null}
+                                     label="ICB_INDUSTRY"/>
                 </div>
                 <div className="g 1/2@l">
                     <SimpleCheckbox id="MARK_AS_INTERESTING"

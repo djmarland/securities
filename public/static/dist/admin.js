@@ -3310,6 +3310,7 @@ var Isin = function (_React$Component) {
         _this.state = {
             start: true,
             saving: false,
+            companySearch: null,
             messageType: null,
             messageText: null,
             invalidItems: []
@@ -3320,7 +3321,7 @@ var Isin = function (_React$Component) {
     _createClass(Isin, [{
         key: 'canBeSaved',
         value: function canBeSaved() {
-            return !this.state.start && !this.state.saving && Object.keys(this.state.invalidItems).length == 0;
+            return !this.state.start && !this.state.saving && Object.keys(this.state.invalidItems).length === 0;
         }
     }, {
         key: 'onFormChange',
@@ -3330,12 +3331,17 @@ var Isin = function (_React$Component) {
             if (!valid) {
                 invalidItems[id] = true;
             }
-            this.setState({
+            var state = {
                 start: false,
                 messageType: null,
                 messageText: null,
                 invalidItems: invalidItems
-            });
+            };
+            if (id === 'COMPANY_NAME') {
+                state.companySearch = this.refs['COMPANY_NAME'].getValue();
+            }
+
+            this.setState(state);
         }
     }, {
         key: 'onIsinChange',
@@ -3368,26 +3374,40 @@ var Isin = function (_React$Component) {
         key: 'onIssuerChange',
         value: function onIssuerChange(id, data, valid) {
             this.onFormChange(id, data, valid);
+            this.refs.COUNTRY_OF_INCORPORATION.enable();
+            this.refs.COMPANY_PARENT.enable();
+            this.refs.ICB_SECTOR.enable();
+            this.refs.ICB_INDUSTRY.enable();
             if (data) {
                 this.setDataFromIssuer(data, true);
-            } else {
-                // this.refs.COUNTRY_OF_INCORPORATION.enable();
             }
         }
     }, {
         key: 'setDataFromIssuer',
         value: function setDataFromIssuer(issuer, excludeIssuerItself) {
-            // let country = '';
-            // if (issuer.country) {
-            //     country = issuer.country.name;
-            // }
-            // this.refs.COUNTRY_OF_INCORPORATION.setValue(country);
-            // this.refs.COUNTRY_OF_INCORPORATION.disable();
-
-            if (excludeIssuerItself) {
-                return;
+            if (!excludeIssuerItself) {
+                this.refs.COMPANY_NAME.setValue(issuer.name);
             }
-            this.refs.COMPANY_NAME.setValue(issuer.name);
+
+            if (issuer.country) {
+                this.refs.COUNTRY_OF_INCORPORATION.setValue(issuer.country.name);
+                this.refs.COUNTRY_OF_INCORPORATION.disable();
+            }
+
+            if (issuer.parentGroup) {
+                var parentGroup = issuer.parentGroup;
+                this.refs.COMPANY_PARENT.setValue(parentGroup.name);
+                this.refs.COMPANY_PARENT.disable();
+                if (parentGroup.sector) {
+                    var sector = parentGroup.sector;
+                    this.refs.ICB_SECTOR.setValue(sector.name);
+                    this.refs.ICB_SECTOR.disable();
+                    if (sector.industry) {
+                        this.refs.ICB_INDUSTRY.setValue(sector.industry.name);
+                        this.refs.ICB_INDUSTRY.disable();
+                    }
+                }
+            }
         }
     }, {
         key: 'onSave',
@@ -3400,9 +3420,7 @@ var Isin = function (_React$Component) {
             });
 
             // prepare the ISIN data
-            var fields = ['ISIN', 'SECURITY_NAME', 'SECURITY_START_DATE', 'MATURITY_DATE', 'SOURCE', 'COUPON_RATE', 'MONEY_RAISED_GBP', 'MONEY_RAISED_LOCAL', 'TRADING_CURRENCY', 'MARGIN', 'PRA_ITEM_4748', 'COMPANY_NAME', 'MARK_AS_INTERESTING'
-            // 'COUNTRY_OF_INCORPORATION',
-            ];
+            var fields = ['ISIN', 'SECURITY_NAME', 'SECURITY_START_DATE', 'MATURITY_DATE', 'SOURCE', 'COUPON_RATE', 'MONEY_RAISED_GBP', 'MONEY_RAISED_LOCAL', 'TRADING_CURRENCY', 'MARGIN', 'PRA_ITEM_4748', 'COMPANY_NAME', 'MARK_AS_INTERESTING', 'COMPANY_PARENT', 'COUNTRY_OF_INCORPORATION', 'ICB_SECTOR', 'ICB_INDUSTRY'];
 
             var postData = {};
             fields.forEach(function (fieldId) {
@@ -3452,6 +3470,19 @@ var Isin = function (_React$Component) {
                 saveButtonStatusType = _Status2.default.STATUS_LOADING;
             }
             var fieldValues = this.props.fieldValues || {};
+            var companySearch = null;
+            if (this.state.companySearch) {
+                companySearch = _react2.default.createElement(
+                    'p',
+                    { className: 'text--right' },
+                    _react2.default.createElement(
+                        'a',
+                        { href: 'https://www.google.co.uk/search?q=' + this.state.companySearch,
+                            target: '_blank' },
+                        'Search online for company >'
+                    )
+                );
+            }
 
             return _react2.default.createElement(
                 'form',
@@ -3459,36 +3490,16 @@ var Isin = function (_React$Component) {
                 _react2.default.createElement(
                     'h1',
                     { className: 'b g-unit' },
-                    'Add/Edit ISIN'
+                    'Add/Edit ISIN',
+                    _react2.default.createElement(
+                        'span',
+                        { className: 'e' },
+                        ' (* Required)'
+                    )
                 ),
                 _react2.default.createElement(
                     'div',
                     { className: 'grid' },
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'g 1/2' },
-                        _react2.default.createElement(
-                            'span',
-                            { className: 'e' },
-                            '* Required'
-                        )
-                    ),
-                    _react2.default.createElement(
-                        'div',
-                        { className: 'g 1/2' },
-                        _react2.default.createElement(
-                            'div',
-                            { className: 'text--right' },
-                            _react2.default.createElement(_Status2.default, { type: saveButtonStatusType }),
-                            _react2.default.createElement(
-                                'button',
-                                { className: 'button button--fat',
-                                    type: 'submit',
-                                    disabled: !this.canBeSaved() },
-                                'Save'
-                            )
-                        )
-                    ),
                     _react2.default.createElement(
                         'div',
                         { className: 'g' },
@@ -3617,44 +3628,44 @@ var Isin = function (_React$Component) {
                                 value: fieldValues.COMPANY_NAME || null,
                                 onChange: this.onIssuerChange.bind(this),
                                 label: 'COMPANY_NAME: Issuer Name' }),
-                            fieldValues.COMPANY_NAME ? _react2.default.createElement(
-                                'p',
-                                { className: 'text--right' },
-                                _react2.default.createElement(
-                                    'a',
-                                    { href: 'https://google.com?q=' + fieldValues.COMPANY_NAME,
-                                        target: '_blank' },
-                                    'Search online for company >'
-                                )
-                            ) : null
+                            companySearch
                         )
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'g 1/2@l' },
-                        _react2.default.createElement(_SimpleTextField2.default, { id: 'PARENT_COMPANY',
-                            ref: 'PARENT_COMPANY',
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'COUNTRY_OF_INCORPORATION',
+                            ref: 'COUNTRY_OF_INCORPORATION',
                             onChange: this.onFormChange.bind(this),
-                            value: fieldValues.PARENT_COMPANY || null,
-                            label: 'PARENT_COMPANY' })
+                            value: fieldValues.COUNTRY_OF_INCORPORATION || null,
+                            label: 'COUNTRY_OF_INCORPORATION' })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'g 1/2@l' },
-                        _react2.default.createElement(_SimpleTextField2.default, { id: 'SECTOR',
-                            ref: 'SECTOR',
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'COMPANY_PARENT',
+                            ref: 'COMPANY_PARENT',
                             onChange: this.onFormChange.bind(this),
-                            value: fieldValues.SECTOR || null,
-                            label: 'SECTOR' })
+                            value: fieldValues.COMPANY_PARENT || null,
+                            label: 'COMPANY_PARENT' })
                     ),
                     _react2.default.createElement(
                         'div',
                         { className: 'g 1/2@l' },
-                        _react2.default.createElement(_SimpleTextField2.default, { id: 'INDUSTRY',
-                            ref: 'INDUSTRY',
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'ICB_SECTOR',
+                            ref: 'ICB_SECTOR',
                             onChange: this.onFormChange.bind(this),
-                            value: fieldValues.INDUSTRY || null,
-                            label: 'INDUSTRY' })
+                            value: fieldValues.ICB_SECTOR || null,
+                            label: 'ICB_SECTOR' })
+                    ),
+                    _react2.default.createElement(
+                        'div',
+                        { className: 'g 1/2@l' },
+                        _react2.default.createElement(_SimpleTextField2.default, { id: 'ICB_INDUSTRY',
+                            ref: 'ICB_INDUSTRY',
+                            onChange: this.onFormChange.bind(this),
+                            value: fieldValues.ICB_INDUSTRY || null,
+                            label: 'ICB_INDUSTRY' })
                     ),
                     _react2.default.createElement(
                         'div',
@@ -3962,16 +3973,20 @@ var SimpleRadioField = function (_BaseField) {
     _createClass(SimpleRadioField, [{
         key: 'getValue',
         value: function getValue() {
-            return this.refs.inputField.value;
+            return this.state.fieldText;
         }
     }, {
         key: 'handleInput',
-        value: function handleInput() {
-            var val = this.refs.inputField.value;
+        value: function handleInput(val) {
             this.setState({
                 fieldText: val
             });
             this.props.onChange(this.props.id, val, true);
+        }
+    }, {
+        key: 'isChecked',
+        value: function isChecked(value) {
+            return value === this.state.fieldText;
         }
     }, {
         key: 'render',
@@ -3981,16 +3996,19 @@ var SimpleRadioField = function (_BaseField) {
             var items = this.props.options.map(function (option, i) {
                 return _react2.default.createElement(
                     'div',
-                    { className: 'g 1/3 1/6@xl', key: i },
+                    { className: 'g 1/2 1/3@s 1/6@xl', key: i },
                     _react2.default.createElement(
                         'label',
                         { className: 'form__radio' },
                         _react2.default.createElement('input', { className: 'form__radio-input',
                             type: 'radio',
+                            checked: _this2.isChecked(option.value),
                             name: _this2.fieldId,
                             ref: option.value,
                             value: option.value,
-                            onChange: _this2.handleInput.bind(_this2) }),
+                            onChange: function onChange() {
+                                _this2.handleInput(option.value);
+                            } }),
                         _react2.default.createElement(
                             'span',
                             { className: 'form__radio-label' },
@@ -4115,6 +4133,7 @@ var SimpleTextField = function (_BaseField) {
                     this.props.label
                 ),
                 _react2.default.createElement('input', { className: 'form__input', id: this.fieldId,
+                    disabled: this.state.disabled,
                     value: this.state.fieldText,
                     ref: 'textInput',
                     required: this.props.isRequired,
@@ -5978,6 +5997,9 @@ var Ready = function (_React$Component) {
         key: 'done',
         value: function done(isin) {
             this.props.onIsinToDone(isin);
+            if (document) {
+                document.getElementById('securities-identified').scrollIntoView();
+            }
         }
     }, {
         key: 'getFieldValues',
@@ -6027,7 +6049,7 @@ var Ready = function (_React$Component) {
                     'Check details below or ',
                     _react2.default.createElement(
                         'button',
-                        { className: 'button button--fat', onClick: onClick },
+                        { className: 'button button--warning button--fat', onClick: onClick },
                         'Ignore'
                     )
                 ),

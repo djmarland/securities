@@ -19,7 +19,8 @@
         outline: none;
         box-shadow: 0 0 $size-grid-unit-small $color-primary-dark;
     }
-    &[readonly] {
+    &[readonly],
+    &[disabled] {
         background-color: $color-grey-lightest;
     }
 }
@@ -72,12 +73,13 @@
 }
 
 .form__radio {
-    @include flexbox(block);
+    display: block;
     @include flex-align(center);
 }
 .form__radio-label {
     @include flexbox(block);
     @include flex-align(center);
+    @include justify-content(center);
     text-align: center;
     cursor: pointer;
     background: $color-grey-lightest;

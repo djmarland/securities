@@ -194,11 +194,15 @@ class IssuersService extends Service
     ): array {
         $countryTbl = 'c';
         $groupTbl = 'g';
+        $sectorTbl = 's';
+        $industryTbl = 'i';
 
         $qb = $this->getQueryBuilder(self::SERVICE_ENTITY);
-        $qb->select(self::TBL, $countryTbl, $groupTbl)
+        $qb->select(self::TBL, $countryTbl, $groupTbl, $sectorTbl, $industryTbl)
             ->leftJoin(self::TBL . '.country', $countryTbl)
             ->leftJoin(self::TBL . '.parentGroup', $groupTbl)
+            ->leftJoin($groupTbl . '.sector', $sectorTbl)
+            ->leftJoin($sectorTbl . '.industry', $industryTbl)
             ->where(self::TBL . '.name LIKE :query')
             ->addOrderBy(self::TBL . '.name', 'ASC')
             ->setParameter('query', '%' . $query . '%');

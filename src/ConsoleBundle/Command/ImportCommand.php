@@ -242,9 +242,9 @@ class ImportCommand extends Command
         }
 
 
-//        $security->setMarket($row['MARKET']);
-//        $security->setTIDM($row['TIDM']);
-//        $security->setDescription($row['SECURITY_DESCRIPTION']);
+//        $security->market = ($row['MARKET']);
+//        $security->tidm = ($row['TIDM']);
+//        $security->description = ($row['SECURITY_DESCRIPTION']);
 
         $product = $this->getRowValue($row, 'PRA_ITEM_4748');
         if ($product) {
@@ -361,7 +361,7 @@ class ImportCommand extends Command
 
         $sector = $this->getRowValue($row, 'ICB_SECTOR');
         if ($sector) {
-            $parentGroup->setSector($this->getSector($row));
+            $parentGroup->sector = $this->getSector($row);
         }
         $this->em->persist($parentGroup);
         $this->em->flush();
