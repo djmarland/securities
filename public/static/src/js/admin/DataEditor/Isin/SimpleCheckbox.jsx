@@ -3,11 +3,11 @@ import BaseField from './BaseField';
 
 export default class SimpleCheckbox extends BaseField {
     getValue() {
-        return this.refs.inputField.value;
+        return !!this.state.fieldText;
     }
 
     handleInput() {
-        let val = !this.state.fieldText;
+        const val = !this.state.fieldText;
         this.setState({
             fieldText : val
         });

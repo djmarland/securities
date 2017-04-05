@@ -170,6 +170,11 @@ class ImportCommand extends Command
             $security->source = $source;
         }
 
+        $interesting = !!$this->getRowValue($row, 'MARK_AS_INTERESTING');
+        if ($interesting) {
+            $security->isInteresting = !!$interesting;
+        }
+
 //        $excelZeroPoint = new DateTimeImmutable('1900-01-01T12:00:00');
 //
 //        $startDate = $excelZeroPoint->add(new DateInterval('P' . $row['SECURITY_START_DATE'] . 'D'));

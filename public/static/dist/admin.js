@@ -3893,7 +3893,7 @@ var SimpleCheckbox = function (_BaseField) {
     _createClass(SimpleCheckbox, [{
         key: 'getValue',
         value: function getValue() {
-            return this.refs.inputField.value;
+            return !!this.state.fieldText;
         }
     }, {
         key: 'handleInput',

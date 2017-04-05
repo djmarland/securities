@@ -1,4 +1,5 @@
 docker exec -it securities_php_1 /bin/bash
+docker exec -it securities_node_1 /bin/bash
 
 docker-compose stop php
 docker-compose build php
