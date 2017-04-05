@@ -60,7 +60,7 @@ trait IssuanceTrait
         $results = [];
 
 //        $results[$oldYear] = $securitiesService->sumByMonthForYear($oldYear, $entity);
-//        $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
+        $results[$lastYear] = $securitiesService->sumByMonthForYear($lastYear, $entity);
         $results[$currentYear] = $securitiesService->sumByMonthForYear($currentYear, $entity);
 
         $hasData = false;
