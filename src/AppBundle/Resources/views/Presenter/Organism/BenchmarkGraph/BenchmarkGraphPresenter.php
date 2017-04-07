@@ -13,6 +13,7 @@ class BenchmarkGraphPresenter extends Presenter
 
     private $securities;
     private $securitiesByCurrency;
+    private $biggestValue;
 
     public function __construct(
         array $securities = [],
@@ -21,6 +22,18 @@ class BenchmarkGraphPresenter extends Presenter
         parent::__construct(null, $options);
         $this->securities = $securities;
         $this->securitiesByCurrency = $this->securitiesByCurrency($securities);
+        $this->biggestValue = $this->biggestValue($securities);
+    }
+
+    private function biggestValue($securities) {
+        $value = 0;
+        foreach ($securities as $security) {
+            /** @var Security $security */
+            if ($security->getMoneyRaisedUSD() > $value) {
+                $value = $security->getMoneyRaisedUSD();
+            }
+        }
+        return $value;
     }
 
     public function securitiesByCurrency($securities)
@@ -83,15 +96,25 @@ class BenchmarkGraphPresenter extends Presenter
             ];
             foreach ($securities as $security) {
                 /** @var Security $security */
+                if (!$security->getMoneyRaisedUSD()) {
+                    continue;
+                }
+
                 $dataset['data'][] = [
                     'x' => $security->getTerm(),
                     'y' => $security->getCoupon(),
-                    'r' => $security->getMoneyRaisedUSD()
+                    'r' => $this->getRadius($security->getMoneyRaisedUSD())
                 ];
             }
             $datasets[] = $dataset;
             $i++;
         }
         return $datasets;
+    }
+
+    private function getRadius($value) {
+        $biggestRadius = 64;
+        $ratio = $value / $this->biggestValue;
+        return $ratio * $biggestRadius;
     }
 }
