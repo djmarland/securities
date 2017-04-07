@@ -5,6 +5,9 @@
 {% block content %}
     <h1 class="g-unit b">Interesting Securities</h1>
     {% if pagination.total > 0 %}
+        {% if graph %}
+            {% include graph.templatePath with graph.vars only %}
+        {% endif %}
         {% include '@partials/securities-list.html.twig' %}
         {% include pagination.templatePath with pagination.vars only %}
     {% else %}

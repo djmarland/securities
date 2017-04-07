@@ -36,6 +36,7 @@ class SecurityMapper extends Mapper
             $item['startDate'],
             !!$item['isInteresting'],
             $item['moneyRaised'],
+            $item['usdValueNow'],
             $item['moneyRaisedLocal'],
             $product,
             $company,

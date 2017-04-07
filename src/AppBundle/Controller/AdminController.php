@@ -2,6 +2,7 @@
 
 namespace AppBundle\Controller;
 
+use AppBundle\Presenter\Organism\BenchmarkGraph\BenchmarkGraphPresenter;
 use ConsoleBundle\Command\ImportCommand;
 use Djmarland\ISIN\Exception\InvalidISINException;
 use SecuritiesService\Domain\Entity\Product;
@@ -504,6 +505,7 @@ class AdminController extends Controller
 
         $perPage = 20;
         $currentPage = $this->getCurrentPage();
+        $graph = null;
 
         if ($total) {
             $securities = $securitiesService
@@ -512,6 +514,7 @@ class AdminController extends Controller
                     $currentPage
                 );
             $presenters = $this->securitiesToPresenters($securities);
+            $graph = new BenchmarkGraphPresenter($securities);
         }
         $this->setPagination(
             $total,
@@ -520,6 +523,7 @@ class AdminController extends Controller
         );
 
         $this->toView('securities', $presenters);
+        $this->toView('graph', $graph);
 
         return $this->renderTemplate(
             'admin:interesting',

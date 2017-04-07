@@ -19,6 +19,7 @@ class Security extends Entity implements JsonSerializable
     private $coupon;
     private $margin;
     private $moneyRaisedGBP;
+    private $moneyRaisedUSD;
     private $moneyRaisedLocal;
     private $product;
     private $currency;
@@ -32,6 +33,7 @@ class Security extends Entity implements JsonSerializable
         DateTime $startDate,
         bool $isInteresting,
         float $moneyRaisedGBP = null,
+        float $moneyRaisedUSD = null,
         float $moneyRaisedLocal = null,
         Product $product = null,
         Company $company = null,
@@ -49,6 +51,7 @@ class Security extends Entity implements JsonSerializable
         $this->isInteresting = $isInteresting;
         $this->currency = $currency;
         $this->moneyRaisedGBP = $moneyRaisedGBP;
+        $this->moneyRaisedUSD = $moneyRaisedUSD;
         $this->moneyRaisedLocal = $moneyRaisedLocal;
         $this->product = $product;
         $this->company = $company;
@@ -103,6 +106,11 @@ class Security extends Entity implements JsonSerializable
     public function getMoneyRaised()
     {
         return $this->moneyRaisedGBP;
+    }
+
+    public function getMoneyRaisedUSD()
+    {
+        return $this->moneyRaisedUSD;
     }
 
     public function getMoneyRaisedLocal()
