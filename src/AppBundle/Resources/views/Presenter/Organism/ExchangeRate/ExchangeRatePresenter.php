@@ -50,6 +50,27 @@ class ExchangeRatePresenter extends Presenter implements ExchangeRatePresenterIn
 
     private function number($value)
     {
-       return rtrim(number_format($value, 6), '0.');
+        if (is_null($value)) {
+            return null;
+        }
+        // find the position of the first non-zero after the decimal place
+        $string = number_format($value,30);
+        $found = null;
+        $start = strpos($string, '.') + 1;
+        $position = $start;
+        if ($position > 0) {
+            while ($found === null && isset($string[$position])) {
+                if ($string[$position] !== '0') {
+                    $found = ($position - $start) + 3;
+                }
+                $position++;
+            }
+        }
+        $round = $found ?? 12;
+        $number = rtrim(number_format($value, $round), '0.');
+        if ($number === '') {
+            return '0.00';
+        }
+        return $number;
     }
 }

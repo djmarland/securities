@@ -9,21 +9,21 @@
             chart;
 
         // Create legend
-//        settings.options.legendCallback = function (data) {
-//            var items = [];
-//            data.legend.legendItems.forEach(function (item) {
-//                if (!item.hidden) {
-//                    items.push(
-//                            '<li class="g 1/3"><div class="legend__item">' +
-//                            '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
-//                            '<span class="legend__text">' + item.text + '</span>' +
-//                            '</div></li>'
-//                    );
-//                }
-//            });
-//            return '<ul class="legend legend--inline grid">' + items.join('') + '</ul>';
-//        };
-//
+        settings.options.legendCallback = function (data) {
+            var items = [];
+            data.legend.legendItems.forEach(function (item) {
+                if (!item.hidden) {
+                    items.push(
+                            '<li class="g 1/3"><div class="legend__item">' +
+                            '<span class="legend__icon" style="background-color:' + item.fillStyle + '"></span>' +
+                            '<span class="legend__text">' + item.text + '</span>' +
+                            '</div></li>'
+                    );
+                }
+            });
+            return '<ul class="legend legend--inline grid">' + items.join('') + '</ul>';
+        };
+
 //        settings.options.scales.yAxes[0].ticks.callback = function (value) {
 //            return settings.options.axisFormat.replace('#', value);
 //        };
@@ -35,7 +35,7 @@
 
         chart = new Chart(ctx, settings);
 
-//        document.getElementById('chart-legend').innerHTML = chart.generateLegend();
+        document.getElementById('chart-legend').innerHTML = chart.generateLegend();
 
     })();
 </script>

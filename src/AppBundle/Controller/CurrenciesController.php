@@ -69,7 +69,7 @@ class CurrenciesController extends Controller
                 $changeRate = $latest->getValueUSD() - $penultimate->getValueUSD();
                 $this->toView('changeDate', $penultimate->getDate()->format('d/m/Y'));
             }
-            $this->toView('changeRate', $this->number($changeRate, 12));
+            $this->toView('changeRate', $this->number($changeRate));
 
             $graphData = [];
             $graphLabels = [];
@@ -294,7 +294,21 @@ class CurrenciesController extends Controller
         if (is_null($value)) {
             return null;
         }
-        $number = rtrim(number_format($value, 12), '0.');
+        // find the position of the first non-zero after the decimal place
+        $string = number_format($value,30);
+        $found = null;
+        $start = strpos($string, '.') + 1;
+        $position = $start;
+        if ($position > 0) {
+            while ($found === null && isset($string[$position])) {
+                if ($string[$position] !== '0') {
+                    $found = ($position - $start) + 3;
+                }
+                $position++;
+            }
+        }
+        $round = $found ?? 12;
+        $number = rtrim(number_format($value, $round), '0.');
         if ($number === '') {
             return '0.00';
         }

@@ -8,7 +8,8 @@ use SecuritiesService\Domain\Entity\Security;
 
 class BenchmarkGraphPresenter extends Presenter
 {
-    private $axisFormat = '£#m';
+    private $yAxisFormat = '#%';
+    private $xAxisFormat = '#y';
     private $scale = 1;
 
     private $securities;
@@ -73,11 +74,17 @@ class BenchmarkGraphPresenter extends Presenter
                         }
                     }]
                 },
+                "legend" : {
+                    "display": false
+                },
                 "responsive": true,
                 "hover" : {
                     "mode" : "label"
                 },
-                "maintainAspectRatio": true
+                "maintainAspectRatio": true,
+                "vAxis" : {
+                    "format" : "#%"
+                }
             }')
         ];
     }
@@ -96,17 +103,22 @@ class BenchmarkGraphPresenter extends Presenter
             ];
             foreach ($securities as $security) {
                 /** @var Security $security */
-                if (!$security->getMoneyRaisedUSD()) {
+                if (!$security->getMoneyRaisedUSD() ||
+                    !$security->getCoupon() ||
+                    !$security->getTerm()
+                ) {
                     continue;
                 }
 
                 $dataset['data'][] = [
                     'x' => $security->getTerm(),
-                    'y' => $security->getCoupon(),
+                    'y' => $security->getCoupon() * 100, // percents
                     'r' => $this->getRadius($security->getMoneyRaisedUSD())
                 ];
             }
-            $datasets[] = $dataset;
+            if (!empty($dataset['data'])) {
+                $datasets[] = $dataset;
+            }
             $i++;
         }
         return $datasets;
